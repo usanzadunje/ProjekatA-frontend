@@ -1,6 +1,6 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router';
+import { createApp } from 'vue';
+import App           from './App.vue';
+import router        from './router';
 
 import { IonicVue } from '@ionic/vue';
 
@@ -23,10 +23,17 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+/* Axios support */
+import axios        from 'axios';
+import VueAxios     from 'vue-axios';
+
+axios.defaults.withCredentials = true;
+
 const app = createApp(App)
-  .use(IonicVue)
-  .use(router);
-  
+    .use(IonicVue)
+    .use(router)
+    .use(VueAxios, axios);
+
 router.isReady().then(() => {
-  app.mount('#app');
+    app.mount('#app');
 });
