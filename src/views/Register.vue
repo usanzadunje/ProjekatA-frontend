@@ -2,24 +2,24 @@
     <ion-page>
         <ion-header :translucent="true">
             <ion-toolbar>
-                <ion-title>Login</ion-title>
+                <ion-title>Register</ion-title>
             </ion-toolbar>
         </ion-header>
 
         <ion-content :fullscreen="true">
-            <LoginForm/>
+            <RegisterForm/>
         </ion-content>
     </ion-page>
 </template>
 
 <script>
-    import LoginForm                                                from "../components/LoginForm";
+    import RegisterForm                                             from "../components/RegisterForm";
     import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 
     export default {
-        name: "Login",
+        name: "Register",
         components: {
-            LoginForm,
+            RegisterForm,
             IonPage,
             IonHeader,
             IonToolbar,

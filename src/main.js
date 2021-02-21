@@ -23,16 +23,13 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-/* Axios support */
-import axios        from 'axios';
-import VueAxios     from 'vue-axios';
+import store from './store';
 
-axios.defaults.withCredentials = true;
 
 const app = createApp(App)
+    .use(store)
     .use(IonicVue)
-    .use(router)
-    .use(VueAxios, axios);
+    .use(router);
 
 router.isReady().then(() => {
     app.mount('#app');
