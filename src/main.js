@@ -24,7 +24,7 @@ import '@ionic/vue/css/display.css';
 import './theme/variables.css';
 
 /* Taliwindcss import*/
-import './index.css';
+import "tailwindcss/tailwind.css";
 
 /* Vuex */
 import store        from './store';
