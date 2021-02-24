@@ -4,4 +4,7 @@ export default {
     index() {
         return API.apiClient.get(`/cafes`);
     },
+    show(id) {
+        return API.apiClient.get(`/cafes/${id}`);
+    }
 };

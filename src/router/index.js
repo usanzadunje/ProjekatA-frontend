@@ -50,6 +50,12 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
     },
+    {
+        path: "/tables",
+        name: "table",
+        component: () =>
+            import(/* webpackChunkName: "Table" */ "../views/Table"),
+    },
     // {
     //     path: "/reset-password",
     //     name: "ResetPassword",
@@ -64,6 +70,16 @@ const routes = [
     //             /* webpackChunkName: "forgot-password" */ "../views/ForgotPassword"
     //             ),
     // },
+    {
+        path: "/404",
+        name: "notFound",
+        component: () =>
+            import(/* webpackChunkName: "NotFound" */ "../views/404"),
+    },
+    {
+        path: "/:catchAll(.*)",
+        redirect: { name: 'notFound' },
+    },
 ];
 
 const router = createRouter({

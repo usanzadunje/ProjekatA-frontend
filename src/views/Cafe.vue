@@ -8,7 +8,7 @@
 
         <ion-content :fullscreen="true" class="ion-padding">
             <div v-for="cafe in cafes" :key="cafe.id">
-                {{ cafe }}
+                {{ cafe.name }}
             </div>
         </ion-content>
     </ion-page>
@@ -20,7 +20,7 @@
 
 
     export default {
-        name: "Home",
+        name: "Table",
         components: {
             IonPage,
             IonHeader,
