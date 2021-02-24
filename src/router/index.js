@@ -46,6 +46,7 @@ const routes = [
     {
         path: "/cafes",
         name: "cafe",
+        meta: { middleware: [auth] },
         component: () =>
             import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
     },
@@ -82,8 +83,6 @@ router.beforeEach((to, from, next) => {
     const context = { to, from, next, store };
 
     if(!middleware) {
-        store.dispatch("auth/getAuthUser").then(() => {
-        });
         return next();
     }
 
