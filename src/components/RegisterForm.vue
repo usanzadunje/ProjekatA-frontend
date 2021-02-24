@@ -14,7 +14,8 @@
                         </ion-item>
                         <ion-item class="ion-padding-top">
                             <ion-label>Birthday</ion-label>
-                            <ion-datetime :value="bday" @ionChange="bday = $event.target.value.substring(0,10)"></ion-datetime>
+                            <ion-datetime :value="bday"
+                                          @ionChange="bday = $event.target.value.substring(0,10)"></ion-datetime>
                         </ion-item>
                         <ion-item>
                             <ion-label position="floating">Phone</ion-label>
@@ -51,7 +52,8 @@
 <script>
     import { IonGrid, IonCol, IonRow, IonItem, IonInput, IonButton, IonLabel, IonDatetime } from "@ionic/vue";
     import AuthService
-                                                                                            from "@/services/AuthService";
+                                                                                            from '@/services/AuthService';
+    import { getError }                                                                     from '../utils/helpers';
 
     export default {
         name: "RegisterForm",
@@ -75,6 +77,7 @@
                 email: null,
                 password: null,
                 passwordConfirm: null,
+                error: null,
             };
         },
         methods: {
@@ -91,7 +94,12 @@
                 };
                 AuthService.registerUser(payload)
                            .then(() => this.$router.push("/dashboard"))
-                           .catch((error) => (console.log(error)));
+                           .catch((error) => {
+                               this.error = getError(error);
+                               this.$emit('registerError', {
+                                   error: this.error,
+                               });
+                           });
             },
         },
     };

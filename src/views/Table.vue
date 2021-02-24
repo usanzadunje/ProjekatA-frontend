@@ -22,7 +22,7 @@
 <script>
     import { IonPage, IonHeader, IonToolbar, IonContent, IonTitle } from '@ionic/vue';
     import TableService                                             from '../services/TableService';
-    import { getError }                                             from '../utils/helpers';
+    //import { getError }                                             from '../utils/helpers';
 
     export default {
         name: "Table",
@@ -41,14 +41,13 @@
         },
         created() {
             this.loading = true;
-            TableService.show(1, 22)
+            TableService.show(1, 2)
                         .then((response) => {
                             this.cafe = response.data;
                             this.loading = false;
                         })
                         .catch(error => {
-                            let errorMessage = getError(error);
-                            console.log(errorMessage);
+                            console.log(error);
                             this.loading = false;
                         });
         },

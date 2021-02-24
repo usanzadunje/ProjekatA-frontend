@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import store                              from '../store/index';
 import auth                               from "../middleware/auth";
+import redirectIfAuthenticated            from "../middleware/redirectIfAuthenticated";
 import middlewarePipeline                 from "./middlewarePipeline";
 
 const routes = [
@@ -35,11 +36,13 @@ const routes = [
     {
         path: "/login",
         name: "login",
+        meta: { middleware: [redirectIfAuthenticated] },
         component: () => import(/* webpackChunkName: "Login" */ "../views/Login"),
     },
     {
         path: "/register",
         name: "register",
+        meta: { middleware: [redirectIfAuthenticated] },
         component: () =>
             import(/* webpackChunkName: "Register" */ "../views/Register"),
     },

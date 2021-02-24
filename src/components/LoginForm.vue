@@ -26,6 +26,7 @@
 <script>
     import { IonGrid, IonCol, IonRow, IonItem, IonInput, IonButton, IonLabel } from "@ionic/vue";
     import AuthService                                                         from "@/services/AuthService";
+    import { getError }                                                        from '../utils/helpers';
 
     export default {
         name: "LoginForm",
@@ -42,6 +43,7 @@
             return {
                 email: null,
                 password: null,
+                error: null,
             };
         },
         methods: {
@@ -55,7 +57,12 @@
                            .then(() => {
                                this.$router.push(redirectedFrom);
                            })
-                           .catch((error) => (console.log(error)));
+                           .catch((error) => {
+                               this.error = getError(error);
+                               this.$emit('loginError', {
+                                   error: this.error,
+                               });
+                           });
             },
         },
     };
