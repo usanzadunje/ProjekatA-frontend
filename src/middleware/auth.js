@@ -1,3 +1,5 @@
+/* Middleware that handles whether user is logged in or not and lets them continue to another route accordingly */
+
 export default function auth({ to, next, store }) {
     const loginRoute = { path: "/login", query: { redirect: to.fullPath } };
 

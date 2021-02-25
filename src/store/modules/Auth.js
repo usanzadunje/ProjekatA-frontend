@@ -50,4 +50,7 @@ export const getters = {
     loggedIn: (state) => {
         return !!state.user;
     },
+    emailVerified: (state) => {
+        return !!state.user.email_verified;
+    },
 };

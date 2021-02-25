@@ -1,6 +1,9 @@
 <template>
     <div>
         <transition-group name="fade">
+            <p v-if="message" class="mt-2 text-sm text-green-500" key="message">
+                {{ message }}
+            </p>
             <p
                     v-if="error && getType(error) === 'string'"
                     class="mt-2 text-sm text-red-500"
@@ -32,6 +35,10 @@
         props: {
             error: {
                 type: [Object, String],
+                default: null,
+            },
+            message: {
+                type: String,
                 default: null,
             },
         },

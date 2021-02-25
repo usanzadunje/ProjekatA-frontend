@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import store                              from '../store/index';
 import auth                               from "../middleware/auth";
+import verified                               from "../middleware/verified";
 import redirectIfAuthenticated            from "../middleware/redirectIfAuthenticated";
 import middlewarePipeline                 from "./middlewarePipeline";
 
@@ -16,6 +17,20 @@ const routes = [
         meta: { middleware: [auth] },
         component: () =>
             import(/* webpackChunkName: "Dashboard" */ "../views/Dashboard"),
+    },
+    {
+        path: "/email/verify",
+        name: "verificationNotice",
+        meta: { middleware: [auth] },
+        component: () =>
+            import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/EmailVerificationNotice"),
+    },
+    {
+        path: "/test",
+        name: "test",
+        meta: { middleware: [auth, verified] },
+        component: () =>
+            import(/* webpackChunkName: "Test" */ "../views/Test"),
     },
     // {
     //     path: "/user",

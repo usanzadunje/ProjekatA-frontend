@@ -13,8 +13,8 @@ authClient.interceptors.response.use(
     (response) => {
         return response;
     },
-    function (error) {
-        if (
+    function(error) {
+        if(
             error.response &&
             [401, 419].includes(error.response.status) &&
             store.getters["auth/authUser"]
@@ -22,7 +22,7 @@ authClient.interceptors.response.use(
             store.dispatch("auth/logout");
         }
         return Promise.reject(error);
-    }
+    },
 );
 
 export default {
@@ -54,8 +54,9 @@ export default {
         await authClient.get("/sanctum/csrf-cookie");
         return authClient.post("/register", payload);
     },
-    sendVerification(payload) {
-        return authClient.post("/email/verification-notification", payload);
+    async resendVerificationEmail() {
+        await authClient.get("/sanctum/csrf-cookie");
+        return authClient.post("/email/verification-notification");
     },
     updateUser(payload) {
         return authClient.put("/user/profile-information", payload);
