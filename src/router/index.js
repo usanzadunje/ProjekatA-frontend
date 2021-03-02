@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import store                              from '../store/index';
 import auth                               from "../middleware/auth";
-import verified                               from "../middleware/verified";
+import verified                           from "../middleware/verified";
 import redirectIfAuthenticated            from "../middleware/redirectIfAuthenticated";
 import middlewarePipeline                 from "./middlewarePipeline";
 
@@ -18,6 +18,7 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "Dashboard" */ "../views/Dashboard"),
     },
+    /* Responsible for showing verification notice view */
     {
         path: "/email/verify",
         name: "verificationNotice",
@@ -26,8 +27,8 @@ const routes = [
             import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/EmailVerificationNotice"),
     },
     {
-        path: "/test",
-        name: "test",
+        path: "/testEmailVerification",
+        name: "testEmailVerification",
         meta: { middleware: [auth, verified] },
         component: () =>
             import(/* webpackChunkName: "Test" */ "../views/Test"),
@@ -74,26 +75,28 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "Table" */ "../views/Table"),
     },
-    // {
-    //     path: "/reset-password",
-    //     name: "ResetPassword",
-    //     component: () =>
-    //         import(/* webpackChunkName: "reset-password" */ "../views/ResetPassword"),
-    // },
-    // {
-    //     path: "/forgot-password",
-    //     name: "ForgotPassword",
-    //     component: () =>
-    //         import(
-    //             /* webpackChunkName: "forgot-password" */ "../views/ForgotPassword"
-    //             ),
-    // },
+    /* Responsible for showing form for resetting password and sending POST request to backend */
+    {
+        path: "/reset-password",
+        name: "resetPassword",
+        component: () =>
+            import(/* webpackChunkName: "ResetPassword" */ "../views/ResetPassword"),
+    },
+    {
+        path: "/forgot-password",
+        name: "forgotPassword",
+        component: () =>
+            import(
+                /* webpackChunkName: "ForgotPassword" */ "../views/ForgotPassword"
+                ),
+    },
     {
         path: "/404",
         name: "notFound",
         component: () =>
             import(/* webpackChunkName: "NotFound" */ "../views/404"),
     },
+    /* Responsible for handling routes that do not exist */
     {
         path: "/:catchAll(.*)",
         redirect: { name: 'notFound' },

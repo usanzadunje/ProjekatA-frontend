@@ -16,6 +16,7 @@
                     <div class="padding">
                         <ion-button size="large" type="submit" expand="block">Login
                         </ion-button>
+                        <ion-button color="primary" href="/forgot-password">Forgot Password?</ion-button>
                     </div>
                 </ion-col>
             </ion-row>

@@ -33,6 +33,7 @@ export default {
     logout() {
         return authClient.post("/logout");
     },
+    /* Responsible for sending password reset email to user (e-mail is provided in form) */
     async forgotPassword(payload) {
         await authClient.get("/sanctum/csrf-cookie");
         return authClient.post("/forgot-password", payload);
@@ -40,9 +41,7 @@ export default {
     getAuthUser() {
         return authClient.get("/api/users/auth");
     },
-    test() {
-        return authClient.get("/api/user");
-    },
+    /* Responsible for actually resetting password to values given in form */
     async resetPassword(payload) {
         await authClient.get("/sanctum/csrf-cookie");
         return authClient.post("/reset-password", payload);
