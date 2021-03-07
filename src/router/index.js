@@ -11,27 +11,13 @@ const routes = [
         name: "home",
         component: () => import(/* webpackChunkName: "Home" */ "../views/Home"),
     },
+    /* START USER ROUTES */
     {
         path: "/dashboard",
         name: "dashboard",
         meta: { middleware: [auth] },
         component: () =>
             import(/* webpackChunkName: "Dashboard" */ "../views/Dashboard"),
-    },
-    /* Responsible for showing verification notice view */
-    {
-        path: "/email/verify",
-        name: "verificationNotice",
-        meta: { middleware: [auth] },
-        component: () =>
-            import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/EmailVerificationNotice"),
-    },
-    {
-        path: "/testEmailVerification",
-        name: "testEmailVerification",
-        meta: { middleware: [auth, verified] },
-        component: () =>
-            import(/* webpackChunkName: "Test" */ "../views/Test"),
     },
     // {
     //     path: "/user",
@@ -49,6 +35,16 @@ const routes = [
     //         else next(false);
     //     },
     // },
+    /* END USER ROUTES */
+    /* START AUTH ROUTES */
+    /* Responsible for showing verification notice view */
+    {
+        path: "/email/verify",
+        name: "verificationNotice",
+        meta: { middleware: [auth] },
+        component: () =>
+            import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/EmailVerificationNotice"),
+    },
     {
         path: "/login",
         name: "login",
@@ -61,19 +57,6 @@ const routes = [
         meta: { middleware: [redirectIfAuthenticated] },
         component: () =>
             import(/* webpackChunkName: "Register" */ "../views/Register"),
-    },
-    {
-        path: "/cafes",
-        name: "cafe",
-        meta: { middleware: [auth] },
-        component: () =>
-            import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
-    },
-    {
-        path: "/tables",
-        name: "table",
-        component: () =>
-            import(/* webpackChunkName: "Table" */ "../views/Table"),
     },
     /* Responsible for showing form for resetting password and sending POST request to backend */
     {
@@ -90,6 +73,31 @@ const routes = [
                 /* webpackChunkName: "ForgotPassword" */ "../views/ForgotPassword"
                 ),
     },
+    {
+        path: "/testEmailVerification",
+        name: "testEmailVerification",
+        meta: { middleware: [auth, verified] },
+        component: () =>
+            import(/* webpackChunkName: "Test" */ "../views/Test"),
+    },
+    /* END AUTH ROUTES */
+    /* START CAFE ROUTES */
+    {
+        path: "/cafes",
+        name: "cafe",
+        meta: { middleware: [auth] },
+        component: () =>
+            import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
+    },
+    /* END CAFE ROUTES */
+    /* START TABLE ROUTES */
+    {
+        path: "/tables",
+        name: "table",
+        component: () =>
+            import(/* webpackChunkName: "Table" */ "../views/Table"),
+    },
+    /* END TABLE ROUTES */
     {
         path: "/404",
         name: "notFound",

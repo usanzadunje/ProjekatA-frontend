@@ -55,7 +55,7 @@
         IonLabel,
     }                   from '@ionic/vue';
     import AuthService  from "@/services/AuthService";
-    import { getError } from '../utils/helpers';
+    import { getError } from '@/utils/helpers';
     import FlashMessage from "../components/FlashMessage";
 
     export default {
