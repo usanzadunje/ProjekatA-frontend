@@ -85,7 +85,6 @@ const routes = [
     {
         path: "/cafes",
         name: "cafe",
-        meta: { middleware: [auth] },
         component: () =>
             import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
     },
