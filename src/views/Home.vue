@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     logout() {
+      this.$Echo.disconnect();
       this.$store.dispatch('auth/logout');
     },
   },

@@ -11,9 +11,10 @@
         {{ cafe.name }}
         <ion-button size="small" type="button" @click="subscribe(cafe.id)">Subscribe
         </ion-button>
-        <ion-button size="small" type="button" color="secondary" @click="unsubscribe(cafe.id)">Subscribe
+        <ion-button size="small" type="button" color="secondary" @click="unsubscribe(cafe.id)">Unsubscribe
         </ion-button>
       </div>
+      <ion-button color="warning" routerLink="/">Home</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -40,16 +41,17 @@ export default {
   },
   methods: {
     subscribe(cafeId) {
-      this.$Echo.private(`cafes.${ cafeId }`)
+      /* Subscribing to cafe(channel) and listening for table changes */
+      this.$Echo.private(`cafes.${cafeId}`)
           .listen('.CafeTableFreed', () => {
-            console.log('SUCCESS');
-            this.$Echo.leave(`cafes.${ cafeId }`);
+            //Push notification about subscribed cafes table becoming empty again
+            this.$Echo.leave(`cafes.${cafeId}`);
           });
     },
-    unsubscribe(cafeId){
-      this.$Echo.leave(`cafes.${ cafeId }`);
-      console.log('UNSUB');
-    }
+    unsubscribe(cafeId) {
+      /* Unsubscribing cafe(channel) - regardless what happens with cafes tables user will not be notified */
+      this.$Echo.leaveChannel(`private-cafes.${cafeId}`);
+    },
   },
   created() {
     CafeService.index().then((response) => this.cafes = response.data);
