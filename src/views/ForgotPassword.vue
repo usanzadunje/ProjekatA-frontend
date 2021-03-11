@@ -25,7 +25,8 @@
                     </ion-row>
                 </ion-grid>
             </form>
-            <FlashMessage :error="error" :message="message"/>
+          <ion-button color="warning" routerLink="/">Home</ion-button>
+          <FlashMessage :error="error" :message="message"/>
         </ion-content>
     </ion-page>
 </template>

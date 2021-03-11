@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "217719253185",
+    "project_id": "projekata-91472",
+    "storage_bucket": "projekata-91472.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217719253185:android:2b1c0c055e03462bb58c40",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217719253185-68p2rrbkpg1ro8k3d7pl3jkrks432hsh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8KwCqoUgoKwH8nvR0r8pwWsaTg4p8X34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217719253185-68p2rrbkpg1ro8k3d7pl3jkrks432hsh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

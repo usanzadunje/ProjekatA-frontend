@@ -15,6 +15,7 @@
         </ion-button>
       </div>
       <ion-button color="warning" routerLink="/">Home</ion-button>
+      <ion-button color="warning" @click="not">Not</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -22,7 +23,7 @@
 <script>
 import { IonPage, IonHeader, IonToolbar, IonContent, IonTitle, IonButton } from '@ionic/vue';
 import CafeService                                                         from '../services/CafeService';
-
+import LocalNotificationService                                            from '@/services/LocalNotificationService';
 
 export default {
   name: "Table",
@@ -41,10 +42,13 @@ export default {
   },
   methods: {
     subscribe(cafeId) {
+      //Extracting only cafe that user subscribed to
+      let cafe = this.cafes.find(cafe => cafe.id === cafeId);
       /* Subscribing to cafe(channel) and listening for table changes */
       this.$Echo.private(`cafes.${cafeId}`)
           .listen('.CafeTableFreed', () => {
             //Push notification about subscribed cafes table becoming empty again
+            LocalNotificationService.sendNotification(cafe.name);
             this.$Echo.leave(`cafes.${cafeId}`);
           });
     },
@@ -52,6 +56,9 @@ export default {
       /* Unsubscribing cafe(channel) - regardless what happens with cafes tables user will not be notified */
       this.$Echo.leaveChannel(`private-cafes.${cafeId}`);
     },
+    not(){
+      LocalNotificationService.sendNotification('dsa');
+    }
   },
   created() {
     CafeService.index().then((response) => this.cafes = response.data);

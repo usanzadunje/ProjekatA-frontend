@@ -12,13 +12,17 @@
         <ion-button color="primary" routerLink="/register">Register</ion-button>
       </div>
       <ion-button color="secondary" @click="logout" v-else>Logout</ion-button>
+      <ion-button color="warning" routerLink="/dashboard">Dashboard</ion-button>
+      <ion-button color="warning" routerLink="/cafes">Cafes</ion-button>
+      <ion-button color="warning" routerLink="/testEmailVerification">testEmailVerification</ion-button>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 import { IonPage, IonHeader, IonToolbar, IonContent, IonTitle, IonButton } from '@ionic/vue';
-import { mapGetters }                                                      from 'vuex';
+import { mapGetters }
+                                                                           from 'vuex';
 
 export default {
   name: "Home",
@@ -39,6 +43,5 @@ export default {
       this.$store.dispatch('auth/logout');
     },
   },
-
 };
 </script>
