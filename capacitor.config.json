@@ -1,5 +1,5 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "com.projekata",
   "appName": "ProjekatA",
   "bundledWebRuntime": false,
   "npmClient": "npm",
@@ -16,5 +16,9 @@
       ]
     }
   },
-  "cordova": {}
+  "cordova": {},
+  "server": {
+    "url": "http://192.168.1.203:8100",
+    "cleartext": true
+  }
 }

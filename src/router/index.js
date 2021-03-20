@@ -84,7 +84,7 @@ const routes = [
     /* START CAFE ROUTES */
     {
         path: "/cafes",
-        name: "cafe",
+        name: "cafes",
         component: () =>
             import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
     },

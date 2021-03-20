@@ -29,15 +29,11 @@ import "tailwindcss/tailwind.css";
 /* Vuex */
 import store        from './store';
 
-import LaravelEchoService from '@/services/LaravelEchoService';
-
 const app = createApp(App)
     .use(store)
     .use(IonicVue)
     .use(router);
 
-/* Extracting Laravel Echo instance as global property so it can be accessed in components where needed as this.$Echo */
-app.config.globalProperties.$Echo = LaravelEchoService.Echo;
 
 router.isReady().then(() => {
     app.mount('#app');

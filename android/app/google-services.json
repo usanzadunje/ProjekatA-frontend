@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "217719253185",
-    "project_id": "projekata-91472",
-    "storage_bucket": "projekata-91472.appspot.com"
+    "project_number": "1075012223350",
+    "firebase_url": "https://projecta-292418.firebaseio.com",
+    "project_id": "projecta-292418",
+    "storage_bucket": "projecta-292418.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:217719253185:android:6513ba564fa81b5fb58c40",
+        "mobilesdk_app_id": "1:1075012223350:android:dcd7d2c6260be5e23bba57",
         "android_client_info": {
-          "package_name": "io.ionic.starter"
+          "package_name": "com.projekata"
         }
       },
       "oauth_client": [
         {
-          "client_id": "217719253185-68p2rrbkpg1ro8k3d7pl3jkrks432hsh.apps.googleusercontent.com",
+          "client_id": "1075012223350-ot9lec3ijhu2dso3ur5ngroepdmtmj74.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB8KwCqoUgoKwH8nvR0r8pwWsaTg4p8X34"
+          "current_key": "AIzaSyB-e3NtD7Gst1FLnBTrVmc7j86Ms-NnkpA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "217719253185-68p2rrbkpg1ro8k3d7pl3jkrks432hsh.apps.googleusercontent.com",
+              "client_id": "1075012223350-ot9lec3ijhu2dso3ur5ngroepdmtmj74.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
