@@ -6,13 +6,13 @@ import {
     // PushNotificationActionPerformed,
     Capacitor,
 }                    from '@capacitor/core';
+import AuthService   from '../services/AuthService';
 
 export function useFCM() {
     const { PushNotifications, LocalNotifications } = Plugins;
     const router = useRouter();
 
     const initPush = () => {
-        console.log('Initializing push notifications...');
         if(Capacitor.platform !== 'web') {
             registerPush();
         }
@@ -32,7 +32,13 @@ export function useFCM() {
         PushNotifications.addListener(
             'registration',
             (token) => {
-                alert('Push registration success, token: ' + token.value);
+                const payload = {
+                    fcm_token: token.value,
+                };
+                /* Saving token from FCM into user table */
+                AuthService.setFcmToken(payload).then().catch((error) => {
+                    alert(error);
+                });
             },
         );
         PushNotifications.addListener(
@@ -50,7 +56,6 @@ export function useFCM() {
                             title: notification.title,
                             body: notification.body,
                             id: Math.random(),
-                            iconColor: '#0000ff',
                         },
                     ],
                 });

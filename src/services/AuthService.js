@@ -60,4 +60,8 @@ export default {
     updateUser(payload) {
         return authClient.put("/user/profile-information", payload);
     },
+    async setFcmToken(payload) {
+        await authClient.get("/sanctum/csrf-cookie");
+        return authClient.post("/api/users/fcm-token", payload);
+    },
 };

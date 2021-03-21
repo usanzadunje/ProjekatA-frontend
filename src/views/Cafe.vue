@@ -9,7 +9,7 @@
     <ion-content :fullscreen="true" class="ion-padding">
       <div v-for="cafe in state.cafes" :key="cafe.id">
         {{ cafe.name }}
-        <ion-button size="small" color="primary" @click="initPush">Subscribe</ion-button>
+        <ion-button size="small" color="primary" @click="subscribe(cafe.id)">Subscribe</ion-button>
       </div>
       <ion-button color="warning" routerLink="/">Home</ion-button>
     </ion-content>
@@ -36,13 +36,21 @@ export default {
 
     /* Method for initializing push notifications for mobile devices */
     const { initPush } = useFCM();
+    initPush();
+
+    /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
+    const subscribe = (cafeId) => {
+      let cafeName = state.cafes.filter(cafe => cafe.id === cafeId)[0].name;
+      CafeService.subscribe(cafeId).then(() => alert(`Successfully subscribed to ${cafeName}!`)).catch((error) => alert(error));
+    };
 
     /* Fetching all cafes from backend */
     CafeService.index().then((response) => state.cafes = response.data);
 
     return {
       state,
-      initPush
+      initPush,
+      subscribe,
     };
   },
 
