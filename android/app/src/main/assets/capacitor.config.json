@@ -17,7 +17,7 @@
     },
     "LocalNotifications": {
       "smallIcon": "ic_table_chart",
-      "iconColor": "#0000ff",
+      "iconColor": "#9E0300",
       "sound": "sound.wav"
     }
   },

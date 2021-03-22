@@ -4,6 +4,9 @@ import auth                               from "../middleware/auth";
 import verified                           from "../middleware/verified";
 import redirectIfAuthenticated            from "../middleware/redirectIfAuthenticated";
 import middlewarePipeline                 from "./middlewarePipeline";
+// import { Plugins }                        from '@capacitor/core';
+//
+// const { App } = Plugins;
 
 const routes = [
     {
@@ -135,6 +138,19 @@ router.beforeEach((to, from, next) => {
         next: middlewarePipeline(context, middleware, 1),
     });
 });
+
+// App.addListener('appUrlOpen', function (data) {
+//     // Example url: https://beerswift.app/tabs/tabs2
+//     // slug = /tabs/tabs2
+//     const slug = data.url.split('.app').pop();
+//
+//     // We only push to the route if there is a slug present
+//     if (slug) {
+//         router.push({
+//             path: slug,
+//         });
+//     }
+// });
 
 
 export default router;

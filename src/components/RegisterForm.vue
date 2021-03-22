@@ -95,6 +95,7 @@ export default {
       AuthService.registerUser(payload)
                  .then(() => this.$router.push({ name: 'verificationNotice' }))
                  .catch((error) => {
+                   alert(error);
                    this.error = getError(error);
                    this.$emit('registerError', {
                      error: this.error,
