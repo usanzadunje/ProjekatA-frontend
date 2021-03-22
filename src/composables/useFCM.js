@@ -53,9 +53,10 @@ export function useFCM() {
                 LocalNotifications.schedule({
                     notifications: [
                         {
+                            id: notification.data.cafeId,
                             title: notification.title,
                             body: notification.body,
-                            id: Math.random(),
+                            autoCancel: true,
                         },
                     ],
                 });
