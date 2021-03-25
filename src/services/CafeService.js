@@ -6,6 +6,9 @@ export default {
         return API.apiClient.get(`/cafes`);
     },
     show(id) {
+        return API.apiClient.get(`/cafes/${id}?load=true`);
+    },
+    showWithoutTables(id) {
         return API.apiClient.get(`/cafes/${id}`);
     },
     async subscribe(cafeId) {

@@ -1,12 +1,16 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import store                              from '../store/index';
+
+/* Middleware imports */
+import middlewarePipeline                 from "./middlewarePipeline";
 import auth                               from "../middleware/auth";
 import verified                           from "../middleware/verified";
 import redirectIfAuthenticated            from "../middleware/redirectIfAuthenticated";
-import middlewarePipeline                 from "./middlewarePipeline";
-// import { Plugins }                        from '@capacitor/core';
-//
-// const { App } = Plugins;
+import staff                              from "../middleware/staff";
+
+/* Staff imports */
+import Staff                              from '@/views/staff/Staff';
+
 
 const routes = [
     {
@@ -100,6 +104,30 @@ const routes = [
             import(/* webpackChunkName: "Table" */ "../views/Table"),
     },
     /* END TABLE ROUTES */
+
+    /* START STAFF ROUTES */
+    {
+        path: "/staff",
+        component: Staff,
+        meta: { middleware: [auth, staff] },
+        children: [
+            {
+                path: "tables",
+                name: "tableStaff",
+                component: () =>
+                    import(/* webpackChunkName: "TableStaff" */ "../views/staff/Tables"),
+            },
+            {
+                path: "home",
+                name: "homeStaff",
+                component: () =>
+                    import(/* webpackChunkName: "HomeStaff" */ "../views/staff/Home"),
+            },
+        ],
+    },
+    /* END STAFF ROUTES */
+
+    /* START ERROR ROUTES */
     {
         path: "/404",
         name: "notFound",
@@ -111,6 +139,7 @@ const routes = [
         path: "/:catchAll(.*)",
         redirect: { name: 'notFound' },
     },
+    /* END ERROR ROUTES */
 ];
 
 const router = createRouter({
@@ -138,6 +167,7 @@ router.beforeEach((to, from, next) => {
         next: middlewarePipeline(context, middleware, 1),
     });
 });
+
 
 // App.addListener('appUrlOpen', function (data) {
 //     // Example url: https://beerswift.app/tabs/tabs2

@@ -26,8 +26,10 @@
 
 <script>
 import { IonGrid, IonCol, IonRow, IonItem, IonInput, IonButton, IonLabel } from "@ionic/vue";
+import { mapGetters }                                                      from "vuex";
 import AuthService                                                         from "@/services/AuthService";
-import { getError }                                                        from '../utils/helpers';
+import { getError }                                                        from '@/utils/helpers';
+import store                                                               from '@/store/index';
 
 export default {
   name: "LoginForm",
@@ -53,18 +55,26 @@ export default {
         email: this.email,
         password: this.password,
       };
-      const redirectedFrom = this.$route.query.redirect ?? '/dashboard';
+
       AuthService.login(payload)
                  .then(() => {
-                   this.$router.push(redirectedFrom);
+                   store.dispatch("auth/getAuthUser");
+                   setTimeout(() => {
+                     let redirectRouteName = store.state.auth.user.cafe_id ? { name: 'homeStaff' } : { name: 'home' };
+                     this.$router.push(redirectRouteName);
+                   }, 500);
                  })
                  .catch((error) => {
+                   alert(error);
                    this.error = getError(error);
                    this.$emit('loginError', {
                      error: this.error,
                    });
                  });
     },
+  },
+  computed: {
+    ...mapGetters('auth', ['authUser']),
   },
 };
 </script>

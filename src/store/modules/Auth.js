@@ -23,7 +23,7 @@ export const actions = {
                           .then(() => {
                               commit("SET_USER", null);
                               if(router.currentRoute.name !== "login")
-                                  router.push({ path: "/login" });
+                                  router.push('/login');
                           });
     },
     async getAuthUser({ commit }) {
@@ -52,5 +52,8 @@ export const getters = {
     },
     emailVerified: (state) => {
         return !!state.user.email_verified;
+    },
+    isStaff: (state) => {
+        return !!state.user.cafe_id;
     },
 };

@@ -9,6 +9,7 @@
     <ion-content :fullscreen="true" class="ion-padding">
       <div v-for="cafe in state.cafes" :key="cafe.id">
         {{ cafe.name }}
+        ({{ cafe.free_tables }} tables free)
         <ion-button size="small" color="primary" @click="subscribe(cafe.id)">Subscribe</ion-button>
       </div>
       <ion-button color="warning" routerLink="/">Home</ion-button>
@@ -19,7 +20,7 @@
 <script>
 import { IonPage, IonHeader, IonToolbar, IonContent, IonTitle, IonButton } from '@ionic/vue';
 import CafeService                                                         from '../services/CafeService';
-import { reactive }                                                        from 'vue';
+import { reactive, onBeforeMount }                                         from 'vue';
 import { useFCM }                                                          from '@/composables/useFCM';
 
 export default {
@@ -32,7 +33,7 @@ export default {
     IonButton,
   },
   setup() {
-    const state = reactive({ cafes: [] });
+    let state = reactive({ cafes: [] });
 
     /* Method for initializing push notifications for mobile devices */
     const { initPush } = useFCM();
@@ -45,7 +46,9 @@ export default {
     };
 
     /* Fetching all cafes from backend */
-    CafeService.index().then((response) => state.cafes = response.data);
+    onBeforeMount(() => {
+      CafeService.index().then((response) => state.cafes = response.data).catch((error) => alert(error));
+    });
 
     return {
       state,
