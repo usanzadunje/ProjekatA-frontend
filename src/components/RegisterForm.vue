@@ -93,7 +93,7 @@ export default {
         password_confirmation: this.passwordConfirm,
       };
       AuthService.registerUser(payload)
-                 .then(() => this.$router.push({ name: 'verificationNotice' }))
+                 .then(() => this.$router.push({ name: 'email.notice' }))
                  .catch((error) => {
                    alert(error);
                    this.error = getError(error);

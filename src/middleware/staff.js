@@ -1,9 +1,14 @@
 export default function staff({ next, store }) {
     const homeRoute = { name: "home" };
+    const loginRoute = { name: "login" };
 
-    if(!store.getters["auth/authUser"].cafe_id) {
-        next(homeRoute);
+    if(store.getters["auth/loggedIn"]) {
+        if(store.getters["auth/isStaff"]) {
+            next();
+        }else {
+            next(homeRoute);
+        }
     }else {
-        next();
+        next(loginRoute);
     }
 }

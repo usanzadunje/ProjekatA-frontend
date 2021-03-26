@@ -60,12 +60,11 @@ export default {
                  .then(() => {
                    store.dispatch("auth/getAuthUser");
                    setTimeout(() => {
-                     let redirectRouteName = store.state.auth.user.cafe_id ? { name: 'homeStaff' } : { name: 'home' };
-                     this.$router.push(redirectRouteName);
+                     let homeRoute = store.state.auth.user.cafe_id ? { name: 'staff.home' } : { name: 'home' };
+                     this.$router.push(homeRoute);
                    }, 500);
                  })
                  .catch((error) => {
-                   alert(error);
                    this.error = getError(error);
                    this.$emit('loginError', {
                      error: this.error,

@@ -1,57 +1,25 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import store                              from '../store/index';
+import store                              from '@/store/index';
 
 /* Middleware imports */
 import middlewarePipeline                 from "./middlewarePipeline";
-import auth                               from "../middleware/auth";
-import verified                           from "../middleware/verified";
-import redirectIfAuthenticated            from "../middleware/redirectIfAuthenticated";
-import staff                              from "../middleware/staff";
+import auth                               from "@/middleware/auth";
+import verified                           from "@/middleware/verified";
+import redirectIfAuthenticated            from "@/middleware/redirectIfAuthenticated";
+import staff                              from "@/middleware/staff";
+import redirectIfStaff                    from '@/middleware/redirectIfStaff';
 
 /* Staff imports */
 import Staff                              from '@/views/staff/Staff';
 
 
+import App from '@/App';
+
+
 const routes = [
-    {
-        path: "/",
-        name: "home",
-        component: () => import(/* webpackChunkName: "Home" */ "../views/Home"),
-    },
-    /* START USER ROUTES */
-    {
-        path: "/dashboard",
-        name: "dashboard",
-        meta: { middleware: [auth] },
-        component: () =>
-            import(/* webpackChunkName: "Dashboard" */ "../views/Dashboard"),
-    },
-    // {
-    //     path: "/user",
-    //     name: "user",
-    //     meta: { requiresAuth: true },
-    //     component: () => import(/* webpackChunkName: "user" */ "../views/User"),
-    // },
-    // {
-    //     path: "/users",
-    //     name: "users",
-    //     meta: { requiresAuth: true },
-    //     component: () => import(/* webpackChunkName: "users" */ "../views/Users"),
-    //     beforeEnter: (to, from, next) => {
-    //         if (store.getters["auth/isAdmin"]) next();
-    //         else next(false);
-    //     },
-    // },
-    /* END USER ROUTES */
-    /* START AUTH ROUTES */
-    /* Responsible for showing verification notice view */
-    {
-        path: "/email/verify",
-        name: "verificationNotice",
-        meta: { middleware: [auth] },
-        component: () =>
-            import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/EmailVerificationNotice"),
-    },
+    /* =============================================
+        Start unprotected routes from staff
+    ============================================= */
     {
         path: "/login",
         name: "login",
@@ -65,16 +33,25 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "Register" */ "../views/Register"),
     },
-    /* Responsible for showing form for resetting password and sending POST request to backend */
     {
+        /* Responsible for showing verification notice view */
+        path: "/email/verify",
+        name: "email.notice",
+        meta: { middleware: [auth] },
+        component: () =>
+            import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/EmailVerificationNotice"),
+    },
+
+    {
+        /* Responsible for showing form for resetting password and sending POST request to backend */
         path: "/reset-password",
-        name: "resetPassword",
+        name: "password.reset",
         component: () =>
             import(/* webpackChunkName: "ResetPassword" */ "../views/ResetPassword"),
     },
     {
         path: "/forgot-password",
-        name: "forgotPassword",
+        name: "password.forgot",
         component: () =>
             import(
                 /* webpackChunkName: "ForgotPassword" */ "../views/ForgotPassword"
@@ -87,25 +64,73 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "Test" */ "../views/Test"),
     },
-    /* END AUTH ROUTES */
-    /* START CAFE ROUTES */
+    /* =============================================
+        End unprotected routes from staff
+    ============================================= */
     {
-        path: "/cafes",
-        name: "cafes",
-        component: () =>
-            import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
-    },
-    /* END CAFE ROUTES */
-    /* START TABLE ROUTES */
-    {
-        path: "/tables",
-        name: "table",
-        component: () =>
-            import(/* webpackChunkName: "Table" */ "../views/Table"),
-    },
-    /* END TABLE ROUTES */
+        /* =============================================
+            Start routes protected from staff
+        ============================================= */
+        path: '/',
+        meta: { middleware: [redirectIfStaff] },
+        component: App,
+        children: [
+            {
+                path: "/",
+                name: "home",
+                component: () => import(/* webpackChunkName: "Home" */ "../views/Home"),
+            },
+            /* START USER ROUTES */
+            {
+                path: "/dashboard",
+                name: "dashboard",
+                meta: { middleware: [auth] },
+                component: () =>
+                    import(/* webpackChunkName: "Dashboard" */ "../views/Dashboard"),
+            },
+            // {
+            //     path: "/user",
+            //     name: "user",
+            //     meta: { requiresAuth: true },
+            //     component: () => import(/* webpackChunkName: "user" */ "../views/User"),
+            // },
+            // {
+            //     path: "/users",
+            //     name: "users",
+            //     meta: { requiresAuth: true },
+            //     component: () => import(/* webpackChunkName: "users" */ "../views/Users"),
+            //     beforeEnter: (to, from, next) => {
+            //         if (store.getters["auth/isAdmin"]) next();
+            //         else next(false);
+            //     },
+            // },
+            /* END USER ROUTES */
 
-    /* START STAFF ROUTES */
+            /* START CAFE ROUTES */
+            {
+                path: "/cafes",
+                name: "cafes",
+                component: () =>
+                    import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
+            },
+            /* END CAFE ROUTES */
+            /* START TABLE ROUTES */
+            {
+                path: "/tables",
+                name: "table",
+                component: () =>
+                    import(/* webpackChunkName: "Table" */ "../views/Table"),
+            },
+            /* END TABLE ROUTES */
+        ],
+    },
+    /* =============================================
+        End routes protected from staff
+    ============================================= */
+
+    /* =============================================
+        Start routes protected from end-user
+    ============================================= */
     {
         path: "/staff",
         component: Staff,
@@ -113,33 +138,39 @@ const routes = [
         children: [
             {
                 path: "tables",
-                name: "tableStaff",
+                name: "staff.tables",
                 component: () =>
                     import(/* webpackChunkName: "TableStaff" */ "../views/staff/Tables"),
             },
             {
                 path: "home",
-                name: "homeStaff",
+                name: "staff.home",
                 component: () =>
                     import(/* webpackChunkName: "HomeStaff" */ "../views/staff/Home"),
             },
         ],
     },
-    /* END STAFF ROUTES */
+    /* =============================================
+        Start routes protected from end-user
+    ============================================= */
 
-    /* START ERROR ROUTES */
+    /* =============================================
+        Start error routes
+    ============================================= */
     {
         path: "/404",
         name: "notFound",
         component: () =>
             import(/* webpackChunkName: "NotFound" */ "../views/404"),
     },
-    /* Responsible for handling routes that do not exist */
     {
+        /* Responsible for handling routes that do not exist */
         path: "/:catchAll(.*)",
         redirect: { name: 'notFound' },
     },
-    /* END ERROR ROUTES */
+    /* =============================================
+        End error routes
+    ============================================= */
 ];
 
 const router = createRouter({

@@ -23,7 +23,7 @@ export const actions = {
                           .then(() => {
                               commit("SET_USER", null);
                               if(router.currentRoute.name !== "login")
-                                  router.push('/login');
+                                  router.push({ name: 'login' });
                           });
     },
     async getAuthUser({ commit }) {
