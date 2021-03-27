@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import LoginForm                                                from "../components/LoginForm";
-import FlashMessage                                             from "../components/FlashMessage";
+import LoginForm                                                from "@/components/LoginForm";
+import FlashMessage                                             from "@/components/FlashMessage";
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 
 export default {

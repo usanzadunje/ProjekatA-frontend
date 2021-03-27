@@ -21,7 +21,7 @@
 
 <script>
     import { IonPage, IonHeader, IonToolbar, IonContent, IonTitle } from '@ionic/vue';
-    import TableService                                             from '../services/TableService';
+    import TableService                                             from '@/services/TableService';
     //import { getError }                                             from '../utils/helpers';
 
     export default {

@@ -19,7 +19,7 @@
 
 <script>
 import { IonPage, IonHeader, IonToolbar, IonContent, IonTitle, IonButton } from '@ionic/vue';
-import CafeService                                                         from '../services/CafeService';
+import CafeService                                                         from '@/services/CafeService';
 import { reactive, onBeforeMount }                                         from 'vue';
 import { useFCM }                                                          from '@/composables/useFCM';
 

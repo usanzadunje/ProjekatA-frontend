@@ -20,8 +20,7 @@
 
 <script>
 import { IonPage, IonHeader, IonToolbar, IonContent, IonTitle, IonButton } from '@ionic/vue';
-import { mapGetters }
-                                                                           from 'vuex';
+import { mapGetters }                                                      from 'vuex';
 
 export default {
   name: "Home",

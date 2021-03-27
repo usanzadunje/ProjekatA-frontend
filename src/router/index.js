@@ -9,11 +9,11 @@ import redirectIfAuthenticated            from "@/middleware/redirectIfAuthentic
 import staff                              from "@/middleware/staff";
 import redirectIfStaff                    from '@/middleware/redirectIfStaff';
 
-/* Staff imports */
+/* Staff imports views */
 import Staff                              from '@/views/staff/Staff';
 
-
-import App from '@/App';
+/* End user imports views*/
+import UserLayout from '@/views/user/UserLayout';
 
 
 const routes = [
@@ -24,14 +24,14 @@ const routes = [
         path: "/login",
         name: "login",
         meta: { middleware: [redirectIfAuthenticated] },
-        component: () => import(/* webpackChunkName: "Login" */ "../views/Login"),
+        component: () => import(/* webpackChunkName: "Login" */ "../views/auth/Login"),
     },
     {
         path: "/register",
         name: "register",
         meta: { middleware: [redirectIfAuthenticated] },
         component: () =>
-            import(/* webpackChunkName: "Register" */ "../views/Register"),
+            import(/* webpackChunkName: "Register" */ "../views/auth/Register"),
     },
     {
         /* Responsible for showing verification notice view */
@@ -39,7 +39,7 @@ const routes = [
         name: "email.notice",
         meta: { middleware: [auth] },
         component: () =>
-            import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/EmailVerificationNotice"),
+            import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/auth/EmailVerificationNotice"),
     },
 
     {
@@ -47,14 +47,14 @@ const routes = [
         path: "/reset-password",
         name: "password.reset",
         component: () =>
-            import(/* webpackChunkName: "ResetPassword" */ "../views/ResetPassword"),
+            import(/* webpackChunkName: "ResetPassword" */ "../views/auth/ResetPassword"),
     },
     {
         path: "/forgot-password",
         name: "password.forgot",
         component: () =>
             import(
-                /* webpackChunkName: "ForgotPassword" */ "../views/ForgotPassword"
+                /* webpackChunkName: "ForgotPassword" */ "../views/auth/ForgotPassword"
                 ),
     },
     {
@@ -62,7 +62,7 @@ const routes = [
         name: "testEmailVerification",
         meta: { middleware: [auth, verified] },
         component: () =>
-            import(/* webpackChunkName: "Test" */ "../views/Test"),
+            import(/* webpackChunkName: "Test" */ "../views/user/Test"),
     },
     /* =============================================
         End unprotected routes from staff
@@ -73,12 +73,12 @@ const routes = [
         ============================================= */
         path: '/',
         meta: { middleware: [redirectIfStaff] },
-        component: App,
+        component: UserLayout,
         children: [
             {
                 path: "/",
                 name: "home",
-                component: () => import(/* webpackChunkName: "Home" */ "../views/Home"),
+                component: () => import(/* webpackChunkName: "Home" */ "../views/user/Home"),
             },
             /* START USER ROUTES */
             {
@@ -86,7 +86,7 @@ const routes = [
                 name: "dashboard",
                 meta: { middleware: [auth] },
                 component: () =>
-                    import(/* webpackChunkName: "Dashboard" */ "../views/Dashboard"),
+                    import(/* webpackChunkName: "Dashboard" */ "../views/user/Dashboard"),
             },
             // {
             //     path: "/user",
@@ -111,7 +111,7 @@ const routes = [
                 path: "/cafes",
                 name: "cafes",
                 component: () =>
-                    import(/* webpackChunkName: "Cafe" */ "../views/Cafe"),
+                    import(/* webpackChunkName: "Cafe" */ "../views/user/Cafe"),
             },
             /* END CAFE ROUTES */
             /* START TABLE ROUTES */
@@ -119,7 +119,7 @@ const routes = [
                 path: "/tables",
                 name: "table",
                 component: () =>
-                    import(/* webpackChunkName: "Table" */ "../views/Table"),
+                    import(/* webpackChunkName: "Table" */ "../views/user/Table"),
             },
             /* END TABLE ROUTES */
         ],
@@ -161,7 +161,7 @@ const routes = [
         path: "/404",
         name: "notFound",
         component: () =>
-            import(/* webpackChunkName: "NotFound" */ "../views/404"),
+            import(/* webpackChunkName: "NotFound" */ "../views/errors/404"),
     },
     {
         /* Responsible for handling routes that do not exist */

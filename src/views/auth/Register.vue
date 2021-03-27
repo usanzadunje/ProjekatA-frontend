@@ -14,8 +14,8 @@
 </template>
 
 <script>
-    import RegisterForm                                             from "../components/RegisterForm";
-    import FlashMessage                                             from "../components/FlashMessage";
+    import RegisterForm                                             from "@/components/RegisterForm";
+    import FlashMessage                                             from "@/components/FlashMessage";
     import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 
     export default {
