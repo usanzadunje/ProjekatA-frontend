@@ -21,6 +21,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+    <FlashMessage :error="error"/>
   </form>
 </template>
 
@@ -29,6 +30,7 @@ import { IonGrid, IonCol, IonRow, IonItem, IonInput, IonButton, IonLabel } from 
 import { mapGetters }                                                      from "vuex";
 import AuthService                                                         from "@/services/AuthService";
 import { getError }                                                        from '@/utils/helpers';
+import FlashMessage                                                        from '@/components/FlashMessage';
 import store                                                               from '@/store/index';
 
 export default {
@@ -41,6 +43,7 @@ export default {
     IonInput,
     IonButton,
     IonLabel,
+    FlashMessage,
   },
   data() {
     return {
@@ -57,12 +60,10 @@ export default {
       };
 
       AuthService.login(payload)
-                 .then(() => {
-                   store.dispatch("auth/getAuthUser");
-                   setTimeout(() => {
-                     let homeRoute = store.state.auth.user.cafe_id ? { name: 'staff.home' } : { name: 'home' };
-                     this.$router.push(homeRoute);
-                   }, 500);
+                 .then(async() => {
+                   await store.dispatch("auth/getAuthUser");
+                   let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
+                   this.$router.push(homeRoute);
                  })
                  .catch((error) => {
                    this.error = getError(error);

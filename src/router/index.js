@@ -13,7 +13,7 @@ import redirectIfStaff                    from '@/middleware/redirectIfStaff';
 import Staff                              from '@/views/staff/Staff';
 
 /* End user imports views*/
-import UserLayout from '@/views/user/UserLayout';
+import UserLayout                         from '@/views/user/UserLayout';
 
 
 const routes = [
@@ -88,22 +88,13 @@ const routes = [
                 component: () =>
                     import(/* webpackChunkName: "Dashboard" */ "../views/user/Dashboard"),
             },
-            // {
-            //     path: "/user",
-            //     name: "user",
-            //     meta: { requiresAuth: true },
-            //     component: () => import(/* webpackChunkName: "user" */ "../views/User"),
-            // },
-            // {
-            //     path: "/users",
-            //     name: "users",
-            //     meta: { requiresAuth: true },
-            //     component: () => import(/* webpackChunkName: "users" */ "../views/Users"),
-            //     beforeEnter: (to, from, next) => {
-            //         if (store.getters["auth/isAdmin"]) next();
-            //         else next(false);
-            //     },
-            // },
+            {
+                path: "/user/edit",
+                name: "user.edit",
+                meta: { middleware: [auth] },
+                component: () => import(/* webpackChunkName: "Edit" */ "../views/user/Edit"),
+            },
+
             /* END USER ROUTES */
 
             /* START CAFE ROUTES */

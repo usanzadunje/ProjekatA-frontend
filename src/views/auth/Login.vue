@@ -7,15 +7,13 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <LoginForm @loginError="displayErrors"/>
-      <FlashMessage :error="error"/>
+      <LoginForm/>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 import LoginForm                                                from "@/components/LoginForm";
-import FlashMessage                                             from "@/components/FlashMessage";
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 
 export default {
@@ -27,17 +25,6 @@ export default {
     IonToolbar,
     IonTitle,
     IonContent,
-    FlashMessage,
-  },
-  data() {
-    return {
-      error: null,
-    };
-  },
-  methods: {
-    displayErrors(payload) {
-      this.error = payload.error;
-    },
   },
 };
 </script>

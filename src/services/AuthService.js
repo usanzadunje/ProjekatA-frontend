@@ -57,7 +57,8 @@ export default {
         await authClient.get("/sanctum/csrf-cookie");
         return authClient.post("/email/verification-notification");
     },
-    updateUser(payload) {
+    async updateUser(payload) {
+        await authClient.get("/sanctum/csrf-cookie");
         return authClient.put("/user/profile-information", payload);
     },
     async setFcmToken(payload) {

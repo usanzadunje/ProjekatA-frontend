@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="registerUser">
+  <form @submit.prevent="editUser">
     <ion-grid>
       <ion-row color="primary" class="justify-content-center">
         <ion-col class="align-self-center" size-md="6" size-lg="5" size-xs="12">
@@ -31,18 +31,9 @@
               <ion-label position="floating">Email</ion-label>
               <ion-input v-model="email" name="email" type="email" required></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-label position="floating">Password</ion-label>
-              <ion-input v-model="password" name="password" type="password" required></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Confirm Password</ion-label>
-              <ion-input v-model="passwordConfirm" name="password-confirm" type="password"
-                         required></ion-input>
-            </ion-item>
           </div>
           <div class="padding">
-            <ion-button size="large" type="submit" expand="block">Register
+            <ion-button size="large" type="submit" expand="block">Update
             </ion-button>
           </div>
         </ion-col>
@@ -54,14 +45,14 @@
 
 <script>
 import { IonGrid, IonCol, IonRow, IonItem, IonInput, IonButton, IonLabel, IonDatetime } from "@ionic/vue";
-import AuthService
-                                                                                        from '@/services/AuthService';
+import AuthService                                                                      from '@/services/AuthService';
 import { getError }                                                                     from '@/utils/helpers';
 import FlashMessage
                                                                                         from '@/components/FlashMessage';
+import { mapGetters }                                                                   from 'vuex';
 
 export default {
-  name: "RegisterForm",
+  name: "EditForm",
   components: {
     IonGrid,
     IonCol,
@@ -77,17 +68,15 @@ export default {
     return {
       fname: null,
       lname: null,
-      bday: new Date().toDateString().substring(4),
+      bday: null,
       phone: null,
       username: null,
       email: null,
-      password: null,
-      passwordConfirm: null,
       error: null,
     };
   },
   methods: {
-    registerUser() {
+    editUser() {
       const payload = {
         fname: this.fname,
         lname: this.lname,
@@ -95,20 +84,26 @@ export default {
         phone: this.phone,
         username: this.username,
         email: this.email,
-        password: this.password,
-        password_confirmation: this.passwordConfirm,
       };
-      console.log(payload.bday);
-      AuthService.registerUser(payload)
-                 .then(() => this.$router.push({ name: 'email.notice' }))
+      AuthService.updateUser(payload)
+                 .then(() => this.$store.dispatch('auth/getAuthUser'))
+                 .then(() => this.$router.push({ name: 'dashboard' }))
                  .catch((error) => {
-                   alert(error);
                    this.error = getError(error);
-                   this.$emit('registerError', {
-                     error: this.error,
-                   });
                  });
     },
+  },
+  computed: {
+    ...mapGetters('auth', ['authUser']),
+  },
+  beforeMount() {
+    let fullName = this.authUser.full_name.split(' ');
+    this.fname = fullName[0];
+    this.lname = fullName[1];
+    this.bday = this.authUser.bday;
+    this.phone = this.authUser.phone;
+    this.username = this.authUser.username;
+    this.email = this.authUser.email;
   },
 };
 </script>
