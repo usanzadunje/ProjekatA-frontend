@@ -21,6 +21,11 @@ const routes = [
         Start unprotected routes from staff
     ============================================= */
     {
+        path: "/test",
+        name: "test",
+        component: () => import(/* webpackChunkName: "Test" */ "../views/auth/LoginFinal"),
+    },
+    {
         path: "/login",
         name: "login",
         meta: { middleware: [redirectIfAuthenticated] },

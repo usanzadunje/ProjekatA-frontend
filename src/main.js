@@ -26,6 +26,9 @@ import './theme/variables.css';
 /* Taliwindcss import*/
 import "tailwindcss/tailwind.css";
 
+// /* Custom css */
+// import "css/style.css"
+
 /* Vuex */
 import store        from './store';
 

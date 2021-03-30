@@ -7,7 +7,7 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
       <div v-if="!loggedIn">
-        <ion-button color="primary" href="/login">Login</ion-button>
+        <ion-button color="primary" routerLink="/test">Login</ion-button>
         <ion-button color="primary" routerLink="/register">Register</ion-button>
       </div>
       <ion-button color="secondary" @click="logout" v-else>Logout</ion-button>
