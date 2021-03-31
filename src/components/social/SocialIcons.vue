@@ -1,16 +1,16 @@
 <template>
   <div class="flex justify-around px-6">
-    <div style="height:40px; width:40px; line-height: 45px" class="bg-gray-200 rounded-full text-center align-middle">
-      <ion-icon :icon="logoFacebook" size="small"></ion-icon>
+    <div class="bg-gray-100 rounded-full text-center align-middle social-circle-size">
+      <ion-icon :icon="logoFacebook"></ion-icon>
     </div>
-    <div style="height:40px; width:40px; line-height: 45px" class="bg-gray-200 rounded-full text-center align-middle">
-      <ion-icon :icon="logoTwitter" size="small"></ion-icon>
+    <div class="bg-gray-100 rounded-full text-center align-middle social-circle-size">
+      <ion-icon :icon="logoTwitter"></ion-icon>
     </div>
-    <div style="height:40px; width:40px; line-height: 45px" class="bg-gray-200 rounded-full text-center align-middle">
-      <ion-icon :icon="logoInstagram" size="small"></ion-icon>
+    <div class="bg-gray-100 rounded-full text-center align-middle social-circle-size">
+      <ion-icon :icon="logoInstagram"></ion-icon>
     </div>
-    <div style="height:40px; width:40px; line-height: 45px" class="bg-gray-200 rounded-full text-center align-middle">
-      <ion-icon :icon="logoGoogle" size="small"></ion-icon>
+    <div class="bg-gray-100 rounded-full text-center align-middle social-circle-size">
+      <ion-icon :icon="logoGoogle"></ion-icon>
     </div>
   </div>
 </template>

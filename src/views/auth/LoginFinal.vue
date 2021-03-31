@@ -5,7 +5,7 @@
         <h1 class="ion-text-center ion-text-uppercase text-4xl font-bold">Caffe</h1>
         <h1 class="ion-text-center ion-text-lowercase text-2xl">finder</h1>
       </div>
-      <div class="mt-28">
+      <div class="mt-16">
         <h2 class="ion-text-center text-2xl">Prijavi se</h2>
         <LoginForm class="mt-2"></LoginForm>
       </div>

@@ -15,6 +15,7 @@
       <ion-button color="warning" routerLink="/cafes">Cafes</ion-button>
       <ion-button color="warning" routerLink="/testEmailVerification">testEmailVerification</ion-button>
       <ion-button color="warning" routerLink="/user/edit">Edit Profile</ion-button>
+      <ion-button color="warning" routerLink="/test1">Test</ion-button>
     </ion-content>
   </ion-page>
 </template>
