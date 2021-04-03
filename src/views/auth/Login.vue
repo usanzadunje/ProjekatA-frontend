@@ -1,29 +1,27 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Login</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
     <ion-content :fullscreen="true">
-      <LoginForm/>
+      <div class="mt-16">
+        <h1 class="ion-text-center ion-text-uppercase text-4xl font-bold">Caffe</h1>
+        <h1 class="ion-text-center ion-text-lowercase text-2xl">finder</h1>
+      </div>
+      <div class="mt-16">
+        <h2 class="ion-text-center text-2xl">Prijavi se</h2>
+        <LoginForm class="mt-2"></LoginForm>
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import LoginForm                                                from "@/components/LoginForm";
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { IonPage, IonContent } from '@ionic/vue';
+import LoginForm               from '@/components/auth/LoginForm';
 
 export default {
   name: "Login",
   components: {
     LoginForm,
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
   },
 };

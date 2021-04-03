@@ -49,7 +49,7 @@ export default {
     updatePassword(payload) {
         return authClient.put("/user/password", payload);
     },
-    async registerUser(payload) {
+    async register(payload) {
         await authClient.get("/sanctum/csrf-cookie");
         return authClient.post("/register", payload);
     },

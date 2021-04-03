@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="login" class="px-5">
-    <ion-item lines="none" class="border rounded-2xl h-12">
+    <ion-item lines="none" class="border rounded-2xl h-12 auth-input-background">
       <ion-icon :icon="mailOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="email"
@@ -13,25 +13,25 @@
           autofocus required
       ></ion-input>
     </ion-item>
-    <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5">
+    <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
       <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model.lazy="password"
-          class="--background"
+          v-model="password"
           inputmode="password"
-          :type="showPasswordEye ? 'password' : 'text'"
-          debounce="600"
+          :type="showPassword ? 'text' : 'password'"
+          debounce="1"
           placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
           required
       ></ion-input>
-      <ion-icon :icon="showPasswordEye ? eyeOutline : eyeOffOutline" @click="togglePasswordShow"></ion-icon>
+      <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
+                @click="togglePasswordShow"></ion-icon>
     </ion-item>
     <div class="flex justify-between mt-3.5 px-4">
       <div>
         <ion-checkbox class="align-text-top"></ion-checkbox>
         <ion-text class="ml-2">Zapamti me</ion-text>
       </div>
-      <ion-router-link href="/forgot-password">Zaboravljena lozinka?</ion-router-link>
+      <a href="/forgot-password">Zaboravljena lozinka?</a>
     </div>
     <SocialIcons class="mt-7"/>
     <div class="padding mt-10">
@@ -60,7 +60,7 @@
 
 <script>
 import { defineComponent }                                         from 'vue';
-import { IonItem, IonInput, IonIcon, IonRouterLink, IonText }      from "@ionic/vue";
+import { IonItem, IonInput, IonIcon, IonText, IonButton }          from "@ionic/vue";
 import store                                                       from '@/store/index';
 import { mapGetters }                                              from "vuex";
 import AuthService                                                 from "@/services/AuthService";
@@ -75,8 +75,8 @@ export default defineComponent({
     IonItem,
     IonInput,
     IonIcon,
-    IonRouterLink,
     IonText,
+    IonButton,
     FlashMessage,
     SocialIcons,
   },
@@ -85,7 +85,7 @@ export default defineComponent({
       email: null,
       password: null,
       error: null,
-      showPasswordEye: true,
+      showPassword: false,
 
       /* Icons from ionicon/icons */
       mailOutline,
@@ -115,7 +115,7 @@ export default defineComponent({
                  });
     },
     togglePasswordShow() {
-      this.showPasswordEye = !this.showPasswordEye;
+      this.showPassword = !this.showPassword;
     },
   },
   computed: {

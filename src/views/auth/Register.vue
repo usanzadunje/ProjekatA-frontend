@@ -1,29 +1,27 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Register</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
     <ion-content :fullscreen="true">
-      <RegisterForm/>
+      <div class="mt-16">
+        <h1 class="ion-text-center ion-text-uppercase text-4xl font-bold">Caffe</h1>
+        <h1 class="ion-text-center ion-text-lowercase text-2xl">finder</h1>
+      </div>
+      <div class="mt-16">
+        <h2 class="ion-text-center text-2xl">Registruj se</h2>
+        <RegisterForm class="mt-2"></RegisterForm>
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import RegisterForm                                             from "@/components/RegisterForm";
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import RegisterForm            from "@/components/auth/RegisterForm";
+import { IonPage, IonContent } from '@ionic/vue';
 
 export default {
   name: "Register",
   components: {
     RegisterForm,
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
   },
 };

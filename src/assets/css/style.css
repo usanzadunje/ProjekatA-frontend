@@ -1,11 +1,15 @@
-.social-circle-size{
-    height:37.5px;
-    width:37.5px;
+.social-circle-size {
+    height: 37.5px;
+    width: 37.5px;
     line-height: 43.5px;
     font-size: 16px;
 }
 
-.auth-button-border-radius{
+.auth-button-border-radius {
     --border-radius: 17px;
     --border-color: #f00;
+}
+
+.auth-input-background {
+    --background: #F6F7FB;
 }

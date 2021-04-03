@@ -7,7 +7,7 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
       <div v-if="!loggedIn">
-        <ion-button color="primary" routerLink="/test">Login</ion-button>
+        <ion-button color="primary" routerLink="/login">Login</ion-button>
         <ion-button color="primary" routerLink="/register">Register</ion-button>
       </div>
       <ion-button color="secondary" @click="logout" v-else>Logout</ion-button>
@@ -15,7 +15,7 @@
       <ion-button color="warning" routerLink="/cafes">Cafes</ion-button>
       <ion-button color="warning" routerLink="/testEmailVerification">testEmailVerification</ion-button>
       <ion-button color="warning" routerLink="/user/edit">Edit Profile</ion-button>
-      <ion-button color="warning" routerLink="/test1">Test</ion-button>
+      <ion-button color="warning" routerLink="/test">Test</ion-button>
     </ion-content>
   </ion-page>
 </template>
