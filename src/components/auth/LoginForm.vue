@@ -8,7 +8,6 @@
           type="email"
           inputmode="email"
           debounce="600"
-          pattern="email"
           placeholder="marko.markovic@gmail.com"
           autofocus required
       ></ion-input>

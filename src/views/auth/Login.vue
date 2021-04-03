@@ -16,13 +16,14 @@
 <script>
 import { IonPage, IonContent } from '@ionic/vue';
 import LoginForm               from '@/components/auth/LoginForm';
+import { defineComponent }         from 'vue';
 
-export default {
+export default defineComponent({
   name: "Login",
   components: {
     LoginForm,
     IonPage,
     IonContent,
   },
-};
+});
 </script>

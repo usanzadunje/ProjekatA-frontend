@@ -16,13 +16,14 @@
 <script>
 import RegisterForm            from "@/components/auth/RegisterForm";
 import { IonPage, IonContent } from '@ionic/vue';
+import { defineComponent }         from 'vue';
 
-export default {
+export default defineComponent({
   name: "Register",
   components: {
     RegisterForm,
     IonPage,
     IonContent,
   },
-};
+});
 </script>

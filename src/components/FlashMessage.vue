@@ -30,7 +30,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: "FlashMessage",
   props: {
     error: {
@@ -58,5 +60,5 @@ export default {
       return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
     },
   },
-};
+});
 </script>
