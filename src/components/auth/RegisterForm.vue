@@ -155,7 +155,7 @@ export default defineComponent({
       };
 
       AuthService.register(payload)
-                 .then(() => this.$router.push({ name: 'email.notice' }))
+                 .then(() => this.$router.push({ name: 'onboarding' }))
                  .catch((error) => {
                    this.error = getError(error);
                  });

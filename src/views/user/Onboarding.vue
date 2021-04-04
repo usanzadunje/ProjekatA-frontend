@@ -43,7 +43,7 @@ export default defineComponent({
     // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
     const slides = ref(null);
     const slideOpts = {
-      initialSlide: 1,
+      initialSlide: 0,
       speed: 400,
     };
 

@@ -58,15 +58,15 @@
 </template>
 
 <script>
-import { defineComponent }                                         from 'vue';
-import { IonItem, IonInput, IonIcon, IonText, IonButton }          from "@ionic/vue";
-import store                                                       from '@/store/index';
-import { mapGetters }                                              from "vuex";
-import AuthService                                                 from "@/services/AuthService";
-import { getError }                                                from '@/utils/helpers';
-import FlashMessage                                                from '@/components/FlashMessage';
-import SocialIcons                                                 from '@/components/social/SocialIcons';
-import { mailOutline, lockOpenOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { defineComponent }                                             from 'vue';
+import { IonItem, IonInput, IonIcon, IonText, IonButton, IonCheckbox } from "@ionic/vue";
+import store                                                           from '@/store/index';
+import { mapGetters }                                                  from "vuex";
+import AuthService                                                     from "@/services/AuthService";
+import { getError }                                                    from '@/utils/helpers';
+import FlashMessage                                                    from '@/components/FlashMessage';
+import SocialIcons                                                     from '@/components/social/SocialIcons';
+import { mailOutline, lockOpenOutline, eyeOutline, eyeOffOutline }     from 'ionicons/icons';
 
 export default defineComponent({
   name: "LoginForm",
@@ -76,6 +76,7 @@ export default defineComponent({
     IonIcon,
     IonText,
     IonButton,
+    IonCheckbox,
     FlashMessage,
     SocialIcons,
   },

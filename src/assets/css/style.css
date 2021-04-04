@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+/* Social icons styles */
 .social-circle-size {
     height: 37.5px;
     width: 37.5px;
@@ -5,11 +8,57 @@
     font-size: 16px;
 }
 
+/* Login/Register buttons styles */
 .auth-button-border-radius {
     --border-radius: 17px;
     --border-color: #f00;
 }
 
+/* Input styles */
 .auth-input-background {
     --background: #F6F7FB;
 }
+
+/*
+    START ONBOARDING STYLES
+*/
+
+/* Font styles */
+.onboarding-headings {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 35px;
+}
+
+.onboarding-paragraphs {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    padding: 0 1rem 0 1rem;
+}
+
+/* Text positioning styles */
+.register-success-text-position {
+    top: 325px;
+    left: 5px;
+}
+
+.searching-example-text-position {
+    top: 375px;
+    left: 5px;
+}
+
+.cafe-preview-example-text-position {
+    top: 345px;
+    left: 5px;
+}
+
+.notification-example-text-position {
+    top: 400px;
+    left: 5px;
+}
+
+/*
+    END ONBOARDING STYLES
+*/
+

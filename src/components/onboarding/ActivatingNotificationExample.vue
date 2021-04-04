@@ -4,6 +4,13 @@
         src="@/assets/img/onboarding/notification-example.png"
         alt="Showing how to turn notifications on"
     />
+    <div class="absolute notification-example-text-position">
+      <h1 class="text-4xl onboarding-headings px-6">Obavesti me kada se mesto oslobodi!</h1>
+      <p class="onboarding-paragraphs mt-3.5">
+        There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in
+        some form, by injected humour.
+      </p>
+    </div>
     <ion-button
         color="primary"
         routerLink="/dashboard"

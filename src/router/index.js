@@ -76,6 +76,7 @@ const routes = [
         /* =============================================
             Start routes protected from staff
         ============================================= */
+
         path: '/',
         meta: { middleware: [redirectIfStaff] },
         component: UserLayout,
@@ -89,7 +90,7 @@ const routes = [
             {
                 path: "/dashboard",
                 name: "dashboard",
-                meta: { middleware: [auth] },
+                meta: { middleware: [auth, verified] },
                 component: () =>
                     import(/* webpackChunkName: "Dashboard" */ "../views/user/Dashboard"),
             },
@@ -120,6 +121,12 @@ const routes = [
             /* END TABLE ROUTES */
         ],
     },
+    {
+        path: "/onboadring",
+        name: "onboarding",
+        meta: { middleware: [redirectIfStaff, auth] },
+        component: () => import(/* webpackChunkName: "Test" */ "../views/user/Onboarding"),
+    },
     /* =============================================
         End routes protected from staff
     ============================================= */
@@ -147,7 +154,7 @@ const routes = [
         ],
     },
     /* =============================================
-        Start routes protected from end-user
+        End routes protected from end-user
     ============================================= */
 
     /* =============================================
