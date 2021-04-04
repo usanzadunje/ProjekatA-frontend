@@ -3,7 +3,7 @@
     <ion-item lines="none" class="border rounded-2xl h-12 auth-input-background">
       <ion-icon :icon="personOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model.lazy="fname"
+          v-model.lazy="newUser.fname"
           autocomplete="given-name"
           type="text"
           inputmode="text"
@@ -15,7 +15,7 @@
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
       <ion-icon :icon="personOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model.lazy="lname"
+          v-model.lazy="newUser.lname"
           autocomplete="family-name"
           type="text"
           inputmode="text"
@@ -27,7 +27,7 @@
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
       <ion-icon :icon="personOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model.lazy="username"
+          v-model.lazy="newUser.username"
           autocomplete="username"
           type="text"
           inputmode="text"
@@ -39,7 +39,7 @@
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
       <ion-icon :icon="mailOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model.lazy="email"
+          v-model.lazy="newUser.email"
           autocomplete="email"
           type="email"
           inputmode="email"
@@ -51,7 +51,7 @@
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
       <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model="password"
+          v-model="newUser.password"
           debounce="1"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
@@ -64,7 +64,7 @@
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
       <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model="password_confirmation"
+          v-model="newUser.password_confirmation"
           debounce="1"
           inputmode="password"
           :type="showPasswordConfirm ? 'text' : 'password'"
@@ -95,12 +95,13 @@
         Prijavi se
       </ion-button>
     </div>
-    <FlashMessage :error="error"/>
+    <FlashMessage :error="errors.data"/>
   </form>
 </template>
 
 <script>
-import { defineComponent }                                                        from 'vue';
+import { defineComponent, reactive, ref }                                         from 'vue';
+import { useRouter }                                                              from 'vue-router';
 import { IonItem, IonInput, IonIcon, IonButton }                                  from "@ionic/vue";
 import AuthService                                                                from "@/services/AuthService";
 import { getError }                                                               from '@/utils/helpers';
@@ -110,7 +111,7 @@ import SocialIcons
 import { personOutline, mailOutline, lockOpenOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
 
 export default defineComponent({
-  name: "LoginForm",
+  name: "RegisterForm",
   components: {
     IonItem,
     IonInput,
@@ -119,19 +120,44 @@ export default defineComponent({
     FlashMessage,
     SocialIcons,
   },
-  data() {
+  setup() {
+    /* Global properties and methods */
+    const router = useRouter();
+
+    /* Component properties */
+    let newUser = reactive({});
+    let errors = reactive({ data: {} });
+    let showPassword = ref(false);
+    let showPasswordConfirm = ref(false);
+
+    /* Component methods */
+    let register = () => {
+      Object.assign(newUser, newUser, { bday: null, phone: null });
+      AuthService.register(newUser)
+                 .then(async() => await router.push({ name: 'onboarding' }))
+                 .catch((e) => {
+                   errors.data = getError(e);
+                 });
+    };
+
+    let togglePasswordShow = (passwordConfirm = false) => {
+      if(passwordConfirm) {
+        showPasswordConfirm.value = !showPasswordConfirm.value;
+      }else {
+        showPassword.value = !showPassword.value;
+      }
+    };
+
     return {
-      fname: null,
-      lname: null,
-      bday: null,
-      phone: null,
-      username: null,
-      email: null,
-      password: null,
-      password_confirmation: null,
-      error: null,
-      showPassword: false,
-      showPasswordConfirm: false,
+      /* Properties */
+      newUser,
+      errors,
+      showPassword,
+      showPasswordConfirm,
+
+      /* Methods */
+      register,
+      togglePasswordShow,
 
       /* Icons from ionicon/icons */
       personOutline,
@@ -140,33 +166,6 @@ export default defineComponent({
       eyeOutline,
       eyeOffOutline,
     };
-  },
-  methods: {
-    register() {
-      const payload = {
-        fname: this.fname,
-        lname: this.lname,
-        bday: this.bday,
-        phone: this.phone,
-        username: this.username,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.password_confirmation,
-      };
-
-      AuthService.register(payload)
-                 .then(() => this.$router.push({ name: 'onboarding' }))
-                 .catch((error) => {
-                   this.error = getError(error);
-                 });
-    },
-    togglePasswordShow(passwordConfirm = false) {
-      if(passwordConfirm) {
-        this.showPasswordConfirm = !this.showPasswordConfirm;
-      }else {
-        this.showPassword = !this.showPassword;
-      }
-    },
   },
 });
 </script>

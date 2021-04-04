@@ -6,7 +6,8 @@
     />
     <div class="absolute register-success-text-position">
       <h1 class="text-4xl onboarding-headings text-white">Uspesno ste se registrovali!</h1>
-      <p class="onboarding-paragraphs text-white mt-3.5">Dobrodosli u Project A. Nastavi dalje kako bi video sta vam nasa aplikacija nudi.</p>
+      <p class="onboarding-paragraphs text-white mt-3.5">Dobrodosli u Project A. Nastavi dalje kako bi video sta vam
+                                                         nasa aplikacija nudi.</p>
     </div>
     <ion-button
         color="primary"
@@ -21,10 +22,12 @@
 </template>
 
 <script>
+import { defineComponent }    from 'vue';
 import { IonButton, IonIcon } from '@ionic/vue';
 import { arrowForward }       from 'ionicons/icons';
 
-export default {
+export default defineComponent({
+  name: 'RegistrationSuccess',
   components: {
     IonButton,
     IonIcon,
@@ -34,5 +37,5 @@ export default {
       arrowForward,
     };
   },
-};
+});
 </script>

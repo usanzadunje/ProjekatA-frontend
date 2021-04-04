@@ -13,18 +13,13 @@ import redirectIfStaff                    from '@/middleware/redirectIfStaff';
 import Staff                              from '@/views/staff/Staff';
 
 /* End user imports views*/
-import UserLayout                         from '@/views/user/UserLayout';
+import UserLayout from '@/views/user/layouts/UserLayout';
 
 
 const routes = [
     /* =============================================
         Start unprotected routes from staff
     ============================================= */
-    {
-        path: "/test",
-        name: "test",
-        component: () => import(/* webpackChunkName: "Test" */ "../views/user/Onboarding"),
-    },
     {
         path: "/login",
         name: "login",
@@ -81,26 +76,33 @@ const routes = [
         meta: { middleware: [redirectIfStaff] },
         component: UserLayout,
         children: [
+            /* START USER ROUTES */
             {
-                path: "/",
+                path: "",
+                redirect: "/home",
+            },
+            {
+                path: "home",
                 name: "home",
                 component: () => import(/* webpackChunkName: "Home" */ "../views/user/Home"),
             },
-            /* START USER ROUTES */
+            {
+                path: "search",
+                name: "search",
+                component: () => import(/* webpackChunkName: "Search" */ "../views/user/Search"),
+            },
             {
                 path: "/dashboard",
                 name: "dashboard",
                 meta: { middleware: [auth, verified] },
-                component: () =>
-                    import(/* webpackChunkName: "Dashboard" */ "../views/user/Dashboard"),
+                component: () => import(/* webpackChunkName: "Dashboard" */ "../views/user/Dashboard"),
             },
             {
-                path: "/user/edit",
-                name: "user.edit",
-                meta: { middleware: [auth] },
-                component: () => import(/* webpackChunkName: "Edit" */ "../views/user/Edit"),
+                path: "/settings",
+                name: "settings",
+                meta: { middleware: [auth, verified] },
+                component: () => import(/* webpackChunkName: "Settings" */ "../views/user/Settings"),
             },
-
             /* END USER ROUTES */
 
             /* START CAFE ROUTES */

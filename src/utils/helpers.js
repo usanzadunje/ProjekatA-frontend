@@ -1,7 +1,7 @@
 import router from "@/router";
 
-export const getError = (error) => {
-    const errorMessage = "API Error, please try again.";
+export function getError(error) {
+    const errorMessage = { apiError: ["API Error, please try again."] };
 
     if(error.response.status === 404) {
         if(router.currentRoute.name !== "notFound")
@@ -13,4 +13,4 @@ export const getError = (error) => {
     }
 
     return errorMessage;
-};
+}

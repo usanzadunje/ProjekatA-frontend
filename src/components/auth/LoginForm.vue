@@ -3,7 +3,7 @@
     <ion-item lines="none" class="border rounded-2xl h-12 auth-input-background">
       <ion-icon :icon="mailOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model.lazy="email"
+          v-model.lazy="user.email"
           autocomplete="email"
           type="email"
           inputmode="email"
@@ -15,7 +15,7 @@
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
       <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
       <ion-input
-          v-model="password"
+          v-model="user.password"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
           debounce="1"
@@ -53,12 +53,13 @@
         Registruj se
       </ion-button>
     </div>
-    <FlashMessage :error="error"/>
+    <FlashMessage :error="errors.data"/>
   </form>
 </template>
 
 <script>
-import { defineComponent }                                             from 'vue';
+import { defineComponent, ref, reactive }                              from 'vue';
+import { useRouter }                                                   from 'vue-router';
 import { IonItem, IonInput, IonIcon, IonText, IonButton, IonCheckbox } from "@ionic/vue";
 import store                                                           from '@/store/index';
 import { mapGetters }                                                  from "vuex";
@@ -80,12 +81,42 @@ export default defineComponent({
     FlashMessage,
     SocialIcons,
   },
-  data() {
+  computed: {
+    ...mapGetters('auth', ['authUser']),
+  },
+  setup() {
+    /* Global properties and methods */
+    const router = useRouter();
+
+    /* Component properties */
+    let user = reactive({});
+    let errors = reactive({ data: {} });
+    let showPassword = ref(false);
+
+    /* Component methods */
+    const login = () => {
+      AuthService.login(user)
+                 .then(async() => {
+                   await store.dispatch("auth/getAuthUser");
+                   let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
+                   await router.push(homeRoute);
+                 })
+                 .catch((e) => {
+                   errors.data = getError(e);
+                 });
+    };
+
+    const togglePasswordShow = () => showPassword.value = !showPassword.value;
+
     return {
-      email: null,
-      password: null,
-      error: null,
-      showPassword: false,
+      /* Properties */
+      user,
+      errors,
+      showPassword,
+
+      /* Methods */
+      login,
+      togglePasswordShow,
 
       /* Icons from ionicon/icons */
       mailOutline,
@@ -93,33 +124,6 @@ export default defineComponent({
       eyeOutline,
       eyeOffOutline,
     };
-  },
-  methods: {
-    login() {
-      const payload = {
-        email: this.email,
-        password: this.password,
-      };
-
-      AuthService.login(payload)
-                 .then(async() => {
-                   await store.dispatch("auth/getAuthUser");
-                   let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
-                   this.$router.push(homeRoute);
-                 })
-                 .catch((error) => {
-                   this.error = getError(error);
-                   this.$emit('loginError', {
-                     error: this.error,
-                   });
-                 });
-    },
-    togglePasswordShow() {
-      this.showPassword = !this.showPassword;
-    },
-  },
-  computed: {
-    ...mapGetters('auth', ['authUser']),
   },
 });
 </script>

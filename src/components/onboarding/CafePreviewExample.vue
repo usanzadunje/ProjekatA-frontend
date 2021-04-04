@@ -24,10 +24,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { IonButton, IonIcon } from '@ionic/vue';
 import { arrowForward }       from 'ionicons/icons';
 
-export default {
+export default defineComponent({
+  name: 'CafePreviewExample',
   components: {
     IonButton,
     IonIcon,
@@ -37,5 +39,5 @@ export default {
       arrowForward,
     };
   },
-};
+});
 </script>

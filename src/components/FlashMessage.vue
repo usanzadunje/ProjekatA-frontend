@@ -46,7 +46,7 @@ export default defineComponent({
   },
   computed: {
     errorKeys() {
-      if(!this.error || this.getType(this.error) === "string") {
+      if(!this.error) {
         return null;
       }
       return Object.keys(this.error);

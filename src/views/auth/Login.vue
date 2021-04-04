@@ -14,9 +14,9 @@
 </template>
 
 <script>
+import { defineComponent }         from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import LoginForm               from '@/components/auth/LoginForm';
-import { defineComponent }         from 'vue';
 
 export default defineComponent({
   name: "Login",

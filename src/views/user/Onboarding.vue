@@ -29,6 +29,7 @@ import CafePreviewExample                           from '@/components/onboardin
 import ActivatingNotificationExample                from '@/components/onboarding/ActivatingNotificationExample';
 
 export default defineComponent({
+  name: 'Onboarding',
   components: {
     IonSlides,
     IonSlide,
@@ -40,13 +41,14 @@ export default defineComponent({
     ActivatingNotificationExample,
   },
   setup() {
-    // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.
+    /* Component properties */
     const slides = ref(null);
     const slideOpts = {
       initialSlide: 0,
       speed: 400,
     };
 
+    /* Compoenent methods */
     const slideNext = async() => {
       const swiper = await slides?.value?.$el.getSwiper();
       await swiper.slideNext();

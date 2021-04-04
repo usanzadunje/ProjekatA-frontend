@@ -2,36 +2,29 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Dashboard</ion-title>
+        <ion-title>Search</ion-title>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
-      {{ authUser }}
-    </ion-content>
+    <ion-content class="ion-padding">Search Tab</ion-content>
   </ion-page>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-import { mapGetters }      from 'vuex';
-
 import {
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
-  IonToolbar,
+  IonToolbar
 } from '@ionic/vue';
 
 export default defineComponent({
-  name: 'Dashboard',
+  name: 'Search',
   components: { IonContent, IonHeader, IonPage, IonTitle, IonToolbar },
-  computed: {
-    ...mapGetters('auth', ['authUser']),
-  },
   setup() {
 
-  },
+  }
 });
 </script>
