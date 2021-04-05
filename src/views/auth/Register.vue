@@ -27,3 +27,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+ion-content{
+  --background: #FFF;
+}
+</style>

@@ -62,3 +62,65 @@
     END ONBOARDING STYLES
 */
 
+/*
+    START TOOLBAR STYLES
+*/
+
+/* Toolbar border styles */
+.main-toolbar-border {
+    --border-style: none;
+    border-bottom-left-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
+}
+
+/* Toolbar text styles */
+.main-toolbar-fade-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: #9EAAB7;
+    font-size: 14px;
+}
+
+.main-toolbar-search-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 14px !important;
+
+}
+
+/* Start placeholder styling */
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    font-size: 14px !important;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+    font-size: 14px !important;
+}
+
+:-ms-input-placeholder { /* IE 10+ */
+    font-size: 14px !important;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    font-size: 14px !important;
+}
+
+/* End placeholder styling */
+
+.main-toolbar-heading {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+/* Search background color styles */
+.main-toolbar-search-bg {
+    --background: #F9F9F9;
+}
+
+.icon-fade-color {
+    color: #D7D6E0;
+}
+
+/*
+    END TOOLBAR STYLES
+*/

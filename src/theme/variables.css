@@ -77,6 +77,14 @@ http://ionicframework.com/docs/theming/ */
 
 }
 
+/* Global styles for certain components */
+ion-content {
+    --background: #F6F7FB;
+}
+
+ion-header {
+    background-color: #F6F7FB !important;
+}
 
 
 @media (prefers-color-scheme: dark) {
