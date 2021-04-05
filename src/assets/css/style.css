@@ -1,22 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
+/*
+    START Global styles for certain components
+*/
+ion-content {
+    --background: #F6F7FB;
+}
+
+ion-header {
+    background-color: #F6F7FB !important;
+}
+ion-input {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+}
+ion-searchbar{
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    --background: #F9F9F9 !important;
+}
+/*
+    END Global styles for certain components
+*/
+
 /* Social icons styles */
 .social-circle-size {
     height: 37.5px;
     width: 37.5px;
     line-height: 43.5px;
     font-size: 16px;
-}
-
-/* Login/Register buttons styles */
-.auth-button-border-radius {
-    --border-radius: 17px;
-    --border-color: #f00;
-}
-
-/* Input styles */
-.auth-input-background {
-    --background: #F6F7FB;
 }
 
 /*
@@ -80,47 +94,78 @@
     color: #9EAAB7;
     font-size: 14px;
 }
-
-.main-toolbar-search-text {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    font-size: 14px !important;
-
-}
-
-/* Start placeholder styling */
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    font-size: 14px !important;
-}
-
-::-moz-placeholder { /* Firefox 19+ */
-    font-size: 14px !important;
-}
-
-:-ms-input-placeholder { /* IE 10+ */
-    font-size: 14px !important;
-}
-
-:-moz-placeholder { /* Firefox 18- */
-    font-size: 14px !important;
-}
-
-/* End placeholder styling */
-
 .main-toolbar-heading {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
 }
+/*
+    END TOOLBAR STYLES
+*/
 
-/* Search background color styles */
-.main-toolbar-search-bg {
-    --background: #F9F9F9;
+/*
+    START LOGIN/REGISTER STYLESs
+*/
+/* Text styles for login/register screens */
+.main-heading {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: #232B38;
+    font-size: 50px;
 }
 
-.icon-fade-color {
-    color: #D7D6E0;
+.main-heading-smaller {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: #232B38;
+    font-size: 16px;
+    letter-spacing: 8px;
+}
+
+.secondary-heading {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: #232B38;
+    font-size: 20px;
+}
+
+.utility-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: #9EAAB7;
+    font-size: 10px;
+}
+
+.button-text-black{
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    --color: #232B38;
+    font-size: 14px !important;
+    --padding-bottom: 28px;
+    --padding-top: 28px;
+}
+
+.button-text-white {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    --color: #FFF;
+    --padding-bottom: 28px;
+    --padding-top: 28px;
+    --background: #1B6DE0;
+
+}
+
+/* Login/Register buttons styles */
+.auth-button-border-radius {
+    --border-radius: 17px;
+    --border-color: #f00;
+}
+
+/* Input styles */
+.auth-input-background {
+    --background: #F6F7FB;
 }
 
 /*
-    END TOOLBAR STYLES
+    END LOGIN/REGISTER STYLES
 */

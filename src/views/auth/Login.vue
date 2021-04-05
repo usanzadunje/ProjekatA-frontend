@@ -1,13 +1,13 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <div class="mt-16">
-        <h1 class="ion-text-center ion-text-uppercase text-4xl font-bold">Caffe</h1>
-        <h1 class="ion-text-center ion-text-lowercase text-2xl">finder</h1>
+      <div class="mt-28">
+        <h1 class="text-center uppercase main-heading">Caffe</h1>
+        <h1 class="text-center lowercase main-heading-smaller">finder</h1>
       </div>
-      <div class="mt-16">
-        <h2 class="ion-text-center text-2xl">Prijavi se</h2>
-        <LoginForm class="mt-2"></LoginForm>
+      <div class="mt-40">
+        <h2 class="text-center secondary-heading">Prijavi se</h2>
+        <LoginForm class="mt-8"></LoginForm>
       </div>
     </ion-content>
   </ion-page>
@@ -29,6 +29,6 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-content{
-  --background: #FFF;
+  --background: url('../../assets/img/auth/LoginBackground.png') no-repeat;
 }
 </style>

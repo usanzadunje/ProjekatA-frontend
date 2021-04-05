@@ -33,3 +33,22 @@ exports.logoGoogle = `data:image/svg+xml;utf8,<svg version="1.1" id="Layer_1" xm
 <path style="fill:#F14336;" d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012
 \tc-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0
 \tC318.115,0,375.068,22.126,419.404,58.936z"/>`;
+
+exports.envelopeOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="19.2" height="15.2" viewBox="0 0 19.2 15.2">
+  <g id="mail-outline" transform="translate(-47.4 -95.241)">
+    <rect id="Rectangle_5387" data-name="Rectangle 5387" width="18" height="14" rx="3" transform="translate(48 95.841)" fill="none" stroke="#232b38" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+    <path id="Path_6941" data-name="Path 6941" d="M112,160l4.663,3.627L121.326,160" transform="translate(-59.811 -59.783)" fill="none" stroke="#232b38" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+  </g>
+</svg>
+`;
+exports.lockOpenOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="17.2" height="18.398" viewBox="0 0 17.2 18.398">
+  <g id="lock-open-outline" transform="translate(-94.2 -31.702)">
+    <path id="Path_6942" data-name="Path 6942" d="M183.019,34.918a3.569,3.569,0,0,0-7.019,0v3.5" transform="translate(-77.215 0.302)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+    <rect id="Rectangle_5388" data-name="Rectangle 5388" width="16" height="10" rx="4" transform="translate(94.8 39.5)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+  </g>
+</svg>
+`;
+exports.profileOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="16" viewBox="0 0 13 16">
+  <path id="Profile" d="M5.424,15.971l-.231,0-.117,0a1.826,1.826,0,0,1-.328-.037,12.694,12.694,0,0,1-1.9-.271l-.208-.043A3.22,3.22,0,0,1,.228,14.092a2.319,2.319,0,0,1-.228-1A2.272,2.272,0,0,1,.233,12.08a3.527,3.527,0,0,1,2.6-1.558,13.8,13.8,0,0,1,1.9-.265c.583-.05,1.176-.076,1.763-.076s1.179.025,1.763.076l.374.031a14.19,14.19,0,0,1,1.522.233,3.344,3.344,0,0,1,2.612,1.57,2.3,2.3,0,0,1,0,2,3.329,3.329,0,0,1-2.6,1.56l-.38.078a12.954,12.954,0,0,1-1.527.2c-.581.049-1.171.073-1.753.073C6.144,16,5.779,15.991,5.424,15.971Zm-.6-4.56a12.8,12.8,0,0,0-1.752.244,2.618,2.618,0,0,0-1.791.935,1.119,1.119,0,0,0-.113.5,1.147,1.147,0,0,0,.113.5c.207.422.833.744,1.81.932l.287.06a12.784,12.784,0,0,0,1.522.2,1.517,1.517,0,0,0,.233.027l.32.005c.349.019.7.028,1.053.028.551,0,1.11-.023,1.663-.07a11.823,11.823,0,0,0,1.756-.252l.183-.038c.862-.192,1.416-.5,1.6-.886a1.154,1.154,0,0,0,0-1.007c-.2-.413-.819-.736-1.794-.934a12.838,12.838,0,0,0-1.748-.243H8.16c-.548-.048-1.106-.071-1.655-.071S5.384,11.363,4.828,11.411ZM2.187,4.268a4.316,4.316,0,0,1,8.632,0,4.316,4.316,0,0,1-8.632,0Zm1.171,0A3.145,3.145,0,1,0,6.5,1.158,3.131,3.131,0,0,0,3.358,4.268Z" fill="#200e32"/>
+</svg>
+`;

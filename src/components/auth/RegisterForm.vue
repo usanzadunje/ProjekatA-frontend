@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="register" class="px-5">
     <ion-item lines="none" class="border rounded-2xl h-12 auth-input-background">
-      <ion-icon :icon="personOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="newUser.fname"
           autocomplete="given-name"
@@ -13,7 +13,7 @@
       ></ion-input>
     </ion-item>
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
-      <ion-icon :icon="personOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="newUser.lname"
           autocomplete="family-name"
@@ -25,7 +25,7 @@
       ></ion-input>
     </ion-item>
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
-      <ion-icon :icon="personOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="newUser.username"
           autocomplete="username"
@@ -37,7 +37,7 @@
       ></ion-input>
     </ion-item>
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
-      <ion-icon :icon="mailOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="envelopeOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="newUser.email"
           autocomplete="email"
@@ -49,7 +49,7 @@
       ></ion-input>
     </ion-item>
     <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
-      <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="lockOpenOutline" color="primary" class="mr-2"></ion-icon>
       <ion-input
           v-model="newUser.password"
           debounce="1"
@@ -75,27 +75,26 @@
                 @click="togglePasswordShow(true)"></ion-icon>
     </ion-item>
     <SocialIcons class="mt-7"/>
-    <div class="padding mt-10">
+    <div class="padding mt-10 mb-10">
       <ion-button
-          color="primary"
           type="submit"
           size="large"
           expand="block"
-          class="auth-button-border-radius uppercase"
+          class="auth-button-border-radius uppercase button-text-white"
       >
         Registruj se
       </ion-button>
       <ion-button
-          color="danger"
+          fill="clear"
           routerLink="/login"
           size="large"
           expand="block"
-          class="auth-button-border-radius uppercase"
+          class="auth-button-border-radius uppercase button-text-black mt-7"
       >
         Prijavi se
       </ion-button>
     </div>
-    <FlashMessage :error="errors.data"/>
+    <FlashMessage :error="errors.data" class="mb-10"/>
   </form>
 </template>
 
@@ -108,7 +107,9 @@ import { getError }                                                             
 import FlashMessage                                                               from '@/components/FlashMessage';
 import SocialIcons
                                                                                   from '@/components/social/SocialIcons';
-import { personOutline, mailOutline, lockOpenOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { profileOutline, envelopeOutline, lockOpenOutline } from '@/assets/icons';
+
 
 export default defineComponent({
   name: "RegisterForm",
@@ -160,8 +161,8 @@ export default defineComponent({
       togglePasswordShow,
 
       /* Icons from ionicon/icons */
-      personOutline,
-      mailOutline,
+      profileOutline,
+      envelopeOutline,
       lockOpenOutline,
       eyeOutline,
       eyeOffOutline,

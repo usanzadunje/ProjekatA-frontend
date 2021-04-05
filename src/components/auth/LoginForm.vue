@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="login" class="px-5">
     <ion-item lines="none" class="border rounded-2xl h-12 auth-input-background">
-      <ion-icon :icon="mailOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="envelopeOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="user.email"
           autocomplete="email"
@@ -9,6 +9,7 @@
           inputmode="email"
           debounce="600"
           placeholder="marko.markovic@gmail.com"
+          class="input-text"
           autofocus required
       ></ion-input>
     </ion-item>
@@ -25,35 +26,34 @@
       <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
                 @click="togglePasswordShow"></ion-icon>
     </ion-item>
-    <div class="flex justify-between mt-3.5 px-4">
-      <div>
-        <ion-checkbox class="align-text-top"></ion-checkbox>
+    <div class="flex justify-between mt-3.5 px-4 utility-text">
+      <div class="align-text-bottom">
+        <ion-checkbox class="align-text-bottom"></ion-checkbox>
         <ion-text class="ml-2">Zapamti me</ion-text>
       </div>
-      <a href="/forgot-password">Zaboravljena lozinka?</a>
+      <a href="/forgot-password" class="mt-0.5">Zaboravljena lozinka?</a>
     </div>
     <SocialIcons class="mt-7"/>
-    <div class="padding mt-10">
+    <div class="padding mt-10 mb-10">
       <ion-button
-          color="primary"
           type="submit"
           size="large"
           expand="block"
-          class="auth-button-border-radius uppercase"
+          class="auth-button-border-radius uppercase button-text-white"
       >
         Prijavi se
       </ion-button>
       <ion-button
-          color="danger"
+          fill="clear"
           routerLink="/register"
           size="large"
           expand="block"
-          class="auth-button-border-radius uppercase"
+          class="auth-button-border-radius uppercase button-text-black mt-7"
       >
         Registruj se
       </ion-button>
     </div>
-    <FlashMessage :error="errors.data"/>
+    <FlashMessage :error="errors.data" class="mb-10"/>
   </form>
 </template>
 
@@ -67,7 +67,8 @@ import AuthService                                                     from "@/s
 import { getError }                                                    from '@/utils/helpers';
 import FlashMessage                                                    from '@/components/FlashMessage';
 import SocialIcons                                                     from '@/components/social/SocialIcons';
-import { mailOutline, lockOpenOutline, eyeOutline, eyeOffOutline }     from 'ionicons/icons';
+import { eyeOutline, eyeOffOutline }     from 'ionicons/icons';
+import { envelopeOutline, lockOpenOutline }                                             from '@/assets/icons';
 
 export default defineComponent({
   name: "LoginForm",
@@ -119,10 +120,10 @@ export default defineComponent({
       togglePasswordShow,
 
       /* Icons from ionicon/icons */
-      mailOutline,
       lockOpenOutline,
       eyeOutline,
       eyeOffOutline,
+      envelopeOutline
     };
   },
 });
