@@ -6,8 +6,8 @@
     </div>
     <h1 class="main-toolbar-heading text-xl">Pronadji slobodno mesto</h1>
     <div class="mt-5 flex justify-around items-start">
-      <ion-searchbar class="main-toolbar-search-text main-toolbar-search-bg" placeholder="Unesite ime kafica"></ion-searchbar>
-      <ion-icon :icon="optionsOutline" class="text-3xl mt-1 icon-fade-color "></ion-icon>
+      <ion-searchbar class="main-toolbar-search-text main-toolbar-search-bg align-middle" placeholder="Unesite ime kafica"></ion-searchbar>
+      <ion-icon :icon="optionsOutline" class="text-3xl icon-fade-color align-bottom mt-1 md filter-icon"></ion-icon>
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@
 <script>
 import { defineComponent }                      from 'vue';
 import { IonIcon, IonSearchbar }                from '@ionic/vue';
-import { notificationsOutline, optionsOutline } from 'ionicons/icons';
+import { notificationsOutline, optionsOutline } from '@/assets/icons';
 
 export default defineComponent({
   name: 'GreetingNotificationToolbar',

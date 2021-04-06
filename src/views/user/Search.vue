@@ -27,6 +27,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  IonButton,
 }                               from '@ionic/vue';
 import { mapGetters, useStore } from 'vuex';
 
@@ -39,6 +40,7 @@ export default defineComponent({
     IonPage,
     IonTitle,
     IonToolbar,
+    IonButton,
   },
   computed: {
     ...mapGetters('auth', ['loggedIn']),

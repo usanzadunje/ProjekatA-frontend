@@ -1,7 +1,7 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar class="main-toolbar-border">
+    <ion-header class="ion-no-border">
+      <ion-toolbar>
         <GreetingNotificationToolbar/>
       </ion-toolbar>
     </ion-header>

@@ -10,17 +10,47 @@ ion-content {
 ion-header {
     background-color: #F6F7FB !important;
 }
+
 ion-input {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     font-size: 14px !important;
 }
-ion-searchbar{
+
+ion-searchbar {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     font-size: 14px !important;
     --background: #F9F9F9 !important;
+    --border-radius: 12px !important;
+    --box-shadow: none !important;
 }
+
+ion-toolbar {
+    border-bottom-left-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
+}
+
+ion-tab-bar {
+    border-radius: 16px !important;
+}
+
+ion-tab-button {
+    --color-selected: #207DFF;
+}
+
+/*
+    START Android specific styles
+*/
+/* Filter icon next to searchbar positioned center*/
+.md .filter-icon {
+    margin-top: 0.55rem;
+}
+
+/*
+    END Android specific styles
+*/
+
 /*
     END Global styles for certain components
 */
@@ -80,13 +110,6 @@ ion-searchbar{
     START TOOLBAR STYLES
 */
 
-/* Toolbar border styles */
-.main-toolbar-border {
-    --border-style: none;
-    border-bottom-left-radius: 15px !important;
-    border-bottom-right-radius: 15px !important;
-}
-
 /* Toolbar text styles */
 .main-toolbar-fade-text {
     font-family: 'Poppins', sans-serif;
@@ -94,10 +117,12 @@ ion-searchbar{
     color: #9EAAB7;
     font-size: 14px;
 }
+
 .main-toolbar-heading {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
 }
+
 /*
     END TOOLBAR STYLES
 */
@@ -135,7 +160,7 @@ ion-searchbar{
     font-size: 10px;
 }
 
-.button-text-black{
+.button-text-black {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     --color: #232B38;
