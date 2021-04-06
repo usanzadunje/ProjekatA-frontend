@@ -27,6 +27,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "Login" */ "../views/auth/Login"),
     },
     {
+        path: "/test",
+        name: "test",
+        component: () => import(/* webpackChunkName: "Login" */ "../views/user/Onboarding"),
+    },
+    {
         path: "/register",
         name: "register",
         meta: { middleware: [redirectIfAuthenticated] },

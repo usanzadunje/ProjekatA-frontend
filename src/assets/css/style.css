@@ -30,9 +30,12 @@ ion-toolbar {
     border-bottom-left-radius: 15px !important;
     border-bottom-right-radius: 15px !important;
 }
-
+ion-tabs {
+    background-color: #F9F9F9 !important;
+}
 ion-tab-bar {
-    border-radius: 16px !important;
+    border-bottom-left-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
 }
 
 ion-tab-button {

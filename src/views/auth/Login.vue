@@ -29,6 +29,6 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-content{
-  --background: url('../../assets/img/auth/LoginBackground.png') no-repeat;
+  --background: url('../../assets/img/auth/login-background.png') no-repeat;
 }
 </style>
