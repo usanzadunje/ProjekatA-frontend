@@ -1,10 +1,12 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Search</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <UserHeader
+        :hasSearchFilter="false"
+        :mainHeading="'Pretraga'"
+        :notificationIcon="notificationsReceivedOutline"
+    >
+      <SlidingFilter :hasTitle="true"/>
+    </UserHeader>
 
     <ion-content class="ion-padding">
       <div v-if="!loggedIn">
@@ -20,27 +22,26 @@
 </template>
 
 <script>
-import { defineComponent }      from 'vue';
+import { defineComponent }                                    from 'vue';
 import {
   IonContent,
-  IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonButton,
-}                               from '@ionic/vue';
-import { mapGetters, useStore } from 'vuex';
+}                                                             from '@ionic/vue';
+import { mapGetters, useStore }                               from 'vuex';
+import UserHeader                                             from '@/components/user/UserHeader';
+import SlidingFilter                                          from '@/components/user/SlidingFilter';
+import { notificationsOutline, notificationsReceivedOutline } from '@/assets/icons';
 
 
 export default defineComponent({
   name: 'Search',
   components: {
     IonContent,
-    IonHeader,
     IonPage,
-    IonTitle,
-    IonToolbar,
     IonButton,
+    UserHeader,
+    SlidingFilter,
   },
   computed: {
     ...mapGetters('auth', ['loggedIn']),
@@ -53,7 +54,12 @@ export default defineComponent({
     const logout = () => store.dispatch('auth/logout');
 
     return {
+      /* Methods */
       logout,
+
+      /* Icons */
+      notificationsOutline,
+      notificationsReceivedOutline,
     };
   },
 });

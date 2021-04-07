@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-tabs ref="tabs" @ionTabsDidChange="tabChanged">
+    <ion-tabs @ionTabsDidChange="tabChanged">
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="home" href="/home">
           <ion-icon :icon="selectedTab === 'home' ? homeOutlineSelected : homeOutline"></ion-icon>

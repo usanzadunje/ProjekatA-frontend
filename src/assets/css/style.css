@@ -30,12 +30,14 @@ ion-toolbar {
     border-bottom-left-radius: 15px !important;
     border-bottom-right-radius: 15px !important;
 }
+
 ion-tabs {
     background-color: #F9F9F9 !important;
 }
+
 ion-tab-bar {
-    border-bottom-left-radius: 15px !important;
-    border-bottom-right-radius: 15px !important;
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
 }
 
 ion-tab-button {
@@ -110,7 +112,7 @@ ion-tab-button {
 */
 
 /*
-    START TOOLBAR STYLES
+    START USER HEADER STYLES
 */
 
 /* Toolbar text styles */
@@ -126,8 +128,41 @@ ion-tab-button {
     font-weight: 700;
 }
 
+.sliding-filter-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: #9EAAB7;
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.sliding-filter-button {
+    --border-radius: 12px;
+    --box-shadow: none;
+}
+
+.sliding-filter-inactive-button {
+    --background: #F6F7FB;
+}
+
+.sliding-filter-button-active {
+    --background: #207DFF;
+    --color: #FFF;
+}
+
+.sliding-filter-button-inactive {
+    --background: #F6F7FB;
+    --color: #9EAAB7;
+}
+
+.sliding-filter-button-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+}
+
 /*
-    END TOOLBAR STYLES
+    END USER HEADER STYLES
 */
 
 /*

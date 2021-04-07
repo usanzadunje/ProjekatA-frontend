@@ -1,43 +1,79 @@
 <template>
   <ion-page>
-    <ion-header class="ion-no-border">
-      <ion-toolbar>
-        <GreetingNotificationToolbar/>
-      </ion-toolbar>
-    </ion-header>
+    <UserHeader
+        :hasSearchFilter="true"
+        :mainHeading="'Pronadji slobodno mesto'"
+        :notificationIcon="notificationsOutline"
+    />
 
     <ion-content>
-      <div class="p-6">
-        Content
+      <div v-for="cafe in state.cafes" :key="cafe.id">
+        Cafe: {{ cafe.name }}
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent }         from 'vue';
+import { defineComponent, reactive } from 'vue';
 import {
   IonContent,
-  IonHeader,
   IonPage,
-  IonToolbar,
-}                                  from '@ionic/vue';
-import GreetingNotificationToolbar from '@/components/user/GreetingNotificationToolbar';
+  // IonSlides,
+  // IonSlide,
+}                                    from '@ionic/vue';
+import UserHeader                    from '@/components/user/UserHeader';
+import CafeService                   from '@/services/CafeService';
+import { useFCM }                    from '@/composables/useFCM';
+import { notificationsOutline, notificationsReceivedOutline } from '@/assets/icons';
+
 
 export default defineComponent({
   name: 'Home',
   components: {
     IonContent,
-    IonHeader,
     IonPage,
-    IonToolbar,
-    GreetingNotificationToolbar,
+    UserHeader,
+    /*    IonSlides,
+        IonSlide,*/
   },
   setup() {
+    /*
+      Properties
+    */
+    let state = reactive({ cafes: [] });
 
+    /*
+      Lifecycle hooks
+    */
+    /* Fetching all cafes from backend */
+    CafeService.index().then((response) => state.cafes = response.data).catch((error) => alert(error));
+
+    /*
+      Methods
+    */
+    /* Method for initializing push notifications for mobile devices */
+    const { initPush } = useFCM();
+    initPush();
+
+    /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
+    const subscribe = (cafeId) => {
+      let cafeName = state.cafes.filter(cafe => cafe.id === cafeId)[0].name;
+      CafeService.subscribe(cafeId).then(() => alert(`Successfully subscribed to ${cafeName}!`)).catch((error) => alert(error));
+    };
+
+    return {
+      /* Properties */
+      state,
+
+      /* Methods */
+      initPush,
+      subscribe,
+
+      /* Icons */
+      notificationsOutline,
+      notificationsReceivedOutline,
+    };
   },
 });
 </script>
-<style scoped>
-
-</style>
