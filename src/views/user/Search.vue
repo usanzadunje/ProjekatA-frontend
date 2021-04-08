@@ -9,28 +9,21 @@
     </UserHeader>
 
     <ion-content class="ion-padding">
-      <div v-if="!loggedIn">
-        <ion-button color="primary" routerLink="/login">Login</ion-button>
-        <ion-button color="primary" routerLink="/register">Register</ion-button>
-      </div>
-      <ion-button color="secondary" @click="logout" v-else>Logout</ion-button>
-      <ion-button color="warning" routerLink="/cafes">Cafes</ion-button>
-      <ion-button color="warning" routerLink="/testEmailVerification">testEmailVerification</ion-button>
-      <ion-button color="warning" routerLink="/test">Test</ion-button>
+      <InfiniteScroll/>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent }                                    from 'vue';
+import { defineComponent }                          from 'vue';
 import {
   IonContent,
   IonPage,
-  IonButton,
 }                                                             from '@ionic/vue';
 import { mapGetters, useStore }                               from 'vuex';
 import UserHeader                                             from '@/components/user/UserHeader';
 import SlidingFilter                                          from '@/components/user/SlidingFilter';
+import InfiniteScroll                                         from '@/components/InfiniteScroll';
 import { notificationsOutline, notificationsReceivedOutline } from '@/assets/icons';
 
 
@@ -39,9 +32,9 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    IonButton,
     UserHeader,
     SlidingFilter,
+    InfiniteScroll,
   },
   computed: {
     ...mapGetters('auth', ['loggedIn']),

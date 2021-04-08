@@ -36,7 +36,7 @@ export default defineComponent({
   props: {
     hasSearchFilter: Boolean,
     mainHeading: String,
-    notificationIcon: Object
+    notificationIcon: String
   },
   setup() {
     /* Props */

@@ -45,7 +45,7 @@ export default defineComponent({
     const slides = ref(null);
     const slideOpts = {
       initialSlide: 0,
-      speed: 400,
+      speed: 500,
     };
 
     /* Compoenent methods */
