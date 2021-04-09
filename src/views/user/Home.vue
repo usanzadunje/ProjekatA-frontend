@@ -47,7 +47,7 @@ export default defineComponent({
       Lifecycle hooks
     */
     /* Fetching all cafes from backend */
-    CafeService.index().then((response) => state.cafes = response.data).catch((error) => alert(error));
+    CafeService.getCafeCardsChunkInfo(0,2).then((response) => state.cafes = response.data).catch((error) => alert(error));
 
     /*
       Methods

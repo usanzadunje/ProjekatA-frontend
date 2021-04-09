@@ -5,10 +5,10 @@ export default {
     index() {
         return API.apiClient.get(`/cafes`);
     },
-    getCafeCardInfo() {
+    getCafeCardsChunkInfo(start = 0, numberOfCafes = 20) {
         // Only fetching columns needed to show in cafe card component
         // Search and Home screen have it
-        return API.apiClient.get(`/cafes?columns=cafeCardInfo`);
+        return API.apiClient.get(`/cafes/chunked/start/number-of-cafes/${start}/${numberOfCafes}`);
     },
     show(id) {
         // Only getting

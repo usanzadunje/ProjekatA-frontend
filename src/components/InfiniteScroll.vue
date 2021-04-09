@@ -1,7 +1,7 @@
 <template>
   <FilterCategoryHeading class="mb-3"/>
   <ion-list>
-    <ion-item v-for="cafe in filteredCafesChunks" :key="cafe.id">
+    <ion-item v-for="cafe in cafes" :key="cafe.id">
       <ion-label>{{ cafe.name }}</ion-label>
     </ion-item>
   </ion-list>
@@ -52,28 +52,36 @@ export default defineComponent({
     // All non filtered cafes
     let cafes = ref([]);
     // All cafes that match search string
-    let allFilteredCafes = ref([]);
+    let initial20Cafes = null;
     // Chunks from filtered cafes that are shown piece by piece through infinite scroll component
     let filteredCafesChunks = ref([]);
     let { cafeSearchString } = toRefs(props);
-    let cafeCount = 0;
+    let cafeStart = 0;
     // Property to enable / disable loading infinite scroll animation and action
     let isInfiniteScrollDisabled = ref(false);
 
-    //*Before mounting in setsearup fetching all cafes
-    CafeService.index().then((response) => cafes.value = response.data).catch((error) => alert(error));
+    //*Before mounting fetching initial 20 cafes to show
+    CafeService.getCafeCardsChunkInfo(cafeStart, 20)
+               .then((response) => {
+                 cafes.value = response.data;
+                 initial20Cafes = response.data
+               })
+               .catch((error) => alert(error));
 
     /* Methods */
     // Grabbing 20 more cafes that match required filter
     const loadMoreCafes = () => {
-      cafeCount = cafeCount + 20;
-      filteredCafesChunks.value = filteredCafesChunks.value.concat(allFilteredCafes.value.slice(cafeCount - 20, cafeCount));
+      cafeStart += 20;
+      CafeService.getCafeCardsChunkInfo(cafeStart, 20)
+                 .then((response) => cafes.value.concat(response.data))
+                 .catch((error) => alert(error));
+
     };
 
     const filterCafes = (searchTerm) => {
       //If there is no search term all cafes are returned
       if(!searchTerm) {
-        return cafes.value;
+        return cafes.value = initial20Cafes;
       }
 
       return cafes.value.filter(function(cafe) {
@@ -88,33 +96,24 @@ export default defineComponent({
         loadMoreCafes();
         ev.target.complete();
 
-        // App logic to determine if all data is loaded and disable the infinite scroll
-        if(allFilteredCafes.value.length <= cafeCount) {
-          isInfiniteScrollDisabled.value = true;
-        }
+        // // App logic to determine if all data is loaded and disable the infinite scroll
+        // if(allFilteredCafes.value.length <= cafeCount) {
+        //   isInfiniteScrollDisabled.value = true;
+        // }
       }, 600);
     };
-
-    //Loading 20 cafes to show initially in 1st view of infinite scroll
-    // ** Before mounted lifecycle occurs **
-    setTimeout(() => {
-      allFilteredCafes.value = filterCafes(cafeSearchString.value);
-      loadMoreCafes();
-    }, 500);
 
     /* Watchers */
     // Watching for a change on cafeSearchString(search term from search input) prop
     // resetting all the variables for filtered data and loading first 20 records from new filtered data
     watch(cafeSearchString, () => {
       isInfiniteScrollDisabled.value = false;
-      cafeCount = 0;
+      cafeStart = 0;
       filteredCafesChunks.value = [];
-      allFilteredCafes.value = filterCafes(cafeSearchString.value);
+      cafes.value = filterCafes(cafeSearchString.value);
       loadMoreCafes();
       emit('scrollToTop');
     });
-
-
 
 
     return {
@@ -124,7 +123,6 @@ export default defineComponent({
       isInfiniteScrollDisabled,
 
       /* Computed properties */
-      allFilteredCafes,
 
       /* Methods */
       loadMoreCafes,
