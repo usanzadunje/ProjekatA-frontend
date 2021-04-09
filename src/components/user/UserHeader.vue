@@ -9,7 +9,9 @@
         <h1 class="main-toolbar-heading text-xl">{{ mainHeading }}</h1>
         <div class="mt-5 flex justify-around items-start">
           <ion-searchbar class="main-toolbar-search-text main-toolbar-search-bg align-middle"
-                         placeholder="Unesite ime kafica"></ion-searchbar>
+                         placeholder="Unesite ime kafica"
+                         @ionChange="searchInputChanged"
+          ></ion-searchbar>
           <ion-icon v-if="hasSearchFilter" :icon="optionsOutline"
                     class="text-3xl icon-fade-color align-bottom mt-1 md filter-icon"></ion-icon>
         </div>
@@ -38,12 +40,15 @@ export default defineComponent({
     mainHeading: String,
     notificationIcon: String
   },
-  setup() {
-    /* Props */
-
+  setup(props, { emit }) {
+    /* Methods */
+    const searchInputChanged = (e) => {
+      emit('searchFilterChanged', e.target.value)
+    }
 
     return {
-      /* Props */
+      /* Methods */
+      searchInputChanged,
 
       /* Icons */
       notificationsOutline,
