@@ -6,27 +6,38 @@
         :notificationIcon="notificationsOutline"
     />
 
-    <ion-content>
-      <div v-for="cafe in cafes" :key="cafe.id">
-        Cafe: {{ cafe.name }}
+    <ion-content class="ion-padding">
+      <div>
+        <FilterCategoryHeading class="mb-2"/>
+        <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
+          <CafeCard :cafe="cafe"/>
+        </div>
+      </div>
+
+      <div>
+        <FilterCategoryHeading class="mb-2"/>
+        <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
+          <CafeCard :cafe="cafe"/>
+        </div>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref }                               from 'vue';
 import {
   IonContent,
   IonPage,
   // IonSlides,
   // IonSlide,
-}                                    from '@ionic/vue';
-import UserHeader                    from '@/components/user/UserHeader';
-import CafeService                   from '@/services/CafeService';
-import { useFCM }                    from '@/composables/useFCM';
+}                                                             from '@ionic/vue';
+import UserHeader                                             from '@/components/user/UserHeader';
+import CafeService                                            from '@/services/CafeService';
+import { useFCM }                                             from '@/composables/useFCM';
 import { notificationsOutline, notificationsReceivedOutline } from '@/assets/icons';
-
+import CafeCard                                               from '@/components/user/CafeCard';
+import FilterCategoryHeading                                  from '@/components/user/FilterCategoryHeading';
 
 export default defineComponent({
   name: 'Home',
@@ -34,6 +45,8 @@ export default defineComponent({
     IonContent,
     IonPage,
     UserHeader,
+    CafeCard,
+    FilterCategoryHeading,
     /*    IonSlides,
         IonSlide,*/
   },
@@ -47,7 +60,7 @@ export default defineComponent({
       Lifecycle hooks
     */
     /* Fetching all cafes from backend */
-    CafeService.getCafeCardsChunkInfo(0,2).then((response) => cafes.value = response.data).catch((error) => alert(error));
+    CafeService.getCafeCardsChunkInfo(0, 2).then((response) => cafes.value = response.data).catch((error) => alert(error));
 
     /*
       Methods

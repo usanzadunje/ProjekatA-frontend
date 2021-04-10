@@ -14,9 +14,3 @@ export function getError(error) {
 
     return errorMessage;
 }
-
-export function pluck(array, key) {
-    return array.map(function(item) {
-        return item[key];
-    });
-}

@@ -232,3 +232,42 @@ ion-tab-button {
 /*
     END LOGIN/REGISTER STYLES
 */
+
+
+/*
+    START SEARCH STYLES
+*/
+/* Text styles for login/register screens */
+.cafe-card-border-radius {
+    border-radius: 15px;
+}
+
+.cafe-card-image {
+    height: 42px;
+    width: 42px;
+    border-radius: 11px;
+}
+
+.cafe-card-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: #000;
+    font-size: 14px;
+}
+
+.cafe-card-fade-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: #9EAAB7;
+    font-size: 12px;
+}
+
+.card-horizontal-ruler {
+    border-color: #F3F3F3;
+    border-width: 1px;
+    width: 100%;
+}
+
+/*
+    END SEARCH STYLES
+*/

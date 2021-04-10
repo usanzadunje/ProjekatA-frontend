@@ -1,10 +1,10 @@
 <template>
-  <FilterCategoryHeading class="mb-3"/>
-  <ion-list>
-    <ion-item v-for="cafe in cafes" :key="cafe.id">
-      <ion-label>{{ cafe.name }}</ion-label>
-    </ion-item>
-  </ion-list>
+  <div>
+    <FilterCategoryHeading class="mb-2"/>
+    <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
+      <CafeCard :cafe="cafe"/>
+    </div>
+  </div>
   <ion-infinite-scroll
       @ionInfinite="loadData($event)"
       threshold="100px"
@@ -23,22 +23,18 @@
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonItem,
-  IonLabel,
-  IonList,
 }                                              from '@ionic/vue';
 import { defineComponent, ref, watch, toRefs } from 'vue';
 import CafeService                             from '@/services/CafeService';
 import FilterCategoryHeading                   from '@/components/user/FilterCategoryHeading';
+import CafeCard                                from '@/components/user/CafeCard';
 
 export default defineComponent({
   components: {
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-    IonItem,
-    IonLabel,
-    IonList,
     FilterCategoryHeading,
+    CafeCard,
   },
   props: {
     cafeSearchString: {
