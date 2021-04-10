@@ -7,7 +7,7 @@
     />
 
     <ion-content>
-      <div v-for="cafe in state.cafes" :key="cafe.id">
+      <div v-for="cafe in cafes" :key="cafe.id">
         Cafe: {{ cafe.name }}
       </div>
     </ion-content>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   IonContent,
   IonPage,
@@ -41,13 +41,13 @@ export default defineComponent({
     /*
       Properties
     */
-    let state = reactive({ cafes: [] });
+    let cafes = ref([]);
 
     /*
       Lifecycle hooks
     */
     /* Fetching all cafes from backend */
-    CafeService.getCafeCardsChunkInfo(0,2).then((response) => state.cafes = response.data).catch((error) => alert(error));
+    CafeService.getCafeCardsChunkInfo(0,2).then((response) => cafes.value = response.data).catch((error) => alert(error));
 
     /*
       Methods
@@ -58,13 +58,13 @@ export default defineComponent({
 
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
     const subscribe = (cafeId) => {
-      let cafeName = state.cafes.filter(cafe => cafe.id === cafeId)[0].name;
+      let cafeName = cafes.value.filter(cafe => cafe.id === cafeId)[0].name;
       CafeService.subscribe(cafeId).then(() => alert(`Successfully subscribed to ${cafeName}!`)).catch((error) => alert(error));
     };
 
     return {
       /* Properties */
-      state,
+      cafes,
 
       /* Methods */
       initPush,

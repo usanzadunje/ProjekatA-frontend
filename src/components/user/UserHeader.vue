@@ -41,13 +41,13 @@ export default defineComponent({
     notificationIcon: String
   },
   setup(props, { emit }) {
-    /* Methods */
+    /* Event handlers */
     const searchInputChanged = (e) => {
       emit('searchFilterChanged', e.target.value)
     }
 
     return {
-      /* Methods */
+      /* Event handlers */
       searchInputChanged,
 
       /* Icons */

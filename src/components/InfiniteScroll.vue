@@ -43,7 +43,11 @@ export default defineComponent({
   props: {
     cafeSearchString: {
       type: String,
-      default: null,
+      default: '',
+    },
+    sortBy: {
+      type: String,
+      default: '',
     },
   },
   emits: ["scrollToTop"],
@@ -51,11 +55,13 @@ export default defineComponent({
     /* Properties */
     // All non filtered cafes
     let cafes = ref([]);
-    // All cafes that match search string
+    // Initial 20 cafes that are shown when no filters are applied
     let initial20Cafes = null;
-    // Chunks from filtered cafes that are shown piece by piece through infinite scroll component
-    let filteredCafesChunks = ref([]);
+    // Search term for filtering records
     let { cafeSearchString } = toRefs(props);
+    // Term for sorting records in specific order
+    let { sortBy } = toRefs(props);
+    // From which number on to take cafe records
     let cafeStart = 0;
     // Property to enable / disable loading infinite scroll animation and action
     let isInfiniteScrollDisabled = ref(false);
@@ -64,7 +70,7 @@ export default defineComponent({
     CafeService.getCafeCardsChunkInfo(cafeStart, 20)
                .then((response) => {
                  cafes.value = response.data;
-                 initial20Cafes = response.data
+                 initial20Cafes = response.data;
                })
                .catch((error) => alert(error));
 
@@ -72,34 +78,37 @@ export default defineComponent({
     // Grabbing 20 more cafes that match required filter
     const loadMoreCafes = () => {
       cafeStart += 20;
-      CafeService.getCafeCardsChunkInfo(cafeStart, 20)
-                 .then((response) => cafes.value.concat(response.data))
+      CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, sortBy.value)
+                 .then((response) => {
+                   // There are no more records
+                   if(!response.data) return;
+                   if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
+                   cafes.value = cafes.value.concat(response.data);
+                 })
                  .catch((error) => alert(error));
 
     };
 
-    const filterCafes = (searchTerm) => {
+    const filterCafes = (ignoreIfNoSearchTerm = false) => {
       //If there is no search term all cafes are returned
-      if(!searchTerm) {
+      if(!cafeSearchString.value && !ignoreIfNoSearchTerm) {
         return cafes.value = initial20Cafes;
       }
 
-      return cafes.value.filter(function(cafe) {
-        if(cafe.name.toLowerCase().indexOf(searchTerm.trim().toLowerCase()) !== -1) {
-          return cafe;
-        }
-      });
+      CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, sortBy.value)
+                 .then((response) => {
+                   if(!response.data) return;
+                   if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
+                   cafes.value = response.data;
+                 })
+                 .catch((error) => alert(error));
+
     };
 
     const loadData = (ev) => {
       setTimeout(() => {
         loadMoreCafes();
         ev.target.complete();
-
-        // // App logic to determine if all data is loaded and disable the infinite scroll
-        // if(allFilteredCafes.value.length <= cafeCount) {
-        //   isInfiniteScrollDisabled.value = true;
-        // }
       }, 600);
     };
 
@@ -109,9 +118,16 @@ export default defineComponent({
     watch(cafeSearchString, () => {
       isInfiniteScrollDisabled.value = false;
       cafeStart = 0;
-      filteredCafesChunks.value = [];
-      cafes.value = filterCafes(cafeSearchString.value);
-      loadMoreCafes();
+      filterCafes();
+      emit('scrollToTop');
+    });
+    // Watching for a change on sortBy(term for sorting records) prop
+    // when new button for sorting is clicked initial 20 cafes are changed to appear correctly
+    // (be sorted) on initial view show
+    watch(sortBy, () => {
+      isInfiniteScrollDisabled.value = false;
+      cafeStart = 0;
+      filterCafes(true);
       emit('scrollToTop');
     });
 
@@ -119,7 +135,6 @@ export default defineComponent({
     return {
       /* Properties */
       cafes,
-      filteredCafesChunks,
       isInfiniteScrollDisabled,
 
       /* Computed properties */

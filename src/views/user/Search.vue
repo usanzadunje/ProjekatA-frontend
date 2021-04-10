@@ -6,11 +6,11 @@
         :notificationIcon="notificationsReceivedOutline"
         @searchFilterChanged="searchFilterChanged"
     >
-      <SlidingFilter :hasTitle="true"/>
+      <SlidingFilter :hasTitle="true" @sortHasChanged="sortHasChanged"/>
     </UserHeader>
 
     <ion-content ref="content" class="ion-padding">
-      <InfiniteScroll :cafeSearchString="cafeSearchString" @scrollToTop="scrollToTop"/>
+      <InfiniteScroll :cafeSearchString="cafeSearchString" :sortBy="sortBy" @scrollToTop="scrollToTop"/>
     </ion-content>
   </ion-page>
 </template>
@@ -45,14 +45,19 @@ export default defineComponent({
     const store = useStore();
 
     /* Properties */
-    const cafeSearchString = ref(null);
+    const cafeSearchString = ref('');
+    const sortBy = ref('');
     const content = ref(null);
 
-    /* Methods */
+    /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
       cafeSearchString.value = searchInputValue;
     };
+    const sortHasChanged = (sortValue) => {
+      sortBy.value = sortValue;
+    };
 
+    /* Methods */
     // When search term is changed infinity scroll component changes data and
     // this function scrolls user back to top to see new filtered data from start
     const scrollToTop = async() => {
@@ -64,11 +69,15 @@ export default defineComponent({
     return {
       /* Properties */
       cafeSearchString,
+      sortBy,
       content,
+
+      /* Event handlers */
+      searchFilterChanged,
+      sortHasChanged,
 
       /* Methods */
       logout,
-      searchFilterChanged,
       scrollToTop,
 
       /* Icons */

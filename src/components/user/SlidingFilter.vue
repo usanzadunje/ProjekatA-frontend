@@ -5,13 +5,13 @@
       <ion-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text h-9 w-32 uppercase"
-            :class="activeSlidingButton === 'location' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="location"
-            @click="buttonActivated"
+            :class="activeSlidingButton === '' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
+            data-sliding-filter=""
+            @click="sortButtonActivated"
         >
           Najblizi vama
           <ion-icon slot="start"
-                    :icon="activeSlidingButton === 'location' ? locationOutline : locationInactiveOutline"></ion-icon>
+                    :icon="activeSlidingButton === '' ? locationOutline : locationInactiveOutline"></ion-icon>
         </ion-button>
       </ion-slide>
       <ion-slide>
@@ -19,7 +19,7 @@
             class="sliding-filter-button sliding-filter-button-text h-9 w-28 uppercase"
             :class="activeSlidingButton === 'free' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             data-sliding-filter="free"
-            @click="buttonActivated"
+            @click="sortButtonActivated"
         >
           SLOBODNI
           <ion-icon slot="start"
@@ -31,7 +31,7 @@
             class="sliding-filter-button sliding-filter-button-text h-9 w-20 uppercase"
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             data-sliding-filter="food"
-            @click="buttonActivated"
+            @click="sortButtonActivated"
         >
           HRANA
           <ion-icon slot="start"
@@ -43,7 +43,7 @@
             class="sliding-filter-button sliding-filter-button-text h-9 w-28 uppercase"
             :class="activeSlidingButton === 'popular' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             data-sliding-filter="popular"
-            @click="buttonActivated"
+            @click="sortButtonActivated"
         >
           POPULARNO
           <ion-icon slot="start"
@@ -80,9 +80,9 @@ export default defineComponent({
   props: {
     hasTitle: Boolean,
   },
-  setup() {
+  setup(props, { emit }) {
     /* Properties */
-    let activeSlidingButton = ref('location');
+    let activeSlidingButton = ref('');
     const slideOpts = {
       initialSlide: 0,
       speed: 500,
@@ -91,9 +91,10 @@ export default defineComponent({
       slidesPerView: 2.3,
     };
 
-    /* Event listeners */
-    const buttonActivated = (event) => {
+    /* Event handlers */
+    const sortButtonActivated = (event) => {
       activeSlidingButton.value = event.target.dataset.slidingFilter;
+      emit('sortHasChanged', 'id');
     };
 
     return {
@@ -102,7 +103,7 @@ export default defineComponent({
       slideOpts,
 
       /* Event listeners */
-      buttonActivated,
+      sortButtonActivated,
 
       /* Icons */
       locationOutline,
