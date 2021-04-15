@@ -11,7 +11,7 @@
       </div>
     </div>
     <hr class="card-horizontal-ruler">
-    <div class="p-5 flex justify-between ion-align-items-center">
+    <div class="p-3 flex justify-between ion-align-items-center">
       <div class="flex align-middle">
         <div class="flex align-bottom">
           <ion-icon :icon="graphSliceYellowOutline"></ion-icon>

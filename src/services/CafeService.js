@@ -5,15 +5,22 @@ export default {
     index() {
         return API.apiClient.get(`/cafes`);
     },
-    getCafeCardsChunkInfo(start = 0, numberOfCafes = 20, filter = '', sortBy = '') {
+    getCafeCardsChunkInfo(
+        start = 0,
+        numberOfCafes = 20,
+        filter = '',
+        sortBy = '',
+        getAllColumns = false,
+    ) {
         // Only fetching columns needed to show in cafe card component
         // Search and Home screen have it
         return API.apiClient.get(
             `/cafes/chunked/start/number-of-cafes/${start}/${numberOfCafes}`,
             {
                 params: {
-                    filter: filter,
-                    sortBy: sortBy,
+                    filter,
+                    sortBy,
+                    getAllColumns,
                 },
             });
     },

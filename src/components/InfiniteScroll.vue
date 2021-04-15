@@ -46,7 +46,7 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ["scrollToTop"],
+  emits: ['scrollToTop'],
   setup(props, { emit }) {
     /* Properties */
     // All non filtered cafes
@@ -105,7 +105,7 @@ export default defineComponent({
       setTimeout(() => {
         loadMoreCafes();
         ev.target.complete();
-      }, 600);
+      }, 500);
     };
 
     /* Watchers */

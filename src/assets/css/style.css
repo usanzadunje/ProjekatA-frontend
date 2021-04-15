@@ -44,6 +44,19 @@ ion-tab-button {
     --color-selected: #207DFF;
 }
 
+.custom-modal {
+    --height: 70vh;
+}
+
+.custom-modal .modal-wrapper {
+    position: absolute !important;
+    bottom: 0 !important;
+}
+
+ion-thumbnail {
+    --border-radius: 11px;
+}
+
 /*
     START Android specific styles
 */
@@ -239,35 +252,88 @@ ion-tab-button {
 */
 /* Text styles for login/register screens */
 .cafe-card-border-radius {
-    border-radius: 15px;
+    border-radius: 15px !important;
 }
 
 .cafe-card-image {
-    height: 42px;
-    width: 42px;
-    border-radius: 11px;
+    height: 42px !important;
+    width: 42px !important;
+    border-radius: 11px !important;
 }
 
 .cafe-card-name {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    color: #000;
-    font-size: 14px;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #000 !important;
+    font-size: 14px !important;
 }
 
 .cafe-card-fade-text {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    color: #9EAAB7;
-    font-size: 12px;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    color: #9EAAB7 !important;
+    font-size: 12px !important;
 }
 
 .card-horizontal-ruler {
-    border-color: #F3F3F3;
-    border-width: 1px;
-    width: 100%;
+    border-color: #F3F3F3 !important;
+    border-width: 1px !important;
+    width: 100% !important;
 }
 
 /*
     END SEARCH STYLES
+*/
+
+/*
+    START MODAL STYLES
+*/
+.modal-thumbnail {
+    height: 57px !important;
+    width: 57px !important;
+}
+
+.ion-item-no-padding-x {
+    --padding-start: 0;
+    --padding-end: 0;
+}
+
+.img-border-15 {
+    border-radius: 15px;
+}
+
+.img-modal-gallery {
+    height: 72px;
+    width: 139px;
+}
+
+.button-see-more {
+
+    --color: #232B38;
+    --padding-bottom: 28px;
+    --padding-top: 28px;
+    --padding-start: 28px;
+    --padding-end: 28px;
+    --background: #F6F7FB;
+
+}
+
+.button-subscribe {
+
+    --color: #FFF;
+    --padding-bottom: 28px;
+    --padding-top: 28px;
+    --padding-start: 28px;
+    --padding-end: 28px;
+    --background: #1B6DE0;
+
+}
+
+.modal-button-border {
+    --box-shadow: none;
+    --border-radius: 17px;
+}
+
+/*
+    END MODAL STYLES
 */
