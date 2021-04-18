@@ -55,19 +55,19 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, onMounted, ref } from 'vue';
 import {
   IonIcon,
   IonButton,
   IonSlides,
   IonSlide,
-}                               from '@ionic/vue';
+}                                                    from '@ionic/vue';
 import {
   locationOutline,
   locationInactiveOutline,
   graphSliceOutline,
   graphSliceInactiveOutline,
-}                               from '@/assets/icons';
+}                                                    from '@/assets/icons';
 
 export default defineComponent({
   name: 'SlidingFilter',
@@ -89,7 +89,17 @@ export default defineComponent({
       centeredSlides: false,
       spaceBetween: 10,
       slidesPerView: 2.3,
+      freeMode: true,
     };
+
+    /* Lifecycle hook */
+    // Without this on android options are not passed to swiper
+    onMounted(() => {
+      const slides = document.querySelector("ion-slides");
+      nextTick(() => {
+        slides.options = slideOpts;
+      });
+    });
 
     /* Event handlers */
     const sortButtonActivated = (event) => {

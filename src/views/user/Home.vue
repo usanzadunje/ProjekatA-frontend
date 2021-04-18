@@ -18,7 +18,7 @@
           @onDidDismiss="openModal(false);"
           :swipe-to-close="true"
       >
-        <ShortCafeModal :cafe="modalCafe" @dismissModal="dismissModal"/>
+        <ShortCafeModal :cafe="modalCafe" @dismissShortCafeModal="openModal(false)"/>
       </ion-modal>
     </ion-content>
   </ion-page>
@@ -32,7 +32,6 @@ import {
   // IonSlides,
   // IonSlide,
   IonModal,
-  modalController,
 }                                                             from '@ionic/vue';
 import UserHeader                                             from '@/components/user/UserHeader';
 import CafeService                                            from '@/services/CafeService';
@@ -114,9 +113,6 @@ export default defineComponent({
       }
       isModalOpen.value = state;
     };
-    const dismissModal = () => {
-      modalController.dismiss();
-    };
 
     /* Component methods */
     const updateSlider = async() => {
@@ -191,7 +187,6 @@ export default defineComponent({
       searchFilterChanged,
       loadMoreCafes,
       openModal,
-      dismissModal,
 
       /* Methods */
       initPush,
