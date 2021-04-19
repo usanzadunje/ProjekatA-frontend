@@ -44,6 +44,14 @@ ion-tab-button {
     --color-selected: #207DFF;
 }
 
+ion-modal ion-content {
+    --background: #FFF;
+}
+
+ion-modal ion-item {
+    --border-style: none;
+}
+
 .custom-modal {
     --max-height: 70vh;
     --height: 50vh;
@@ -69,6 +77,18 @@ ion-thumbnail {
 
 /*
     END Android specific styles
+*/
+
+/*
+    START IOS specific styles
+*/
+/* Filter icon next to searchbar positioned center*/
+.ios .margin-left-1 {
+    margin-left: 0.75rem;
+}
+
+/*
+    END IOS specific styles
 */
 
 /*
@@ -288,7 +308,7 @@ ion-thumbnail {
 */
 
 /*
-    START MODAL STYLES
+    START MODALS STYLES
 */
 .modal-thumbnail {
     height: 57px !important;
@@ -371,6 +391,68 @@ ion-thumbnail {
     --border-radius: 17px;
 }
 
+.submodal-heading {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #000 !important;
+    font-size: 20px !important;
+}
+
+.submodal-paragraph {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    color: #232B38 !important;
+    font-size: 14px !important;
+}
+
+.submodal-paragraph-meidum {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #232B38 !important;
+    font-size: 14px !important;
+}
+
+.submodal-fade-text {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #9EAAB7 !important;
+    font-size: 12px !important;
+}
+
+.submodal-alert-time {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #232B38 !important;
+    font-size: 12px !important;
+}
+
+.button-cancel {
+    --color: #232B38;
+    --padding-top: 25px;
+    --padding-bottom: 25px;
+    --padding-start: 52px;
+    --padding-end: 52px;
+    --background: #F6F7FB;
+    --background-activated: #bbbbbb;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #232B38 !important;
+    font-size: 12px !important;
+}
+
+.button-confirm {
+    --color: #FFF;
+    --padding-top: 25px;
+    --padding-bottom: 25px;
+    --padding-start: 39px;
+    --padding-end: 39px;
+    --background: #1B6DE0;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #FFF !important;
+    font-size: 12px !important;
+}
+
 /*
-    END MODAL STYLES
+    END MODALS STYLES
 */

@@ -1,6 +1,6 @@
 <template>
   <ion-content class="ion-padding">
-    <ion-item>
+    <ion-item class="mt-3">
       <ion-thumbnail slot="start">
         <img
             src="../../assets/img/cafe/test.png"
@@ -45,7 +45,7 @@
         </ion-slide>
       </ion-slides>
     </ion-item>
-    <div class="mt-5 mb-5 flex justify-between">
+    <div class="mt-5 mb-3 flex justify-between">
       <ion-button class="uppercase button-see-more modal-button-border"> Pogledaj vise</ion-button>
       <ion-button
           class="uppercase button-subscribe modal-button-border"
@@ -58,12 +58,13 @@
     <ion-modal
         :is-open="isModalOpen"
         css-class="custom-modal"
-        @onDidDismiss="openModal(false);"
+        @onDidDismiss="openModal(false);$emit('dismissShortCafeModal')"
+        :backdrop-dismiss="true"
         :swipe-to-close="true"
     >
       <CafeSubscriptionModal
           :cafeName="cafe.name"
-          @dismissSubscriptionModal="$emit('dismissShortCafeModal')"
+          @dismissSubscriptionModal="openModal(false);$emit('dismissShortCafeModal')"
       />
     </ion-modal>
   </ion-content>
@@ -124,8 +125,6 @@ export default defineComponent({
 
     /* Properties */
     const isModalOpen = ref(false);
-    // Cafe which information is sent to modal
-    const modalCafeName = ref('');
 
     /* Lifecycle hook */
     // Without this on android options are not passed to swiper
@@ -147,7 +146,6 @@ export default defineComponent({
 
       /* Properties */
       isModalOpen,
-      modalCafeName,
 
       /* Event handlers */
       openModal,
@@ -163,8 +161,3 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-ion-item {
-  --border-style: none;
-}
-</style>

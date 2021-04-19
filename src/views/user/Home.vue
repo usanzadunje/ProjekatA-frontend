@@ -16,9 +16,12 @@
           :is-open="isModalOpen"
           css-class="custom-modal"
           @onDidDismiss="openModal(false);"
+          :backdrop-dismiss="true"
           :swipe-to-close="true"
       >
-        <ShortCafeModal :cafe="modalCafe" @dismissShortCafeModal="openModal(false)"/>
+        <ShortCafeModal
+            :cafe="modalCafe"
+            @dismissShortCafeModal="openModal(false)"/>
       </ion-modal>
     </ion-content>
   </ion-page>
@@ -200,8 +203,3 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-ion-modal ion-content{
-  --background: #FFF;
-}
-</style>
