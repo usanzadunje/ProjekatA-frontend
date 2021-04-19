@@ -1,12 +1,12 @@
-import { useRouter } from 'vue-router';
+import { useRouter }  from 'vue-router';
 import {
     Plugins,
     // PushNotification,
     // PushNotificationToken,
     // PushNotificationActionPerformed,
     Capacitor,
-}                    from '@capacitor/core';
-import AuthService   from '../services/AuthService';
+}                     from '@capacitor/core';
+import AuthService    from '../services/AuthService';
 
 export function useFCM() {
     const { PushNotifications, LocalNotifications } = Plugins;

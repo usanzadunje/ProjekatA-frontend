@@ -1,19 +1,21 @@
 <template>
-  <ion-content class="ion-padding">
+  <ion-content
+      class="ion-padding"
+  >
     <ion-item class="mt-3">
       <h1 class="submodal-heading">Notifikacije</h1>
     </ion-item>
     <ion-item>
       <p class="submodal-paragraph">
         Obavesti me ukoliko se oslobodi sto u objektu
-        <span class="submodal-paragraph-meidum">{{ cafeName }}</span>
+        <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
         u narednih :
       </p>
     </ion-item>
     <ion-item class="ion-no-padding mt-4">
       <ion-toggle
           class="pl-4"
-          checked
+          @ionChange="indefiniteTimerToggle($event)"
       ></ion-toggle>
       <ion-label class="margin-left-1 submodal-fade-text">Neodredjeno</ion-label>
     </ion-item>
@@ -23,9 +25,10 @@
           max="60"
           step="5"
           color="primary"
-          v-model="alertTime"
+          v-model="notificationTime"
+          :disabled="indefiniteTimerActive"
       ></ion-range>
-      <ion-label class="ml-1 margin-left-1 submodal-alert-time">{{ alertTime }}min</ion-label>
+      <ion-label class="ml-1 margin-left-1 submodal-alert-time">{{ notificationTime }}min</ion-label>
     </ion-item>
     <div class="mt-2 mb-3 flex justify-between">
       <ion-button
@@ -34,7 +37,10 @@
       >
         Otkazi
       </ion-button>
-      <ion-button class="uppercase button-confirm modal-button-border">
+      <ion-button
+          class="uppercase button-confirm modal-button-border"
+          @click="subscribe(cafe.id, notificationTime)"
+      >
         <ion-icon slot="start" :icon="notificationsOutlineWhite"></ion-icon>
         Potvrdi
       </ion-button>
@@ -56,6 +62,8 @@ import {
   notificationsOutlineWhite,
   notificationsReceivedOutline,
 }                               from '@/assets/icons';
+import { useFCM }               from '@/composables/useFCM';
+import CafeService              from '@/services/CafeService';
 
 export default defineComponent({
   name: 'ShortCafeModal',
@@ -68,24 +76,48 @@ export default defineComponent({
     IonRange,
   },
   props: {
-    cafeName: {
-      type: String,
-      default: '',
+    cafe: {
+      type: Object,
+      default: null,
     },
   },
   emits: ['dismissSubscriptionModal'],
   setup() {
     /* Properties */
-    let alertTime = ref(15);
+    let notificationTime = ref(15);
+    let indefiniteTimerActive = ref(false);
 
     /* Event Handlers */
+    const indefiniteTimerToggle = (e) => {
+      indefiniteTimerActive.value = e.target.checked;
+    };
+
+    /* Methods */
+    /* Method for initializing push notifications for mobile devices */
+    const { initPush } = useFCM();
+    initPush();
+
+    /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
+    const subscribe = (cafeId, $notificationTime = null) => {
+      if(indefiniteTimerActive.value) {
+        $notificationTime = null;
+      }
+      CafeService.subscribe(cafeId, $notificationTime)
+                 .then(() => alert(`Successfully subscribed!`))
+                 .catch((error) => alert(error));
+    };
 
 
     return {
       /* Properties */
-      alertTime,
+      notificationTime,
+      indefiniteTimerActive,
 
       /* Event handlers */
+      indefiniteTimerToggle,
+
+      /* Methods */
+      subscribe,
 
       /* Icons */
       notificationsOutlineWhite,

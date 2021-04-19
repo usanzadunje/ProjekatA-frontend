@@ -38,7 +38,6 @@ import {
 }                                                             from '@ionic/vue';
 import UserHeader                                             from '@/components/user/UserHeader';
 import CafeService                                            from '@/services/CafeService';
-import { useFCM }                                             from '@/composables/useFCM';
 import { notificationsOutline, notificationsReceivedOutline } from '@/assets/icons';
 import FilterCategoryHeading                                  from '@/components/user/FilterCategoryHeading';
 import HomeSlidingCafeCards                                   from '@/components/user/HomeSlidingCafeCards';
@@ -123,14 +122,6 @@ export default defineComponent({
     };
 
     /* Methods */
-    /* Method for initializing push notifications for mobile devices */
-    const { initPush } = useFCM();
-    initPush();
-
-    /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
-    const subscribe = (cafeId) => {
-      CafeService.subscribe(cafeId).then(() => alert(`Successfully subscribed!`)).catch((error) => alert(error));
-    };
 
     // Grabbing 20 more cafes that match required filter
     const loadMoreCafes = (cafes, sortBy = '') => {
@@ -192,8 +183,6 @@ export default defineComponent({
       openModal,
 
       /* Methods */
-      initPush,
-      subscribe,
       computeCafeSlidesLength,
 
       /* Icons */

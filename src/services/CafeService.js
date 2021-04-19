@@ -28,8 +28,13 @@ export default {
         // Only getting
         return API.apiClient.get(`/cafes/${id}?columns=cafeShowInfo`);
     },
-    async subscribe(cafeId) {
+    async subscribe(cafeId, notificationTime = null) {
         await authClient.get("/sanctum/csrf-cookie");
-        return API.apiClient.post(`/users/subscribe/cafe/${cafeId}`);
+        if(notificationTime) {
+            return API.apiClient.post(`/users/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime}`);
+        }
+        else{
+            return API.apiClient.post(`/users/subscribe/cafe/${cafeId}/notify-in-next/`);
+        }
     },
 };
