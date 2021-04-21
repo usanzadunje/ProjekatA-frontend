@@ -92,6 +92,12 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Home" */ "../views/user/Home"),
             },
             {
+                path: "/cafes/:id",
+                name: "cafes",
+                component: () =>
+                    import(/* webpackChunkName: "Cafe" */ "../views/user/Cafe"),
+            },
+            {
                 path: "search",
                 name: "search",
                 component: () => import(/* webpackChunkName: "Search" */ "../views/user/Search"),
@@ -109,23 +115,6 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Settings" */ "../views/user/Settings"),
             },
             /* END USER ROUTES */
-
-            /* START CAFE ROUTES */
-            {
-                path: "/cafes",
-                name: "cafes",
-                component: () =>
-                    import(/* webpackChunkName: "Cafe" */ "../views/user/Cafe"),
-            },
-            /* END CAFE ROUTES */
-            /* START TABLE ROUTES */
-            {
-                path: "/tables",
-                name: "table",
-                component: () =>
-                    import(/* webpackChunkName: "Table" */ "../views/user/Table"),
-            },
-            /* END TABLE ROUTES */
         ],
     },
     {

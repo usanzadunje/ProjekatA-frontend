@@ -46,12 +46,16 @@
       </ion-slides>
     </ion-item>
     <div class="mt-5 mb-3 flex justify-between">
-      <ion-button class="uppercase button-see-more modal-button-border"> Pogledaj vise</ion-button>
+      <ion-button
+          class="uppercase button-see-more modal-button-border"
+          @click="$router.push({ name: 'cafes', params: { id: cafe.id } });$emit('dismissShortCafeModal')"
+      > Pogledaj vise</ion-button>
       <ion-button
           class="uppercase button-subscribe modal-button-border"
           @click="openModal(true)"
       >
-        <ion-icon slot="start" :icon="notificationsOutlineWhite"></ion-icon>
+        <ion-icon slot="start"
+                  :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
         Pretplati se
       </ion-button>
     </div>
@@ -65,6 +69,7 @@
       <CafeSubscriptionModal
           :cafe="{'id': cafe.id, 'name': cafe.name}"
           @dismissSubscriptionModal="openModal(false);$emit('dismissShortCafeModal')"
+          @userSubscribedToCafe="isUserSubscribed = !isUserSubscribed"
       />
     </ion-modal>
   </ion-content>
@@ -86,6 +91,7 @@ import {
   graphSliceYellowFilled,
   locationInactiveOutline,
   notificationsOutlineWhite,
+  notificationsReceivedOutline,
   fastFoodOutline,
   leafOutline,
   timeOutline,
@@ -125,6 +131,7 @@ export default defineComponent({
 
     /* Properties */
     const isModalOpen = ref(false);
+    const isUserSubscribed = ref(false);
 
     /* Lifecycle hook */
     // Without this on android options are not passed to swiper
@@ -146,6 +153,7 @@ export default defineComponent({
 
       /* Properties */
       isModalOpen,
+      isUserSubscribed,
 
       /* Event handlers */
       openModal,
@@ -154,6 +162,7 @@ export default defineComponent({
       graphSliceYellowFilled,
       locationInactiveOutline,
       notificationsOutlineWhite,
+      notificationsReceivedOutline,
       fastFoodOutline,
       leafOutline,
       timeOutline,

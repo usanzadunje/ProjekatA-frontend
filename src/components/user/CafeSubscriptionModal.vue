@@ -39,10 +39,10 @@
       </ion-button>
       <ion-button
           class="uppercase button-confirm modal-button-border"
-          @click="subscribe(cafe.id, notificationTime)"
+          @click="subscribe(cafe.id, notificationTime);$emit('userSubscribedToCafe');"
       >
-        <ion-icon slot="start" :icon="notificationsOutlineWhite"></ion-icon>
-        Potvrdi
+        <ion-icon slot="start" :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
+        {{ isUserSubscribed ? 'Ukloni' : 'Potvrdi' }}
       </ion-button>
     </div>
   </ion-content>
@@ -81,11 +81,13 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissSubscriptionModal'],
+  emits: ['dismissSubscriptionModal', 'userSubscribedToCafe'],
   setup() {
     /* Properties */
     let notificationTime = ref(15);
     let indefiniteTimerActive = ref(false);
+
+    const isUserSubscribed = ref(false);
 
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {
@@ -103,7 +105,10 @@ export default defineComponent({
         $notificationTime = null;
       }
       CafeService.subscribe(cafeId, $notificationTime)
-                 .then(() => alert(`Successfully subscribed!`))
+                 .then(() => {
+                   alert(`Successfully subscribed!`);
+                   isUserSubscribed.value = !isUserSubscribed.value;
+                 })
                  .catch((error) => alert(error));
     };
 
@@ -112,6 +117,7 @@ export default defineComponent({
       /* Properties */
       notificationTime,
       indefiniteTimerActive,
+      isUserSubscribed,
 
       /* Event handlers */
       indefiniteTimerToggle,

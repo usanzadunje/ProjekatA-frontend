@@ -147,8 +147,8 @@ exports.optionsOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/
 </svg>
 `;
 
-exports.arrowForwardOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18.114" height="17.703" viewBox="0 0 18.114 17.703">
-  <path id="arrow-forward-outline_1_" data-name="arrow-forward-outline (1)" d="M108.677,112l7.437,7.437-7.437,7.437m6.4-7.437H100" transform="translate(-99 -110.586)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+exports.arrowBackwardOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18.114" height="17.703" viewBox="0 0 18.114 17.703">
+  <path id="arrow-forward-outline_1_" data-name="arrow-forward-outline (1)" d="M108.677,112l7.437,7.437-7.437,7.437m6.4-7.437H100" transform="translate(117.114 128.289) rotate(180)" fill="none" stroke="#9eaab7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
 </svg>
 `;
 

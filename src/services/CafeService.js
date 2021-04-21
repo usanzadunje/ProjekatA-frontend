@@ -26,7 +26,7 @@ export default {
     },
     show(id) {
         // Only getting
-        return API.apiClient.get(`/cafes/${id}?columns=cafeShowInfo`);
+        return API.apiClient.get(`/cafes/${id}`);
     },
     async subscribe(cafeId, notificationTime = null) {
         await authClient.get("/sanctum/csrf-cookie");
