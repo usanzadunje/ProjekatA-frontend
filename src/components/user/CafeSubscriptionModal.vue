@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, toRef } from 'vue';
 import {
   IonContent,
   IonItem,
@@ -82,12 +82,21 @@ export default defineComponent({
     },
   },
   emits: ['dismissSubscriptionModal', 'userSubscribedToCafe'],
-  setup() {
+  setup(props) {
     /* Properties */
     let notificationTime = ref(15);
     let indefiniteTimerActive = ref(false);
 
     const isUserSubscribed = ref(false);
+
+    const cafe = toRef(props, 'cafe')
+
+    /* Lifecycle hooks */
+    CafeService.isUserSubscribed(cafe.value.id)
+               .then((response) => {
+                 isUserSubscribed.value = !!response.data;
+               })
+               .catch((error) => alert(error));
 
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {

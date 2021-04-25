@@ -93,7 +93,7 @@ const routes = [
             },
             {
                 path: "/cafes/:id",
-                name: "cafes",
+                name: "cafe",
                 component: () =>
                     import(/* webpackChunkName: "Cafe" */ "../views/user/Cafe"),
             },

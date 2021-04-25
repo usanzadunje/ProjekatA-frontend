@@ -460,9 +460,73 @@ ion-thumbnail {
 /*
     START CAFE SHOW STYLES
 */
-.banner-image{
+.banner-image {
     height: 170px;
     width: 335px;
+}
+
+.popover-text-block {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+
+    border-radius: 8px;
+}
+
+.cafe-show-name {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #000 !important;
+    font-size: 29px !important;
+}
+
+.cafe-show-offers {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    color: #9EAAB7 !important;
+    font-size: 14px !important;
+}
+
+.cafe-show-menu-headers {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    color: #000 !important;
+    font-size: 12px !important;
+}
+
+.accordion-list-box {
+    margin-left: -16px !important;
+    margin-right: -16px !important;
+    padding-right: 16px;
+    padding-left: 16px;
+}
+
+.accordion-list-border-top {
+    border-top: solid 0.5px #F3F3F3;
+}
+
+.accordion-list-border-bottom {
+    border-bottom: solid 0.5px #F3F3F3;
+}
+
+.panel {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-in;
+}
+
+.button-subscribe-wide {
+    --color: #FFF;
+    --padding-top: 26px;
+    --padding-bottom: 26px;
+    --background: #1B6DE0;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #FFF !important;
+    font-size: 12px !important;
+    --box-shadow: none;
+    --border-radius: 17px;
 }
 
 /*

@@ -152,6 +152,11 @@ exports.arrowBackwardOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w
 </svg>
 `;
 
+exports.arrowDownwardOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="11.776" height="6.736" viewBox="0 0 11.776 6.736">
+  <path id="Path_6943" data-name="Path 6943" d="M767.652,1976.547l5.464,5.464,5.464-5.464" transform="translate(-767.227 -1976.123)" fill="none" stroke="#9eaab7" stroke-width="1.2"/>
+</svg>
+`;
+
 exports.fastFoodOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="19.096" height="19.271" viewBox="0 0 19.096 19.271">
   <g id="fast-food-outline" transform="translate(0.65 0.825)">
     <path id="Path_6726" data-name="Path 6726" d="M43.52,339.178A2.29,2.29,0,0,1,41.3,341.72H36.052a2.29,2.29,0,0,1-2.224-2.542M44.076,336a1.457,1.457,0,0,1,1.271,1.589h0a1.457,1.457,0,0,1-1.271,1.589h-10.8A1.457,1.457,0,0,1,32,337.589h0A1.457,1.457,0,0,1,33.271,336" transform="translate(-32 -323.924)" fill="none" stroke="#9eaab7" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.3"/>

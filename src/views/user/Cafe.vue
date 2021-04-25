@@ -4,10 +4,9 @@
       <ion-toolbar>
         <div class="flex justify-between">
           <ion-buttons slot="start">
-            <ion-back-button
-                :text="''"
-                :icon="arrowBackwardOutline">
-            </ion-back-button>
+            <ion-button href="/home">
+              <ion-icon slot="icon-only" :icon="arrowBackwardOutline"></ion-icon>
+            </ion-button>
           </ion-buttons>
           <ion-buttons slot="start">
             <ion-button>
@@ -19,43 +18,58 @@
     </ion-header>
 
     <ion-content :fullscreen="true" class="ion-padding">
-      <img
-          src="../../assets/img/cafe/cafeshow.png"
-          alt="Image of {{ cafe.name }} cafe"
-          class="banner-image"
-      />
-
-      <ion-item class="mt-3">
-        <div>
-          <h1 class="modal-cafe-name-text">123</h1>
-          <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
-        </div>
-      </ion-item>
-      <ion-item>
-        <ion-icon :icon="graphSliceYellowFilled" class="mr-2"></ion-icon>
-        <span class="modal-cafe-text-medium mt-0.5">{{ cafe.taken_capacity }} - slobodnih mesta</span>
-      </ion-item>
-      <ion-item class="ion-item-no-padding-x">
-        <div class="flex justify-between">
-          <ion-icon :icon="locationInactiveOutline" class="mr-2"></ion-icon>
-          <p class="modal-cafe-text-regular">{{ cafe.address }} - {{ cafe.city }}</p>
-        </div>
-        <ion-button fill="clear" class="uppercase" slot="end">MAPA</ion-button>
-      </ion-item>
-      <div class="flex justify-start mt-1.5">
-        <div class="ion-item-no-padding-x flex">
-          <ion-icon :icon="fastFoodOutline" class="mr-2"></ion-icon>
-          <p class="modal-cafe-text-regular">hrana</p>
-        </div>
-        <div class="ion-item-no-padding-x flex ml-3.5">
-          <ion-icon :icon="leafOutline" class="mr-2"></ion-icon>
-          <p class="modal-cafe-text-regular">poseduje bastu</p>
-        </div>
-        <div class="ion-item-no-padding-x flex ml-3.5">
-          <ion-icon :icon="timeOutline" class="mr-2"></ion-icon>
-          <p class="modal-cafe-text-regular">09am-01pm</p>
+      <div class="relative">
+        <img
+            src="../../assets/img/cafe/cafeshow.png"
+            alt="Image of {{ cafe.name }} cafe"
+            class="banner-image"
+        />
+        <div
+            class="uppercase absolute top-3/4 left-3/4 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
+        >
+          GALERIJA
         </div>
       </div>
+
+      <div class="mt-4 ion-item-no-padding-x">
+        <h1 class="cafe-show-name">{{ cafe.name }}</h1>
+        <p class="cafe-show-offers mt-1">Kafić, hrana, bašta. Nastavi dalje kako bi video šta vam naša aplikacija
+                                         nudi.</p>
+      </div>
+
+      <CafeInfoBody :cafe="cafe"/>
+
+      <div>
+        <FilterCategoryHeading class="mt-7 mb-2" :title="'Meni'" :icon="fastFoodOutline"/>
+        <AccordionList class="accordion-list-border-top" :title="'Karta pica'" :items="['Pice 1','Pice 2', 'Pice 3']"/>
+        <AccordionList class="accordion-list-border-top accordion-list-border-bottom" :title="'Hrana'"
+                       :items="['Hrana 1','Hrana 2', 'Hrana 3']"/>
+      </div>
+
+      <div class="mt-10">
+        <ion-button
+            class="uppercase button-subscribe-wide"
+            expand="block"
+            @click="openModal(true)"
+        >
+          <ion-icon slot="start"
+                    :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
+          {{ isUserSubscribed ? 'Pretplacen' : 'Pretplati se' }}
+        </ion-button>
+      </div>
+      <ion-modal
+          :is-open="isModalOpen"
+          css-class="custom-modal"
+          @onDidDismiss="openModal(false)"
+          :backdrop-dismiss="true"
+          :swipe-to-close="true"
+      >
+        <CafeSubscriptionModal
+            :cafe="{'id': cafe.id, 'name': cafe.name}"
+            @dismissSubscriptionModal="openModal(false)"
+            @userSubscribedToCafe="isUserSubscribed = !isUserSubscribed"
+        />
+      </ion-modal>
     </ion-content>
   </ion-page>
 </template>
@@ -66,15 +80,18 @@ import {
   IonHeader,
   IonToolbar,
   IonButtons,
-  IonBackButton,
   IonContent,
   IonIcon,
   IonButton,
-  IonItem,
-}                                  from '@ionic/vue';
-import CafeService                 from '@/services/CafeService';
-import { reactive, onBeforeMount } from 'vue';
-import { useRoute }                from 'vue-router';
+  IonModal,
+}                            from '@ionic/vue';
+import CafeInfoBody          from '@/components/user/CafeInfoBody';
+import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
+import AccordionList         from '@/components/user/AccordionList';
+import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
+import CafeService           from '@/services/CafeService';
+import { ref }               from 'vue';
+import { useRoute }          from 'vue-router';
 import {
   arrowBackwardOutline,
   notificationsOutline,
@@ -85,7 +102,7 @@ import {
   fastFoodOutline,
   leafOutline,
   timeOutline,
-}                                  from '@/assets/icons';
+}                            from '@/assets/icons';
 
 export default {
   name: "Cafe",
@@ -94,28 +111,50 @@ export default {
     IonHeader,
     IonToolbar,
     IonButtons,
-    IonBackButton,
     IonContent,
     IonIcon,
     IonButton,
-    IonItem,
+    IonModal,
+    CafeInfoBody,
+    FilterCategoryHeading,
+    AccordionList,
+    CafeSubscriptionModal,
   },
   setup() {
     const route = useRoute();
 
-    let state = reactive({ cafe: null });
+    /* Properties */
+    let cafe = ref({});
+    const isModalOpen = ref(false);
+    const isUserSubscribed = ref(false);
 
 
+    /* Event handlers */
+    const openModal = (state) => {
+      isModalOpen.value = state;
+    };
+
+    /* Lifecycle hooks */
     /* Fetching all cafes from backend */
-    onBeforeMount(() => {
-      CafeService.show(route.params.id)
-                 .then((response) => state.cafe = response.data)
-                 .catch((error) => alert(error));
-    });
+    CafeService.show(route.params.id)
+               .then((response) => cafe.value = response.data)
+               .catch((error) => alert(error));
+
+    CafeService.isUserSubscribed(route.params.id)
+               .then((response) => {
+                 isUserSubscribed.value = !!response.data;
+               })
+               .catch((error) => alert(error));
+
 
     return {
       /* Properties */
-      cafe: state.cafe,
+      cafe,
+      isModalOpen,
+      isUserSubscribed,
+
+      /* Event handlers */
+      openModal,
 
       /* Icons */
       arrowBackwardOutline,
@@ -135,6 +174,14 @@ export default {
 <style scoped>
 ion-toolbar {
   --border-style: none;
-  --background: transparent;
+  --background: #FFF;
+}
+
+ion-content {
+  --background: #FFF;
+}
+
+ion-item {
+  --border-style: none !important;
 }
 </style>

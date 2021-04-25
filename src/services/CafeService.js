@@ -37,4 +37,7 @@ export default {
             return API.apiClient.post(`/users/subscribe/cafe/${cafeId}/notify-in-next/`);
         }
     },
+    isUserSubscribed(cafeId) {
+        return API.apiClient.post(`/users/subscribed/cafe/${cafeId}`);
+    }
 };
