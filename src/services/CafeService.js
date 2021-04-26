@@ -22,7 +22,8 @@ export default {
                     sortBy,
                     getAllColumns,
                 },
-            });
+            },
+        );
     },
     show(id) {
         // Only getting
@@ -31,23 +32,29 @@ export default {
             {
                 params: {
                     getAllColumns: true,
-                }
-            }
+                },
+            },
         );
     },
     async subscribe(cafeId, notificationTime = null) {
         await authClient.get("/sanctum/csrf-cookie");
         if(notificationTime) {
             return API.apiClient.post(`/users/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime}`);
-        }
-        else{
+        }else {
             return API.apiClient.post(`/users/subscribe/cafe/${cafeId}/notify-in-next/`);
         }
     },
     isUserSubscribed(cafeId) {
         return API.apiClient.post(`/users/subscribed/cafe/${cafeId}`);
     },
-    getAllCafesUserSubscribedTo(){
-        return API.apiClient.get(`/users/cafes/subscriptions`);
-    }
+    getAllCafesUserSubscribedTo(sortBy = '') {
+        return API.apiClient.get(
+            `/users/cafes/subscriptions`,
+            {
+                params: {
+                    sortBy,
+                },
+            },
+        );
+    },
 };

@@ -21,5 +21,9 @@
       "sound": "sound.wav"
     }
   },
-  "cordova": {}
+  "cordova": {},
+  "server": {
+    "url": "http://192.168.1.203:8100",
+    "cleartext": true
+  }
 }

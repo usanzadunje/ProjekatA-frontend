@@ -3,7 +3,7 @@
     <UserProfileHeader/>
 
     <ion-content>
-      <SlidingFilter class="mt-2"/>
+      <SlidingFilter class="mt-2" @sortHasChanged="sortHasChanged"/>
 
       <div class="px-5 mt-2">
         <FilterCategoryHeading title="Kafici koje pratim" class="mb-2"/>
@@ -85,12 +85,21 @@ export default defineComponent({
     // Cafes user is subscribed to
     let cafesUserSubscribedTo = ref([]);
 
-    /* Lifecycle hooks */
-
+    /* Event handlers */
+    const sortHasChanged = (sortValue) => {
+      CafeService.getAllCafesUserSubscribedTo(sortValue)
+                 .then((response) => {
+                   cafesUserSubscribedTo.value = response.data;
+                 })
+                 .catch((error) => alert(error));
+    };
 
     return {
       /* Properties */
       cafesUserSubscribedTo,
+
+      /* Event handlers */
+      sortHasChanged,
 
       /* Icons */
       trashcanOutline,
@@ -108,7 +117,7 @@ ion-item {
   border-bottom-right-radius: 15px !important;
 }
 
-ion-item-options{
+ion-item-options {
   --border-style: none;
   background-color: #E01B43 !important;
   border-top-right-radius: 15px !important;
