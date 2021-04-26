@@ -175,6 +175,8 @@ export default {
 ion-toolbar {
   --border-style: none;
   --background: #FFF;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 ion-content {

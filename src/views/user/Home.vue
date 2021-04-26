@@ -12,6 +12,12 @@
       <HomeSlidingCafeCards
           :cafes="tableFreeCafes.slice(0)"
           @openCafeModal="openModal($event, true)"/>
+
+      <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
+      <HomeSlidingCafeCards
+          :cafes="tableFreeCafes.slice(0)"
+          @openCafeModal="openModal($event, true)"/>
+
       <ion-modal
           :is-open="isModalOpen"
           css-class="custom-modal"

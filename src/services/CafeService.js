@@ -26,7 +26,14 @@ export default {
     },
     show(id) {
         // Only getting
-        return API.apiClient.get(`/cafes/${id}`);
+        return API.apiClient.get(
+            `/cafes/${id}`,
+            {
+                params: {
+                    getAllColumns: true,
+                }
+            }
+        );
     },
     async subscribe(cafeId, notificationTime = null) {
         await authClient.get("/sanctum/csrf-cookie");
@@ -39,5 +46,8 @@ export default {
     },
     isUserSubscribed(cafeId) {
         return API.apiClient.post(`/users/subscribed/cafe/${cafeId}`);
+    },
+    getAllCafesUserSubscribedTo(){
+        return API.apiClient.get(`/users/cafes/subscriptions`);
     }
 };

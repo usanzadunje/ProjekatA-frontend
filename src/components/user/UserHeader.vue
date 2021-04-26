@@ -4,7 +4,9 @@
       <div class="px-4 py-3 mt-2">
         <div class="flex justify-between">
           <p class="main-toolbar-fade-text">Cao, Marija!</p>
-          <ion-icon :icon="notificationIcon" class="text-2xl icon-fade-color "></ion-icon>
+          <ion-button fill="clear" @click="alert('dsd')">
+            <ion-icon :icon="notificationIcon" class="text-2xl"></ion-icon>
+          </ion-button>
         </div>
         <h1 class="main-toolbar-heading text-xl">{{ mainHeading }}</h1>
         <div class="mt-5 flex justify-around items-start">
@@ -23,9 +25,9 @@
 </template>
 
 <script>
-import { defineComponent }                              from 'vue';
-import { IonHeader, IonIcon, IonSearchbar, IonToolbar } from '@ionic/vue';
-import { notificationsOutline, optionsOutline }         from '@/assets/icons';
+import { defineComponent }                                         from 'vue';
+import { IonHeader, IonIcon, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
+import { notificationsOutline, optionsOutline }                    from '@/assets/icons';
 
 export default defineComponent({
   name: 'GreetingNotificationToolbar',
@@ -34,17 +36,18 @@ export default defineComponent({
     IonSearchbar,
     IonHeader,
     IonToolbar,
+    IonButton,
   },
   props: {
     hasSearchFilter: Boolean,
     mainHeading: String,
-    notificationIcon: String
+    notificationIcon: String,
   },
   setup(props, { emit }) {
     /* Event handlers */
     const searchInputChanged = (e) => {
-      emit('searchFilterChanged', e.target.value)
-    }
+      emit('searchFilterChanged', e.target.value);
+    };
 
     return {
       /* Event handlers */
@@ -57,3 +60,9 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+ion-button {
+  padding: 0 0 0.75rem 0 !important;
+  margin: 0 -1rem 0 0 !important;
+}
+</style>
