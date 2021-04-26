@@ -33,6 +33,7 @@
       <ion-button
           class="uppercase button-subscribe modal-button-border"
           @click="openModal(true)"
+          :disabled="!loggedIn"
       >
         <ion-icon slot="start"
                   :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
@@ -56,7 +57,10 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, nextTick, ref, toRef } from 'vue';
+import { defineComponent, onMounted, nextTick, ref, toRef, computed } from 'vue';
+
+import { useStore } from 'vuex'
+
 import {
   IonContent,
   IonThumbnail,
@@ -102,6 +106,9 @@ export default defineComponent({
   },
   emits: ['dismissShortCafeModal'],
   setup(props) {
+    /* Global properties */
+    const store = useStore();
+
     /* Component properties */
     const slideOpts = {
       initialSlide: 0,
@@ -117,12 +124,17 @@ export default defineComponent({
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
 
+    let loggedIn = computed(() => store.getters['auth/loggedIn']);
+
     /* Lifecycle hooks */
-    CafeService.isUserSubscribed(cafe.value.id)
-               .then((response) => {
-                 isUserSubscribed.value = !!response.data;
-               })
-               .catch((error) => alert(error));
+    /* Checking if user is subscribed to this cafe */
+    if(loggedIn.value){
+      CafeService.isUserSubscribed(cafe.value.id)
+                 .then((response) => {
+                   isUserSubscribed.value = !!response.data;
+                 })
+                 .catch((error) => alert(error));
+    }
     // Without this on android options are not passed to swiper
     onMounted(() => {
       const slides = document.querySelector("ion-slides");
@@ -143,6 +155,7 @@ export default defineComponent({
       /* Properties */
       isModalOpen,
       isUserSubscribed,
+      loggedIn,
 
       /* Event handlers */
       openModal,

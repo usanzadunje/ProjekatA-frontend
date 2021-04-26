@@ -5,6 +5,7 @@
         :key="cafe.id"
         class="mb-5"
         :cafe="cafe"
+        disabled
         @click="$emit('openCafeModal', cafe)"
     />
   </div>
@@ -32,7 +33,7 @@ export default defineComponent({
 
       /* Computed properties */
 
-      /* Methods */
+      /* Event handlers */
 
 
     };

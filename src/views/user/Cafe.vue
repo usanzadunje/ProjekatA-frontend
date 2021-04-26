@@ -51,6 +51,7 @@
             class="uppercase button-subscribe-wide"
             expand="block"
             @click="openModal(true)"
+            :disabled="!loggedIn"
         >
           <ion-icon slot="start"
                     :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
@@ -75,6 +76,11 @@
 </template>
 
 <script>
+import { defineComponent, ref, computed }               from 'vue';
+
+import { useStore } from 'vuex'
+
+import { useRoute }          from 'vue-router';
 import {
   IonPage,
   IonHeader,
@@ -85,13 +91,14 @@ import {
   IonButton,
   IonModal,
 }                            from '@ionic/vue';
+
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import AccordionList         from '@/components/user/AccordionList';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
+
 import CafeService           from '@/services/CafeService';
-import { ref }               from 'vue';
-import { useRoute }          from 'vue-router';
+
 import {
   arrowBackwardOutline,
   notificationsOutline,
@@ -104,7 +111,7 @@ import {
   timeOutline,
 }                            from '@/assets/icons';
 
-export default {
+export default defineComponent({
   name: "Cafe",
   components: {
     IonPage,
@@ -121,12 +128,16 @@ export default {
     CafeSubscriptionModal,
   },
   setup() {
+    /* Global properties */
     const route = useRoute();
+    const store = useStore();
 
     /* Properties */
     let cafe = ref({});
     const isModalOpen = ref(false);
     const isUserSubscribed = ref(false);
+
+    let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
 
     /* Event handlers */
@@ -140,11 +151,14 @@ export default {
                .then((response) => cafe.value = response.data)
                .catch((error) => alert(error));
 
-    CafeService.isUserSubscribed(route.params.id)
-               .then((response) => {
-                 isUserSubscribed.value = !!response.data;
-               })
-               .catch((error) => alert(error));
+    /* Checking if user is subscribed to this cafe */
+    if(loggedIn.value){
+      CafeService.isUserSubscribed(route.params.id)
+                 .then((response) => {
+                   isUserSubscribed.value = !!response.data;
+                 })
+                 .catch((error) => alert(error));
+    }
 
 
     return {
@@ -152,6 +166,7 @@ export default {
       cafe,
       isModalOpen,
       isUserSubscribed,
+      loggedIn,
 
       /* Event handlers */
       openModal,
@@ -169,7 +184,7 @@ export default {
     };
   },
 
-};
+});
 </script>
 <style scoped>
 ion-toolbar {
