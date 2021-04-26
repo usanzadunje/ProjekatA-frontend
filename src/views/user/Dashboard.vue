@@ -14,7 +14,7 @@
           </ion-item>
 
           <ion-item-options side="end">
-            <ion-item-option type="button">
+            <ion-item-option type="button" @click="unsubscribe(cafe.id)">
               <ion-icon
                   slot="icon-only"
                   :icon="trashcanOutline"
@@ -74,7 +74,7 @@ export default defineComponent({
   },
   ionViewDidEnter() {
     //*Everytime user comes to the page give him view of fresh cafes he has subscribed to
-    CafeService.getAllCafesUserSubscribedTo()
+    CafeService.getAllCafesUserSubscribedTo(this.sortBy)
                .then((response) => {
                  this.cafesUserSubscribedTo = response.data;
                })
@@ -84,9 +84,11 @@ export default defineComponent({
     /* Properties */
     // Cafes user is subscribed to
     let cafesUserSubscribedTo = ref([]);
+    let sortBy = ref('name');
 
     /* Event handlers */
     const sortHasChanged = (sortValue) => {
+      sortBy.value = sortValue;
       CafeService.getAllCafesUserSubscribedTo(sortValue)
                  .then((response) => {
                    cafesUserSubscribedTo.value = response.data;
@@ -94,12 +96,25 @@ export default defineComponent({
                  .catch((error) => alert(error));
     };
 
+    const unsubscribe = (cafeId) => {
+      CafeService.unsubscribe(cafeId)
+                 .then((response) => {
+                   if(response.data){
+                     alert('Successfully unsubscribed!');
+                     cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter((cafe) => cafe.id !== cafeId);
+                   }
+                 })
+                 .catch((error) => alert(error));
+    };
+
     return {
       /* Properties */
       cafesUserSubscribedTo,
+      sortBy,
 
       /* Event handlers */
       sortHasChanged,
+      unsubscribe,
 
       /* Icons */
       trashcanOutline,

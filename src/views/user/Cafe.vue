@@ -67,7 +67,7 @@
         <CafeSubscriptionModal
             :cafe="{'id': cafe.id, 'name': cafe.name}"
             @dismissSubscriptionModal="openModal(false)"
-            @userSubscribedToCafe="isUserSubscribed = !isUserSubscribed"
+            @userToggledSubscription="isUserSubscribed = !isUserSubscribed"
         />
       </ion-modal>
     </ion-content>

@@ -16,6 +16,7 @@
       <ion-toggle
           class="pl-4"
           @ionChange="indefiniteTimerToggle($event)"
+          :disabled="isUserSubscribed"
       ></ion-toggle>
       <ion-label class="margin-left-1 submodal-fade-text">Neodredjeno</ion-label>
     </ion-item>
@@ -26,7 +27,7 @@
           step="5"
           color="primary"
           v-model="notificationTime"
-          :disabled="indefiniteTimerActive"
+          :disabled="indefiniteTimerActive || isUserSubscribed"
       ></ion-range>
       <ion-label class="ml-1 margin-left-1 submodal-alert-time">{{ notificationTime }}min</ion-label>
     </ion-item>
@@ -39,9 +40,10 @@
       </ion-button>
       <ion-button
           class="uppercase button-confirm modal-button-border"
-          @click="subscribe(cafe.id, notificationTime);$emit('userSubscribedToCafe');"
+          @click="toggleSubscription(cafe.id)"
       >
-        <ion-icon slot="start" :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
+        <ion-icon slot="start"
+                  :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
         {{ isUserSubscribed ? 'Ukloni' : 'Potvrdi' }}
       </ion-button>
     </div>
@@ -57,13 +59,13 @@ import {
   IonButton,
   IonToggle,
   IonRange,
-}                               from '@ionic/vue';
+}                                      from '@ionic/vue';
 import {
   notificationsOutlineWhite,
   notificationsReceivedOutline,
-}                               from '@/assets/icons';
-import { useFCM }               from '@/composables/useFCM';
-import CafeService              from '@/services/CafeService';
+}                                      from '@/assets/icons';
+import { useFCM }                      from '@/composables/useFCM';
+import CafeService                     from '@/services/CafeService';
 
 export default defineComponent({
   name: 'ShortCafeModal',
@@ -81,15 +83,15 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissSubscriptionModal', 'userSubscribedToCafe'],
-  setup(props) {
+  emits: ['dismissSubscriptionModal', 'userToggledSubscription'],
+  setup(props, { emit }) {
     /* Properties */
     let notificationTime = ref(15);
     let indefiniteTimerActive = ref(false);
 
     const isUserSubscribed = ref(false);
 
-    const cafe = toRef(props, 'cafe')
+    const cafe = toRef(props, 'cafe');
 
     /* Lifecycle hooks */
     CafeService.isUserSubscribed(cafe.value.id)
@@ -109,16 +111,33 @@ export default defineComponent({
     initPush();
 
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
-    const subscribe = (cafeId, $notificationTime = null) => {
+    const toggleSubscription = (cafeId) => {
       if(indefiniteTimerActive.value) {
-        $notificationTime = null;
+        notificationTime.value = null;
       }
-      CafeService.subscribe(cafeId, $notificationTime)
-                 .then(() => {
-                   alert(`Successfully subscribed!`);
-                   isUserSubscribed.value = !isUserSubscribed.value;
-                 })
-                 .catch((error) => alert(error));
+
+      if(isUserSubscribed.value) {
+        CafeService.unsubscribe(cafeId)
+                   .then((response) => {
+                     if(response.data) {
+                       alert(`Successfully unsubscribed!`);
+                       isUserSubscribed.value = false;
+                       emit('userToggledSubscription');
+                     }
+                   })
+                   .catch((error) => alert(error));
+      }else {
+        CafeService.subscribe(cafeId, notificationTime.value)
+                   .then((response) => {
+                     if(response.data) {
+                       alert(`Successfully subscribed!`);
+                       isUserSubscribed.value = true;
+                       emit('userToggledSubscription');
+                     }
+                   })
+                   .catch((error) => alert(error));
+      }
+
     };
 
 
@@ -130,9 +149,8 @@ export default defineComponent({
 
       /* Event handlers */
       indefiniteTimerToggle,
+      toggleSubscription,
 
-      /* Methods */
-      subscribe,
 
       /* Icons */
       notificationsOutlineWhite,
