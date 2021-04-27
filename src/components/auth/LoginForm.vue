@@ -28,7 +28,10 @@
     </ion-item>
     <div class="flex justify-between mt-3.5 px-4 utility-text">
       <div class="align-text-bottom">
-        <ion-checkbox class="align-text-bottom"></ion-checkbox>
+        <ion-checkbox
+            class="align-text-bottom"
+            v-model="user.remember"
+        ></ion-checkbox>
         <ion-text class="ml-2">Zapamti me</ion-text>
       </div>
       <a href="/forgot-password" class="mt-0.5">Zaboravljena lozinka?</a>
