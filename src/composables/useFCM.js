@@ -41,12 +41,14 @@ export function useFCM() {
                 });
             },
         );
+
         PushNotifications.addListener(
             'registrationError',
             (error) => {
                 alert('Error on registration: ' + JSON.stringify(error));
             },
         );
+
         PushNotifications.addListener(
             'pushNotificationReceived',
             (notification) => {
@@ -62,6 +64,7 @@ export function useFCM() {
                 });
             },
         );
+
         PushNotifications.addListener(
             'pushNotificationActionPerformed',
             (notification) => {
@@ -71,6 +74,7 @@ export function useFCM() {
                 });
             },
         );
+
         LocalNotifications.addListener(
             'localNotificationActionPerformed',
             () => {

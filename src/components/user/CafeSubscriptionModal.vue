@@ -161,16 +161,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-toggle {
-  --background: #C1C9D2;
-  --background-checked: #1B6DE0;
-  --handle-height: 13px;
-  --handle-width: 13px;
-  --handle-spacing: 3px;
-  --handle-background-checked: #FFF;
-  height: 19px;
-}
-
 ion-range {
   --bar-background: #F6F7FB;
   --bar-background-active: #1B6DE0;

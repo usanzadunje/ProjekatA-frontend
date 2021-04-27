@@ -67,6 +67,16 @@ ion-thumbnail {
     --border-radius: 11px;
 }
 
+ion-toggle {
+    --background: #C1C9D2;
+    --background-checked: #1B6DE0;
+    --handle-height: 13px;
+    --handle-width: 13px;
+    --handle-spacing: 3px;
+    --handle-background-checked: #FFF;
+    height: 19px;
+}
+
 /*
     START Android specific styles
 */
@@ -74,6 +84,15 @@ ion-thumbnail {
 .md .filter-icon {
     margin-top: 0.55rem;
 }
+
+.md .pull-quarter-left{
+    margin-right: 1rem !important;
+}
+
+.md .pull-right{
+    margin-right: -0.25rem !important;
+}
+
 
 /*
     END Android specific styles
@@ -565,4 +584,64 @@ ion-thumbnail {
 }
 /*
     END USER PROFILE STYLES
+*/
+
+
+/*
+    START SETTINGS STYLES
+*/
+.settings-heading {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    font-size: 20px !important;
+}
+
+.settings-fade-text {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #9EAAB7 !important;
+    font-size: 12px !important;
+}
+
+.settings-item-text {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    color: #000 !important;
+    font-size: 14px !important;
+}
+
+.flex-between {
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.settings-icon-badge{
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+}
+
+.settings-red-icon-color{
+    background-color: #E01B43;
+}
+
+.settings-yellow-icon-color{
+    background-color: #FFD700;
+}
+
+.settings-padding-icon-top {
+    padding-top: 7px;
+}
+
+.settings-on-off-text {
+
+}
+
+.no-border {
+    --border-style: none !important;
+}
+
+/*
+    END SETTINGS STYLES
 */

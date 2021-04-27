@@ -65,4 +65,7 @@ export default {
         await authClient.get("/sanctum/csrf-cookie");
         return authClient.post("/api/users/fcm-token", payload);
     },
+    removeFcmToken() {
+        return authClient.post("/api/users/fcm-token/remove");
+    },
 };
