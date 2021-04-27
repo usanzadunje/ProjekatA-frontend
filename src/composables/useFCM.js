@@ -7,15 +7,27 @@ import {
     Capacitor,
 }                     from '@capacitor/core';
 import AuthService    from '../services/AuthService';
+import { useStorage } from '@/services/StorageService';
 
-export function useFCM() {
+export function useFCM(userId) {
+    /* Global properties */
     const { PushNotifications, LocalNotifications } = Plugins;
     const router = useRouter();
 
+    //Initializing storage and destructuring getter
+    const { get } = useStorage();
+
     const initPush = () => {
-        if(Capacitor.platform !== 'web') {
-            registerPush();
-        }
+        get(`areNotificationsOn.${userId}`)
+            .then((response) => {
+                if(Capacitor.platform !== 'web' && !!response) {
+                    registerPush();
+                }
+            })
+            .catch((error) => {
+                alert(error);
+            });
+
     };
 
     const registerPush = () => {

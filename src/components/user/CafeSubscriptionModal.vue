@@ -52,6 +52,9 @@
 
 <script>
 import { defineComponent, ref, toRef } from 'vue';
+
+import { useStore } from 'vuex';
+
 import {
   IonContent,
   IonItem,
@@ -59,13 +62,14 @@ import {
   IonButton,
   IonToggle,
   IonRange,
-}                                      from '@ionic/vue';
+  IonLabel,
+}                     from '@ionic/vue';
 import {
   notificationsOutlineWhite,
   notificationsReceivedOutline,
-}                                      from '@/assets/icons';
-import { useFCM }                      from '@/composables/useFCM';
-import CafeService                     from '@/services/CafeService';
+}                     from '@/assets/icons';
+import { useFCM }     from '@/composables/useFCM';
+import CafeService    from '@/services/CafeService';
 
 export default defineComponent({
   name: 'ShortCafeModal',
@@ -76,6 +80,7 @@ export default defineComponent({
     IonButton,
     IonToggle,
     IonRange,
+    IonLabel,
   },
   props: {
     cafe: {
@@ -85,6 +90,8 @@ export default defineComponent({
   },
   emits: ['dismissSubscriptionModal', 'userToggledSubscription'],
   setup(props, { emit }) {
+    /* Global properties */
+    const store = useStore();
     /* Properties */
     let notificationTime = ref(15);
     let indefiniteTimerActive = ref(false);
@@ -107,7 +114,7 @@ export default defineComponent({
 
     /* Methods */
     /* Method for initializing push notifications for mobile devices */
-    const { initPush } = useFCM();
+    const { initPush } = useFCM(store.getters['auth/authUser'].id);
     initPush();
 
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */

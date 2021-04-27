@@ -15,7 +15,10 @@
           <p class="settings-item-text">Dark mode</p>
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
             <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'ON' : 'OFF' }}</ion-label>
-            <ion-toggle @ionChange="toggleDarkMode($event)"></ion-toggle>
+            <ion-toggle
+                id="dark-mode-toggle"
+                @ionChange="toggleDarkMode($event)"
+            ></ion-toggle>
           </ion-item>
         </ion-item>
         <ion-item class="ion-item-padding-right">
@@ -28,7 +31,10 @@
           <p class="settings-item-text">Notifikacije</p>
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
             <ion-label class="settings-fade-text">{{ areNotificationsOn ? 'ON' : 'OFF' }}</ion-label>
-            <ion-toggle @ionChange="toggleNotifications($event)"></ion-toggle>
+            <ion-toggle
+                id="notification-toggle"
+                @ionChange="toggleNotifications($event)"
+            ></ion-toggle>
           </ion-item>
         </ion-item>
         <ion-item class="ion-item-padding-right">
@@ -57,6 +63,9 @@
             <ion-icon slot="icon-only" :icon="arrowRightOutline"></ion-icon>
           </ion-button>
         </ion-item>
+        <ion-button fill="clear" expand="block" @click="logout">
+          Logout
+        </ion-button>
       </div>
     </ion-content>
   </ion-page>
@@ -64,6 +73,9 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+
+import { useStore } from 'vuex';
+
 import {
   IonContent,
   IonPage,
@@ -72,14 +84,17 @@ import {
   IonLabel,
   IonToggle,
   IonButton,
-}                               from '@ionic/vue';
+} from '@ionic/vue';
 
 import {
   flashFilled,
   arrowRightOutline,
   rocketFilled,
-}                  from '@/assets/icons';
-import AuthService from '@/services/AuthService';
+} from '@/assets/icons';
+
+import AuthService    from '@/services/AuthService';
+import { useStorage } from '@/services/StorageService';
+import { useFCM }     from '@/composables/useFCM';
 
 export default defineComponent({
   name: 'Settings',
@@ -93,13 +108,45 @@ export default defineComponent({
     IonButton,
   },
   setup() {
+    /* Global properties */
+    const store = useStore();
+
     /* Properties */
     let isDarkModeOn = ref(false);
     let areNotificationsOn = ref(false);
     let language = ref('SRB');
 
+    const { set, get } = useStorage();
+
+    //Setting toggle checked attribute to whatever user choose and is persisted in storage
+    //for notifications
+    get(`areNotificationsOn.${store.getters['auth/authUser'].id}`)
+        .then((response) => {
+          areNotificationsOn.value = !!response;
+          document.getElementById('notification-toggle').checked = areNotificationsOn.value;
+        })
+        .catch((error) => {
+          alert(error);
+        });
+
+    get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
+        .then((response) => {
+          isDarkModeOn.value = !!response;
+          document.getElementById('dark-mode-toggle').checked = isDarkModeOn.value;
+        })
+        .catch((error) => {
+          alert(error);
+        });
+
     /* Event handlers */
     const toggleDarkMode = (e) => {
+      if(!e.target.checked) {
+        set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, false);
+      }else {
+        //Remembering user decision for future usage
+        set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, true);
+      }
+      document.body.classList.toggle('dark', e.target.checked);
       isDarkModeOn.value = e.target.checked;
     };
 
@@ -107,13 +154,28 @@ export default defineComponent({
       if(!e.target.checked) {
         /* Remove FCM token thus disabling notifications */
         AuthService.removeFcmToken()
-                   .then()
+                   .then((response) => {
+                     if(response.data) {
+                       //Remembering user decision for future usage
+                       set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, false);
+                     }
+                   })
                    .catch((error) => {
                      alert(error);
                    });
+
+      }else {
+        const { initPush } = useFCM(store.getters['auth/authUser'].id);
+        //Remembering user decision for future usage
+        set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
+        initPush();
       }
       areNotificationsOn.value = e.target.checked;
     };
+
+    const logout = () => {
+      store.dispatch("auth/logout")
+    }
 
     return {
       /* Properties */
@@ -124,6 +186,7 @@ export default defineComponent({
       /* Event handlers */
       toggleDarkMode,
       toggleNotifications,
+      logout,
 
       /* Icons */
       flashFilled,
