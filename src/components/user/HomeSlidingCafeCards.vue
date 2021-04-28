@@ -5,7 +5,6 @@
         :key="cafe.id"
         class="mb-5"
         :cafe="cafe"
-        disabled
         @click="$emit('openCafeModal', cafe)"
     />
   </div>

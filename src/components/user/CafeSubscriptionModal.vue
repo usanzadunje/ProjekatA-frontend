@@ -29,7 +29,9 @@
           v-model="notificationTime"
           :disabled="indefiniteTimerActive || isUserSubscribed"
       ></ion-range>
-      <ion-label class="ml-1 margin-left-1 submodal-alert-time">{{ notificationTime }}min</ion-label>
+      <ion-label class="ml-1 margin-left-1 submodal-alert-time">
+        {{ !isNaN(notificationTime) ? notificationTime + 'min' : '∞' }}
+      </ion-label>
     </ion-item>
     <div class="mt-2 mb-3 flex justify-between">
       <ion-button

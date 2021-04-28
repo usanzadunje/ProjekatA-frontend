@@ -10,11 +10,11 @@
           <ion-icon :icon="selectedTab === 'search' ? searchOutlineSelected : searchOutline"></ion-icon>
         </ion-tab-button>
 
-        <ion-tab-button tab="dashboard" href="/dashboard">
+        <ion-tab-button tab="dashboard" href="/dashboard" v-if="loggedIn">
           <ion-icon :icon="selectedTab === 'dashboard' ? dashboardOutlineSelected : dashboardOutline"></ion-icon>
         </ion-tab-button>
 
-        <ion-tab-button tab="settings" href="/settings">
+        <ion-tab-button tab="settings" href="/settings" v-if="loggedIn">
           <ion-icon :icon="selectedTab === 'settings' ? settingsOutlineSelected : settingsOutline"></ion-icon>
         </ion-tab-button>
       </ion-tab-bar>
@@ -24,6 +24,9 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+
+import { mapGetters } from 'vuex';
+
 import {
   IonIcon,
   IonPage,
@@ -50,6 +53,9 @@ export default defineComponent({
     IonTabBar,
     IonTabButton,
     IonTabs,
+  },
+  computed: {
+    ...mapGetters('auth', ['loggedIn']),
   },
   setup() {
     /* Component properties */
