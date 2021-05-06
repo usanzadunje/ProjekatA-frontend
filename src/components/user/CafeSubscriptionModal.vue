@@ -45,7 +45,7 @@
           @click="toggleSubscription(cafe.id)"
       >
         <ion-icon slot="start"
-                  :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
+                  :icon="isUserSubscribed ? notificationsReceivedFilled : notificationsOutlineWhite"></ion-icon>
         {{ isUserSubscribed ? 'Ukloni' : 'Potvrdi' }}
       </ion-button>
     </div>
@@ -68,7 +68,7 @@ import {
 }                     from '@ionic/vue';
 import {
   notificationsOutlineWhite,
-  notificationsReceivedOutline,
+  notificationsReceivedFilled,
 }                     from '@/assets/icons';
 import { useFCM }     from '@/composables/useFCM';
 import CafeService    from '@/services/CafeService';
@@ -163,7 +163,7 @@ export default defineComponent({
 
       /* Icons */
       notificationsOutlineWhite,
-      notificationsReceivedOutline,
+      notificationsReceivedFilled,
 
     };
   },

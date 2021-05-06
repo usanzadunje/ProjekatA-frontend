@@ -145,6 +145,27 @@ exports.notificationsReceivedOutline = `data:image/svg+xml;utf8,<svg xmlns="http
 </svg>
 `;
 
+
+exports.notificationsReceivedFilled = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="23.962" height="21.53" viewBox="0 0 23.962 21.53">
+  <g id="Group_8895" data-name="Group 8895" transform="translate(-351.731 -1105.589)">
+    <g id="Iconly_Light-outline_Notification" data-name="Iconly/Light-outline/Notification" transform="translate(357.388 1111)">
+      <g id="Notification" transform="translate(0 0)">
+        <path id="Notification-2" data-name="Notification" d="M6.383,15.849a2.771,2.771,0,0,1-1.849-1.037.558.558,0,0,1,.086-.778.542.542,0,0,1,.768.088,1.678,1.678,0,0,0,1.122.627A1.7,1.7,0,0,0,7.762,14.4a1.516,1.516,0,0,0,.282-.276.543.543,0,0,1,.769-.084.558.558,0,0,1,.084.778,2.611,2.611,0,0,1-.473.463,2.771,2.771,0,0,1-2.04.572Zm-3.2-3.276A3.889,3.889,0,0,1,.736,11.364,3.221,3.221,0,0,1,0,9.253V9.065a3.249,3.249,0,0,1,.53-1.622l.053-.069a3.061,3.061,0,0,0,.737-1.445l-.012.049,0-.424.009-.473c.007-.208.019-.4.034-.573A4.745,4.745,0,0,1,3.122,1.291,5.657,5.657,0,0,1,6.716,0h.057a5.664,5.664,0,0,1,3.594,1.29,4.778,4.778,0,0,1,1.775,3.22c.014.157.02.3.022.513v.534c0,.087,0,.165,0,.244l.007.156.036.149a3.093,3.093,0,0,0,.576,1.135l.119.141.049.063a3.207,3.207,0,0,1,.533,1.646v.32a3.224,3.224,0,0,1-.766,1.981,3.8,3.8,0,0,1-2.417,1.18,33.034,33.034,0,0,1-3.565.194A33.005,33.005,0,0,1,3.184,12.573ZM1.417,8.093h0l-.061.1a2.129,2.129,0,0,0-.249.745l-.014.151v.174a2.108,2.108,0,0,0,.456,1.361,2.771,2.771,0,0,0,1.744.845,32.1,32.1,0,0,0,3.445.186,32.163,32.163,0,0,0,3.457-.187,2.725,2.725,0,0,0,1.712-.818,2.115,2.115,0,0,0,.486-1.407V9.117a2.049,2.049,0,0,0-.345-1.05l.012.02-.109-.129a4.205,4.205,0,0,1-.8-1.584L11.1,6.155l-.01-.074c-.009-.116-.013-.211-.015-.318l0-.718c0-.181-.006-.3-.017-.434a4.213,4.213,0,0,0-4.28-3.505H6.716a4.2,4.2,0,0,0-4.272,3.5c-.009.1-.016.2-.023.335l-.012.371L2.4,6.042l-.011.113a4.173,4.173,0,0,1-.968,1.932h0Z" transform="translate(0)" fill="#fff" stroke="#fff" stroke-width="0.5"/>
+      </g>
+    </g>
+    <path id="Path_6962" data-name="Path 6962" d="M-3660.428,2460.008c-.708.329-2.074.256-3.23,1.889a9.9,9.9,0,0,0-1.394,4.645c-.142,1-.658,3.937.191,4.1s11.038.52,11.133-1.486-1.631-3.983-1.582-4.6a7.958,7.958,0,0,0-1.252-3.35C-3657.01,2460.811-3659.72,2459.679-3660.428,2460.008Z" transform="translate(4024 -1348)" fill="#fff"/>
+    <path id="Path_6963" data-name="Path 6963" d="M-3682.483,2461.959l1.58,1.58,3.251-3.251" transform="translate(4044.073 -1344.605)" fill="none" stroke="#1b6de0" stroke-linecap="round" stroke-width="1"/>
+    <path id="Path_6964" data-name="Path 6964" d="M-3651.7,2459.948l1.568-1.241" transform="translate(4023 -1348)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+    <path id="Path_6965" data-name="Path 6965" d="M-3651.7,2459.948l1.834-.255" transform="translate(4025 -1344)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+    <path id="Path_6966" data-name="Path 6966" d="M-3651.7,2459.948l.745-1.7" transform="translate(4019 -1352)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+    <path id="Path_6967" data-name="Path 6967" d="M-3650.136,2459.948l-1.568-1.241" transform="translate(4006.266 -1348)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+    <path id="Path_6968" data-name="Path 6968" d="M-3649.871,2459.948l-1.834-.255" transform="translate(4004 -1344)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+    <path id="Path_6969" data-name="Path 6969" d="M-3650.96,2459.948l-.745-1.7" transform="translate(4011.089 -1352)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+  </g>
+</svg>
+`;
+
+
 exports.optionsOutline = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="25.712" height="22.3" viewBox="0 0 25.712 22.3">
   <g id="options-outline" transform="translate(-63.35 -94.575)">
     <path id="Path_6945" data-name="Path 6945" d="M83.566,128h4.847M64,128H77.894m5.433,16.275h5.086m-24.412,0H77.894m-3.535-8.138H88.412m-24.412,0h4.6" transform="translate(0 -30.229)" fill="none" stroke="#9eaab7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3"/>

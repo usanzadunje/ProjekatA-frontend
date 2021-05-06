@@ -36,7 +36,7 @@
           :disabled="!loggedIn"
       >
         <ion-icon slot="start"
-                  :icon="isUserSubscribed ? notificationsReceivedOutline : notificationsOutlineWhite"></ion-icon>
+                  :icon="isUserSubscribed ? notificationsReceivedFilled : notificationsOutlineWhite"></ion-icon>
         {{ isUserSubscribed ? 'Pretplacen' : 'Pretplati se' }}
       </ion-button>
     </div>
@@ -76,7 +76,7 @@ import {
   graphSliceYellowFilled,
   locationInactiveOutline,
   notificationsOutlineWhite,
-  notificationsReceivedOutline,
+  notificationsReceivedFilled,
   fastFoodOutline,
   leafOutline,
   timeOutline,
@@ -164,7 +164,7 @@ export default defineComponent({
       graphSliceYellowFilled,
       locationInactiveOutline,
       notificationsOutlineWhite,
-      notificationsReceivedOutline,
+      notificationsReceivedFilled,
       fastFoodOutline,
       leafOutline,
       timeOutline,

@@ -9,32 +9,33 @@
 
     <ion-content class="ion-padding">
       <FilterCategoryHeading class="mb-2" :title="'Trenutno slobodni'"/>
-      <ion-slides
-          :options="slideOpts"
-          ref="availableCafeSlides"
-          @ionSlideDidChange="loadMoreCafes('currentlyAvailableCafes')"
+      <swiper
+          ref="availableCafesSwiper"
+          :slides-per-view="1"
+          @slideChange="loadMoreCafes($event, 'currentlyAvailableCafes', 'id')"
       >
-        <ion-slide v-for="i in cafeSlidesLength" :key="i">
+        <swiper-slide v-for="i in cafeSlidesLength.currentlyAvailableCafes" :key="i">
           <HomeSlidingCafeCards
-              :cafes="cafes.currentlyAvailableCafes.slice(0, 2)"
+              :cafes="cafes.currentlyAvailableCafes.slice(i, i + 2)"
               @openCafeModal="openModal($event, true)"
           />
-        </ion-slide>
-      </ion-slides>
+        </swiper-slide>
+      </swiper>
+
 
       <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
-      <ion-slides
-          :options="slideOpts"
-          ref="closestCafeSlides"
+      <swiper
+          ref="closestCafesSwiper"
+          :slides-per-view="1"
+          @slideChange="loadMoreCafes($event, 'closestToUserCafes', 'name')"
       >
-        <ion-slide v-for="i in [0, 2, 4]" :key="i">
-          <!--          <HomeSlidingCafeCards-->
-          <!--              :cafes="cafes.closestToUserCafes.slice(0)"-->
-          <!--              @openCafeModal="openModal($event, true)"-->
-          <!--          />-->
-        </ion-slide>
-      </ion-slides>
-
+        <swiper-slide v-for="i in cafeSlidesLength.closestToUserCafes" :key="i">
+          <HomeSlidingCafeCards
+              :cafes="cafes.closestToUserCafes.slice(i, i + 2)"
+              @openCafeModal="openModal($event, true)"
+          />
+        </swiper-slide>
+      </swiper>
 
       <ion-modal
           :is-open="isModalOpen"
@@ -45,52 +46,49 @@
       >
         <ShortCafeModal
             :cafe="modalCafe"
-            @dismissShortCafeModal="openModal(false)"/>
+            @dismissShortCafeModal="openModal(false)"
+        />
       </ion-modal>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent, ref, reactive, watch }              from 'vue';
+import { defineComponent, ref, reactive, watch } from 'vue';
 import {
   IonContent,
   IonPage,
-  IonSlides,
-  IonSlide,
   IonModal,
-}                                                             from '@ionic/vue';
-import UserHeader                                             from '@/components/user/UserHeader';
-import CafeService                                            from '@/services/CafeService';
+}                                                from '@ionic/vue';
+import UserHeader                                from '@/components/user/UserHeader';
+import CafeService                               from '@/services/CafeService';
+import FilterCategoryHeading                     from '@/components/user/FilterCategoryHeading';
+import HomeSlidingCafeCards                      from '@/components/user/HomeSlidingCafeCards';
+import ShortCafeModal                            from '@/components/user/ShortCafeModal';
+
+import { Swiper, SwiperSlide } from 'swiper/vue';
+
+import 'swiper/swiper.min.css';
+
 import { notificationsOutline, notificationsReceivedOutline } from '@/assets/icons';
-import FilterCategoryHeading                                  from '@/components/user/FilterCategoryHeading';
-import HomeSlidingCafeCards                                   from '@/components/user/HomeSlidingCafeCards';
-import ShortCafeModal                                         from '@/components/user/ShortCafeModal';
 
 export default defineComponent({
   name: 'Home',
   components: {
     IonContent,
     IonPage,
-    IonSlides,
-    IonSlide,
     IonModal,
     UserHeader,
     FilterCategoryHeading,
     HomeSlidingCafeCards,
     ShortCafeModal,
+    Swiper,
+    SwiperSlide,
   },
   setup() {
-    /* Component properties */
-    const availableCafeSlides = ref(null);
-    const closestCafeSlides = ref(null);
-    const slideOpts = {
-      initialSlide: 0,
-      speed: 500,
-      centeredSlides: true,
-      slidesPerView: 1,
-      spaceBetween: 16,
-    };
+    /* Component references */
+    const availableCafesSwiper = ref(null);
+    const closestCafesSwiper = ref(null);
 
     /* Properties */
     // Cafes closest to user
@@ -99,12 +97,18 @@ export default defineComponent({
       closestToUserCafes: [],
     });
 
-    let cafeSlidesLength = ref(2);
+    const cafeSlidesLength = reactive({
+      currentlyAvailableCafes: [0, 2],
+      closestToUserCafes: [0, 2],
+    });
 
     // Search term for filtering records
     const cafeSearchString = ref('');
     // From which number on to take cafe records
-    let cafeStart = 0;
+    let cafeStart = reactive({
+      currentlyAvailableCafes: 4,
+      closestToUserCafes: 4,
+    });
 
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
@@ -112,19 +116,18 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
-    CafeService.getCafeCardsChunkInfo(cafeStart, 4, '', 'id', true)
+    CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
                .then((response) => {
                  cafes.currentlyAvailableCafes = response.data;
                })
                .catch((error) => alert(error));
 
     //*Before mounting fetching initial 4 cafes to show closest to user
-    CafeService.getCafeCardsChunkInfo(cafeStart, 4, '', 'name', true)
+    CafeService.getCafeCardsChunkInfo(0, 4, '', 'name', true)
                .then((response) => {
                  cafes.closestToUserCafes = response.data;
                })
                .catch((error) => alert(error));
-
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
@@ -139,64 +142,62 @@ export default defineComponent({
 
 
     // Grabbing 2 more cafes that match required filter
-    const loadMoreCafes = async(cafeArrayName, sortBy = '') => {
-      //Only load more cafes if user is on last slide
-      if(await availableCafeSlides?.value?.$el.isEnd() || await closestCafeSlides?.value?.$el.isEnd()) {
-        cafeStart += 4;
-        CafeService.getCafeCardsChunkInfo(cafeStart, 4, cafeSearchString.value, sortBy, true)
-                   .then((response) => {
-                     // There are no more records
-                     if(!response.data) return;
-                     // if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
-                     cafes[cafeArrayName] = cafes[cafeArrayName].concat(response.data);
-                   })
-                   .catch((error) => {
-                     alert(error);
-                   });
-      }
+    const loadMoreCafes = (e, cafeArrayName, sortBy = '') => {
+      CafeService.getCafeCardsChunkInfo(cafeStart[cafeArrayName], 2, cafeSearchString.value, sortBy, true)
+                 .then((response) => {
+                   // There are no more records
+                   if(response.data.length === 0) return;
+                   // if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
+                   cafes[cafeArrayName] = cafes[cafeArrayName].concat(response.data);
+                   cafeSlidesLength[cafeArrayName].push(cafeSlidesLength[cafeArrayName][cafeSlidesLength[cafeArrayName].length - 1] + 2);
+                   console.log(cafeSlidesLength[cafeArrayName]);
+                 })
+                 .catch((error) => {
+                   alert(error);
+                 });
+      cafeStart[cafeArrayName] += 2;
     };
 
     const filterCafes = () => {
-      CafeService.getCafeCardsChunkInfo(cafeStart, 4, cafeSearchString.value, 'id', true)
+      CafeService.getCafeCardsChunkInfo(0, 4, cafeSearchString.value, 'id', true)
                  .then((response) => {
-                   if(!response.data) return;
-                   // if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
+                   if(response.data.length === 0) return;
                    cafes.currentlyAvailableCafes = response.data;
+                   cafeStart.currentlyAvailableCafes = 4;
+                   cafeSlidesLength.currentlyAvailableCafes = response.data.length === 1 ? [0] : [0, 2];
                  })
                  .catch((error) => alert(error));
 
-      CafeService.getCafeCardsChunkInfo(cafeStart, 4, cafeSearchString.value, 'name', true)
+      CafeService.getCafeCardsChunkInfo(0, 4, cafeSearchString.value, 'name', true)
                  .then((response) => {
-                   if(!response.data) return;
-                   // if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
+                   if(response.data.length === 0) return;
                    cafes.closestToUserCafes = response.data;
+                   cafeStart.closestToUserCafes = 4;
+                   cafeSlidesLength.closestToUserCafes = response.data.length === 1 ? [0] : [0, 2];
                  })
                  .catch((error) => alert(error));
-
     };
 
     /* Watchers */
     // Watching for a change on cafeSearchString(search term from search input) prop
     // resetting all the variables for filtered data and loading first 20 records from new filtered data
     watch(cafeSearchString, () => {
-      cafeStart = 0;
       filterCafes();
-      availableCafeSlides?.value?.$el.slideTo(0);
+      availableCafesSwiper.value.$el.swiper.slideTo(0);
+      closestCafesSwiper.value.$el.swiper.slideTo(0);
     });
 
     return {
-      /* Component specific properties */
-      availableCafeSlides,
-      closestCafeSlides,
-      slideOpts,
-      isModalOpen,
-      modalCafe,
+      /* Component references */
+      availableCafesSwiper,
+      closestCafesSwiper,
 
       /* Properties */
       cafes,
       cafeSlidesLength,
       cafeStart,
-
+      isModalOpen,
+      modalCafe,
 
       /* Event handlers */
       searchFilterChanged,

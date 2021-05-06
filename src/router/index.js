@@ -29,7 +29,7 @@ const routes = [
     {
         path: "/test",
         name: "test",
-        component: () => import(/* webpackChunkName: "Login" */ "../views/user/Onboarding"),
+        component: () => import(/* webpackChunkName: "Login" */ "../views/Test"),
     },
     {
         path: "/register",
@@ -121,7 +121,7 @@ const routes = [
         path: "/onboadring",
         name: "onboarding",
         meta: { middleware: [redirectIfStaff, auth] },
-        component: () => import(/* webpackChunkName: "Test" */ "../views/user/Onboarding"),
+        component: () => import(/* webpackChunkName: "Onboarding" */ "../views/user/Onboarding"),
     },
     /* =============================================
         End routes protected from staff
