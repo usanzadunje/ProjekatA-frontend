@@ -1,33 +1,34 @@
 <template>
-  <swiper
-      :slides-per-view="1"
-      @slideChange="onSlideChange"
-  >
-    <swiper-slide v-for="i in slides" :key="i">{{ i }}</swiper-slide>
-  </swiper>
+  <div>
+    <h1>Longitude : {{ coordinates.latitude }}</h1>
+    <h1>Longitude : {{ coordinates.longitude }}</h1>
+  </div>
 </template>
 <script>
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from 'swiper/vue';
+import { useGeolocation } from '@/composables/useGeolocation';
 
-// Import Swiper styles
-import 'swiper/swiper.min.css';
+import { reactive } from 'vue';
+
 
 export default {
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
-  data() {
+  setup() {
+    const { getCurrentPosition } = useGeolocation();
+
+    let coordinates = reactive({});
+
+    getCurrentPosition()
+        .then((position) => {
+          coordinates.latitude = position.latitude;
+          coordinates.longitude = position.longitude;
+        })
+        .catch((error) => {
+          alert(error);
+        });
+
     return {
-      slides: [0, 1, 2],
+      coordinates,
     };
-  },
-  methods: {
-    onSlideChange() {
-      this.slides.push(2);
-      console.log('slide change');
-    },
   },
 };
 </script>

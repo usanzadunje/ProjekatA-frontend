@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="login" class="px-5">
+  <div class="px-5">
     <ion-item lines="none" class="border rounded-2xl h-12 auth-input-background">
       <ion-icon :icon="envelopeOutline" class="mr-2"></ion-icon>
       <ion-input
@@ -39,10 +39,10 @@
     <SocialIcons class="mt-7"/>
     <div class="padding mt-10 mb-10">
       <ion-button
-          type="submit"
           size="large"
           expand="block"
           class="auth-button-border-radius uppercase button-text-white"
+          @click="login"
       >
         Prijavi se
       </ion-button>
@@ -57,7 +57,7 @@
       </ion-button>
     </div>
     <FlashMessage :error="errors.data" class="mb-10"/>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -70,8 +70,8 @@ import AuthService                                                     from "@/s
 import { getError }                                                    from '@/utils/helpers';
 import FlashMessage                                                    from '@/components/FlashMessage';
 import SocialIcons                                                     from '@/components/social/SocialIcons';
-import { eyeOutline, eyeOffOutline }     from 'ionicons/icons';
-import { envelopeOutline, lockOpenOutline }                                             from '@/assets/icons';
+import { eyeOutline, eyeOffOutline }                                   from 'ionicons/icons';
+import { envelopeOutline, lockOpenOutline }                            from '@/assets/icons';
 
 export default defineComponent({
   name: "LoginForm",
@@ -126,7 +126,7 @@ export default defineComponent({
       lockOpenOutline,
       eyeOutline,
       eyeOffOutline,
-      envelopeOutline
+      envelopeOutline,
     };
   },
 });

@@ -6,7 +6,7 @@
         <ion-button
             class="sliding-filter-button sliding-filter-button-text h-9 w-32 uppercase"
             :class="activeSlidingButton === '' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter=""
+            data-sliding-filter="closest"
             @click="sortButtonActivated"
         >
           Najblizi vama
@@ -23,14 +23,14 @@
         >
           SLOBODNI
           <ion-icon slot="start"
-                    :icon="activeSlidingButton === 'free' ? graphSliceOutline : graphSliceInactiveOutline"></ion-icon>
+                    :icon="activeSlidingButton === 'freest' ? graphSliceOutline : graphSliceInactiveOutline"></ion-icon>
         </ion-button>
       </ion-slide>
       <ion-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text h-9 w-20 uppercase"
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="food"
+            data-sliding-filter="id"
             @click="sortButtonActivated"
         >
           HRANA
@@ -104,7 +104,7 @@ export default defineComponent({
     /* Event handlers */
     const sortButtonActivated = (event) => {
       activeSlidingButton.value = event.target.dataset.slidingFilter;
-      emit('sortHasChanged', 'id');
+      emit('sortHasChanged', activeSlidingButton.value);
     };
 
     return {
