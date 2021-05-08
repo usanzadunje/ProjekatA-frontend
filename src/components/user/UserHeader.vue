@@ -4,7 +4,7 @@
       <div class="px-4 py-3 mt-2">
         <div class="flex justify-between">
           <p class="main-toolbar-fade-text">Cao, Marija!</p>
-          <ion-button fill="clear" href="/test">
+          <ion-button fill="clear" href="/login">
             <ion-icon :icon="notificationIcon" class="text-2xl"></ion-icon>
           </ion-button>
         </div>

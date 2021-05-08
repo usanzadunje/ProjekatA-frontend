@@ -1,15 +1,20 @@
 <template>
   <ion-page>
-    <UserHeader
-        :hasSearchFilter="false"
-        :mainHeading="'Pretraga'"
-        :notificationIcon="notificationsReceivedOutline"
-        @searchFilterChanged="searchFilterChanged"
+    <div
+        id="uh"
+        class="pull-transition"
     >
-      <SlidingFilter :hasTitle="true" @sortHasChanged="sortHasChanged"/>
-    </UserHeader>
+      <UserHeader
+          :hasSearchFilter="false"
+          :mainHeading="'Pretraga'"
+          :notificationIcon="notificationsReceivedOutline"
+          @searchFilterChanged="searchFilterChanged"
+      >
+        <SlidingFilter :hasTitle="true" @sortHasChanged="sortHasChanged"/>
+      </UserHeader>
+    </div>
 
-    <ion-content ref="content" class="ion-padding">
+    <ion-content ref="content" :scroll-events="true" class="ion-padding" @ionScrollStart="pullAnimation" @ionScroll="pullAnimation">
       <InfiniteScroll :cafeSearchString="cafeSearchString" :sortBy="sortBy" @scrollToTop="scrollToTop"/>
     </ion-content>
   </ion-page>
@@ -48,6 +53,7 @@ export default defineComponent({
     const cafeSearchString = ref('');
     const sortBy = ref('');
     const content = ref(null);
+    let isHeaderVisible = ref(true);
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
@@ -55,6 +61,16 @@ export default defineComponent({
     };
     const sortHasChanged = (sortValue) => {
       sortBy.value = sortValue;
+    };
+    const pullAnimation = () => {
+      if(!isHeaderVisible.value) {
+        document.querySelector('#uh').classList.remove('add-margin');
+        document.querySelector('#uh').classList.add('remove-margin');
+      }else {
+        document.querySelector('#uh').classList.remove('remove-margin');
+        document.querySelector('#uh').classList.add('add-margin');
+      }
+      isHeaderVisible.value = !isHeaderVisible.value;
     };
 
     /* Methods */
@@ -75,6 +91,7 @@ export default defineComponent({
       /* Event handlers */
       searchFilterChanged,
       sortHasChanged,
+      pullAnimation,
 
       /* Methods */
       logout,
@@ -87,3 +104,16 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.add-margin {
+  margin-top: -266px !important;
+}
+
+.remove-margin {
+  margin-top: 0 !important;
+}
+
+.pull-transition {
+  transition: all 0.5s ease-in;
+}
+</style>
