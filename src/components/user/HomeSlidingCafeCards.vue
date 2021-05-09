@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full">
     <CafeCard
         v-for="cafe in cafes"
         :key="cafe.id"

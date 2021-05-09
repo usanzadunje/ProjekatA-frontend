@@ -11,14 +11,14 @@
       <FilterCategoryHeading class="mb-2" :title="'Trenutno slobodni'"/>
       <swiper
           ref="availableCafesSwiper"
-          :options="slideOpts"
+          :slides-per-view="1.1"
           @slideChange="loadMoreCafes($event, 'currentlyAvailableCafes', 'id')"
       >
         <swiper-slide v-for="i in cafeSlidesLength.currentlyAvailableCafes" :key="i">
           <HomeSlidingCafeCards
               :cafes="cafes.currentlyAvailableCafes.slice(i, i + 2)"
               @openCafeModal="openModal($event, true)"
-              class="ml-3"
+              class="pr-3"
           />
         </swiper-slide>
       </swiper>
@@ -34,7 +34,7 @@
           <HomeSlidingCafeCards
               :cafes="cafes.closestToUserCafes.slice(i, i + 2)"
               @openCafeModal="openModal($event, true)"
-              class="ml-3"
+              class="pr-3"
           />
         </swiper-slide>
       </swiper>
@@ -56,17 +56,17 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, watch, onMounted, nextTick } from 'vue';
+import { defineComponent, ref, reactive, watch, onMounted } from 'vue';
 import {
   IonContent,
   IonPage,
   IonModal,
-}                                                                     from '@ionic/vue';
-import UserHeader                                from '@/components/user/UserHeader';
-import CafeService                               from '@/services/CafeService';
-import FilterCategoryHeading                     from '@/components/user/FilterCategoryHeading';
-import HomeSlidingCafeCards                      from '@/components/user/HomeSlidingCafeCards';
-import ShortCafeModal                            from '@/components/user/ShortCafeModal';
+}                                                           from '@ionic/vue';
+import UserHeader                                           from '@/components/user/UserHeader';
+import CafeService                                          from '@/services/CafeService';
+import FilterCategoryHeading                                from '@/components/user/FilterCategoryHeading';
+import HomeSlidingCafeCards                                 from '@/components/user/HomeSlidingCafeCards';
+import ShortCafeModal                                       from '@/components/user/ShortCafeModal';
 
 import { Swiper, SwiperSlide } from 'swiper/vue';
 
@@ -91,12 +91,6 @@ export default defineComponent({
     /* Component references */
     const availableCafesSwiper = ref(null);
     const closestCafesSwiper = ref(null);
-    const slideOpts = {
-      initialSlide: 0,
-      speed: 500,
-      centeredSlides: false,
-      slidesPerView: 3,
-    };
 
     /* Properties */
     // Cafes closest to user
@@ -136,12 +130,11 @@ export default defineComponent({
                  cafes.closestToUserCafes = response.data;
                })
                .catch((error) => alert(error));
-    // Without this on android options are not passed to swiper
+
+    // Without this slides per view is 1 and not 1.1
     onMounted(() => {
-      let swiper = availableCafesSwiper.value.$el.swiper;
-      nextTick(() => {
-        console.log(swiper);
-      });
+      // document.getElementsByClassName('swiper-slide').style.width = '90%';
+      console.log(document.getElementsByClassName('swiper-wrapper').firstChild);
     });
 
     /* Event handlers */
@@ -206,7 +199,6 @@ export default defineComponent({
       /* Component references */
       availableCafesSwiper,
       closestCafesSwiper,
-      slideOpts,
 
       /* Properties */
       cafes,
@@ -229,3 +221,8 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+  div.swiper-slide {
+    width: 90%;
+  }
+</style>
