@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <div
-        id="uh"
+        id="header"
         class="pull-transition"
     >
       <UserHeader
@@ -14,14 +14,14 @@
       </UserHeader>
     </div>
 
-    <ion-content ref="content" :scroll-events="true" class="ion-padding" @ionScrollStart="pullAnimation" @ionScroll="pullAnimation">
+    <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation" class="ion-padding">
       <InfiniteScroll :cafeSearchString="cafeSearchString" :sortBy="sortBy" @scrollToTop="scrollToTop"/>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent, ref }                               from 'vue';
+import { defineComponent, ref }          from 'vue';
 import {
   IonContent,
   IonPage,
@@ -53,7 +53,7 @@ export default defineComponent({
     const cafeSearchString = ref('');
     const sortBy = ref('');
     const content = ref(null);
-    let isHeaderVisible = ref(true);
+    let scrollTopOffset = ref(0);
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
@@ -62,22 +62,23 @@ export default defineComponent({
     const sortHasChanged = (sortValue) => {
       sortBy.value = sortValue;
     };
-    const pullAnimation = () => {
-      if(!isHeaderVisible.value) {
-        document.querySelector('#uh').classList.remove('add-margin');
-        document.querySelector('#uh').classList.add('remove-margin');
+    const pullAnimation = async() => {
+      let scrollElement = await content.value?.$el.getScrollElement();
+
+      if(scrollElement.scrollTop > scrollTopOffset.value) {
+        document.querySelector('#header').classList.add('hide-header');
       }else {
-        document.querySelector('#uh').classList.remove('remove-margin');
-        document.querySelector('#uh').classList.add('add-margin');
+        document.querySelector('#header').classList.remove('hide-header');
       }
-      isHeaderVisible.value = !isHeaderVisible.value;
+
+      scrollTopOffset.value = scrollElement.scrollTop;
     };
 
     /* Methods */
     // When search term is changed infinity scroll component changes data and
     // this function scrolls user back to top to see new filtered data from start
-    const scrollToTop = async() => {
-      content.value?.$el.scrollToTop(700);
+    const scrollToTop = () => {
+      content.value?.$el.scrollToTop(500);
     };
 
     const logout = () => store.dispatch('auth/logout');
@@ -105,12 +106,8 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.add-margin {
+.hide-header {
   margin-top: -266px !important;
-}
-
-.remove-margin {
-  margin-top: 0 !important;
 }
 
 .pull-transition {
