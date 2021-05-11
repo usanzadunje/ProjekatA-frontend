@@ -53,12 +53,20 @@ ion-modal ion-item {
 }
 
 .custom-modal {
-    --max-height: 70vh;
-    --height: 50vh;
+    --height: 390px;
+    --border-radius: 20px 20px 0 0;
+}
+
+.custom-sub-modal {
+    --height: 320px;
     --border-radius: 20px 20px 0 0;
 }
 
 .custom-modal .modal-wrapper {
+    position: absolute !important;
+    bottom: 0 !important;
+}
+.custom-sub-modal .modal-wrapper {
     position: absolute !important;
     bottom: 0 !important;
 }
@@ -307,6 +315,7 @@ ion-toggle {
     font-weight: 500 !important;
     color: #000 !important;
     font-size: 14px !important;
+    text-align: start;
 }
 
 .cafe-card-fade-text {

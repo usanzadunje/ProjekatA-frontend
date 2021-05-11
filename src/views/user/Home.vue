@@ -49,6 +49,7 @@
         <ShortCafeModal
             :cafe="modalCafe"
             @dismissShortCafeModal="openModal(false)"
+            @subModalOpened="hideModal"
         />
       </ion-modal>
     </ion-content>
@@ -56,7 +57,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, watch, onMounted } from 'vue';
+import { defineComponent, ref, reactive, watch } from 'vue';
 import {
   IonContent,
   IonPage,
@@ -131,12 +132,6 @@ export default defineComponent({
                })
                .catch((error) => alert(error));
 
-    // Without this slides per view is 1 and not 1.1
-    onMounted(() => {
-      // document.getElementsByClassName('swiper-slide').style.width = '90%';
-      console.log(document.getElementsByClassName('swiper-wrapper').firstChild);
-    });
-
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
       cafeSearchString.value = searchInputValue;
@@ -146,6 +141,11 @@ export default defineComponent({
         modalCafe.value = cafe;
       }
       isModalOpen.value = state;
+    };
+    const hideModal = () => {
+      const modal = document.querySelector('.custom-modal > .modal-wrapper');
+
+      modal.style.height = 0;
     };
 
 
@@ -158,7 +158,6 @@ export default defineComponent({
                    // if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
                    cafes[cafeArrayName] = cafes[cafeArrayName].concat(response.data);
                    cafeSlidesLength[cafeArrayName].push(cafeSlidesLength[cafeArrayName][cafeSlidesLength[cafeArrayName].length - 1] + 2);
-                   console.log(cafeSlidesLength[cafeArrayName]);
                  })
                  .catch((error) => {
                    alert(error);
@@ -211,6 +210,7 @@ export default defineComponent({
       searchFilterChanged,
       loadMoreCafes,
       openModal,
+      hideModal,
 
       /* Methods */
 
@@ -222,7 +222,7 @@ export default defineComponent({
 });
 </script>
 <style>
-  div.swiper-slide {
-    width: 90%;
-  }
+div.swiper-slide {
+  width: 90%;
+}
 </style>

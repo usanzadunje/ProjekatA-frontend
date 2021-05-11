@@ -32,7 +32,7 @@
       </ion-button>
       <ion-button
           class="uppercase button-subscribe modal-button-border"
-          @click="openModal(true)"
+          @click="openModal(true);$emit('subModalOpened');"
           :disabled="!loggedIn"
       >
         <ion-icon slot="start"
@@ -42,7 +42,7 @@
     </div>
     <ion-modal
         :is-open="isModalOpen"
-        css-class="custom-modal"
+        css-class="custom-sub-modal"
         @onDidDismiss="openModal(false);$emit('dismissShortCafeModal')"
         :backdrop-dismiss="true"
         :swipe-to-close="true"
@@ -104,7 +104,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissShortCafeModal'],
+  emits: ['dismissShortCafeModal', 'subModalOpened'],
   setup(props) {
     /* Global properties */
     const store = useStore();
