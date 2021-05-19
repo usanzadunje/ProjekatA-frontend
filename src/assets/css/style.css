@@ -66,9 +66,20 @@ ion-modal ion-item {
     position: absolute !important;
     bottom: 0 !important;
 }
+
 .custom-sub-modal .modal-wrapper {
     position: absolute !important;
     bottom: 0 !important;
+}
+
+.custom-toast {
+    --background: #E01B43;
+    opacity: 0.95;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: top 0.3s ease-in;
 }
 
 ion-thumbnail {
@@ -93,11 +104,11 @@ ion-toggle {
     margin-top: 0.55rem;
 }
 
-.md .pull-quarter-left{
+.md .pull-quarter-left {
     margin-right: 1rem !important;
 }
 
-.md .pull-right{
+.md .pull-right {
     margin-right: -0.25rem !important;
 }
 
@@ -289,6 +300,10 @@ ion-toggle {
 /* Input styles */
 .auth-input-background {
     --background: #F6F7FB;
+}
+
+.error-border {
+    border: 2px solid red !important;
 }
 
 /*
@@ -591,6 +606,7 @@ ion-toggle {
     width: 63px;
     border-radius: 19px;
 }
+
 /*
     END USER PROFILE STYLES
 */
@@ -625,17 +641,17 @@ ion-toggle {
     justify-content: space-between !important;
 }
 
-.settings-icon-badge{
+.settings-icon-badge {
     width: 30px;
     height: 30px;
     border-radius: 8px;
 }
 
-.settings-red-icon-color{
+.settings-red-icon-color {
     background-color: #E01B43;
 }
 
-.settings-yellow-icon-color{
+.settings-yellow-icon-color {
     background-color: #FFD700;
 }
 

@@ -21,12 +21,16 @@
 </template>
 
 <script>
-import { defineComponent, ref }          from 'vue';
+import { defineComponent, ref } from 'vue';
+
+import { useRoute } from 'vue-router';
+
 import {
   IonContent,
   IonPage,
-}                                                             from '@ionic/vue';
-import { mapGetters, useStore }                               from 'vuex';
+}
+  from '@ionic/vue';
+
 import UserHeader                                             from '@/components/user/UserHeader';
 import SlidingFilter                                          from '@/components/user/SlidingFilter';
 import InfiniteScroll                                         from '@/components/InfiniteScroll';
@@ -42,18 +46,18 @@ export default defineComponent({
     SlidingFilter,
     InfiniteScroll,
   },
-  computed: {
-    ...mapGetters('auth', ['loggedIn']),
-  },
   setup() {
     /* Global properties and methods */
-    const store = useStore();
+    const route = useRoute();
 
     /* Properties */
     const cafeSearchString = ref('');
     const sortBy = ref('');
     const content = ref(null);
     let scrollTopOffset = ref(0);
+
+    /* Lifecycle hooks */
+    console.log(route.query.searchTerm);
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
@@ -81,8 +85,6 @@ export default defineComponent({
       content.value?.$el.scrollToTop(500);
     };
 
-    const logout = () => store.dispatch('auth/logout');
-
     return {
       /* Properties */
       cafeSearchString,
@@ -95,7 +97,6 @@ export default defineComponent({
       pullAnimation,
 
       /* Methods */
-      logout,
       scrollToTop,
 
       /* Icons */

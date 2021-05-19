@@ -1,6 +1,10 @@
 <template>
   <div class="px-5">
-    <ion-item lines="none" class="border rounded-2xl h-12 auth-input-background">
+    <ion-item
+        lines="none"
+        class="border rounded-2xl h-12 auth-input-background"
+        :class="{ 'error-border' : errors.hasOwnProperty('fname') }"
+    >
       <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="newUser.fname"
@@ -12,7 +16,11 @@
           autofocus required
       ></ion-input>
     </ion-item>
-    <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
+    <ion-item
+        lines="none"
+        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errors.hasOwnProperty('lname') }"
+    >
       <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="newUser.lname"
@@ -24,7 +32,11 @@
           required
       ></ion-input>
     </ion-item>
-    <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
+    <ion-item
+        lines="none"
+        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errors.hasOwnProperty('username') }"
+    >
       <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="newUser.username"
@@ -36,7 +48,11 @@
           required
       ></ion-input>
     </ion-item>
-    <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
+    <ion-item
+        lines="none"
+        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errors.hasOwnProperty('email') }"
+    >
       <ion-icon :icon="envelopeOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="newUser.email"
@@ -48,7 +64,11 @@
           required
       ></ion-input>
     </ion-item>
-    <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
+    <ion-item
+        lines="none"
+        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errors.hasOwnProperty('password') }"
+    >
       <ion-icon :icon="lockOpenOutline" color="primary" class="mr-2"></ion-icon>
       <ion-input
           v-model="newUser.password"
@@ -61,7 +81,11 @@
       <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
                 @click="togglePasswordShow(false)"></ion-icon>
     </ion-item>
-    <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
+    <ion-item
+        lines="none"
+        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errors.hasOwnProperty('password') }"
+    >
       <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model="newUser.password_confirmation"
@@ -94,21 +118,18 @@
         Prijavi se
       </ion-button>
     </div>
-    <FlashMessage :error="errors.data" class="mb-10"/>
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref }                                         from 'vue';
-import { useRouter }                                                              from 'vue-router';
-import { IonItem, IonInput, IonIcon, IonButton }                                  from "@ionic/vue";
-import AuthService                                                                from "@/services/AuthService";
-import { getError }                                                               from '@/utils/helpers';
-import FlashMessage                                                               from '@/components/FlashMessage';
-import SocialIcons
-                                                                                  from '@/components/social/SocialIcons';
-import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
-import { profileOutline, envelopeOutline, lockOpenOutline } from '@/assets/icons';
+import { computed, defineComponent, reactive, ref }               from 'vue';
+import { useRouter }                                              from 'vue-router';
+import { IonItem, IonInput, IonIcon, IonButton, toastController } from "@ionic/vue";
+import AuthService                                                from "@/services/AuthService";
+import { getError }                                               from '@/utils/helpers';import SocialIcons
+                                                                  from '@/components/social/SocialIcons';
+import { eyeOutline, eyeOffOutline }                              from 'ionicons/icons';
+import { profileOutline, envelopeOutline, lockOpenOutline }       from '@/assets/icons';
 
 
 export default defineComponent({
@@ -118,7 +139,6 @@ export default defineComponent({
     IonInput,
     IonIcon,
     IonButton,
-    FlashMessage,
     SocialIcons,
   },
   setup() {
@@ -127,19 +147,59 @@ export default defineComponent({
 
     /* Component properties */
     let newUser = reactive({});
-    let errors = reactive({ data: {} });
+    let errors = ref({});
     let showPassword = ref(false);
     let showPasswordConfirm = ref(false);
 
-    /* Component methods */
+    /* Computed properties */
+    // Returning all the error key names of all errors
+    const errorKeys = computed(() => {
+      if(!errors.value) {
+        return null;
+      }
+      return Object.keys(errors.value);
+    });
+
+    /* Methods */
+    // Returning content of an error
+    const getErrors = (key) => {
+      return errors.value[key];
+    };
+    const showToastErrors = async() => {
+      let toast = null;
+      let i;
+
+      // For each error create separate toast notification popup
+      for(i = 0; i < errorKeys.value.length; i++) {
+        toast = await toastController.create({
+          duration: 1500,
+          position: 'top',
+          message: getErrors(errorKeys.value[i]),
+          showCloseButton: true,
+          cssClass: 'custom-toast',
+        });
+        //Pushing next toast notification further down so they can all be seen
+        toast.style.top = `${55 * i}px`;
+        await toast.present();
+      }
+    };
+
+    /* Event handlers */
     let register = () => {
       Object.assign(newUser, newUser, { bday: null, phone: null });
       AuthService.register(newUser)
                  .then(async() => await router.push({ name: 'onboarding' }))
                  .catch((e) => {
-                   errors.data = getError(e);
+                   // Parse error object returned from backend
+                   errors.value = getError(e);
+                   // Show all toast error notification
+                   showToastErrors();
+                   setTimeout(() => {
+                     errors.value = {};
+                   }, Object.keys(errors.value).length * 900);
                  });
     };
+
 
     let togglePasswordShow = (passwordConfirm = false) => {
       if(passwordConfirm) {
@@ -156,7 +216,7 @@ export default defineComponent({
       showPassword,
       showPasswordConfirm,
 
-      /* Methods */
+      /* Event handlers */
       register,
       togglePasswordShow,
 
@@ -168,5 +228,6 @@ export default defineComponent({
       eyeOffOutline,
     };
   },
-});
+})
+;
 </script>

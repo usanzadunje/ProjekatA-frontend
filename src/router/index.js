@@ -101,6 +101,7 @@ const routes = [
                 path: "search",
                 name: "search",
                 component: () => import(/* webpackChunkName: "Search" */ "../views/user/Search"),
+                props: true,
             },
             {
                 path: "/dashboard",

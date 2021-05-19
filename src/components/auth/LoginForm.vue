@@ -1,6 +1,10 @@
 <template>
   <div class="px-5">
-    <ion-item lines="none" class="border rounded-2xl h-12 auth-input-background">
+    <ion-item
+        lines="none"
+        class="border rounded-2xl h-12 auth-input-background"
+        :class="{ 'error-border' : errors.hasOwnProperty('email') }"
+    >
       <ion-icon :icon="envelopeOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model.lazy="user.email"
@@ -13,7 +17,11 @@
           autofocus required
       ></ion-input>
     </ion-item>
-    <ion-item lines="none" class="border rounded-2xl h-12 mt-3.5 auth-input-background">
+    <ion-item
+        lines="none"
+        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errors.hasOwnProperty('password') }"
+    >
       <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
       <ion-input
           v-model="user.password"
@@ -56,22 +64,28 @@
         Registruj se
       </ion-button>
     </div>
-    <FlashMessage :error="errors.data" class="mb-10"/>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, reactive }                              from 'vue';
-import { useRouter }                                                   from 'vue-router';
-import { IonItem, IonInput, IonIcon, IonText, IonButton, IonCheckbox } from "@ionic/vue";
-import store                                                           from '@/store/index';
-import { mapGetters }                                                  from "vuex";
-import AuthService                                                     from "@/services/AuthService";
-import { getError }                                                    from '@/utils/helpers';
-import FlashMessage                                                    from '@/components/FlashMessage';
-import SocialIcons                                                     from '@/components/social/SocialIcons';
-import { eyeOutline, eyeOffOutline }                                   from 'ionicons/icons';
-import { envelopeOutline, lockOpenOutline }                            from '@/assets/icons';
+import { defineComponent, ref, reactive, computed } from 'vue';
+import { useRouter }                                from 'vue-router';
+import {
+  IonItem,
+  IonInput,
+  IonIcon,
+  IonText,
+  IonButton,
+  IonCheckbox,
+  toastController,
+}                                                   from "@ionic/vue";
+import store                                        from '@/store/index';
+import { mapGetters }                               from "vuex";
+import AuthService                                  from "@/services/AuthService";
+import { getError }                                 from '@/utils/helpers';
+import SocialIcons                                  from '@/components/social/SocialIcons';
+import { eyeOutline, eyeOffOutline }                from 'ionicons/icons';
+import { envelopeOutline, lockOpenOutline }         from '@/assets/icons';
 
 export default defineComponent({
   name: "LoginForm",
@@ -82,7 +96,6 @@ export default defineComponent({
     IonText,
     IonButton,
     IonCheckbox,
-    FlashMessage,
     SocialIcons,
   },
   computed: {
@@ -94,10 +107,38 @@ export default defineComponent({
 
     /* Component properties */
     let user = reactive({});
-    let errors = reactive({ data: {} });
+    let errors = ref({});
     let showPassword = ref(false);
 
-    /* Component methods */
+    /* Computed properties */
+    const errorKeys = computed(() => {
+      if(!errors.value) {
+        return null;
+      }
+      return Object.keys(errors.value);
+    });
+
+    /* Methods */
+    const getErrors = (key) => {
+      return errors.value[key];
+    };
+    const showToastErrors = async() => {
+      let toast = null;
+      let i;
+
+      for(i = 0; i < errorKeys.value.length; i++) {
+        toast = await toastController.create({
+          duration: 1500,
+          position: 'top',
+          message: getErrors(errorKeys.value[i]),
+          cssClass: 'custom-toast',
+        });
+        toast.style.top = `${55 * i}px`;
+        await toast.present();
+      }
+    };
+
+    /* Event handlers */
     const login = () => {
       AuthService.login(user)
                  .then(async() => {
@@ -105,12 +146,18 @@ export default defineComponent({
                    let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
                    await router.push(homeRoute);
                  })
-                 .catch((e) => {
-                   errors.data = getError(e);
+                 .catch(async(e) => {
+                   errors.value = getError(e);
+                   await showToastErrors();
+
+                   setTimeout(() => {
+                     errors.value = {};
+                   }, Object.keys(errors.value).length * 900);
                  });
     };
-
-    const togglePasswordShow = () => showPassword.value = !showPassword.value;
+    const togglePasswordShow = () => {
+      showPassword.value = !showPassword.value;
+    };
 
     return {
       /* Properties */
@@ -118,7 +165,7 @@ export default defineComponent({
       errors,
       showPassword,
 
-      /* Methods */
+      /* Event handlers  */
       login,
       togglePasswordShow,
 

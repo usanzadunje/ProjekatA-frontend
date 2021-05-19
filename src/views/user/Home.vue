@@ -5,6 +5,7 @@
         :mainHeading="'Pronadji slobodno mesto'"
         :notificationIcon="notificationsOutline"
         @searchFilterChanged="searchFilterChanged"
+        @searchEnterPressed="switchToSearch"
     />
 
     <ion-content class="ion-padding">
@@ -58,16 +59,19 @@
 
 <script>
 import { defineComponent, ref, reactive, watch } from 'vue';
+
+import { useRouter } from 'vue-router';
+
 import {
   IonContent,
   IonPage,
   IonModal,
-}                                                           from '@ionic/vue';
-import UserHeader                                           from '@/components/user/UserHeader';
-import CafeService                                          from '@/services/CafeService';
-import FilterCategoryHeading                                from '@/components/user/FilterCategoryHeading';
-import HomeSlidingCafeCards                                 from '@/components/user/HomeSlidingCafeCards';
-import ShortCafeModal                                       from '@/components/user/ShortCafeModal';
+}                            from '@ionic/vue';
+import UserHeader            from '@/components/user/UserHeader';
+import CafeService           from '@/services/CafeService';
+import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
+import HomeSlidingCafeCards  from '@/components/user/HomeSlidingCafeCards';
+import ShortCafeModal        from '@/components/user/ShortCafeModal';
 
 import { Swiper, SwiperSlide } from 'swiper/vue';
 
@@ -89,6 +93,8 @@ export default defineComponent({
     SwiperSlide,
   },
   setup() {
+    /* Global properties */
+    const router = useRouter();
     /* Component references */
     const availableCafesSwiper = ref(null);
     const closestCafesSwiper = ref(null);
@@ -112,7 +118,7 @@ export default defineComponent({
       currentlyAvailableCafes: 4,
       closestToUserCafes: 4,
     });
-
+    // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
     const modalCafe = ref({});
@@ -147,7 +153,9 @@ export default defineComponent({
 
       modal.style.height = 0;
     };
-
+    const switchToSearch = (e) => {
+      router.push({ path: 'search', query: { searchTerm: e.target.value } });
+    };
 
     // Grabbing 2 more cafes that match required filter
     const loadMoreCafes = (e, cafeArrayName, sortBy = '') => {
@@ -211,6 +219,7 @@ export default defineComponent({
       loadMoreCafes,
       openModal,
       hideModal,
+      switchToSearch,
 
       /* Methods */
 

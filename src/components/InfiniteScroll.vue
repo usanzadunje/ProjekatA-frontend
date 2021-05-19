@@ -63,7 +63,7 @@ export default defineComponent({
     let isInfiniteScrollDisabled = ref(false);
 
     //*Before mounting fetching initial 20 cafes to show
-    CafeService.getCafeCardsChunkInfo(cafeStart, 20)
+    CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, sortBy.value)
                .then((response) => {
                  cafes.value = response.data;
                  initial20Cafes = response.data;
