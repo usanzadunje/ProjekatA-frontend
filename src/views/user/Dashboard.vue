@@ -14,7 +14,7 @@
           </ion-item>
 
           <ion-item-options side="end">
-            <ion-item-option type="button" @click="unsubscribe(cafe.id)">
+            <ion-item-option type="button" @click="showAlert(cafe.id)">
               <ion-icon
                   slot="icon-only"
                   :icon="trashOutline"
@@ -41,6 +41,7 @@ import {
   IonItemOptions,
   IonItemOption,
   IonIcon,
+  alertController,
 } from '@ionic/vue';
 
 import UserProfileHeader     from '@/components/user/UserProfileHeader';
@@ -96,12 +97,32 @@ export default defineComponent({
                  })
                  .catch((error) => alert(error));
     };
+    const showAlert = async(cafeId) => {
+      const alert = await alertController
+          .create({
+            header: 'Unsubscribing from cafe',
+            message: 'Are you sure you want to delete cafe from subscription list?',
+            buttons: [
+              {
+                text: 'Disagree',
+                role: 'cancel',
+              },
+              {
+                text: 'Agree',
+                handler: () => {
+                  unsubscribe(cafeId);
+                },
+              },
+            ],
+          });
+      await alert.present();
+    };
 
+    /* Methods */
     const unsubscribe = (cafeId) => {
       CafeService.unsubscribe(cafeId)
                  .then((response) => {
                    if(response.data) {
-                     alert('Successfully unsubscribed!');
                      cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter((cafe) => cafe.id !== cafeId);
                    }
                  })
@@ -115,7 +136,7 @@ export default defineComponent({
 
       /* Event handlers */
       sortHasChanged,
-      unsubscribe,
+      showAlert,
 
       /* Icons */
       trashOutline,
