@@ -15,7 +15,26 @@
     </div>
 
     <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation" class="ion-padding">
-      <InfiniteScroll :cafeSearchString="cafeSearchString" :sortBy="sortBy" @scrollToTop="scrollToTop"/>
+      <InfiniteScroll
+          :cafeSearchString="cafeSearchString"
+          :sortBy="sortBy"
+          @scrollToTop="scrollToTop"
+          @openCafeModal="openModal($event, true)"
+      />
+
+      <ion-modal
+          :is-open="isModalOpen"
+          css-class="custom-modal"
+          @onDidDismiss="openModal(false);"
+          :backdrop-dismiss="true"
+          :swipe-to-close="true"
+      >
+        <ShortCafeModal
+            :cafe="modalCafe"
+            @dismissShortCafeModal="openModal(false)"
+            @subModalOpened="hideModal"
+        />
+      </ion-modal>
     </ion-content>
   </ion-page>
 </template>
@@ -26,12 +45,14 @@ import { defineComponent, ref } from 'vue';
 import {
   IonContent,
   IonPage,
+  IonModal,
 }
   from '@ionic/vue';
 
 import UserHeader     from '@/components/user/UserHeader';
 import SlidingFilter  from '@/components/user/SlidingFilter';
 import InfiniteScroll from '@/components/InfiniteScroll';
+import ShortCafeModal from '@/components/user/ShortCafeModal';
 
 import { notificationsOffOutline } from 'ionicons/icons';
 
@@ -41,9 +62,11 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
+    IonModal,
     UserHeader,
     SlidingFilter,
     InfiniteScroll,
+    ShortCafeModal,
   },
   ionViewWillEnter() {
     // Before enterning vuew check if there is search term if there is
@@ -66,6 +89,10 @@ export default defineComponent({
     const sortBy = ref('');
     const content = ref(null);
     let scrollTopOffset = ref(0);
+    // Showing/Hiding modal based on this property value
+    const isModalOpen = ref(false);
+    // Cafe which information is sent to modal
+    const modalCafe = ref({});
 
 
     /* Event handlers */
@@ -86,6 +113,17 @@ export default defineComponent({
 
       scrollTopOffset.value = scrollElement.scrollTop;
     };
+    const openModal = (cafe = null, state) => {
+      if(cafe) {
+        modalCafe.value = cafe;
+      }
+      isModalOpen.value = state;
+    };
+    const hideModal = () => {
+      const modal = document.querySelector('.custom-modal > .modal-wrapper');
+
+      modal.style.height = 0;
+    };
 
     /* Methods */
     // When search term is changed infinity scroll component changes data and
@@ -99,11 +137,15 @@ export default defineComponent({
       cafeSearchString,
       sortBy,
       content,
+      isModalOpen,
+      modalCafe,
 
       /* Event handlers */
       searchFilterChanged,
       sortHasChanged,
       pullAnimation,
+      openModal,
+      hideModal,
 
       /* Methods */
       scrollToTop,

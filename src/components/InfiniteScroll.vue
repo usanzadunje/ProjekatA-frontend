@@ -2,7 +2,10 @@
   <div>
     <FilterCategoryHeading class="mb-2"/>
     <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
-      <CafeCard :cafe="cafe"/>
+      <CafeCard
+          :cafe="cafe"
+          @click="$emit('openCafeModal', cafe)"
+      />
     </div>
   </div>
   <ion-infinite-scroll
@@ -50,7 +53,7 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['scrollToTop'],
+  emits: ['scrollToTop', 'openCafeModal'],
   setup(props, { emit }) {
     /* Component properties */
     // All non filtered cafes
