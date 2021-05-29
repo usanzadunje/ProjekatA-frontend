@@ -14,7 +14,7 @@
       </UserHeader>
     </div>
 
-    <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation" class="ion-padding">
+    <ion-content ref="content" :scroll-events="true" @ionScrollStart="pullAnimation" class="ion-padding">
       <InfiniteScroll
           :cafeSearchString="cafeSearchString"
           :sortBy="sortBy"
@@ -84,10 +84,12 @@ export default defineComponent({
     this.cafeSearchString = '';
   },
   setup() {
+    /* Component references */
+    const content = ref(null);
+
     /* Component properties */
     const cafeSearchString = ref('');
     const sortBy = ref('');
-    const content = ref(null);
     let scrollTopOffset = ref(0);
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
