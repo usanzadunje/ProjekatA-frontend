@@ -8,6 +8,14 @@
     />
 
     <ion-content class="ion-padding">
+      <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
+        <ion-refresher-content
+            pulling-text="Povuci te da osvezite"
+            refreshing-spinner="lines"
+            refreshing-text="Osvezava se..."
+        >
+        </ion-refresher-content>
+      </ion-refresher>
       <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
       <ion-slides :options="slideOpts" ref="slides">
         <ion-slide>
@@ -44,6 +52,7 @@
         </ion-slide>
       </ion-slides>
 
+
       <ion-modal
           :is-open="isModalOpen"
           css-class="custom-modal"
@@ -72,6 +81,8 @@ import {
   IonModal,
   IonSlides,
   IonSlide,
+  IonRefresher,
+  IonRefresherContent,
 } from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
@@ -91,6 +102,8 @@ export default defineComponent({
     IonModal,
     IonSlides,
     IonSlide,
+    IonRefresher,
+    IonRefresherContent,
     UserHeader,
     FilterCategoryHeading,
     HomeSlidingCafeCards,
@@ -170,6 +183,32 @@ export default defineComponent({
       //Clearing search input after leaving page
       e.target.value = null;
     };
+    const refresh = (event) => {
+      // Only after both cafe arrays have been updated then complete refresher
+      // Fetching 4 cafes in each category with new live data
+      Promise.all([
+        CafeService.getCafeCardsChunkInfo(0, 4, '', 'name', true)
+                   .then((response) => {
+                     cafes.currentlyAvailableCafes = response.data;
+                   })
+                   .catch((error) => alert(error)),
+
+        CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
+                   .then((response) => {
+                     cafes.closestToUserCafes = response.data;
+                   })
+                   .catch((error) => alert(error)),
+      ])
+             .then(() => {
+               event.target.complete();
+             })
+             .catch((error) => {
+               alert(error);
+               event.target.complete();
+             });
+
+
+    };
 
     return {
       slides,
@@ -184,6 +223,7 @@ export default defineComponent({
       openModal,
       hideModal,
       switchToSearch,
+      refresh,
 
       /* Methods */
 
@@ -194,5 +234,11 @@ export default defineComponent({
 });
 </script>
 <style>
+ion-refresher {
+  background: #F6F7FB !important;
+}
 
+ion-refresher-content {
+  margin-top: 3px !important;
+}
 </style>
