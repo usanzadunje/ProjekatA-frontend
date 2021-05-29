@@ -23,8 +23,6 @@
 <script>
 import { defineComponent, ref } from 'vue';
 
-// import { useRoute } from 'vue-router';
-
 import {
   IonContent,
   IonPage,
@@ -47,15 +45,28 @@ export default defineComponent({
     SlidingFilter,
     InfiniteScroll,
   },
+  ionViewWillEnter() {
+    // Before enterning vuew check if there is search term if there is
+    // Set search input to search term passed from Home page
+    // And remove query string
+    if(this.$route.query.searchTerm || this.$route.query.searchTerm === '') {
+      this.cafeSearchString = this.$route.query.searchTerm;
+      document.querySelector('ion-searchbar div input').value = this.$route.query.searchTerm;
+      this.$router.push({ path: 'search', query: {} });
+    }
+  },
+  ionViewWillLeave() {
+    // Before leaving page remove search input value and clear search string
+    document.querySelector('ion-searchbar div input').value = null;
+    this.cafeSearchString = '';
+  },
   setup() {
-    /* Global properties and methods */
-    // const route = useRoute();
-
     /* Component properties */
     const cafeSearchString = ref('');
     const sortBy = ref('');
     const content = ref(null);
     let scrollTopOffset = ref(0);
+
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {

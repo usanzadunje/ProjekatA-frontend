@@ -4,41 +4,45 @@
         :hasSearchFilter="true"
         :mainHeading="'Pronadji slobodno mesto'"
         :notificationIcon="notificationsOutline"
-        @searchFilterChanged="searchFilterChanged"
         @searchEnterPressed="switchToSearch"
     />
 
     <ion-content class="ion-padding">
-      <FilterCategoryHeading class="mb-2" :title="'Trenutno slobodni'"/>
-      <swiper
-          ref="availableCafesSwiper"
-          :slides-per-view="1.1"
-          @slideChange="loadMoreCafes($event, 'currentlyAvailableCafes', 'id')"
-      >
-        <swiper-slide v-for="i in cafeSlidesLength.currentlyAvailableCafes" :key="i">
-          <HomeSlidingCafeCards
-              :cafes="cafes.currentlyAvailableCafes.slice(i, i + 2)"
-              @openCafeModal="openModal($event, true)"
-              class="pr-3"
-          />
-        </swiper-slide>
-      </swiper>
-
-
       <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
-      <swiper
-          ref="closestCafesSwiper"
-          :slides-per-view="1.1"
-          @slideChange="loadMoreCafes($event, 'closestToUserCafes', 'name')"
-      >
-        <swiper-slide v-for="i in cafeSlidesLength.closestToUserCafes" :key="i">
+      <ion-slides :options="slideOpts" ref="slides">
+        <ion-slide>
           <HomeSlidingCafeCards
-              :cafes="cafes.closestToUserCafes.slice(i, i + 2)"
+              :cafes="cafes.closestToUserCafes.slice(0, 2)"
               @openCafeModal="openModal($event, true)"
               class="pr-3"
           />
-        </swiper-slide>
-      </swiper>
+        </ion-slide>
+        <ion-slide>
+          <HomeSlidingCafeCards
+              :cafes="cafes.closestToUserCafes.slice(2, 4)"
+              @openCafeModal="openModal($event, true)"
+              class="pr-3"
+          />
+        </ion-slide>
+      </ion-slides>
+
+      <FilterCategoryHeading class="mb-2" :title="'Trenutno slobodni'"/>
+      <ion-slides :options="slideOpts">
+        <ion-slide>
+          <HomeSlidingCafeCards
+              :cafes="cafes.currentlyAvailableCafes.slice(0, 2)"
+              @openCafeModal="openModal($event, true)"
+              class="pr-3"
+          />
+        </ion-slide>
+        <ion-slide>
+          <HomeSlidingCafeCards
+              :cafes="cafes.currentlyAvailableCafes.slice(2, 4)"
+              @openCafeModal="openModal($event, true)"
+              class="pr-3"
+          />
+        </ion-slide>
+      </ion-slides>
 
       <ion-modal
           :is-open="isModalOpen"
@@ -58,7 +62,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, watch } from 'vue';
+import { defineComponent, ref, reactive, onMounted, nextTick } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -66,6 +70,8 @@ import {
   IonContent,
   IonPage,
   IonModal,
+  IonSlides,
+  IonSlide,
 } from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
@@ -75,9 +81,6 @@ import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import HomeSlidingCafeCards  from '@/components/user/HomeSlidingCafeCards';
 import ShortCafeModal        from '@/components/user/ShortCafeModal';
 
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import 'swiper/swiper.min.css';
-
 import { notificationsOutline } from 'ionicons/icons';
 
 export default defineComponent({
@@ -86,37 +89,40 @@ export default defineComponent({
     IonContent,
     IonPage,
     IonModal,
+    IonSlides,
+    IonSlide,
     UserHeader,
     FilterCategoryHeading,
     HomeSlidingCafeCards,
     ShortCafeModal,
-    Swiper,
-    SwiperSlide,
+  },
+  beforeRouteEnter(to) {
+    // Before entering route remove query params
+    if(Object.keys(to.query).length) {
+      return { path: to.path, query: {}, hash: to.hash };
+    }
+  },
+  ionViewWillEnter() {
+    // Before entering view style slides according to options
+    document.querySelector("ion-slides").options = this.slideOpts;
   },
   setup() {
+    /* Component references */
+    const slides = ref(null);
+
     /* Global properties */
     const router = useRouter();
 
-    /* Component references */
-    const availableCafesSwiper = ref(null);
-    const closestCafesSwiper = ref(null);
-
     /* Component properties */
+    const slideOpts = {
+      initialSlide: 0,
+      speed: 300,
+      slidesPerView: 1.1,
+    };
     // Cafes closest to user
     let cafes = reactive({
       currentlyAvailableCafes: [],
       closestToUserCafes: [],
-    });
-    const cafeSlidesLength = reactive({
-      currentlyAvailableCafes: [0, 2],
-      closestToUserCafes: [0, 2],
-    });
-    // Search term for filtering records
-    const cafeSearchString = ref('');
-    // From which number on to take cafe records
-    let cafeStart = reactive({
-      currentlyAvailableCafes: 4,
-      closestToUserCafes: 4,
     });
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
@@ -124,6 +130,13 @@ export default defineComponent({
     const modalCafe = ref({});
 
     /* Lifecycle hooks */
+    // Without this on android options are not passed to swiper
+    onMounted(() => {
+      const slides = document.querySelector("ion-slides");
+      nextTick(() => {
+        slides.options = slideOpts;
+      });
+    });
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
                .then((response) => {
@@ -139,10 +152,9 @@ export default defineComponent({
                .catch((error) => alert(error));
 
     /* Event handlers */
-    const searchFilterChanged = (searchInputValue) => {
-      cafeSearchString.value = searchInputValue;
-    };
     const openModal = (cafe = null, state) => {
+      document.querySelector("ion-slides").options = slideOpts;
+
       if(cafe) {
         modalCafe.value = cafe;
       }
@@ -155,73 +167,25 @@ export default defineComponent({
     };
     const switchToSearch = (e) => {
       router.push({ path: 'search', query: { searchTerm: e.target.value } });
+      //Clearing search input after leaving page
+      e.target.value = null;
     };
-
-    /* Methods */
-    // Grabbing 2 more cafes that match required filter
-    const loadMoreCafes = (e, cafeArrayName, sortBy = '') => {
-      CafeService.getCafeCardsChunkInfo(cafeStart[cafeArrayName], 2, cafeSearchString.value, sortBy, true)
-                 .then((response) => {
-                   // There are no more records
-                   if(response.data.length === 0) return;
-                   // if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
-                   cafes[cafeArrayName] = cafes[cafeArrayName].concat(response.data);
-                   cafeSlidesLength[cafeArrayName].push(cafeSlidesLength[cafeArrayName][cafeSlidesLength[cafeArrayName].length - 1] + 2);
-                 })
-                 .catch((error) => {
-                   alert(error);
-                 });
-      cafeStart[cafeArrayName] += 2;
-    };
-    const filterCafes = () => {
-      CafeService.getCafeCardsChunkInfo(0, 4, cafeSearchString.value, 'id', true)
-                 .then((response) => {
-                   if(response.data.length === 0) return;
-                   cafes.currentlyAvailableCafes = response.data;
-                   cafeStart.currentlyAvailableCafes = 4;
-                   cafeSlidesLength.currentlyAvailableCafes = response.data.length === 1 ? [0] : [0, 2];
-                 })
-                 .catch((error) => alert(error));
-
-      CafeService.getCafeCardsChunkInfo(0, 4, cafeSearchString.value, 'name', true)
-                 .then((response) => {
-                   if(response.data.length === 0) return;
-                   cafes.closestToUserCafes = response.data;
-                   cafeStart.closestToUserCafes = 4;
-                   cafeSlidesLength.closestToUserCafes = response.data.length === 1 ? [0] : [0, 2];
-                 })
-                 .catch((error) => alert(error));
-    };
-
-    /* Watchers */
-    // Watching for a change on cafeSearchString(search term from search input) prop
-    // resetting all the variables for filtered data and loading first 20 records from new filtered data
-    watch(cafeSearchString, () => {
-      filterCafes();
-      availableCafesSwiper.value.$el.swiper.slideTo(0);
-      closestCafesSwiper.value.$el.swiper.slideTo(0);
-    });
 
     return {
-      /* Component references */
-      availableCafesSwiper,
-      closestCafesSwiper,
+      slides,
 
       /* Component properties */
+      slideOpts,
       cafes,
-      cafeSlidesLength,
-      cafeStart,
       isModalOpen,
       modalCafe,
 
       /* Event handlers */
-      searchFilterChanged,
       openModal,
       hideModal,
       switchToSearch,
 
       /* Methods */
-      loadMoreCafes,
 
       /* Icons from */
       notificationsOutline,
@@ -230,7 +194,5 @@ export default defineComponent({
 });
 </script>
 <style>
-div.swiper-slide {
-  width: 90%;
-}
+
 </style>
