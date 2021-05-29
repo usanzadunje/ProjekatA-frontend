@@ -7,6 +7,7 @@ export function useGeolocation() {
     /* Global properties */
     const { Geolocation } = Plugins;
 
+    /* Methods */
     const getCurrentPosition = async() => {
         const position = await Geolocation.getCurrentPosition();
 
@@ -21,6 +22,7 @@ export function useGeolocation() {
     };
 
     return {
+        /* Methods */
         getCurrentPosition,
         watchPosition,
     };

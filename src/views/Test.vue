@@ -8,7 +8,8 @@
 // Import Swiper Vue.js components
 import { useGeolocation } from '@/composables/useGeolocation';
 
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
+import { getError }      from '@/utils/helpers';
 
 
 export default {
@@ -17,13 +18,17 @@ export default {
 
     let coordinates = reactive({});
 
+    let errors = ref({});
+
+
     getCurrentPosition()
         .then((position) => {
           coordinates.latitude = position.latitude;
           coordinates.longitude = position.longitude;
         })
         .catch((error) => {
-          alert(error);
+          errors.value = getError(error);
+          console.log(errors.value);
         });
 
     return {

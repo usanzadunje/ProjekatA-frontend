@@ -3,12 +3,12 @@
     <ion-toolbar>
       <div class="px-4 py-3 mt-3 mb-3">
         <div class="flex justify-between">
-          <p class="user-profile-header-heading">Profil</p>
+          <p class="user-profile-header-heading mt-1">Profil</p>
           <ion-button fill="clear" @click="$router.push({ name: 'settings' })">
             <ion-icon
                 slot="icon-only"
-                :icon="settingsOutlineWhite"
-                class="text-2xl"
+                :icon="settingsOutline"
+                class="text-white"
             ></ion-icon>
           </ion-button>
         </div>
@@ -31,18 +31,22 @@
 </template>
 
 <script>
-import { defineComponent }                      from 'vue';
-import { mapGetters }                           from 'vuex';
+import { defineComponent } from 'vue';
+
+import { mapGetters } from 'vuex';
 import {
   IonHeader,
   IonIcon,
   IonToolbar,
   IonButton,
-}                                               from '@ionic/vue';
-import { settingsOutlineWhite, optionsOutline } from '@/assets/icons';
+}                     from '@ionic/vue';
+
+import {
+  settingsOutline,
+} from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'GreetingNotificationToolbar',
+  name: 'UserProfileHeader',
   components: {
     IonIcon,
     IonHeader,
@@ -52,6 +56,7 @@ export default defineComponent({
   computed: {
     ...mapGetters('auth', ['authUser']),
   },
+  emits: ['searchFilterChanged'],
   setup(props, { emit }) {
     /* Event handlers */
     const searchInputChanged = (e) => {
@@ -63,8 +68,7 @@ export default defineComponent({
       searchInputChanged,
 
       /* Icons */
-      settingsOutlineWhite,
-      optionsOutline,
+      settingsOutline,
     };
   },
 });

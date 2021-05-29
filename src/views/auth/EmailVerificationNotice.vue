@@ -1,3 +1,4 @@
+<!--TEST TEMPLATE-->
 <!-- View shown when user has not verified their email address or want to resend it-->
 <template>
   <ion-page>
@@ -15,14 +16,12 @@
         .
       </form>
       <ion-button color="warning" routerLink="/">Home</ion-button>
-      <FlashMessage :message="message" :error="error"/>
     </ion-content>
   </ion-page>
 </template>
 
 
 <script>
-import FlashMessage                                                        from '@/components/FlashMessage';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/vue';
 import AuthService                                                         from '@/services/AuthService';
 import { getError }                                                        from '@/utils/helpers';
@@ -36,7 +35,6 @@ export default {
     IonTitle,
     IonContent,
     IonButton,
-    FlashMessage,
   },
   data() {
     return {

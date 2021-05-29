@@ -1,11 +1,10 @@
-import { useRouter }  from 'vue-router';
+import { useRouter } from 'vue-router';
+
 import {
     Plugins,
-    // PushNotification,
-    // PushNotificationToken,
-    // PushNotificationActionPerformed,
     Capacitor,
-}                     from '@capacitor/core';
+} from '@capacitor/core';
+
 import AuthService    from '../services/AuthService';
 import { useStorage } from '@/services/StorageService';
 
@@ -17,6 +16,7 @@ export function useFCM(userId) {
     //Initializing storage and destructuring getter
     const { get } = useStorage();
 
+    /* Methods */
     const initPush = () => {
         get(`areNotificationsOn.${userId}`)
             .then((response) => {
@@ -29,7 +29,6 @@ export function useFCM(userId) {
             });
 
     };
-
     const registerPush = () => {
         /* If permission is not granted asks for permission, after granted it registers Push Notifications */
         PushNotifications.requestPermission()
@@ -40,7 +39,8 @@ export function useFCM(userId) {
                                  alert('No permission for push notifications granted');
                              }
                          });
-        /* Registering event listeners */
+
+        /* Event listeners */
         PushNotifications.addListener(
             'registration',
             (token) => {
@@ -53,14 +53,12 @@ export function useFCM(userId) {
                 });
             },
         );
-
         PushNotifications.addListener(
             'registrationError',
             (error) => {
                 alert('Error on registration: ' + JSON.stringify(error));
             },
         );
-
         PushNotifications.addListener(
             'pushNotificationReceived',
             (notification) => {
@@ -76,17 +74,14 @@ export function useFCM(userId) {
                 });
             },
         );
-
         PushNotifications.addListener(
             'pushNotificationActionPerformed',
-            (notification) => {
-                alert('Push action performed: ' + JSON.stringify(notification));
+            () => {
                 router.push({
                     name: 'cafes',
                 });
             },
         );
-
         LocalNotifications.addListener(
             'localNotificationActionPerformed',
             () => {
@@ -95,10 +90,10 @@ export function useFCM(userId) {
                 });
             },
         );
-        /* End event listeners */
     };
 
     return {
+        /* Methods */
         initPush,
         registerPush,
     };

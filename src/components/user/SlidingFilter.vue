@@ -11,7 +11,7 @@
         >
           Najblizi vama
           <ion-icon slot="start"
-                    :icon="activeSlidingButton === '' ? locationOutline : locationInactiveOutline"></ion-icon>
+                    :icon="locationOutline"></ion-icon>
         </ion-button>
       </ion-slide>
       <ion-slide>
@@ -23,7 +23,7 @@
         >
           SLOBODNI
           <ion-icon slot="start"
-                    :icon="activeSlidingButton === 'freest' ? graphSliceOutline : graphSliceInactiveOutline"></ion-icon>
+                    :icon="pieChart"></ion-icon>
         </ion-button>
       </ion-slide>
       <ion-slide>
@@ -35,7 +35,7 @@
         >
           HRANA
           <ion-icon slot="start"
-                    :icon="activeSlidingButton === 'food' ? graphSliceOutline : graphSliceInactiveOutline"></ion-icon>
+                    :icon="pieChart"></ion-icon>
         </ion-button>
       </ion-slide>
       <ion-slide>
@@ -47,7 +47,7 @@
         >
           POPULARNO
           <ion-icon slot="start"
-                    :icon="activeSlidingButton === 'popular' ? graphSliceOutline : graphSliceInactiveOutline"></ion-icon>
+                    :icon="pieChart"></ion-icon>
         </ion-button>
       </ion-slide>
     </ion-slides>
@@ -56,18 +56,18 @@
 
 <script>
 import { defineComponent, nextTick, onMounted, ref } from 'vue';
+
 import {
   IonIcon,
   IonButton,
   IonSlides,
   IonSlide,
 }                                                    from '@ionic/vue';
+
 import {
   locationOutline,
-  locationInactiveOutline,
-  graphSliceOutline,
-  graphSliceInactiveOutline,
-}                                                    from '@/assets/icons';
+  pieChart,
+}                                                    from 'ionicons/icons';
 
 export default defineComponent({
   name: 'SlidingFilter',
@@ -80,8 +80,9 @@ export default defineComponent({
   props: {
     hasTitle: Boolean,
   },
+  emits: ['sortHasChanged'],
   setup(props, { emit }) {
-    /* Properties */
+    /* Component properties */
     let activeSlidingButton = ref('');
     const slideOpts = {
       initialSlide: 0,
@@ -108,7 +109,7 @@ export default defineComponent({
     };
 
     return {
-      /* Properties */
+      /* Component properties */
       activeSlidingButton,
       slideOpts,
 
@@ -117,9 +118,7 @@ export default defineComponent({
 
       /* Icons */
       locationOutline,
-      locationInactiveOutline,
-      graphSliceOutline,
-      graphSliceInactiveOutline,
+      pieChart,
     };
   },
 });

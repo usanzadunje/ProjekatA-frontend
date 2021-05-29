@@ -1,5 +1,6 @@
 import router from "@/router";
 
+// Returning array of errors from backend
 export function getError(error) {
     const errorMessage = { apiError: ["API Error, please try again."] };
 

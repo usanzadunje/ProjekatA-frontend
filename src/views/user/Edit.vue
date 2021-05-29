@@ -1,3 +1,4 @@
+<!--test template-->
 <template>
   <ion-page>
     <ion-header :translucent="true">

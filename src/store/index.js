@@ -1,5 +1,7 @@
-import { createStore }      from 'vuex';
-import * as auth            from "@/store/modules/Auth";
+import { createStore } from 'vuex';
+
+import * as auth from "@/store/modules/Auth";
+
 import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
@@ -9,7 +11,8 @@ export default createStore({
         auth,
     },
 
-    plugins: [createPersistedState({
-        storage: window.sessionStorage,
-    })],
+    plugins: [
+        createPersistedState({
+            storage: window.sessionStorage,
+        })],
 });

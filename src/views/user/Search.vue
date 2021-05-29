@@ -7,7 +7,7 @@
       <UserHeader
           :hasSearchFilter="false"
           :mainHeading="'Pretraga'"
-          :notificationIcon="notificationsReceivedOutline"
+          :notificationIcon="notificationsOffOutline"
           @searchFilterChanged="searchFilterChanged"
       >
         <SlidingFilter :hasTitle="true" @sortHasChanged="sortHasChanged"/>
@@ -23,7 +23,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
 
 import {
   IonContent,
@@ -31,10 +31,11 @@ import {
 }
   from '@ionic/vue';
 
-import UserHeader                                             from '@/components/user/UserHeader';
-import SlidingFilter                                          from '@/components/user/SlidingFilter';
-import InfiniteScroll                                         from '@/components/InfiniteScroll';
-import { notificationsOutline, notificationsReceivedOutline } from '@/assets/icons';
+import UserHeader     from '@/components/user/UserHeader';
+import SlidingFilter  from '@/components/user/SlidingFilter';
+import InfiniteScroll from '@/components/InfiniteScroll';
+
+import { notificationsOffOutline } from 'ionicons/icons';
 
 
 export default defineComponent({
@@ -48,16 +49,13 @@ export default defineComponent({
   },
   setup() {
     /* Global properties and methods */
-    const route = useRoute();
+    // const route = useRoute();
 
-    /* Properties */
+    /* Component properties */
     const cafeSearchString = ref('');
     const sortBy = ref('');
     const content = ref(null);
     let scrollTopOffset = ref(0);
-
-    /* Lifecycle hooks */
-    console.log(route.query.searchTerm);
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
@@ -86,7 +84,7 @@ export default defineComponent({
     };
 
     return {
-      /* Properties */
+      /* Component properties */
       cafeSearchString,
       sortBy,
       content,
@@ -99,9 +97,8 @@ export default defineComponent({
       /* Methods */
       scrollToTop,
 
-      /* Icons */
-      notificationsOutline,
-      notificationsReceivedOutline,
+      /* Icons from */
+      notificationsOffOutline,
     };
   },
 });

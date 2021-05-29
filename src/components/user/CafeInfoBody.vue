@@ -1,11 +1,11 @@
 <template>
   <ion-item class="ion-item-no-padding-x">
-    <ion-icon :icon="graphSliceYellowFilled" class="mr-2"></ion-icon>
+    <ion-icon :icon="pieChart" class="mr-2 text-yellow-400"></ion-icon>
     <span class="modal-cafe-text-medium mt-0.5">{{ cafe.taken_capacity }} - slobodnih mesta</span>
   </ion-item>
   <ion-item class="ion-item-no-padding-x">
     <div class="flex justify-between">
-      <ion-icon :icon="locationInactiveOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="locationOutline" class="mr-2"></ion-icon>
       <p class="modal-cafe-text-regular">{{ cafe.address }} - {{ cafe.city }}</p>
     </div>
     <ion-button fill="clear" class="uppercase" slot="end">MAPA</ion-button>
@@ -27,23 +27,23 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
+
 import {
   IonIcon,
   IonButton,
   IonItem,
-}                          from '@ionic/vue';
-import { defineComponent } from 'vue';
+} from '@ionic/vue';
+
 import {
-  arrowBackwardOutline,
-  notificationsOutline,
-  graphSliceYellowFilled,
-  locationInactiveOutline,
-  notificationsOutlineWhite,
-  notificationsReceivedOutline,
-  fastFoodOutline,
+  pieChart,
+  locationOutline,
   leafOutline,
+  fastFoodOutline,
   timeOutline,
-}                          from '@/assets/icons';
+
+}
+  from 'ionicons/icons';
 
 export default defineComponent({
   name: "CafeInfoBody",
@@ -62,15 +62,11 @@ export default defineComponent({
 
 
     return {
-      /* Properties */
+      /* Component properties */
 
-      /* Icons */
-      arrowBackwardOutline,
-      notificationsOutline,
-      graphSliceYellowFilled,
-      locationInactiveOutline,
-      notificationsOutlineWhite,
-      notificationsReceivedOutline,
+      /* Icons from */
+      pieChart,
+      locationOutline,
       fastFoodOutline,
       leafOutline,
       timeOutline,

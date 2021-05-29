@@ -5,7 +5,7 @@
         <div class="flex justify-between">
           <p class="main-toolbar-fade-text">Cao, Marija!</p>
           <ion-button fill="clear" href="/login">
-            <ion-icon :icon="notificationIcon" class="text-2xl"></ion-icon>
+            <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
           </ion-button>
         </div>
         <h1 class="main-toolbar-heading text-xl">{{ mainHeading }}</h1>
@@ -18,7 +18,7 @@
               enterkeyhint="search"
           ></ion-searchbar>
           <ion-icon v-if="hasSearchFilter" :icon="optionsOutline"
-                    class="text-3xl icon-fade-color align-bottom mt-1 md filter-icon"></ion-icon>
+                    class="text-3xl text-gray-400 align-bottom mt-1 md filter-icon"></ion-icon>
         </div>
 
         <slot></slot>
@@ -28,12 +28,14 @@
 </template>
 
 <script>
-import { defineComponent }                                    from 'vue';
+import { defineComponent } from 'vue';
+
 import { IonHeader, IonIcon, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
-import { notificationsOutline, optionsOutline }                    from '@/assets/icons';
+
+import { optionsOutline } from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'GreetingNotificationToolbar',
+  name: 'UserHeader',
   components: {
     IonIcon,
     IonSearchbar,
@@ -46,8 +48,9 @@ export default defineComponent({
     mainHeading: String,
     notificationIcon: String,
   },
+  emits: ['searchFilterChanged', 'searchEnterPressed'],
   setup(props, { emit }) {
-    /* Global properties */
+    /* Component properties */
 
     /* Event handlers */
     const searchInputChanged = (e) => {
@@ -56,13 +59,12 @@ export default defineComponent({
 
 
     return {
-      /* Properties */
+      /* Component properties */
 
       /* Event handlers */
       searchInputChanged,
 
-      /* Icons */
-      notificationsOutline,
+      /* Icons from */
       optionsOutline,
     };
   },

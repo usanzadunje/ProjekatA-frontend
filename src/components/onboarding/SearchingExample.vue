@@ -24,9 +24,11 @@
 </template>
 
 <script>
-import { defineComponent }    from 'vue';
+import { defineComponent } from 'vue';
+
 import { IonButton, IonIcon } from '@ionic/vue';
-import { arrowForward }       from 'ionicons/icons';
+
+import { arrowForward } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'SearchingExample',
@@ -36,6 +38,8 @@ export default defineComponent({
   },
   data() {
     return {
+      /* Icons */
+
       arrowForward,
     };
   },

@@ -14,11 +14,11 @@
     <div class="p-3 flex justify-between ion-align-items-center">
       <div class="flex align-middle">
         <div class="flex align-bottom">
-          <ion-icon :icon="graphSliceYellowOutline"></ion-icon>
+          <ion-icon :icon="pieChart" class="text-yellow-400"></ion-icon>
           <span class="cafe-card-fade-text ml-1 mt-0.5">{{ cafe.taken_capacity }}</span>
         </div>
         <div class="flex align-bottom ml-2">
-          <ion-icon :icon="locationInactiveOutline"></ion-icon>
+          <ion-icon :icon="locationOutline" class="text-gray-400"></ion-icon>
           <span class="cafe-card-fade-text ml-1 mt-0.5">600m</span>
         </div>
       </div>
@@ -32,18 +32,20 @@
 
 <script>
 import { defineComponent } from 'vue';
+
 import {
   IonIcon,
-}                          from '@ionic/vue';
+} from '@ionic/vue';
+
 import {
-  locationInactiveOutline,
-  graphSliceYellowOutline,
+  locationOutline,
+  pieChart,
   fastFoodOutline,
   leafOutline,
-}                          from '@/assets/icons';
+} from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'SlidingFilter',
+  name: 'CafeCard',
   components: {
     IonIcon,
   },
@@ -54,7 +56,7 @@ export default defineComponent({
     },
   },
   setup() {
-    /* Properties */
+    /* Component properties */
 
     /* Event handlers */
 
@@ -64,9 +66,9 @@ export default defineComponent({
 
       /* Event listeners */
 
-      /* Icons */
-      locationInactiveOutline,
-      graphSliceYellowOutline,
+      /* Icons from */
+      locationOutline,
+      pieChart,
       fastFoodOutline,
       leafOutline,
     };

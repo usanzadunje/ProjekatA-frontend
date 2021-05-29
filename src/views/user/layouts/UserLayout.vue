@@ -3,19 +3,27 @@
     <ion-tabs @ionTabsDidChange="tabChanged">
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="home" href="/home">
-          <ion-icon :icon="selectedTab === 'home' ? homeOutlineSelected : homeOutline"></ion-icon>
+          <ion-icon
+              :icon="homeOutline"
+          ></ion-icon>
         </ion-tab-button>
 
         <ion-tab-button tab="search" href="/search">
-          <ion-icon :icon="selectedTab === 'search' ? searchOutlineSelected : searchOutline"></ion-icon>
+          <ion-icon
+              :icon="searchOutline"
+          ></ion-icon>
         </ion-tab-button>
 
         <ion-tab-button tab="dashboard" href="/dashboard" v-if="loggedIn">
-          <ion-icon :icon="selectedTab === 'dashboard' ? dashboardOutlineSelected : dashboardOutline"></ion-icon>
+          <ion-icon
+              :icon="personOutline"
+          ></ion-icon>
         </ion-tab-button>
 
         <ion-tab-button tab="settings" href="/settings" v-if="loggedIn">
-          <ion-icon :icon="selectedTab === 'settings' ? settingsOutlineSelected : settingsOutline"></ion-icon>
+          <ion-icon
+              :icon="settingsOutline"
+          ></ion-icon>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
@@ -33,17 +41,14 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-}                               from '@ionic/vue';
+} from '@ionic/vue';
+
 import {
   homeOutline,
   searchOutline,
-  dashboardOutline,
+  personOutline,
   settingsOutline,
-  homeOutlineSelected,
-  searchOutlineSelected,
-  dashboardOutlineSelected,
-  settingsOutlineSelected,
-}                               from '@/assets/icons';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: 'UserLayout',
@@ -61,7 +66,7 @@ export default defineComponent({
     /* Component properties */
     let selectedTab = ref('home');
 
-    /* Component event listener methods */
+    /* Event listeners */
     const tabChanged = (event) => selectedTab.value = event.tab;
 
 
@@ -69,18 +74,14 @@ export default defineComponent({
       /* Properties */
       selectedTab,
 
-      /* Event listener methods */
+      /* Event listeners */
       tabChanged,
 
-      /* Icons */
+      /* Icons from */
       homeOutline,
       searchOutline,
-      dashboardOutline,
+      personOutline,
       settingsOutline,
-      homeOutlineSelected,
-      searchOutlineSelected,
-      dashboardOutlineSelected,
-      settingsOutlineSelected,
     };
   },
 });

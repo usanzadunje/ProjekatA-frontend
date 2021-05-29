@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import { defineComponent }                                                 from 'vue';
+import { defineComponent } from 'vue';
+
 import { IonButton, IonPage, IonContent, IonHeader, IonToolbar, IonTitle } from '@ionic/vue';
 
 export default defineComponent({

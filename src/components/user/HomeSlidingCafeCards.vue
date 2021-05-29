@@ -12,9 +12,11 @@
 
 <script>
 import { defineComponent } from 'vue';
-import CafeCard            from '@/components/user/CafeCard';
+
+import CafeCard from '@/components/user/CafeCard';
 
 export default defineComponent({
+  name: "HomeSlidingCafeCards",
   components: {
     CafeCard,
   },
@@ -24,11 +26,12 @@ export default defineComponent({
       default: null,
     },
   },
+  emits: ['openCafeModal'],
   setup() {
 
 
     return {
-      /* Properties */
+      /* Component properties */
 
       /* Computed properties */
 

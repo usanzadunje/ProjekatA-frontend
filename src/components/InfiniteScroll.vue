@@ -20,16 +20,20 @@
 </template>
 
 <script>
+import { defineComponent, ref, watch, toRefs } from 'vue';
+
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-}                                              from '@ionic/vue';
-import { defineComponent, ref, watch, toRefs } from 'vue';
-import CafeService                             from '@/services/CafeService';
-import FilterCategoryHeading                   from '@/components/user/FilterCategoryHeading';
-import CafeCard                                from '@/components/user/CafeCard';
+} from '@ionic/vue';
+
+import CafeService from '@/services/CafeService';
+
+import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
+import CafeCard              from '@/components/user/CafeCard';
 
 export default defineComponent({
+  name: "InfiniteScroll",
   components: {
     IonInfiniteScroll,
     IonInfiniteScrollContent,
@@ -48,7 +52,7 @@ export default defineComponent({
   },
   emits: ['scrollToTop'],
   setup(props, { emit }) {
-    /* Properties */
+    /* Component properties */
     // All non filtered cafes
     let cafes = ref([]);
     // Initial 20 cafes that are shown when no filters are applied
@@ -62,6 +66,7 @@ export default defineComponent({
     // Property to enable / disable loading infinite scroll animation and action
     let isInfiniteScrollDisabled = ref(false);
 
+    /* Lifecycle hooks */
     //*Before mounting fetching initial 20 cafes to show
     CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, sortBy.value)
                .then((response) => {
@@ -84,7 +89,6 @@ export default defineComponent({
                  .catch((error) => alert(error));
 
     };
-
     const filterCafes = (ignoreIfNoSearchTerm = false) => {
       //If there is no search term all cafes are returned
       if(!cafeSearchString.value && !ignoreIfNoSearchTerm) {
@@ -101,6 +105,7 @@ export default defineComponent({
 
     };
 
+    /* Event handlers */
     const loadData = (ev) => {
       setTimeout(() => {
         loadMoreCafes();
@@ -129,7 +134,7 @@ export default defineComponent({
 
 
     return {
-      /* Properties */
+      /* Compoenent properties */
       cafes,
       isInfiniteScrollDisabled,
 

@@ -5,12 +5,12 @@
         <div class="flex justify-between">
           <ion-buttons slot="start">
             <ion-button href="/home">
-              <ion-icon slot="icon-only" :icon="arrowBackwardOutline"></ion-icon>
+              <ion-icon slot="icon-only" :icon="arrowBackOutline" class="text-gray-400"></ion-icon>
             </ion-button>
           </ion-buttons>
           <ion-buttons slot="start">
             <ion-button>
-              <ion-icon slot="icon-only" :icon="notificationsOutline"></ion-icon>
+              <ion-icon slot="icon-only" :icon="notificationsOutline" class="text-gray-400"></ion-icon>
             </ion-button>
           </ion-buttons>
         </div>
@@ -22,10 +22,10 @@
         <img
             src="../../assets/img/cafe/cafeshow.png"
             alt="Image of {{ cafe.name }} cafe"
-            class="banner-image"
+            class="banner-image w-full"
         />
         <div
-            class="uppercase absolute top-3/4 left-3/4 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
+            class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
         >
           GALERIJA
         </div>
@@ -40,7 +40,7 @@
       <CafeInfoBody :cafe="cafe"/>
 
       <div>
-        <FilterCategoryHeading class="mt-7 mb-2" :title="'Meni'" :icon="fastFoodOutline"/>
+        <FilterCategoryHeading class="mt-7 mb-2 text-gray-400" :title="'Meni'" :icon="fastFoodOutline"/>
         <AccordionList class="accordion-list-border-top" :title="'Karta pica'" :items="['Pice 1','Pice 2', 'Pice 3']"/>
         <AccordionList class="accordion-list-border-top accordion-list-border-bottom" :title="'Hrana'"
                        :items="['Hrana 1','Hrana 2', 'Hrana 3']"/>
@@ -54,7 +54,7 @@
             :disabled="!loggedIn"
         >
           <ion-icon slot="start"
-                    :icon="isUserSubscribed ? notificationsReceivedFilled : notificationsOutlineWhite"></ion-icon>
+                    :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
           {{ isUserSubscribed ? 'Pretplacen' : 'Pretplati se' }}
         </ion-button>
       </div>
@@ -76,11 +76,12 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed }               from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 
-import { useStore } from 'vuex'
+import { useStore } from 'vuex';
 
-import { useRoute }          from 'vue-router';
+import { useRoute } from 'vue-router';
+
 import {
   IonPage,
   IonHeader,
@@ -90,26 +91,22 @@ import {
   IonIcon,
   IonButton,
   IonModal,
-}                            from '@ionic/vue';
+} from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import AccordionList         from '@/components/user/AccordionList';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
 
-import CafeService           from '@/services/CafeService';
+import CafeService from '@/services/CafeService';
 
 import {
-  arrowBackwardOutline,
+  arrowBackOutline,
+  notifications,
   notificationsOutline,
-  graphSliceYellowFilled,
-  locationInactiveOutline,
-  notificationsOutlineWhite,
-  notificationsReceivedFilled,
   fastFoodOutline,
-  leafOutline,
-  timeOutline,
-}                            from '@/assets/icons';
+}
+  from 'ionicons/icons';
 
 export default defineComponent({
   name: "Cafe",
@@ -132,11 +129,12 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
 
-    /* Properties */
+    /* Componenet properties */
     let cafe = ref({});
     const isModalOpen = ref(false);
     const isUserSubscribed = ref(false);
 
+    // Auth prop
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
 
@@ -150,9 +148,8 @@ export default defineComponent({
     CafeService.show(route.params.id)
                .then((response) => cafe.value = response.data)
                .catch((error) => alert(error));
-
     /* Checking if user is subscribed to this cafe */
-    if(loggedIn.value){
+    if(loggedIn.value) {
       CafeService.isUserSubscribed(route.params.id)
                  .then((response) => {
                    isUserSubscribed.value = !!response.data;
@@ -162,25 +159,22 @@ export default defineComponent({
 
 
     return {
-      /* Properties */
+      /* Component properties */
       cafe,
       isModalOpen,
       isUserSubscribed,
+
+      //Auth prop
       loggedIn,
 
       /* Event handlers */
       openModal,
 
       /* Icons */
-      arrowBackwardOutline,
+      arrowBackOutline,
+      notifications,
       notificationsOutline,
-      graphSliceYellowFilled,
-      locationInactiveOutline,
-      notificationsOutlineWhite,
-      notificationsReceivedFilled,
       fastFoodOutline,
-      leafOutline,
-      timeOutline,
     };
   },
 

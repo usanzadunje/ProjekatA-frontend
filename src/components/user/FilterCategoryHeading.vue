@@ -1,16 +1,18 @@
 <template>
   <div class="flex align-middle">
-    <ion-icon :icon="icon" class="mr-1"></ion-icon>
+    <ion-icon :icon="icon" class="mr-1 text-gray-400"></ion-icon>
     <span class="sliding-filter-title uppercase">{{ title }}</span>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+
 import {
-  IonIcon
-} from '@ionic/vue'
-import { graphSliceInactiveOutline } from '@/assets/icons'
+  IonIcon,
+} from '@ionic/vue';
+
+import { pieChart } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'FilterCategoryHeading',
@@ -24,16 +26,15 @@ export default defineComponent({
     },
     icon: {
       type: String,
-      default: graphSliceInactiveOutline,
+      default: pieChart,
     },
   },
   setup() {
 
-
     return {
-      /* Icons */
-      graphSliceInactiveOutline
-    }
-  }
+      /* Icons from */
+      pieChart,
+    };
+  },
 });
 </script>

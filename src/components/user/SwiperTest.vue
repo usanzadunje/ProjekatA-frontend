@@ -1,3 +1,4 @@
+<!--Swiper test template-->
 <template>
   <swiper
       :slides-per-view="3"

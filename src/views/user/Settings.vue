@@ -6,7 +6,7 @@
       </ion-item>
       <ion-item class="no-border">
         <div class="settings-icon-badge settings-red-icon-color flex justify-center settings-padding-icon-top">
-          <ion-icon :icon="flashFilled"></ion-icon>
+          <ion-icon :icon="flash" class="text-white"></ion-icon>
         </div>
         <p class="uppercase settings-fade-text ml-2">Globalna podesavanja</p>
       </ion-item>
@@ -24,7 +24,7 @@
         <ion-item class="ion-item-padding-right">
           <p class="settings-item-text">Privatnost</p>
           <ion-button fill="clear" slot="end">
-            <ion-icon slot="icon-only" :icon="arrowRightOutline"></ion-icon>
+            <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
         <ion-item class="ion-item-padding-right">
@@ -47,20 +47,20 @@
       <div class="mt-5">
         <ion-item class="flex justify-start no-border">
           <div class="settings-icon-badge settings-yellow-icon-color flex justify-center settings-padding-icon-top">
-            <ion-icon :icon="rocketFilled"></ion-icon>
+            <ion-icon :icon="rocket" class="text-white"></ion-icon>
           </div>
           <p class="uppercase settings-fade-text ml-2">O aplikaciji</p>
         </ion-item>
         <ion-item class="ion-item-padding-right">
           <p class="settings-item-text">Podrzite autore</p>
           <ion-button fill="clear" slot="end">
-            <ion-icon slot="icon-only" :icon="arrowRightOutline"></ion-icon>
+            <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
         <ion-item class="ion-item-padding-right">
           <p class="settings-item-text">Web sajt</p>
           <ion-button fill="clear" slot="end">
-            <ion-icon slot="icon-only" :icon="arrowRightOutline"></ion-icon>
+            <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
         <ion-button fill="clear" expand="block" @click="logout">
@@ -87,14 +87,15 @@ import {
 } from '@ionic/vue';
 
 import {
-  flashFilled,
-  arrowRightOutline,
-  rocketFilled,
-} from '@/assets/icons';
+  flash,
+  chevronForward,
+  rocket,
+} from 'ionicons/icons';
 
 import AuthService    from '@/services/AuthService';
 import { useStorage } from '@/services/StorageService';
-import { useFCM }     from '@/composables/useFCM';
+
+import { useFCM } from '@/composables/useFCM';
 
 export default defineComponent({
   name: 'Settings',
@@ -111,13 +112,14 @@ export default defineComponent({
     /* Global properties */
     const store = useStore();
 
-    /* Properties */
+    /* Component properties */
     let isDarkModeOn = ref(false);
     let areNotificationsOn = ref(false);
     let language = ref('SRB');
 
     const { set, get } = useStorage();
 
+    /* Lifecycle hooks */
     //Setting toggle checked attribute to whatever user choose and is persisted in storage
     //for notifications
     get(`areNotificationsOn.${store.getters['auth/authUser'].id}`)
@@ -128,7 +130,6 @@ export default defineComponent({
         .catch((error) => {
           alert(error);
         });
-
     get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
         .then((response) => {
           isDarkModeOn.value = !!response;
@@ -149,7 +150,6 @@ export default defineComponent({
       document.body.classList.toggle('dark', e.target.checked);
       isDarkModeOn.value = e.target.checked;
     };
-
     const toggleNotifications = (e) => {
       if(!e.target.checked) {
         /* Remove FCM token thus disabling notifications */
@@ -172,13 +172,12 @@ export default defineComponent({
       }
       areNotificationsOn.value = e.target.checked;
     };
-
-    const logout = () => {
-      store.dispatch("auth/logout")
-    }
+    const logout = async() => {
+      await store.dispatch("auth/logout");
+    };
 
     return {
-      /* Properties */
+      /* Compunent properties */
       isDarkModeOn,
       areNotificationsOn,
       language,
@@ -188,10 +187,10 @@ export default defineComponent({
       toggleNotifications,
       logout,
 
-      /* Icons */
-      flashFilled,
-      arrowRightOutline,
-      rocketFilled,
+      /* Icons from */
+      flash,
+      chevronForward,
+      rocket,
     };
   },
 });

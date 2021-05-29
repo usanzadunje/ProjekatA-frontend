@@ -17,7 +17,7 @@
             <ion-item-option type="button" @click="unsubscribe(cafe.id)">
               <ion-icon
                   slot="icon-only"
-                  :icon="trashcanOutline"
+                  :icon="trashOutline"
                   class="text-2xl"
               ></ion-icon>
             </ion-item-option>
@@ -41,7 +41,8 @@ import {
   IonItemOptions,
   IonItemOption,
   IonIcon,
-}                            from '@ionic/vue';
+} from '@ionic/vue';
+
 import UserProfileHeader     from '@/components/user/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
@@ -50,8 +51,8 @@ import CafeCard              from '@/components/user/CafeCard';
 import CafeService from '@/services/CafeService';
 
 import {
-  trashcanOutline,
-} from '@/assets/icons';
+  trashOutline,
+} from 'ionicons/icons';
 
 
 export default defineComponent({
@@ -81,7 +82,7 @@ export default defineComponent({
                .catch((error) => alert(error));
   },
   setup() {
-    /* Properties */
+    /* Component properties */
     // Cafes user is subscribed to
     let cafesUserSubscribedTo = ref([]);
     let sortBy = ref('name');
@@ -99,7 +100,7 @@ export default defineComponent({
     const unsubscribe = (cafeId) => {
       CafeService.unsubscribe(cafeId)
                  .then((response) => {
-                   if(response.data){
+                   if(response.data) {
                      alert('Successfully unsubscribed!');
                      cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter((cafe) => cafe.id !== cafeId);
                    }
@@ -108,7 +109,7 @@ export default defineComponent({
     };
 
     return {
-      /* Properties */
+      /* Component roperties */
       cafesUserSubscribedTo,
       sortBy,
 
@@ -117,7 +118,7 @@ export default defineComponent({
       unsubscribe,
 
       /* Icons */
-      trashcanOutline,
+      trashOutline,
     };
 
   },

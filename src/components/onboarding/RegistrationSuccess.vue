@@ -16,15 +16,17 @@
         class="auth-button-border-radius uppercase absolute left-8 bottom-8 w-5/6"
     >
       NASTAVI DALJE
-      <ion-icon slot="end" :icon="arrowForwardOutline"></ion-icon>
+      <ion-icon slot="end" :icon="arrowForward"></ion-icon>
     </ion-button>
   </div>
 </template>
 
 <script>
-import { defineComponent }    from 'vue';
+import { defineComponent } from 'vue';
+
 import { IonButton, IonIcon } from '@ionic/vue';
-import { arrowForwardOutline }       from '@/assets/icons';
+
+import { arrowForward } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'RegistrationSuccess',
@@ -34,7 +36,9 @@ export default defineComponent({
   },
   data() {
     return {
-      arrowForwardOutline,
+      /* Icons */
+
+      arrowForward,
     };
   },
 });

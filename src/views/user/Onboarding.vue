@@ -21,12 +21,14 @@
 
 
 <script>
-import { defineComponent, ref }                     from 'vue';
+import { defineComponent, ref } from 'vue';
+
 import { IonPage, IonContent, IonSlides, IonSlide } from '@ionic/vue';
-import RegistrationSuccess                          from '@/components/onboarding/RegistrationSuccess';
-import SearchingExample                             from '@/components/onboarding/SearchingExample';
-import CafePreviewExample                           from '@/components/onboarding/CafePreviewExample';
-import ActivatingNotificationExample                from '@/components/onboarding/ActivatingNotificationExample';
+
+import RegistrationSuccess           from '@/components/onboarding/RegistrationSuccess';
+import SearchingExample              from '@/components/onboarding/SearchingExample';
+import CafePreviewExample            from '@/components/onboarding/CafePreviewExample';
+import ActivatingNotificationExample from '@/components/onboarding/ActivatingNotificationExample';
 
 export default defineComponent({
   name: 'Onboarding',
@@ -41,22 +43,29 @@ export default defineComponent({
     ActivatingNotificationExample,
   },
   setup() {
-    /* Component properties */
+    /* Component references */
     const slides = ref(null);
+
+    /* Component properties */
     const slideOpts = {
       initialSlide: 0,
       speed: 500,
     };
 
-    /* Compoenent methods */
+    /* Event handlers */
     const slideNext = async() => {
       const swiper = await slides?.value?.$el.getSwiper();
       await swiper.slideNext();
     };
 
     return {
+      /* Component references */
       slides,
+
+      /* Component properties */
       slideOpts,
+
+      /* Event handlers */
       slideNext,
     };
   },

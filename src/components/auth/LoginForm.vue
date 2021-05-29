@@ -5,7 +5,7 @@
         class="border rounded-2xl h-12 auth-input-background"
         :class="{ 'error-border' : errors.hasOwnProperty('email') }"
     >
-      <ion-icon :icon="envelopeOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model.lazy="user.email"
           autocomplete="email"
@@ -22,7 +22,7 @@
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errors.hasOwnProperty('password') }"
     >
-      <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model="user.password"
           inputmode="password"
@@ -32,7 +32,9 @@
           required
       ></ion-input>
       <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
-                @click="togglePasswordShow"></ion-icon>
+                @click="togglePasswordShow"
+                class="text-black"
+      ></ion-icon>
     </ion-item>
     <div class="flex justify-between mt-3.5 px-4 utility-text">
       <div class="align-text-bottom">
@@ -69,7 +71,14 @@
 
 <script>
 import { defineComponent, ref, reactive, computed } from 'vue';
-import { useRouter }                                from 'vue-router';
+
+import { useRouter } from 'vue-router';
+
+import { mapGetters } from "vuex";
+
+import store from '@/store/index';
+
+
 import {
   IonItem,
   IonInput,
@@ -78,14 +87,21 @@ import {
   IonButton,
   IonCheckbox,
   toastController,
-}                                                   from "@ionic/vue";
-import store                                        from '@/store/index';
-import { mapGetters }                               from "vuex";
-import AuthService                                  from "@/services/AuthService";
-import { getError }                                 from '@/utils/helpers';
-import SocialIcons                                  from '@/components/social/SocialIcons';
-import { eyeOutline, eyeOffOutline }                from 'ionicons/icons';
-import { envelopeOutline, lockOpenOutline }         from '@/assets/icons';
+}
+  from "@ionic/vue";
+
+import AuthService from "@/services/AuthService";
+
+import SocialIcons from '@/components/social/SocialIcons';
+
+import { getError } from '@/utils/helpers';
+
+import {
+  mailOutline,
+  lockOpenOutline,
+  eyeOutline,
+  eyeOffOutline,
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "LoginForm",
@@ -111,6 +127,7 @@ export default defineComponent({
     let showPassword = ref(false);
 
     /* Computed properties */
+    //Returns error key name from backend
     const errorKeys = computed(() => {
       if(!errors.value) {
         return null;
@@ -119,9 +136,11 @@ export default defineComponent({
     });
 
     /* Methods */
+    //Shows error message for specific key
     const getErrors = (key) => {
       return errors.value[key];
     };
+    //Generating toast error notifications
     const showToastErrors = async() => {
       let toast = null;
       let i;
@@ -150,6 +169,7 @@ export default defineComponent({
                    errors.value = getError(e);
                    await showToastErrors();
 
+                   //Removing errors after they are all shown
                    setTimeout(() => {
                      errors.value = {};
                    }, Object.keys(errors.value).length * 900);
@@ -169,11 +189,11 @@ export default defineComponent({
       login,
       togglePasswordShow,
 
-      /* Icons from ionicon/icons */
+      /* Icons */
+      mailOutline,
       lockOpenOutline,
       eyeOutline,
       eyeOffOutline,
-      envelopeOutline,
     };
   },
 });

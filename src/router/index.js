@@ -1,19 +1,20 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import store                              from '@/store/index';
+
+import store                   from '@/store/index';
 
 /* Middleware imports */
-import middlewarePipeline                 from "./middlewarePipeline";
-import auth                               from "@/middleware/auth";
-import verified                           from "@/middleware/verified";
-import redirectIfAuthenticated            from "@/middleware/redirectIfAuthenticated";
-import staff                              from "@/middleware/staff";
-import redirectIfStaff                    from '@/middleware/redirectIfStaff';
+import middlewarePipeline      from "./middlewarePipeline";
+import auth                    from "@/middleware/auth";
+import verified                from "@/middleware/verified";
+import redirectIfAuthenticated from "@/middleware/redirectIfAuthenticated";
+import staff                   from "@/middleware/staff";
+import redirectIfStaff         from '@/middleware/redirectIfStaff';
 
 /* Staff imports views */
-import Staff                              from '@/views/staff/Staff';
+import Staff                   from '@/views/staff/Staff';
 
-/* End user imports views*/
-import UserLayout from '@/views/user/layouts/UserLayout';
+/* Layouts */
+import UserLayout              from '@/views/user/layouts/UserLayout';
 
 
 const routes = [
@@ -29,7 +30,7 @@ const routes = [
     {
         path: "/test",
         name: "test",
-        component: () => import(/* webpackChunkName: "Login" */ "../views/user/Onboarding"),
+        component: () => import(/* webpackChunkName: "Login" */ "../views/Test"),
     },
     {
         path: "/register",
@@ -62,13 +63,6 @@ const routes = [
                 /* webpackChunkName: "ForgotPassword" */ "../views/auth/ForgotPassword"
                 ),
     },
-    {
-        path: "/testEmailVerification",
-        name: "testEmailVerification",
-        meta: { middleware: [auth, verified] },
-        component: () =>
-            import(/* webpackChunkName: "Test" */ "../views/user/Test"),
-    },
     /* =============================================
         End unprotected routes from staff
     ============================================= */
@@ -81,7 +75,6 @@ const routes = [
         meta: { middleware: [redirectIfStaff] },
         component: UserLayout,
         children: [
-            /* START USER ROUTES */
             {
                 path: "",
                 redirect: "/home",
@@ -115,7 +108,6 @@ const routes = [
                 meta: { middleware: [auth, verified] },
                 component: () => import(/* webpackChunkName: "Settings" */ "../views/user/Settings"),
             },
-            /* END USER ROUTES */
         ],
     },
     {

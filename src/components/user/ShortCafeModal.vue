@@ -36,7 +36,7 @@
           :disabled="!loggedIn"
       >
         <ion-icon slot="start"
-                  :icon="isUserSubscribed ? notificationsReceivedFilled : notificationsOutlineWhite"></ion-icon>
+                  :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
         {{ isUserSubscribed ? 'Pretplacen' : 'Pretplati se' }}
       </ion-button>
     </div>
@@ -59,7 +59,7 @@
 <script>
 import { defineComponent, onMounted, nextTick, ref, toRef, computed } from 'vue';
 
-import { useStore } from 'vuex'
+import { useStore } from 'vuex';
 
 import {
   IonContent,
@@ -70,19 +70,19 @@ import {
   IonSlides,
   IonSlide,
   IonModal,
-}                                                            from '@ionic/vue';
-import CafeInfoBody                                          from '@/components/user/CafeInfoBody';
+} from '@ionic/vue';
+
+import CafeService from '@/services/CafeService';
+
+import CafeInfoBody          from '@/components/user/CafeInfoBody';
+import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
+
 import {
-  graphSliceYellowFilled,
-  locationInactiveOutline,
-  notificationsOutlineWhite,
-  notificationsReceivedFilled,
-  fastFoodOutline,
-  leafOutline,
-  timeOutline,
-}                                                            from '@/assets/icons';
-import CafeSubscriptionModal                                 from '@/components/user/CafeSubscriptionModal';
-import CafeService                                           from '@/services/CafeService';
+  notifications,
+  notificationsOutline,
+
+} from 'ionicons/icons';
+
 
 export default defineComponent({
   name: 'ShortCafeModal',
@@ -106,7 +106,7 @@ export default defineComponent({
   },
   emits: ['dismissShortCafeModal', 'subModalOpened'],
   setup(props) {
-    /* Global properties */
+    /* Global properties and methods */
     const store = useStore();
 
     /* Component properties */
@@ -118,17 +118,16 @@ export default defineComponent({
       spaceBetween: 12,
       freeMode: true,
     };
-
-    /* Properties */
     const isModalOpen = ref(false);
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
 
+    //Auth prop
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
     /* Lifecycle hooks */
     /* Checking if user is subscribed to this cafe */
-    if(loggedIn.value){
+    if(loggedIn.value) {
       CafeService.isUserSubscribed(cafe.value.id)
                  .then((response) => {
                    isUserSubscribed.value = !!response.data;
@@ -152,22 +151,19 @@ export default defineComponent({
       /* Component properties */
       slideOpts,
 
-      /* Properties */
+      /* Component properties */
       isModalOpen,
       isUserSubscribed,
+
+      /* Auth prop*/
       loggedIn,
 
       /* Event handlers */
       openModal,
 
-      /* Icons */
-      graphSliceYellowFilled,
-      locationInactiveOutline,
-      notificationsOutlineWhite,
-      notificationsReceivedFilled,
-      fastFoodOutline,
-      leafOutline,
-      timeOutline,
+      /* Icons from */
+      notifications,
+      notificationsOutline,
     };
   },
 });

@@ -66,18 +66,19 @@ import {
   IonContent,
   IonPage,
   IonModal,
-}                            from '@ionic/vue';
+} from '@ionic/vue';
+
+import CafeService from '@/services/CafeService';
+
 import UserHeader            from '@/components/user/UserHeader';
-import CafeService           from '@/services/CafeService';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import HomeSlidingCafeCards  from '@/components/user/HomeSlidingCafeCards';
 import ShortCafeModal        from '@/components/user/ShortCafeModal';
 
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
 import 'swiper/swiper.min.css';
 
-import { notificationsOutline, notificationsReceivedOutline } from '@/assets/icons';
+import { notificationsOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'Home',
@@ -95,22 +96,21 @@ export default defineComponent({
   setup() {
     /* Global properties */
     const router = useRouter();
+
     /* Component references */
     const availableCafesSwiper = ref(null);
     const closestCafesSwiper = ref(null);
 
-    /* Properties */
+    /* Component properties */
     // Cafes closest to user
     let cafes = reactive({
       currentlyAvailableCafes: [],
       closestToUserCafes: [],
     });
-
     const cafeSlidesLength = reactive({
       currentlyAvailableCafes: [0, 2],
       closestToUserCafes: [0, 2],
     });
-
     // Search term for filtering records
     const cafeSearchString = ref('');
     // From which number on to take cafe records
@@ -157,6 +157,7 @@ export default defineComponent({
       router.push({ path: 'search', query: { searchTerm: e.target.value } });
     };
 
+    /* Methods */
     // Grabbing 2 more cafes that match required filter
     const loadMoreCafes = (e, cafeArrayName, sortBy = '') => {
       CafeService.getCafeCardsChunkInfo(cafeStart[cafeArrayName], 2, cafeSearchString.value, sortBy, true)
@@ -172,7 +173,6 @@ export default defineComponent({
                  });
       cafeStart[cafeArrayName] += 2;
     };
-
     const filterCafes = () => {
       CafeService.getCafeCardsChunkInfo(0, 4, cafeSearchString.value, 'id', true)
                  .then((response) => {
@@ -207,7 +207,7 @@ export default defineComponent({
       availableCafesSwiper,
       closestCafesSwiper,
 
-      /* Properties */
+      /* Component properties */
       cafes,
       cafeSlidesLength,
       cafeStart,
@@ -216,16 +216,15 @@ export default defineComponent({
 
       /* Event handlers */
       searchFilterChanged,
-      loadMoreCafes,
       openModal,
       hideModal,
       switchToSearch,
 
       /* Methods */
+      loadMoreCafes,
 
-      /* Icons */
+      /* Icons from */
       notificationsOutline,
-      notificationsReceivedOutline,
     };
   },
 });

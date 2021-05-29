@@ -1,3 +1,4 @@
+<!--TEST TEMPLATE-->
 <template>
     <ion-page>
         <ion-header :translucent="true">
@@ -35,7 +36,6 @@
                 </ion-grid>
             </form>
           <ion-button color="warning" routerLink="/">Home</ion-button>
-            <FlashMessage :error="error"/>
         </ion-content>
     </ion-page>
 </template>
@@ -57,7 +57,6 @@
     }                   from '@ionic/vue';
     import AuthService  from "@/services/AuthService";
     import { getError } from '@/utils/helpers';
-    import FlashMessage from "@/components/FlashMessage";
 
     export default {
         name: "ForgotPassword",
@@ -74,7 +73,6 @@
             IonItem,
             IonInput,
             IonLabel,
-            FlashMessage,
         },
         data() {
             return {

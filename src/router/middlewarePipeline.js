@@ -1,3 +1,4 @@
+// Middleware pipeline that processes middlewares and calls next
 export default function middlewarePipeline(context, middleware, index) {
     const nextMiddleware = middleware[index];
     if(!nextMiddleware) {

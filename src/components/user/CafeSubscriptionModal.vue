@@ -45,7 +45,7 @@
           @click="toggleSubscription(cafe.id)"
       >
         <ion-icon slot="start"
-                  :icon="isUserSubscribed ? notificationsReceivedFilled : notificationsOutlineWhite"></ion-icon>
+                  :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
         {{ isUserSubscribed ? 'Ukloni' : 'Potvrdi' }}
       </ion-button>
     </div>
@@ -65,16 +65,19 @@ import {
   IonToggle,
   IonRange,
   IonLabel,
-}                     from '@ionic/vue';
+} from '@ionic/vue';
+
 import {
-  notificationsOutlineWhite,
-  notificationsReceivedFilled,
-}                     from '@/assets/icons';
-import { useFCM }     from '@/composables/useFCM';
-import CafeService    from '@/services/CafeService';
+  notifications,
+  notificationsOutline,
+} from 'ionicons/icons';
+
+import { useFCM } from '@/composables/useFCM';
+
+import CafeService from '@/services/CafeService';
 
 export default defineComponent({
-  name: 'ShortCafeModal',
+  name: 'CafeSubscriptionModal',
   components: {
     IonContent,
     IonItem,
@@ -94,7 +97,8 @@ export default defineComponent({
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
-    /* Properties */
+
+    /* Component properties */
     let notificationTime = ref(15);
     let indefiniteTimerActive = ref(false);
 
@@ -103,6 +107,7 @@ export default defineComponent({
     const cafe = toRef(props, 'cafe');
 
     /* Lifecycle hooks */
+    //When user lands on page check if he is already subscribed to cafe
     CafeService.isUserSubscribed(cafe.value.id)
                .then((response) => {
                  isUserSubscribed.value = !!response.data;
@@ -113,12 +118,6 @@ export default defineComponent({
     const indefiniteTimerToggle = (e) => {
       indefiniteTimerActive.value = e.target.checked;
     };
-
-    /* Methods */
-    /* Method for initializing push notifications for mobile devices */
-    const { initPush } = useFCM(store.getters['auth/authUser'].id);
-    initPush();
-
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
     const toggleSubscription = (cafeId) => {
       if(indefiniteTimerActive.value) {
@@ -149,9 +148,14 @@ export default defineComponent({
 
     };
 
+    /* Methods */
+    /* Method for initializing push notifications for mobile devices */
+    const { initPush } = useFCM(store.getters['auth/authUser'].id);
+    initPush();
+
 
     return {
-      /* Properties */
+      /* Component properties */
       notificationTime,
       indefiniteTimerActive,
       isUserSubscribed,
@@ -162,8 +166,8 @@ export default defineComponent({
 
 
       /* Icons */
-      notificationsOutlineWhite,
-      notificationsReceivedFilled,
+      notifications,
+      notificationsOutline,
 
     };
   },

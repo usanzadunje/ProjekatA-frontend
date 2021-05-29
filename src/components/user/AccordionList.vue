@@ -2,10 +2,10 @@
   <div class="accordion-list-box">
     <div @click="togglePane" class="flex justify-between py-2.5">
       <div>
-        <ion-icon :icon="locationInactiveOutline" class="align-middle"></ion-icon>
+        <ion-icon :icon="locationOutline" class="align-middle text-gray-400"></ion-icon>
         <p class="inline-block ml-2.5 cafe-show-menu-headers">{{ title }}</p>
       </div>
-      <ion-icon :icon="isPanelOpen ? locationInactiveOutline : arrowDownwardOutline" class="mt-1"></ion-icon>
+      <ion-icon :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline" class="mt-1 text-gray-400"></ion-icon>
     </div>
     <div class="panel" @click="togglePane($event, true)">
       <div v-for="item in items" :key="item">
@@ -21,13 +21,15 @@ import { defineComponent, ref } from 'vue';
 import {
   IonIcon,
 } from '@ionic/vue';
+
 import {
-  locationInactiveOutline,
-  arrowDownwardOutline,
-} from '@/assets/icons';
+  locationOutline,
+  chevronDownOutline,
+  chevronForwardOutline,
+} from 'ionicons/icons';
 
 export default defineComponent({
-  name: "MyAccordion",
+  name: "AccordionList",
   components: {
     IonIcon,
   },
@@ -42,7 +44,7 @@ export default defineComponent({
     },
   },
   setup() {
-    /* Properties */
+    /* Component properties */
     const isPanelOpen = ref(false);
 
     /* Methods */
@@ -62,15 +64,16 @@ export default defineComponent({
 
 
     return {
-      /* Properties */
+      /* Component properties */
       isPanelOpen,
 
       /* Methods */
       togglePane,
 
-      /* Icons */
-      locationInactiveOutline,
-      arrowDownwardOutline,
+      /* Icons from */
+      locationOutline,
+      chevronDownOutline,
+      chevronForwardOutline,
     };
 
   },

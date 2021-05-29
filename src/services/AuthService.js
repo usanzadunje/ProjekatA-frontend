@@ -1,14 +1,16 @@
 import axios from "axios";
+
 import store from "@/store";
 
+// Creating axios instance for routes that are not api protected
 export const authClient = axios.create({
     baseURL: process.env.VUE_APP_API_URL,
     withCredentials: true, // required to handle the CSRF token
 });
 
 /*
- * Add a response interceptor
- */
+    Add a response interceptor to hanndle errors
+*/
 authClient.interceptors.response.use(
     (response) => {
         return response;

@@ -5,7 +5,7 @@
         class="border rounded-2xl h-12 auth-input-background"
         :class="{ 'error-border' : errors.hasOwnProperty('fname') }"
     >
-      <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model.lazy="newUser.fname"
           autocomplete="given-name"
@@ -21,7 +21,7 @@
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errors.hasOwnProperty('lname') }"
     >
-      <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model.lazy="newUser.lname"
           autocomplete="family-name"
@@ -37,7 +37,7 @@
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errors.hasOwnProperty('username') }"
     >
-      <ion-icon :icon="profileOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model.lazy="newUser.username"
           autocomplete="username"
@@ -53,7 +53,7 @@
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errors.hasOwnProperty('email') }"
     >
-      <ion-icon :icon="envelopeOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model.lazy="newUser.email"
           autocomplete="email"
@@ -69,7 +69,7 @@
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errors.hasOwnProperty('password') }"
     >
-      <ion-icon :icon="lockOpenOutline" color="primary" class="mr-2"></ion-icon>
+      <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model="newUser.password"
           debounce="1"
@@ -79,14 +79,18 @@
           required
       ></ion-input>
       <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
-                @click="togglePasswordShow(false)"></ion-icon>
+                @click="togglePasswordShow(false)"
+                class="text-black"
+      >
+
+      </ion-icon>
     </ion-item>
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errors.hasOwnProperty('password') }"
     >
-      <ion-icon :icon="lockOpenOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model="newUser.password_confirmation"
           debounce="1"
@@ -96,7 +100,9 @@
           required
       ></ion-input>
       <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
-                @click="togglePasswordShow(true)"></ion-icon>
+                @click="togglePasswordShow(true)"
+                class="text-black"
+      ></ion-icon>
     </ion-item>
     <SocialIcons class="mt-7"/>
     <div class="padding mt-10 mb-10">
@@ -123,13 +129,24 @@
 
 <script>
 import { computed, defineComponent, reactive, ref }               from 'vue';
+
 import { useRouter }                                              from 'vue-router';
+
 import { IonItem, IonInput, IonIcon, IonButton, toastController } from "@ionic/vue";
+
 import AuthService                                                from "@/services/AuthService";
-import { getError }                                               from '@/utils/helpers';import SocialIcons
-                                                                  from '@/components/social/SocialIcons';
-import { eyeOutline, eyeOffOutline }                              from 'ionicons/icons';
-import { profileOutline, envelopeOutline, lockOpenOutline }       from '@/assets/icons';
+
+import { getError }                                               from '@/utils/helpers';
+
+import SocialIcons                                                from '@/components/social/SocialIcons';
+
+import {
+  personOutline,
+  mailOutline,
+  lockOpenOutline,
+  eyeOutline,
+  eyeOffOutline,
+}                                                                 from 'ionicons/icons';
 
 
 export default defineComponent({
@@ -165,6 +182,7 @@ export default defineComponent({
     const getErrors = (key) => {
       return errors.value[key];
     };
+    //Generating toast norification errors
     const showToastErrors = async() => {
       let toast = null;
       let i;
@@ -199,8 +217,6 @@ export default defineComponent({
                    }, Object.keys(errors.value).length * 900);
                  });
     };
-
-
     let togglePasswordShow = (passwordConfirm = false) => {
       if(passwordConfirm) {
         showPasswordConfirm.value = !showPasswordConfirm.value;
@@ -220,9 +236,9 @@ export default defineComponent({
       register,
       togglePasswordShow,
 
-      /* Icons from ionicon/icons */
-      profileOutline,
-      envelopeOutline,
+      /* Icons from  */
+      personOutline,
+      mailOutline,
       lockOpenOutline,
       eyeOutline,
       eyeOffOutline,
