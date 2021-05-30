@@ -14,7 +14,7 @@
       </UserHeader>
     </div>
 
-    <ion-content ref="content" :scroll-events="true" @ionScrollStart="pullAnimation" class="ion-padding">
+    <ion-content ref="content" :scroll-events="true" @ionScrollStart="pullAnimation($event)" class="ion-padding">
       <InfiniteScroll
           :cafeSearchString="cafeSearchString"
           :sortBy="sortBy"

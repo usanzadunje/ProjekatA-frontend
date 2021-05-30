@@ -3,7 +3,6 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 auth-input-background"
-        :class="{ 'error-border' : errors.hasOwnProperty('email') }"
     >
       <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -20,7 +19,6 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
-        :class="{ 'error-border' : errors.hasOwnProperty('password') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -41,6 +39,7 @@
         <ion-checkbox
             class="align-text-bottom"
             v-model="user.remember"
+            mode="md"
         ></ion-checkbox>
         <ion-text class="ml-2">Zapamti me</ion-text>
       </div>
@@ -70,7 +69,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, computed } from 'vue';
+import { defineComponent, ref, reactive } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -86,7 +85,6 @@ import {
   IonText,
   IonButton,
   IonCheckbox,
-  toastController,
 }
   from "@ionic/vue";
 
@@ -94,7 +92,7 @@ import AuthService from "@/services/AuthService";
 
 import SocialIcons from '@/components/social/SocialIcons';
 
-import { getError } from '@/utils/helpers';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
   mailOutline,
@@ -123,39 +121,13 @@ export default defineComponent({
 
     /* Component properties */
     let user = reactive({});
-    let errors = ref({});
     let showPassword = ref(false);
 
-    /* Computed properties */
-    //Returns error key name from backend
-    const errorKeys = computed(() => {
-      if(!errors.value) {
-        return null;
-      }
-      return Object.keys(errors.value);
-    });
+
 
     /* Methods */
-    //Shows error message for specific key
-    const getErrors = (key) => {
-      return errors.value[key];
-    };
-    //Generating toast error notifications
-    const showToastErrors = async() => {
-      let toast = null;
-      let i;
+    const { showErrorToast, showSuccessToast } = useToastNotifications();
 
-      for(i = 0; i < errorKeys.value.length; i++) {
-        toast = await toastController.create({
-          duration: 1500,
-          position: 'top',
-          message: getErrors(errorKeys.value[i]),
-          cssClass: 'custom-toast',
-        });
-        toast.style.top = `${55 * i}px`;
-        await toast.present();
-      }
-    };
 
     /* Event handlers */
     const login = () => {
@@ -164,15 +136,10 @@ export default defineComponent({
                    await store.dispatch("auth/getAuthUser");
                    let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
                    await router.push(homeRoute);
+                   await showSuccessToast('Success logged in!');
                  })
-                 .catch(async(e) => {
-                   errors.value = getError(e);
-                   await showToastErrors();
-
-                   //Removing errors after they are all shown
-                   setTimeout(() => {
-                     errors.value = {};
-                   }, Object.keys(errors.value).length * 900);
+                 .catch(async(errors) => {
+                   await showErrorToast(errors);
                  });
     };
     const togglePasswordShow = () => {
@@ -182,7 +149,6 @@ export default defineComponent({
     return {
       /* Properties */
       user,
-      errors,
       showPassword,
 
       /* Event handlers  */

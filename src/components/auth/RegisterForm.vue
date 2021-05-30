@@ -3,7 +3,6 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 auth-input-background"
-        :class="{ 'error-border' : errors.hasOwnProperty('fname') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -19,7 +18,6 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
-        :class="{ 'error-border' : errors.hasOwnProperty('lname') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -35,7 +33,6 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
-        :class="{ 'error-border' : errors.hasOwnProperty('username') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -51,7 +48,6 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
-        :class="{ 'error-border' : errors.hasOwnProperty('email') }"
     >
       <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -67,7 +63,6 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
-        :class="{ 'error-border' : errors.hasOwnProperty('password') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -88,7 +83,6 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
-        :class="{ 'error-border' : errors.hasOwnProperty('password') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -128,17 +122,15 @@
 </template>
 
 <script>
-import { computed, defineComponent, reactive, ref }               from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 
-import { useRouter }                                              from 'vue-router';
+import { useRouter } from 'vue-router';
 
-import { IonItem, IonInput, IonIcon, IonButton, toastController } from "@ionic/vue";
+import { IonItem, IonInput, IonIcon, IonButton } from "@ionic/vue";
 
-import AuthService                                                from "@/services/AuthService";
+import AuthService from "@/services/AuthService";
 
-import { getError }                                               from '@/utils/helpers';
-
-import SocialIcons                                                from '@/components/social/SocialIcons';
+import SocialIcons from '@/components/social/SocialIcons';
 
 import {
   personOutline,
@@ -146,7 +138,8 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-}                                                                 from 'ionicons/icons';
+}                                from 'ionicons/icons';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 
 export default defineComponent({
@@ -164,57 +157,22 @@ export default defineComponent({
 
     /* Component properties */
     let newUser = reactive({});
-    let errors = ref({});
     let showPassword = ref(false);
     let showPasswordConfirm = ref(false);
 
-    /* Computed properties */
-    // Returning all the error key names of all errors
-    const errorKeys = computed(() => {
-      if(!errors.value) {
-        return null;
-      }
-      return Object.keys(errors.value);
-    });
-
     /* Methods */
-    // Returning content of an error
-    const getErrors = (key) => {
-      return errors.value[key];
-    };
-    //Generating toast norification errors
-    const showToastErrors = async() => {
-      let toast = null;
-      let i;
-
-      // For each error create separate toast notification popup
-      for(i = 0; i < errorKeys.value.length; i++) {
-        toast = await toastController.create({
-          duration: 1500,
-          position: 'top',
-          message: getErrors(errorKeys.value[i]),
-          showCloseButton: true,
-          cssClass: 'custom-toast',
-        });
-        //Pushing next toast notification further down so they can all be seen
-        toast.style.top = `${55 * i}px`;
-        await toast.present();
-      }
-    };
+    const { showErrorToast, showSuccessToast } = useToastNotifications();
 
     /* Event handlers */
     let register = () => {
       Object.assign(newUser, newUser, { bday: null, phone: null });
       AuthService.register(newUser)
-                 .then(async() => await router.push({ name: 'onboarding' }))
-                 .catch((e) => {
-                   // Parse error object returned from backend
-                   errors.value = getError(e);
-                   // Show all toast error notification
-                   showToastErrors();
-                   setTimeout(() => {
-                     errors.value = {};
-                   }, Object.keys(errors.value).length * 900);
+                 .then(async() => {
+                   await router.push({ name: 'onboarding' });
+                   await showSuccessToast('You have successfully registered!');
+                 })
+                 .catch(async(errors) => {
+                   await showErrorToast(errors);
                  });
     };
     let togglePasswordShow = (passwordConfirm = false) => {
@@ -228,7 +186,6 @@ export default defineComponent({
     return {
       /* Properties */
       newUser,
-      errors,
       showPassword,
       showPasswordConfirm,
 

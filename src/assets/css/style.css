@@ -72,8 +72,18 @@ ion-modal ion-item {
     bottom: 0 !important;
 }
 
-.custom-toast {
+.error-toast {
     --background: #E01B43;
+    opacity: 0.95;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: top 0.3s ease-in;
+}
+
+.success-toast {
+    --background: #30a025;
     opacity: 0.95;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;

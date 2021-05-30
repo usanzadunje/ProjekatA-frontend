@@ -1,12 +1,15 @@
 <template>
   <ion-page>
     <ion-content :scroll-events="true" @ionScrollStart="pullAnimation" class="ion-padding">
+<!--      <div>-->
+<!--        <h1>Longitude : {{ coordinates.latitude }}</h1>-->
+<!--        <h1>Longitude : {{ coordinates.longitude }}</h1>-->
+<!--      </div>-->
+<!--      <div v-for="i in 60" :key="i">-->
+<!--        <h1>dsadasdsad</h1>-->
+<!--      </div>-->
       <div>
-        <h1>Longitude : {{ coordinates.latitude }}</h1>
-        <h1>Longitude : {{ coordinates.longitude }}</h1>
-      </div>
-      <div v-for="i in 60" :key="i">
-        <h1>dsadasdsad</h1>
+
       </div>
 
     </ion-content>
@@ -14,9 +17,10 @@
 </template>
 <script>
 // Import Swiper Vue.js components
-import { useGeolocation } from '@/composables/useGeolocation';
+// import { useGeolocation } from '@/composables/useGeolocation';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import { reactive } from 'vue';
+// import { reactive } from 'vue';
 
 import { IonContent, IonPage } from '@ionic/vue';
 
@@ -26,31 +30,35 @@ export default {
     IonContent,
     IonPage,
   },
-  mounted() {
-    let content = document.querySelector('ion-content');
-    console.log(content);
-  },
+  // mounted() {
+  //   let content = document.querySelector('ion-content');
+  //   console.log(content);
+  // },
   setup() {
-    const { getCurrentPosition } = useGeolocation();
+    // const { getCurrentPosition } = useGeolocation();
 
-    let coordinates = reactive({});
+    const { showSuccessToast } = useToastNotifications();
 
-
-    getCurrentPosition()
-        .then((position) => {
-          coordinates.latitude = position.latitude;
-          coordinates.longitude = position.longitude;
-        })
-        .catch(() => {
-        });
-
-    const pullAnimation = () => {
-      alert('das');
-    };
+    showSuccessToast('You settings su sacuvane sada!');
+    //
+    // let coordinates = reactive({});
+    //
+    //
+    // getCurrentPosition()
+    //     .then((position) => {
+    //       coordinates.latitude = position.latitude;
+    //       coordinates.longitude = position.longitude;
+    //     })
+    //     .catch(() => {
+    //     });
+    //
+    // const pullAnimation = () => {
+    //   alert('das');
+    // };
 
     return {
-      coordinates,
-      pullAnimation,
+      // coordinates,
+      // pullAnimation,
     };
   },
 };
