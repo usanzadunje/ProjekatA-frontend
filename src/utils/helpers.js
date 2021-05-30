@@ -15,3 +15,15 @@ export function getError(error) {
 
     return errorMessage;
 }
+
+// Timer
+export function sleep(milliseconds) {
+    return new Promise((resolve, reject) => {
+        if(milliseconds < 1){
+            reject('Invalid time in milliseconds passed.');
+        }
+        setTimeout(() => {
+            resolve();
+        }, milliseconds);
+    })
+}

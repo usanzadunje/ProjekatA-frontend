@@ -3,6 +3,7 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 auth-input-background"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('fname') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -18,6 +19,7 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('lname') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -33,6 +35,7 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('username') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -48,6 +51,7 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
     >
       <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -63,6 +67,7 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -83,6 +88,7 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -132,6 +138,8 @@ import AuthService from "@/services/AuthService";
 
 import SocialIcons from '@/components/social/SocialIcons';
 
+import { getError, sleep } from "@/utils/helpers"
+
 import {
   personOutline,
   mailOutline,
@@ -159,6 +167,7 @@ export default defineComponent({
     let newUser = reactive({});
     let showPassword = ref(false);
     let showPasswordConfirm = ref(false);
+    let errorNames = ref({});
 
     /* Methods */
     const { showErrorToast, showSuccessToast } = useToastNotifications();
@@ -172,7 +181,10 @@ export default defineComponent({
                    await showSuccessToast('You have successfully registered!');
                  })
                  .catch(async(errors) => {
+                   errorNames.value = getError(errors);
                    await showErrorToast(errors);
+                   await sleep(Object.keys(errorNames.value).length * 900);
+                   errorNames.value = {};
                  });
     };
     let togglePasswordShow = (passwordConfirm = false) => {
@@ -184,10 +196,11 @@ export default defineComponent({
     };
 
     return {
-      /* Properties */
+      /* Component properties */
       newUser,
       showPassword,
       showPasswordConfirm,
+      errorNames,
 
       /* Event handlers */
       register,

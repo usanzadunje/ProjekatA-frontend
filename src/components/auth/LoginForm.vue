@@ -3,6 +3,7 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 auth-input-background"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
     >
       <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -19,6 +20,7 @@
     <ion-item
         lines="none"
         class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
@@ -77,6 +79,8 @@ import { mapGetters } from "vuex";
 
 import store from '@/store/index';
 
+import { getError, sleep } from "@/utils/helpers"
+
 
 import {
   IonItem,
@@ -122,7 +126,7 @@ export default defineComponent({
     /* Component properties */
     let user = reactive({});
     let showPassword = ref(false);
-
+    let errorNames = ref({});
 
 
     /* Methods */
@@ -139,7 +143,10 @@ export default defineComponent({
                    await showSuccessToast('Success logged in!');
                  })
                  .catch(async(errors) => {
+                   errorNames.value = getError(errors);
                    await showErrorToast(errors);
+                   await sleep(Object.keys(errorNames.value).length * 900);
+                   errorNames.value = {};
                  });
     };
     const togglePasswordShow = () => {
@@ -147,9 +154,10 @@ export default defineComponent({
     };
 
     return {
-      /* Properties */
+      /* Component properties */
       user,
       showPassword,
+      errorNames,
 
       /* Event handlers  */
       login,

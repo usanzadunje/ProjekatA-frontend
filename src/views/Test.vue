@@ -1,13 +1,13 @@
 <template>
   <ion-page>
-    <ion-content :scroll-events="true" @ionScrollStart="pullAnimation" class="ion-padding">
+    <ion-content :scroll-events="true" @ionScrollStart="pullAnimation($event)" class="ion-padding">
 <!--      <div>-->
 <!--        <h1>Longitude : {{ coordinates.latitude }}</h1>-->
 <!--        <h1>Longitude : {{ coordinates.longitude }}</h1>-->
 <!--      </div>-->
-<!--      <div v-for="i in 60" :key="i">-->
-<!--        <h1>dsadasdsad</h1>-->
-<!--      </div>-->
+      <div v-for="i in 60" :key="i">
+        <h1>dsadasdsad</h1>
+      </div>
       <div>
 
       </div>
@@ -52,13 +52,15 @@ export default {
     //     .catch(() => {
     //     });
     //
-    // const pullAnimation = () => {
-    //   alert('das');
-    // };
+    const pullAnimation = (e) => {
+      let error = e;
+      console.log(error);
+      alert('scroll: ');
+    };
 
     return {
       // coordinates,
-      // pullAnimation,
+      pullAnimation,
     };
   },
 };

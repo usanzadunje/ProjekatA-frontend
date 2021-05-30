@@ -104,7 +104,8 @@ export default defineComponent({
     const sortHasChanged = (sortValue) => {
       sortBy.value = sortValue;
     };
-    const pullAnimation = async() => {
+    const pullAnimation = async(e) => {
+      console.log('scroll start: ', e);
       let scrollElement = await content.value?.$el.getScrollElement();
 
       if(scrollElement.scrollTop > scrollTopOffset.value) {
