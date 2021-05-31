@@ -316,6 +316,17 @@ ion-toggle {
     border: 2px solid red !important;
 }
 
+.logo-position-login {
+    top: 5%;
+}
+.content-position-login {
+    bottom: 0;
+}
+
+.content-position-register {
+    top: 40%;
+}
+
 /*
     END LOGIN/REGISTER STYLES
 */

@@ -1,12 +1,12 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="bg">
-        <div>
+      <div class="relative background-image-container bg">
+        <div class="absolute logo-position-login w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>
         </div>
-        <div class="mt-28">
+        <div class="absolute content-position-register w-full mb-4">
           <h2 class="text-center secondary-heading">Registruj se</h2>
           <RegisterForm class="mt-8"></RegisterForm>
         </div>
@@ -33,10 +33,7 @@ export default defineComponent({
 </script>
 <style scoped>
 div.bg {
-  background: url('../../assets/img/auth/login-background.png') no-repeat center top fixed;
-  -webkit-background-size: cover !important;
-  -moz-background-size: cover !important;
-  -o-background-size: cover !important;
-  background-size: cover !important;
+  background: url('../../assets/img/auth/registration-background.png') no-repeat center top fixed;
+  background-size: cover;
 }
 </style>

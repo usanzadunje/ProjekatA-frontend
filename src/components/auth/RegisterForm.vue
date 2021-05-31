@@ -105,7 +105,7 @@
       ></ion-icon>
     </ion-item>
     <SocialIcons class="mt-7"/>
-    <div class="padding mt-10 mb-10">
+    <div class="padding mt-10">
       <ion-button
           size="large"
           expand="block"

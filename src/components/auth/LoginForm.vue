@@ -48,7 +48,7 @@
       <a href="/forgot-password" class="mt-0.5">Zaboravljena lozinka?</a>
     </div>
     <SocialIcons class="mt-7"/>
-    <div class="padding mt-10 mb-10">
+    <div class="padding mt-10">
       <ion-button
           size="large"
           expand="block"
