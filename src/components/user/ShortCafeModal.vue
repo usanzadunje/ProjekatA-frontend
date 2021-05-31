@@ -17,7 +17,7 @@
     <CafeInfoBody :cafe="cafe"/>
 
     <ion-item class="mt-5 ion-no-padding">
-      <ion-slides :options="slideOpts">
+      <ion-slides :options="slideOpts" id="image-slider">
         <ion-slide v-for="i in [1,2,3,4,5]" :key="i">
           <img src="../../assets/img/cafe/test1.png" alt="">
         </ion-slide>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, nextTick, ref, toRef, computed } from 'vue';
+import { defineComponent, ref, toRef, computed, nextTick } from 'vue';
 
 import { useStore } from 'vuex';
 
@@ -105,6 +105,14 @@ export default defineComponent({
     },
   },
   emits: ['dismissShortCafeModal', 'subModalOpened'],
+  mounted() {
+    // Without this on android options are not passed to swiper
+    nextTick(() => {
+      const slides = document.querySelector("#image-slider");
+      console.log(slides.options)
+      slides.options = this.slideOpts;
+    })
+  },
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
@@ -113,10 +121,7 @@ export default defineComponent({
     const slideOpts = {
       initialSlide: 0,
       speed: 500,
-      centeredSlides: false,
       slidesPerView: 2.2,
-      spaceBetween: 12,
-      freeMode: true,
     };
     const isModalOpen = ref(false);
     const isUserSubscribed = ref(false);
@@ -134,13 +139,6 @@ export default defineComponent({
                  })
                  .catch((error) => alert(error));
     }
-    // Without this on android options are not passed to swiper
-    onMounted(() => {
-      const slides = document.querySelector("ion-slides");
-      nextTick(() => {
-        slides.options = slideOpts;
-      });
-    });
 
     /* Event handlers */
     const openModal = (state) => {

@@ -1,9 +1,5 @@
 <template>
-  <div class="relative">
-    <img
-        src="@/assets/img/onboarding/cafe-preview-example.png"
-        alt="Showing how preview of cafe looks in application"
-    />
+  <div class="relative background-image-container bg">
     <div class="absolute cafe-preview-example-text-position">
       <h1 class="text-4xl onboarding-headings">Pronadji svoje omiljeno mesto za razonodu!</h1>
       <p class="onboarding-paragraphs mt-3.5">
@@ -44,3 +40,9 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+div.bg {
+  background: url('../../assets/img/onboarding/cafe-preview-example.png') no-repeat center fixed;
+  background-size: cover;
+}
+</style>

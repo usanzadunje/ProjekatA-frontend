@@ -30,7 +30,7 @@ const routes = [
     {
         path: "/test",
         name: "test",
-        component: () => import(/* webpackChunkName: "Login" */ "../views/Test"),
+        component: () => import(/* webpackChunkName: "Login" */ "../views/user/Onboarding"),
     },
     {
         path: "/register",

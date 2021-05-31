@@ -14,7 +14,7 @@
       </UserHeader>
     </div>
 
-    <ion-content ref="content" :scroll-events="true" @ionScrollStart="pullAnimation($event)" class="ion-padding">
+    <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation()" class="ion-padding">
       <InfiniteScroll
           :cafeSearchString="cafeSearchString"
           :sortBy="sortBy"
@@ -104,8 +104,7 @@ export default defineComponent({
     const sortHasChanged = (sortValue) => {
       sortBy.value = sortValue;
     };
-    const pullAnimation = async(e) => {
-      console.log('scroll start: ', e);
+    const pullAnimation = async() => {
       let scrollElement = await content.value?.$el.getScrollElement();
 
       if(scrollElement.scrollTop > scrollTopOffset.value) {

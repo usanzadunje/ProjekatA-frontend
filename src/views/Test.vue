@@ -8,9 +8,9 @@
       <div v-for="i in 60" :key="i">
         <h1>dsadasdsad</h1>
       </div>
-      <div>
-
-      </div>
+<!--      <div>-->
+<!--          sad-->
+<!--      </div>-->
 
     </ion-content>
   </ion-page>
@@ -53,9 +53,10 @@ export default {
     //     });
     //
     const pullAnimation = (e) => {
-      let error = e;
-      console.log(error);
-      alert('scroll: ');
+      // if(e) {
+      //   alert('You current scroll from Y: ', e)
+      // }
+      console.log(e.target.scrollTop)
     };
 
     return {

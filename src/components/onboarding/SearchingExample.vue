@@ -1,9 +1,5 @@
 <template>
-  <div class="relative">
-    <img
-        src="@/assets/img/onboarding/searching-example.png"
-        alt="Showing searching feature of application"
-    />
+  <div class="relative background-image-container bg">
     <div class="absolute searching-example-text-position">
       <h1 class="text-4xl onboarding-headings">Pretrazi sve slobodne kafice!</h1>
       <p class="onboarding-paragraphs mt-3.5">
@@ -45,3 +41,9 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+div.bg {
+  background: url('../../assets/img/onboarding/searching-example.png') no-repeat center fixed;
+  background-size: cover;
+}
+</style>

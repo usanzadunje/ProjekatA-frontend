@@ -8,7 +8,7 @@
     />
 
     <ion-content class="ion-padding">
-      <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
+      <ion-refresher slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             pulling-text="Povuci te da osvezite"
             refreshing-spinner="lines"
@@ -16,6 +16,7 @@
         >
         </ion-refresher-content>
       </ion-refresher>
+
       <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
       <ion-slides :options="slideOpts" ref="slides">
         <ion-slide>
