@@ -41,9 +41,16 @@
 
       <div>
         <FilterCategoryHeading class="mt-7 mb-2 text-gray-400" :title="'Meni'" :icon="fastFoodOutline"/>
-        <AccordionList class="accordion-list-border-top" :title="'Karta pica'" :items="['Pice 1','Pice 2', 'Pice 3']"/>
-        <AccordionList class="accordion-list-border-top accordion-list-border-bottom" :title="'Hrana'"
-                       :items="['Hrana 1','Hrana 2', 'Hrana 3']"/>
+        <AccordionList
+            class="accordion-list-border-top"
+            :title="'Karta pica'"
+            :items="cafe.offerings?.filter(offer => offer.tag === 'pice')"
+        />
+        <AccordionList
+            class="accordion-list-border-top accordion-list-border-bottom"
+            :title="'Hrana'"
+            :items="cafe.offerings?.filter(offer => offer.tag === 'hrana')"
+        />
       </div>
 
       <div class="mt-10">
@@ -146,7 +153,9 @@ export default defineComponent({
     /* Lifecycle hooks */
     /* Fetching all cafes from backend */
     CafeService.show(route.params.id)
-               .then((response) => cafe.value = response.data)
+               .then((response) => {
+                 cafe.value = response.data;
+               })
                .catch((error) => alert(error));
     /* Checking if user is subscribed to this cafe */
     if(loggedIn.value) {

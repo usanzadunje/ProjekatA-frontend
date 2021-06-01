@@ -9,7 +9,7 @@
     </div>
     <div class="panel" @click="togglePane($event, true)">
       <div v-for="item in items" :key="item">
-        {{ item }}
+        {{ item.name }}
       </div>
     </div>
   </div>
