@@ -46,7 +46,7 @@ export const actions = {
 export const getters = {
     // Auth user info
     authUser: (state) => {
-        return state.user;
+        return state.user ?? {};
     },
     // Property true when something is loading
     loading: (state) => {

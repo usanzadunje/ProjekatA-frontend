@@ -41,7 +41,7 @@ export default defineComponent({
 </script>
 <style scoped>
 div.bg {
-  background: url('../../assets/img/onboarding/successful-registration.png') no-repeat center fixed;
+  background: url('http://192.168.1.203:8200/storage/img/onboarding/successful-registration.png') no-repeat center fixed;
   background-size: cover;
 }
 </style>

@@ -3,7 +3,7 @@
     <ion-item class="mt-3 ion-item-no-padding-x">
       <ion-thumbnail slot="start">
         <img
-            src="../../assets/img/cafe/test.png"
+            src="http://192.168.1.203:8200/storage/img/cafe/test.png"
             alt="Logo of {{ cafe.name }}"
             class="modal-thumbnail"
         >
@@ -19,7 +19,10 @@
     <ion-item class="mt-5 ion-no-padding">
       <ion-slides :options="slideOpts" id="image-slider">
         <ion-slide v-for="i in [1,2,3,4,5]" :key="i">
-          <img src="../../assets/img/cafe/test1.png" alt="">
+          <img
+              src="http://192.168.1.203:8200/storage/img/cafe/test1.png"
+              alt=""
+          >
         </ion-slide>
       </ion-slides>
     </ion-item>
@@ -109,9 +112,9 @@ export default defineComponent({
     // Without this on android options are not passed to swiper
     nextTick(() => {
       const slides = document.querySelector("#image-slider");
-      console.log(slides.options)
+      console.log(slides.options);
       slides.options = this.slideOpts;
-    })
+    });
   },
   setup(props) {
     /* Global properties and methods */

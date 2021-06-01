@@ -3,7 +3,7 @@
     <ion-toolbar>
       <div class="px-4 py-3 mt-2">
         <div class="flex justify-between">
-          <p class="main-toolbar-fade-text">Cao, Marija!</p>
+          <p class="main-toolbar-fade-text">Cao, {{ authUser.fname ?? 'Guest' }}!</p>
           <ion-button fill="clear" href="/login">
             <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
           </ion-button>
@@ -30,6 +30,8 @@
 <script>
 import { defineComponent } from 'vue';
 
+import { mapGetters } from 'vuex';
+
 import { IonHeader, IonIcon, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
 
 import { optionsOutline } from 'ionicons/icons';
@@ -47,6 +49,9 @@ export default defineComponent({
     hasSearchFilter: Boolean,
     mainHeading: String,
     notificationIcon: String,
+  },
+  computed: {
+    ...mapGetters('auth', ['authUser']),
   },
   emits: ['searchFilterChanged', 'searchEnterPressed'],
   setup(props, { emit }) {

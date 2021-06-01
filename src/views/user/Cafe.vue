@@ -20,7 +20,7 @@
     <ion-content :fullscreen="true" class="ion-padding">
       <div class="relative">
         <img
-            src="../../assets/img/cafe/cafeshow.png"
+            src="http://192.168.1.203:8200/storage/img/cafe/cafeshow.png"
             alt="Image of {{ cafe.name }} cafe"
             class="banner-image w-full"
         />
@@ -144,7 +144,6 @@ export default defineComponent({
     // Auth prop
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
-
     /* Event handlers */
     const openModal = (state) => {
       isModalOpen.value = state;
@@ -168,6 +167,9 @@ export default defineComponent({
 
 
     return {
+      /* Global properties */
+      process,
+
       /* Component properties */
       cafe,
       isModalOpen,

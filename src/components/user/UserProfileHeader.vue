@@ -15,7 +15,7 @@
         <div class="mt-5 flex justify-start">
           <div>
             <img
-                src="../../assets/img/user/profile-test.png"
+                src="http://192.168.1.203:8200/storage/img/user/profile-test.png"
                 alt="Profile picture of user {{ authUser.full_name }}"
                 class="user-profile-picture"
             >
@@ -75,7 +75,7 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-toolbar {
-  --background: url('../../assets/img/user/header-background.png') no-repeat;
+  --background: url('http://192.168.1.203:8200/storage/img/user/header-background.png') no-repeat;
   background-color: #207DFF;
   border-bottom-left-radius: 33px !important;
   border-bottom-right-radius: 33px !important;

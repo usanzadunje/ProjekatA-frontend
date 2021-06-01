@@ -2,9 +2,10 @@
   <div class="bg-white cafe-card-border-radius">
     <div class="p-5 flex justify-start ion-align-items-center">
       <img
-          src="../../assets/img/cafe/test.png"
+          src="http://192.168.1.203:8200/storage/img/cafe/test.png"
           alt=""
-          class="cafe-card-image">
+          class="cafe-card-image"
+      >
       <div class="ml-3.5">
         <h2 class="cafe-card-name">{{ cafe.name }}</h2>
         <p class="cafe-card-fade-text">Kafic, hrana, basta ...</p>
