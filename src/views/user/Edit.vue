@@ -8,7 +8,38 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <EditForm />
+<!--      <ion-item-->
+<!--          lines="none"-->
+<!--          class="border rounded-2xl h-12 auth-input-background"-->
+<!--          :class="{ 'error-border' : errorNames.hasOwnProperty('fname') }"-->
+<!--      >-->
+<!--        <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>-->
+<!--        <ion-input-->
+<!--            v-model.lazy="newUser.fname"-->
+<!--            autocomplete="given-name"-->
+<!--            type="text"-->
+<!--            inputmode="text"-->
+<!--            debounce="600"-->
+<!--            placeholder="Ime"-->
+<!--            autofocus required-->
+<!--        ></ion-input>-->
+<!--      </ion-item>-->
+<!--      <ion-item-->
+<!--          lines="none"-->
+<!--          class="border rounded-2xl h-12 mt-3.5 auth-input-background"-->
+<!--          :class="{ 'error-border' : errorNames.hasOwnProperty('lname') }"-->
+<!--      >-->
+<!--        <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>-->
+<!--        <ion-input-->
+<!--            v-model.lazy="newUser.lname"-->
+<!--            autocomplete="family-name"-->
+<!--            type="text"-->
+<!--            inputmode="text"-->
+<!--            debounce="600"-->
+<!--            placeholder="Prezime"-->
+<!--            required-->
+<!--        ></ion-input>-->
+<!--      </ion-item>-->
     </ion-content>
   </ion-page>
 </template>

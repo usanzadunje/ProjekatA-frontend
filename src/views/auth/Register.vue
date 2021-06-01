@@ -6,7 +6,10 @@
           <h1 class="text-center uppercase main-heading">Caffe</h1>
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>
         </div>
-        <div class="absolute content-position-register w-full mb-4">
+        <div
+            id="content"
+            class="absolute w-full mb-4"
+        >
           <h2 class="text-center secondary-heading">Registruj se</h2>
           <RegisterForm class="mt-8"></RegisterForm>
         </div>
@@ -29,11 +32,29 @@ export default defineComponent({
     IonPage,
     IonContent,
   },
+  mounted() {
+    if(this.clientDeviceHeight > 720) {
+      document.getElementById('content').style.bottom = '0';
+      console.log('bottom');
+    }else {
+      document.getElementById('content').style.top = '40%';
+      console.log('top');
+    }
+  },
+  data() {
+    return {
+      clientDeviceHeight: document.documentElement.clientHeight ?? 500,
+    };
+  },
 });
 </script>
 <style scoped>
+ion-content {
+  --background: #FFF;
+}
+
 div.bg {
-  background: url('../../assets/img/auth/registration-background.png') no-repeat center top fixed;
+  background: #FFF url('../../assets/img/auth/registration-background.png') no-repeat center top fixed;
   background-size: cover;
 }
 </style>

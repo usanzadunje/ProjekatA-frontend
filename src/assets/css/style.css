@@ -323,9 +323,16 @@ ion-toggle {
     bottom: 0;
 }
 
-.content-position-register {
-    top: 40%;
+@media only screen and (max-width: 600px) {
+    .content-position-register {
+        color: red !important;
+    }
 }
+
+.content-position-register {
+    color: blue !important;
+}
+
 
 /*
     END LOGIN/REGISTER STYLES
