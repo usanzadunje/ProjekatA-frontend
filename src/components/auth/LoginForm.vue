@@ -128,7 +128,7 @@ export default defineComponent({
     let showPassword = ref(false);
     let errorNames = ref({});
 
-
+console.log()
     /* Methods */
     const { showErrorToast, showSuccessToast } = useToastNotifications();
 

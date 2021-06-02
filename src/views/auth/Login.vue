@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="background-image-container bg">
+      <div class="relative background-image-container bg">
         <div class="absolute logo-position-login w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>
@@ -33,7 +33,7 @@ export default defineComponent({
 </script>
 <style scoped>
 div.bg {
-  background: url('http://192.168.1.203:8200/storage/img/auth/login-background.png') no-repeat center top fixed;
+  background: #FFF url('http://192.168.1.203:8200/storage/img/auth/login-background.png') no-repeat center top fixed;
   background-size: cover;
 }
 </style>

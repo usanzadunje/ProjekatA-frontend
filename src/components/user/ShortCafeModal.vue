@@ -1,47 +1,51 @@
 <template>
   <ion-content class="ion-padding">
-    <ion-item class="mt-3 ion-item-no-padding-x">
-      <ion-thumbnail slot="start">
-        <img
-            src="http://192.168.1.203:8200/storage/img/cafe/test.png"
-            alt="Logo of {{ cafe.name }}"
-            class="modal-thumbnail"
-        >
-      </ion-thumbnail>
-      <div>
-        <h1 class="modal-cafe-name-text">{{ cafe.name }}</h1>
-        <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
-      </div>
-    </ion-item>
+    <div class="relative w-full">
+      <div class="absolute w-full">
+        <ion-item class="mt-3 ion-item-no-padding-x">
+          <ion-thumbnail slot="start">
+            <img
+                src="http://192.168.1.203:8200/storage/img/cafe/test.png"
+                alt="Logo of {{ cafe.name }}"
+                class="modal-thumbnail"
+            >
+          </ion-thumbnail>
+          <div>
+            <h1 class="modal-cafe-name-text">{{ cafe.name }}</h1>
+            <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
+          </div>
+        </ion-item>
 
-    <CafeInfoBody :cafe="cafe"/>
+        <CafeInfoBody :cafe="cafe"/>
 
-    <ion-item class="mt-5 ion-no-padding">
-      <ion-slides :options="slideOpts" id="image-slider">
-        <ion-slide v-for="i in [1,2,3,4,5]" :key="i">
-          <img
-              src="http://192.168.1.203:8200/storage/img/cafe/test1.png"
-              alt=""
+        <ion-item class="mt-5 ion-no-padding">
+          <ion-slides :options="slideOpts" id="image-slider">
+            <ion-slide v-for="i in [1,2,3,4,5]" :key="i">
+              <img
+                  src="http://192.168.1.203:8200/storage/img/cafe/test1.png"
+                  alt=""
+              >
+            </ion-slide>
+          </ion-slides>
+        </ion-item>
+        <div class="mt-5 mb-3 flex justify-between">
+          <ion-button
+              class="uppercase button-see-more modal-button-border"
+              :href="`/cafes/${cafe.id}`"
+              @click="$emit('dismissShortCafeModal')"
+          > Pogledaj vise
+          </ion-button>
+          <ion-button
+              class="uppercase button-subscribe modal-button-border"
+              @click="openModal(true);$emit('subModalOpened');"
+              :disabled="!loggedIn"
           >
-        </ion-slide>
-      </ion-slides>
-    </ion-item>
-    <div class="mt-5 mb-3 flex justify-between">
-      <ion-button
-          class="uppercase button-see-more modal-button-border"
-          :href="`/cafes/${cafe.id}`"
-          @click="$emit('dismissShortCafeModal')"
-      > Pogledaj vise
-      </ion-button>
-      <ion-button
-          class="uppercase button-subscribe modal-button-border"
-          @click="openModal(true);$emit('subModalOpened');"
-          :disabled="!loggedIn"
-      >
-        <ion-icon slot="start"
-                  :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-        {{ isUserSubscribed ? 'Pretplacen' : 'Pretplati se' }}
-      </ion-button>
+            <ion-icon slot="start"
+                      :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+            {{ isUserSubscribed ? 'Pretplacen' : 'Pretplati se' }}
+          </ion-button>
+        </div>
+      </div>
     </div>
     <ion-modal
         :is-open="isModalOpen"

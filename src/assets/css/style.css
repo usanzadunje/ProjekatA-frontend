@@ -381,6 +381,9 @@ ion-toggle {
 /*
     START MODALS STYLES
 */
+.modal-positioning {
+    bottom: 0 !important;
+}
 .modal-thumbnail {
     height: 57px !important;
     width: 57px !important;
