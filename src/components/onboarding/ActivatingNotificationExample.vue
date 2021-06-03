@@ -7,15 +7,18 @@
         some form, by injected humour.
       </p>
     </div>
-    <ion-button
-        color="primary"
-        routerLink="/dashboard"
-        size="large"
-        class="auth-button-border-radius uppercase absolute left-8 bottom-8 w-5/6"
-    >
-      NASTAVI DALJE
-      <ion-icon slot="end" :icon="arrowForward"></ion-icon>
-    </ion-button>
+    <div class="absolute left-8 bottom-8 w-5/6">
+      <ion-button
+          routerLink="/dashboard"
+          size="large"
+          expand="block"
+          class="auth-button-size auth-button-border-radius uppercase button-text-white"
+          @click="$emit('nextSlide')"
+      >
+        NASTAVI DALJE
+        <ion-icon slot="end" :icon="arrowForward"></ion-icon>
+      </ion-button>
+    </div>
   </div>
 </template>
 

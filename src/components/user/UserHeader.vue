@@ -9,7 +9,7 @@
           </ion-button>
         </div>
         <div v-show="!loggedIn" class="flex justify-around mb-2">
-          <ion-button fill="clear" href="/login">
+          <ion-button fill="clear" href="/test">
             <p class="main-toolbar-fade-text">Login</p>
           </ion-button>
           <ion-button fill="clear" href="/register">
