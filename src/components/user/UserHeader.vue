@@ -2,10 +2,18 @@
   <ion-header class="ion-no-border">
     <ion-toolbar>
       <div class="px-4 py-3 mt-2">
-        <div class="flex justify-between">
-          <p class="main-toolbar-fade-text">Cao, {{ authUser.fname ?? 'Guest' }}!</p>
+        <div v-show="loggedIn" class="flex justify-between">
+          <p class="main-toolbar-fade-text">Cao, {{ authUser.full_name }}!</p>
           <ion-button fill="clear" href="/login">
             <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
+          </ion-button>
+        </div>
+        <div v-show="!loggedIn" class="flex justify-around mb-2">
+          <ion-button fill="clear" href="/login">
+            <p class="main-toolbar-fade-text">Login</p>
+          </ion-button>
+          <ion-button fill="clear" href="/register">
+            <p class="main-toolbar-fade-text">Register</p>
           </ion-button>
         </div>
         <h1 class="main-toolbar-heading text-xl">{{ mainHeading }}</h1>
@@ -51,7 +59,7 @@ export default defineComponent({
     notificationIcon: String,
   },
   computed: {
-    ...mapGetters('auth', ['authUser']),
+    ...mapGetters('auth', ['authUser', 'loggedIn']),
   },
   emits: ['searchFilterChanged', 'searchEnterPressed'],
   setup(props, { emit }) {

@@ -8,6 +8,7 @@
       <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
           v-model.lazy="newUser.email"
+          @keyup.enter="passwordInput.$el?.setFocus()"
           autocomplete="email"
           type="email"
           inputmode="email"
@@ -23,7 +24,9 @@
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
+          ref="passwordInput"
           v-model="newUser.password"
+          @keyup.enter="passwordConfirmInput.$el?.setFocus()"
           debounce="1"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
@@ -44,7 +47,9 @@
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
+          ref="passwordConfirmInput"
           v-model="newUser.password_confirmation"
+          @keyup.enter="register"
           debounce="1"
           inputmode="password"
           :type="showPasswordConfirm ? 'text' : 'password'"
@@ -120,6 +125,9 @@ export default defineComponent({
     let showPassword = ref(false);
     let showPasswordConfirm = ref(false);
     let errorNames = ref({});
+    const passwordInput = ref(null);
+    const passwordConfirmInput = ref(null);
+
 
     /* Methods */
     const { showErrorToast, showSuccessToast } = useToastNotifications();
@@ -153,6 +161,8 @@ export default defineComponent({
       showPassword,
       showPasswordConfirm,
       errorNames,
+      passwordInput,
+      passwordConfirmInput,
 
       /* Event handlers */
       register,

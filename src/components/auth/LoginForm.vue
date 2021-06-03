@@ -7,7 +7,9 @@
     >
       <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
+          ref="emailInput"
           v-model.lazy="user.email"
+          @keyup.enter="passwordInput.$el?.setFocus()"
           autocomplete="email"
           type="email"
           inputmode="email"
@@ -24,7 +26,9 @@
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
       <ion-input
+          ref="passwordInput"
           v-model="user.password"
+          @keyup.enter="login"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
           debounce="1"
@@ -127,11 +131,11 @@ export default defineComponent({
     let user = reactive({});
     let showPassword = ref(false);
     let errorNames = ref({});
+    const passwordInput = ref(null);
+    const emailInput = ref(null);
 
-console.log()
     /* Methods */
     const { showErrorToast, showSuccessToast } = useToastNotifications();
-
 
     /* Event handlers */
     const login = () => {
@@ -158,6 +162,8 @@ console.log()
       user,
       showPassword,
       errorNames,
+      passwordInput,
+      emailInput,
 
       /* Event handlers  */
       login,
