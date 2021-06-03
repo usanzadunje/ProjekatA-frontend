@@ -8,6 +8,7 @@
           :hasSearchFilter="false"
           :mainHeading="'Pretraga'"
           :notificationIcon="notificationsOffOutline"
+          :searchTerm="cafeSearchString"
           @searchFilterChanged="searchFilterChanged"
       >
         <SlidingFilter :hasTitle="true" @sortHasChanged="sortHasChanged"/>
@@ -74,7 +75,6 @@ export default defineComponent({
     // And remove query string
     if(this.$route.query.searchTerm || this.$route.query.searchTerm === '') {
       this.cafeSearchString = this.$route.query.searchTerm;
-      document.querySelector('ion-searchbar div input').value = this.$route.query.searchTerm;
       this.$router.push({ path: 'search', query: {} });
     }
   },

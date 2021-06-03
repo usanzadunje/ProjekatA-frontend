@@ -35,10 +35,8 @@ export default defineComponent({
   mounted() {
     if(this.clientDeviceHeight > 720) {
       document.getElementById('content').style.bottom = '0';
-      console.log('bottom');
     }else {
       document.getElementById('content').style.top = '40%';
-      console.log('top');
     }
   },
   data() {

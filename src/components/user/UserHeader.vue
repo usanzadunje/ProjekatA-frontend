@@ -19,6 +19,7 @@
         <h1 class="main-toolbar-heading text-xl">{{ mainHeading }}</h1>
         <div class="mt-5 flex justify-around items-start">
           <ion-searchbar
+              :value="searchTerm"
               class="main-toolbar-search-text main-toolbar-search-bg align-middle"
               placeholder="Unesite ime kafica"
               @ionChange="searchInputChanged"
@@ -57,6 +58,7 @@ export default defineComponent({
     hasSearchFilter: Boolean,
     mainHeading: String,
     notificationIcon: String,
+    searchTerm: String,
   },
   computed: {
     ...mapGetters('auth', ['authUser', 'loggedIn']),

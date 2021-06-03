@@ -1,11 +1,11 @@
 <template>
-  <div class="px-5">
+  <div class="px-8">
     <ion-item
         lines="none"
-        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
     >
-      <ion-icon :icon="mailOutline" class="mr-2 text-black"></ion-icon>
+      <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           v-model.lazy="newUser.email"
           @keyup.enter="passwordInput.$el?.setFocus()"
@@ -19,10 +19,10 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
-      <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
+      <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           ref="passwordInput"
           v-model="newUser.password"
@@ -35,17 +35,17 @@
       ></ion-input>
       <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
                 @click="togglePasswordShow(false)"
-                class="text-black"
+                class="text-xl text-gray-500"
       >
 
       </ion-icon>
     </ion-item>
     <ion-item
         lines="none"
-        class="border rounded-2xl h-12 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
-      <ion-icon :icon="lockOpenOutline" class="mr-2 text-black"></ion-icon>
+      <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           ref="passwordConfirmInput"
           v-model="newUser.password_confirmation"
@@ -58,15 +58,15 @@
       ></ion-input>
       <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
                 @click="togglePasswordShow(true)"
-                class="text-black"
+                class="text-xl text-gray-500"
       ></ion-icon>
     </ion-item>
     <SocialIcons class="mt-7"/>
-    <div class="padding mt-10">
+    <div class="mt-10">
       <ion-button
           size="large"
           expand="block"
-          class="auth-button-border-radius uppercase button-text-white"
+          class="auth-button-size auth-button-border-radius uppercase button-text-white"
           @click="register"
       >
         Registruj se
@@ -76,7 +76,7 @@
           routerLink="/login"
           size="large"
           expand="block"
-          class="auth-button-border-radius uppercase button-text-black mt-7"
+          class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
       >
         Prijavi se
       </ion-button>
@@ -95,7 +95,7 @@ import AuthService from "@/services/AuthService";
 
 import SocialIcons from '@/components/social/SocialIcons';
 
-import { getError, sleep } from "@/utils/helpers"
+import { getError, sleep } from "@/utils/helpers";
 
 import {
   personOutline,

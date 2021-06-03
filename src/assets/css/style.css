@@ -14,7 +14,7 @@ ion-header {
 ion-input {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
-    font-size: 14px !important;
+    font-size: 0.8rem !important;
 }
 
 ion-searchbar {
@@ -149,9 +149,9 @@ ion-toggle {
 
 /* Social icons styles */
 .social-circle-size {
-    height: 37.5px;
-    width: 37.5px;
-    line-height: 43.5px;
+    height: 30px;
+    width: 30px;
+    line-height: 36px;
     font-size: 16px;
 }
 
@@ -278,7 +278,7 @@ ion-toggle {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     color: #9EAAB7;
-    font-size: 10px;
+    font-size: 0.6rem;
 }
 
 .button-text-black {
@@ -302,6 +302,10 @@ ion-toggle {
 }
 
 /* Login/Register buttons styles */
+.auth-button-size {
+    --padding-top: 1.5rem;
+    --padding-bottom: 1.5rem;
+}
 .auth-button-border-radius {
     --border-radius: 17px;
     --border-color: #f00;
