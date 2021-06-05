@@ -30,8 +30,14 @@
 <script>
 import { defineComponent } from 'vue';
 
+import { useRouter } from 'vue-router';
+
+import store from '@/store';
 
 import { IonIcon } from '@ionic/vue';
+
+import AuthService       from '@/services/AuthService';
+import SocialAuthService from '@/services/SocialAuthService';
 
 import { logoFacebook, logoGithub, logoInstagram, logoGoogle } from 'ionicons/icons';
 
@@ -42,12 +48,16 @@ export default defineComponent({
   },
   setup() {
     /* Global components */
-
+    const router = useRouter();
     /* Event handlers */
     const login = async(driver) => {
-      window.location.href = `http://192.168.1.203:8200/auth/${driver}/redirect`;
+      const payload = await SocialAuthService.getUserFromProvider(driver);
+      AuthService.authenticateSocial(payload)
+                 .then(async() => {
+                   await store.dispatch("auth/getAuthUser");
+                   await router.push({ name: 'home' });
+                 });
     };
-
 
     return {
       /* Event handlers */

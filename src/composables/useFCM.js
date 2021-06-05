@@ -1,16 +1,16 @@
 import { useRouter } from 'vue-router';
 
-import {
-    Plugins,
-    Capacitor,
-} from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 
-import AuthService    from '../services/AuthService';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { LocalNotifications } from '@capacitor/local-notifications';
+
+import AuthService from '../services/AuthService';
+
 import { useStorage } from '@/services/StorageService';
 
 export function useFCM(userId) {
     /* Global properties */
-    const { PushNotifications, LocalNotifications } = Plugins;
     const router = useRouter();
 
     //Initializing storage and destructuring getter
@@ -20,7 +20,7 @@ export function useFCM(userId) {
     const initPush = () => {
         get(`areNotificationsOn.${userId}`)
             .then((response) => {
-                if(Capacitor.platform !== 'web' && !!response) {
+                if(Capacitor.getPlatform() !== 'web' && !!response) {
                     registerPush();
                 }
             })

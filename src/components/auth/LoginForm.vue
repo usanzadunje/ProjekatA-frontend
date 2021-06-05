@@ -79,12 +79,9 @@ import { defineComponent, ref, reactive } from 'vue';
 
 import { useRouter } from 'vue-router';
 
-import { mapGetters } from "vuex";
-
 import store from '@/store/index';
 
-import { getError, sleep } from "@/utils/helpers"
-
+import { getError, sleep } from "@/utils/helpers";
 
 import {
   IonItem,
@@ -107,7 +104,7 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-} from 'ionicons/icons';
+}                        from 'ionicons/icons';
 
 export default defineComponent({
   name: "LoginForm",
@@ -120,9 +117,6 @@ export default defineComponent({
     IonCheckbox,
     SocialIcons,
   },
-  computed: {
-    ...mapGetters('auth', ['authUser']),
-  },
   setup() {
     /* Global properties and methods */
     const router = useRouter();
@@ -133,6 +127,8 @@ export default defineComponent({
     let errorNames = ref({});
     const passwordInput = ref(null);
     const emailInput = ref(null);
+
+    /* Lifecycle hooks */
 
     /* Methods */
     const { showErrorToast, showSuccessToast } = useToastNotifications();
@@ -152,6 +148,7 @@ export default defineComponent({
                    await sleep(Object.keys(errorNames.value).length * 900);
                    errorNames.value = {};
                  });
+
     };
     const togglePasswordShow = () => {
       showPassword.value = !showPassword.value;

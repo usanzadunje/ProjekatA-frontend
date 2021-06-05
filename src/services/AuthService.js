@@ -32,6 +32,10 @@ export default {
         await authClient.get("/sanctum/csrf-cookie");
         return authClient.post("/login", payload);
     },
+    async authenticateSocial(payload) {
+        await authClient.get("/sanctum/csrf-cookie");
+        return authClient.post("/auth/callback", payload);
+    },
     logout() {
         return authClient.post("/logout");
     },

@@ -57,7 +57,7 @@
       <ion-modal
           :is-open="isModalOpen"
           css-class="custom-modal"
-          @onDidDismiss="openModal(false);"
+          @didDismiss="openModal(false);"
           :backdrop-dismiss="true"
           :swipe-to-close="true"
       >

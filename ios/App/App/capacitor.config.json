@@ -1,25 +1,33 @@
 {
-  "appId": "com.projekata",
-  "appName": "ProjekatA",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "dist",
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 0
-    },
-    "PushNotifications": {
-      "presentationOptions": [
-        "badge",
-        "sound",
-        "alert"
-      ]
-    },
-    "LocalNotifications": {
-      "smallIcon": "ic_table_chart",
-      "iconColor": "#9E0300",
-      "sound": "sound.wav"
-    }
-  },
-  "cordova": {}
+	"appId": "com.projekata",
+	"appName": "ProjekatA",
+	"bundledWebRuntime": false,
+	"npmClient": "npm",
+	"webDir": "dist",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		},
+		"LocalNotifications": {
+			"smallIcon": "ic_table_chart",
+			"iconColor": "#9E0300",
+			"sound": "sound.wav"
+		},
+		"GoogleAuth": {
+			"scopes": [
+				"profile",
+				"email"
+			],
+			"serverClientId": "1075012223350-ot9lec3ijhu2dso3ur5ngroepdmtmj74.apps.googleusercontent.com",
+			"forceCodeForRefreshToken": true
+		}
+	},
+	"cordova": {}
 }

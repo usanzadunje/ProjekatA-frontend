@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">frontend</string>
-    <string name="title_activity_main">frontend</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">ProjekatA</string>
+    <string name="title_activity_main">ProjekatA</string>
+    <string name="package_name">com.projekata</string>
+    <string name="custom_url_scheme">com.projekata</string>
+    <string name="server_client_id">1075012223350-ot9lec3ijhu2dso3ur5ngroepdmtmj74.apps.googleusercontent.com</string>
 </resources>

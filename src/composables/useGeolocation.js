@@ -1,12 +1,7 @@
-import {
-    Plugins,
-} from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
 
 
 export function useGeolocation() {
-    /* Global properties */
-    const { Geolocation } = Plugins;
-
     /* Methods */
     const getCurrentPosition = async() => {
         const position = await Geolocation.getCurrentPosition();

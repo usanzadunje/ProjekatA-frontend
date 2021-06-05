@@ -50,7 +50,7 @@
     <ion-modal
         :is-open="isModalOpen"
         css-class="custom-sub-modal"
-        @onDidDismiss="openModal(false);$emit('dismissShortCafeModal')"
+        @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
         :backdrop-dismiss="true"
         :swipe-to-close="true"
     >

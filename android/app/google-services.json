@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1075012223350-a40qq98m7klj2u6fd5j9095oncluqlcr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.projekata",
+            "certificate_hash": "8acfd6a3476e4235af96df4d6afaf7710de8056c"
+          }
+        },
+        {
           "client_id": "1075012223350-ot9lec3ijhu2dso3ur5ngroepdmtmj74.apps.googleusercontent.com",
           "client_type": 3
         }
