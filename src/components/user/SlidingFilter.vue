@@ -88,9 +88,7 @@ export default defineComponent({
       initialSlide: 0,
       speed: 500,
       centeredSlides: false,
-      spaceBetween: 10,
       slidesPerView: 2.3,
-      freeMode: true,
     };
 
     /* Lifecycle hook */

@@ -20,9 +20,9 @@
 
         <ion-item class="mt-5 ion-no-padding">
           <ion-slides :options="slideOpts" id="image-slider">
-            <ion-slide v-for="i in [1,2,3,4,5]" :key="i">
+            <ion-slide v-for="i in [1,2,3]" :key="i">
               <img
-                  src="http://192.168.1.203:8200/storage/img/cafe/test1.png"
+                  :src="`http://192.168.1.203:8200/storage/img/cafe/test${i}.png`"
                   alt=""
               >
             </ion-slide>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, toRef, computed, nextTick } from 'vue';
+import { defineComponent, ref, toRef, computed } from 'vue';
 
 import { useStore } from 'vuex';
 
@@ -114,9 +114,8 @@ export default defineComponent({
   emits: ['dismissShortCafeModal', 'subModalOpened'],
   mounted() {
     // Without this on android options are not passed to swiper
-    nextTick(() => {
-      const slides = document.querySelector("#image-slider");
-      console.log(slides.options);
+    let slides = document.querySelector("ion-slides");
+    this.$nextTick(() => {
       slides.options = this.slideOpts;
     });
   },

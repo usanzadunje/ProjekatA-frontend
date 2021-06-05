@@ -134,7 +134,7 @@ export default defineComponent({
 
     /* Event handlers */
     let register = () => {
-      Object.assign(newUser, newUser, { bday: null, phone: null });
+      Object.assign(newUser, newUser, { fname: null, lname: null, bday: null, phone: null, username: null });
       AuthService.register(newUser)
                  .then(async() => {
                    await router.push({ name: 'onboarding' });

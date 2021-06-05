@@ -4,7 +4,7 @@
     <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
       <CafeCard
           :cafe="cafe"
-          @click="$emit('openCafeModal', cafe)"
+          @click="openCafeModal(cafe.id)"
       />
     </div>
   </div>
@@ -116,6 +116,13 @@ export default defineComponent({
       }, 500);
     };
 
+    const openCafeModal = (cafeId) => {
+      CafeService.show(cafeId)
+                 .then((response) => {
+                   emit('openCafeModal', response.data);
+                 });
+    };
+
     /* Watchers */
     // Watching for a change on cafeSearchString(search term from search input) prop
     // resetting all the variables for filtered data and loading first 20 records from new filtered data
@@ -137,11 +144,12 @@ export default defineComponent({
 
 
     return {
-      /* Compoenent properties */
+      /* Component properties */
       cafes,
       isInfiniteScrollDisabled,
 
-      /* Computed properties */
+      /* Event handlers */
+      openCafeModal,
 
       /* Methods */
       loadMoreCafes,
