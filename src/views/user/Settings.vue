@@ -18,6 +18,7 @@
             <ion-toggle
                 id="dark-mode-toggle"
                 @ionChange="toggleDarkMode($event)"
+                mode="md"
             ></ion-toggle>
           </ion-item>
         </ion-item>
@@ -34,6 +35,7 @@
             <ion-toggle
                 id="notification-toggle"
                 @ionChange="toggleNotifications($event)"
+                mode="md"
             ></ion-toggle>
           </ion-item>
         </ion-item>

@@ -1,18 +1,18 @@
 <template>
   <ion-page>
-    <ion-content :scroll-events="true" @ionScrollStart="pullAnimation($event)" class="ion-padding">
+    <ion-content :fullscreen="true" :scroll-events="true" @ionScroll="pullAnimation($event)">
       <div class="relative">
         <h1>Longitude : {{ coordinates.latitude }}</h1>
         <h1>Longitude : {{ coordinates.longitude }}</h1>
         <button @click="get" class="bg-red-400 border text-xl mt-6 absolute right-1/2">click me</button>
       </div>
 
-      <!--      <div v-for="i in 60" :key="i">-->
-      <!--        <h1>dsadasdsad</h1>-->
-      <!--      </div>-->
-      <!--      <div>-->
-      <!--          sad-->
-      <!--      </div>-->
+      <div v-for="i in 60" :key="i">
+        <h1>dsadasdsad</h1>
+      </div>
+      <div>
+        sad
+      </div>
 
     </ion-content>
   </ion-page>
@@ -59,10 +59,12 @@ export default {
 
 
     const pullAnimation = (e) => {
-      // if(e) {
-      //   alert('You current scroll from Y: ', e)
-      // }
-      console.log(e.target.scrollTop);
+      console.log(e.detail.currentY);
+      if(e.detail.currentY === 0) {
+        alert('You current to head');
+      }else {
+        alert('You current to not head');
+      }
     };
 
     return {

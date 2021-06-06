@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header class="ion-no-border">
       <ion-toolbar>
-        <div class="flex justify-between">
+        <div class="flex justify-between mt-3">
           <ion-buttons slot="start">
             <ion-button href="/home">
               <ion-icon slot="icon-only" :icon="arrowBackOutline" class="text-gray-400"></ion-icon>
@@ -17,7 +17,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true" class="ion-padding">
+    <ion-content :fullscreen="true" class="ion-padding relative">
       <div class="relative">
         <img
             src="http://192.168.1.203:8200/storage/img/cafe/cafeshow.png"
@@ -55,7 +55,7 @@
 
       <div class="mt-10">
         <ion-button
-            class="uppercase button-subscribe-wide"
+            class="uppercase button-subscribe-wide button-sub-wide-position"
             expand="block"
             @click="openModal(true)"
             :disabled="!loggedIn"
@@ -68,7 +68,7 @@
       <ion-modal
           :is-open="isModalOpen"
           css-class="custom-modal"
-          @onDidDismiss="openModal(false)"
+          @didDismiss="openModal(false)"
           :backdrop-dismiss="true"
           :swipe-to-close="true"
       >

@@ -2,7 +2,7 @@
   <ion-content class="ion-padding">
     <div class="relative w-full">
       <div class="absolute w-full">
-        <ion-item class="mt-3 ion-item-no-padding-x">
+        <ion-item class="ion-item-no-padding-x">
           <ion-thumbnail slot="start">
             <img
                 src="http://192.168.1.203:8200/storage/img/cafe/test.png"
@@ -19,7 +19,7 @@
         <CafeInfoBody :cafe="cafe"/>
 
         <ion-item class="mt-5 ion-no-padding">
-          <ion-slides :options="slideOpts" id="image-slider">
+          <ion-slides ref="slider" :options="slideOpts">
             <ion-slide v-for="i in [1,2,3]" :key="i">
               <img
                   :src="`http://192.168.1.203:8200/storage/img/cafe/test${i}.png`"
@@ -113,9 +113,8 @@ export default defineComponent({
     },
   },
   emits: ['dismissShortCafeModal', 'subModalOpened'],
-  mounted() {
-    // Without this on android options are not passed to swiper
-    let slides = document.querySelector("ion-slides");
+  updated() {
+    const slides = document.querySelector("ion-slides");
     this.$nextTick(() => {
       slides.options = this.slideOpts;
     });

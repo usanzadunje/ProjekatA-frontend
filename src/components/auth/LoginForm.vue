@@ -139,6 +139,8 @@ export default defineComponent({
                  .then(async() => {
                    await store.dispatch("auth/getAuthUser");
                    let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
+                   user.email = '';
+                   user.password = '';
                    await router.push(homeRoute);
                    await showSuccessToast('Success logged in!');
                  })

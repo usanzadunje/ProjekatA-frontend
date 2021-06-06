@@ -2,7 +2,7 @@
   <ion-content
       class="ion-padding"
   >
-    <ion-item class="mt-3">
+    <ion-item>
       <h1 class="submodal-heading">Notifikacije</h1>
     </ion-item>
     <ion-item>
@@ -16,6 +16,7 @@
       <ion-toggle
           class="pl-4"
           @ionChange="indefiniteTimerToggle($event)"
+          mode="md"
           :disabled="isUserSubscribed"
       ></ion-toggle>
       <ion-label class="margin-left-1 submodal-fade-text">Neodredjeno</ion-label>
@@ -49,6 +50,7 @@
         {{ isUserSubscribed ? 'Ukloni' : 'Potvrdi' }}
       </ion-button>
     </div>
+
   </ion-content>
 </template>
 
@@ -152,7 +154,6 @@ export default defineComponent({
       }
 
     };
-
 
 
     return {
