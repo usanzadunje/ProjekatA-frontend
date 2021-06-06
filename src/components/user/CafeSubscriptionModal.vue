@@ -106,6 +106,10 @@ export default defineComponent({
 
     const cafe = toRef(props, 'cafe');
 
+    /* Methods */
+    /* Method for initializing push notifications for mobile devices */
+    const { initPush } = useFCM(store.getters['auth/authUser'].id);
+
     /* Lifecycle hooks */
     //When user lands on page check if he is already subscribed to cafe
     CafeService.isUserSubscribed(cafe.value.id)
@@ -113,6 +117,7 @@ export default defineComponent({
                  isUserSubscribed.value = !!response.data;
                })
                .catch((error) => alert(error));
+    initPush();
 
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {
@@ -148,10 +153,6 @@ export default defineComponent({
 
     };
 
-    /* Methods */
-    /* Method for initializing push notifications for mobile devices */
-    const { initPush } = useFCM(store.getters['auth/authUser'].id);
-    initPush();
 
 
     return {

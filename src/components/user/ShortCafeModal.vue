@@ -56,6 +56,7 @@
     >
       <CafeSubscriptionModal
           :cafe="{'id': cafe.id, 'name': cafe.name}"
+          :isUserSubscribed="isUserSubscribed"
           @dismissSubscriptionModal="openModal(false);$emit('dismissShortCafeModal')"
           @userToggledSubscription="isUserSubscribed = !isUserSubscribed"
       />

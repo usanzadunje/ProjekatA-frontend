@@ -41,10 +41,15 @@ import SocialAuthService from '@/services/SocialAuthService';
 
 import { logoFacebook, logoGithub, logoInstagram, logoGoogle } from 'ionicons/icons';
 
+import { GoogleAuth }                                          from '@codetrix-studio/capacitor-google-auth';
+
 export default defineComponent({
   name: "SocialIcons",
   components: {
     IonIcon,
+  },
+  mounted() {
+    GoogleAuth.init();
   },
   setup() {
     /* Global components */

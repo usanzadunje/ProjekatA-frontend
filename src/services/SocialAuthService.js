@@ -12,7 +12,6 @@ export default {
 };
 
 const useGoogle = async() => {
-    GoogleAuth.init();
     const googleUser = await GoogleAuth.signIn();
     return {
         fname: googleUser.givenName,

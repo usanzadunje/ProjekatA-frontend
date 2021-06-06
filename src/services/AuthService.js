@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import store from "@/store";
-
 // Creating axios instance for routes that are not api protected
 export const authClient = axios.create({
     baseURL: process.env.VUE_APP_API_URL,
@@ -16,13 +14,6 @@ authClient.interceptors.response.use(
         return response;
     },
     function(error) {
-        if(
-            error.response &&
-            [401, 419].includes(error.response.status) &&
-            store.getters["auth/authUser"]
-        ) {
-            store.dispatch("auth/logout");
-        }
         return Promise.reject(error);
     },
 );
@@ -34,7 +25,7 @@ export default {
     },
     async authenticateSocial(payload) {
         await authClient.get("/sanctum/csrf-cookie");
-        return authClient.post("/auth/callback", payload);
+        return authClient.post("/api/auth/callback", payload);
     },
     logout() {
         return authClient.post("/logout");

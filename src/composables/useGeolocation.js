@@ -9,8 +9,8 @@ export function useGeolocation() {
         return position.coords;
     };
 
-    const watchPosition = () => {
-        Geolocation.watchPosition({}, (position, err) => {
+    const watchPosition = async () => {
+        await Geolocation.watchPosition({}, (position, err) => {
             if(err) alert(err);
             console.log(position);
         });

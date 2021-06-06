@@ -24,7 +24,6 @@
 <script>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/vue';
 import AuthService                                                         from '@/services/AuthService';
-import { getError }                                                        from '@/utils/helpers';
 
 export default {
   name: 'EmailVerificationNotice',
@@ -48,8 +47,8 @@ export default {
       this.message = null;
 
       AuthService.resendVerificationEmail()
-                 .then(() => (this.message = "A fresh verification link has been sent to your email address."))
-                 .catch((error) => (this.error = getError(error)));
+                 .then(() => (console.log("A fresh verification link has been sent to your email address.")))
+                 .catch((error) => console.log(error));
     },
   },
 };

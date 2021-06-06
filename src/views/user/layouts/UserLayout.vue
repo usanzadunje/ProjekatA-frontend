@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-tabs @ionTabsDidChange="tabChanged">
+    <ion-tabs>
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="home" href="/home">
           <ion-icon
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import { mapGetters } from 'vuex';
 
@@ -63,20 +63,8 @@ export default defineComponent({
     ...mapGetters('auth', ['loggedIn']),
   },
   setup() {
-    /* Component properties */
-    let selectedTab = ref('home');
-
-    /* Event listeners */
-    const tabChanged = (event) => selectedTab.value = event.tab;
-
 
     return {
-      /* Properties */
-      selectedTab,
-
-      /* Event listeners */
-      tabChanged,
-
       /* Icons from */
       homeOutline,
       searchOutline,

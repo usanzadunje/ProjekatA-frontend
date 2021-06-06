@@ -2,7 +2,7 @@ import { useRouter } from 'vue-router';
 
 import { Capacitor } from '@capacitor/core';
 
-import { PushNotifications } from '@capacitor/push-notifications';
+import { PushNotifications }  from '@capacitor/push-notifications';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
 import AuthService from '../services/AuthService';
@@ -31,10 +31,10 @@ export function useFCM(userId) {
     };
     const registerPush = () => {
         /* If permission is not granted asks for permission, after granted it registers Push Notifications */
-        PushNotifications.requestPermission()
-                         .then((permission) => {
-                             if(permission.granted) {
-                                 PushNotifications.register();
+        PushNotifications.requestPermissions()
+                         .then(async(permission) => {
+                             if(permission.receive === 'granted') {
+                                 await PushNotifications.register();
                              }else {
                                  alert('No permission for push notifications granted');
                              }
@@ -48,9 +48,11 @@ export function useFCM(userId) {
                     fcm_token: token.value,
                 };
                 /* Saving token from FCM into user table */
-                AuthService.setFcmToken(payload).then().catch((error) => {
-                    alert(error);
-                });
+                AuthService.setFcmToken(payload)
+                           .then()
+                           .catch((error) => {
+                               alert(error);
+                           });
             },
         );
         PushNotifications.addListener(
@@ -61,8 +63,8 @@ export function useFCM(userId) {
         );
         PushNotifications.addListener(
             'pushNotificationReceived',
-            (notification) => {
-                LocalNotifications.schedule({
+            async(notification) => {
+                await LocalNotifications.schedule({
                     notifications: [
                         {
                             id: notification.data.cafeId,

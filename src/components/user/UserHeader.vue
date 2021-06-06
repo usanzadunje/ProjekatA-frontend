@@ -4,7 +4,7 @@
       <div class="px-4 py-3 mt-2">
         <div v-show="loggedIn" class="flex justify-between">
           <p class="main-toolbar-fade-text">Cao {{ authUser.full_name }}!</p>
-          <ion-button fill="clear" href="/login">
+          <ion-button fill="clear" href="/test">
             <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
           </ion-button>
         </div>
@@ -12,7 +12,7 @@
           <ion-button fill="clear" href="/login">
             <p class="main-toolbar-fade-text">Login</p>
           </ion-button>
-          <ion-button fill="clear" href="/test">
+          <ion-button fill="clear" href="/register">
             <p class="main-toolbar-fade-text">Register</p>
           </ion-button>
         </div>

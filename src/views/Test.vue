@@ -49,7 +49,8 @@ export default {
           coordinates.latitude = position.latitude;
           coordinates.longitude = position.longitude;
         })
-        .catch(() => {
+        .catch((e) => {
+          alert(e);
         });
 
     const pullAnimation = (e) => {
