@@ -1,5 +1,4 @@
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-
 export default {
     getUserFromProvider(driver) {
         if(driver === 'google') {

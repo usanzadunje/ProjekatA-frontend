@@ -9,7 +9,7 @@
       <ion-icon :icon="locationOutline" class="mr-2 location-icon"></ion-icon>
       <p class="modal-cafe-text-regular">{{ cafe.address }} - {{ cafe.city }}</p>
     </div>
-    <ion-button fill="clear" class="uppercase font-bold" slot="end">MAPA</ion-button>
+    <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold" slot="end">MAPA</ion-button>
   </ion-item>
   <hr class="card-horizontal-ruler">
   <div class="flex justify-start mt-3.5">
@@ -27,15 +27,32 @@
     </div>
   </div>
   <hr class="card-horizontal-ruler mt-3.5">
+  <ion-modal
+      :is-open="isModalOpen"
+      css-class="custom-map-modal"
+      @didDismiss="openModal(false, true);"
+      :backdrop-dismiss="true"
+      :swipe-to-close="true"
+  >
+    <GoogleMap
+        :disableUI="false"
+        :zoom="20"
+        mapType="roadmap"
+        :center="{ lat: 43.317862492567, lng: 21.895785976058143 }"
+        :cafe="cafe"
+    >
+    </GoogleMap>
+  </ion-modal>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import {
   IonIcon,
   IonButton,
   IonItem,
+  IonModal,
 } from '@ionic/vue';
 
 import {
@@ -48,12 +65,16 @@ import {
 }
   from 'ionicons/icons';
 
+import GoogleMap from '@/components/user/GoogleMap';
+
 export default defineComponent({
   name: "CafeInfoBody",
   components: {
     IonIcon,
     IonButton,
     IonItem,
+    IonModal,
+    GoogleMap,
   },
   props: {
     cafe: {
@@ -62,10 +83,19 @@ export default defineComponent({
     },
   },
   setup() {
+    const isModalOpen = ref(false);
 
+    /* Event handlers */
+    const openModal = (state) => {
+      isModalOpen.value = state;
+
+    };
 
     return {
       /* Component properties */
+      isModalOpen,
+      /* Event handlers */
+      openModal,
 
       /* Icons from */
       pieChart,
@@ -82,7 +112,8 @@ export default defineComponent({
 ion-item {
   --border-style: none;
 }
-ion-button{
+
+ion-button {
   font-size: 0.7rem !important;
 }
 </style>

@@ -74,12 +74,21 @@ ion-modal ion-item {
     --border-radius: 20px 20px 0 0;
 }
 
+.custom-map-modal {
+    --height: 390px;
+    --border-radius: 20px 20px 0 0;
+}
+
 .custom-modal .modal-wrapper {
     position: absolute !important;
     bottom: 0 !important;
 }
 
 .custom-sub-modal .modal-wrapper {
+    position: absolute !important;
+    bottom: 0 !important;
+}
+.custom-map-modal .modal-wrapper {
     position: absolute !important;
     bottom: 0 !important;
 }

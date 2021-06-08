@@ -89,6 +89,7 @@ import { useStore } from 'vuex';
 
 import { useRoute } from 'vue-router';
 
+
 import {
   IonPage,
   IonHeader,
@@ -139,14 +140,19 @@ export default defineComponent({
     /* Componenet properties */
     let cafe = ref({});
     const isModalOpen = ref(false);
+    const isMapModalOpen = ref(false);
     const isUserSubscribed = ref(false);
 
     // Auth prop
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
     /* Event handlers */
-    const openModal = (state) => {
-      isModalOpen.value = state;
+    const openModal = (state, isMapModal = false) => {
+      if(isMapModal){
+        isMapModalOpen.value = state;
+      }else{
+        isModalOpen.value = state;
+      }
     };
 
     /* Lifecycle hooks */
@@ -173,6 +179,7 @@ export default defineComponent({
       /* Component properties */
       cafe,
       isModalOpen,
+      isMapModalOpen,
       isUserSubscribed,
 
       //Auth prop

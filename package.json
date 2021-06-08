@@ -11,6 +11,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@capacitor-community/capacitor-googlemaps-native": "^1.0.2",
     "@capacitor/android": "^3.0.0",
     "@capacitor/core": "^3.0.0",
     "@capacitor/geolocation": "^1.0.0",
