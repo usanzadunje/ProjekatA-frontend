@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header class="ion-no-border">
       <ion-toolbar>
-        <div class="flex justify-between mt-3">
+        <div class="flex justify-between mt-3 md margin-top-reset">
           <ion-buttons slot="start">
             <ion-button href="/home">
               <ion-icon slot="icon-only" :icon="arrowBackOutline" class="text-gray-400"></ion-icon>
@@ -67,7 +67,7 @@
       </div>
       <ion-modal
           :is-open="isModalOpen"
-          css-class="custom-modal"
+          css-class="custom-sub-modal"
           @didDismiss="openModal(false)"
           :backdrop-dismiss="true"
           :swipe-to-close="true"

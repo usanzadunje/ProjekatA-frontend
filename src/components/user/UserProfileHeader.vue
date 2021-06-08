@@ -20,9 +20,10 @@
                 class="user-profile-picture"
             >
           </div>
-          <div class="ml-3 mt-3">
+          <div class="ml-3 mt-3 user-profile-user-name">
             <h2 class="user-profile-user-name">{{ authUser.full_name }}</h2>
-            <p class="user-profile-user-location">Srbija, Nis</p>
+            <p v-if="authUser.username" class="user-profile-username">{{ authUser.username }}</p>
+            <a v-if="!authUser.username" @click="$router.push({ name: 'settings' })" class="user-profile-username underline">set username</a>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 <template>
   <ion-content class="ion-padding">
-    <div class="relative w-full">
-      <div class="absolute w-full">
+    <div class="relative w-full container-modal">
+      <div class="absolute w-full top-3">
         <ion-item class="ion-item-no-padding-x">
           <ion-thumbnail slot="start">
             <img
@@ -18,7 +18,7 @@
 
         <CafeInfoBody :cafe="cafe"/>
 
-        <ion-item class="mt-5 ion-no-padding">
+        <ion-item class="mt-6 ion-no-padding">
           <ion-slides ref="slider" :options="slideOpts">
             <ion-slide v-for="i in [1,2,3]" :key="i">
               <img
@@ -172,3 +172,6 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+
+</style>

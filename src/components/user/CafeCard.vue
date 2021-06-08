@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white cafe-card-border-radius">
-    <div class="p-5 flex justify-start ion-align-items-center">
+    <div class="p-4 flex ion-align-items-center">
       <img
           src="http://192.168.1.203:8200/storage/img/cafe/test.png"
           alt=""
@@ -12,18 +12,18 @@
       </div>
     </div>
     <hr class="card-horizontal-ruler">
-    <div class="p-3 flex justify-between ion-align-items-center">
-      <div class="flex align-middle">
-        <div class="flex align-bottom">
+    <div class="px-3 pt-3 pb-2.5 flex justify-between">
+      <div class="flex">
+        <div class="flex">
           <ion-icon :icon="pieChart" class="text-yellow-400"></ion-icon>
-          <span class="cafe-card-fade-text ml-1 mt-0.5">{{ cafe.taken_capacity }}</span>
+          <span class="cafe-card-fade-text ml-1">{{ cafe.taken_capacity }}</span>
         </div>
-        <div class="flex align-bottom ml-2">
+        <div class="flex ml-2">
           <ion-icon :icon="locationOutline" class="text-gray-400"></ion-icon>
-          <span class="cafe-card-fade-text ml-1 mt-0.5">600m</span>
+          <span class="cafe-card-fade-text ml-1">600m</span>
         </div>
       </div>
-      <div>
+      <div class="flex">
         <ion-icon :icon="fastFoodOutline"></ion-icon>
         <ion-icon :icon="leafOutline" class="ml-1"></ion-icon>
       </div>
@@ -77,5 +77,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-
+  ion-icon{
+    font-size: 17px !important;
+  }
 </style>

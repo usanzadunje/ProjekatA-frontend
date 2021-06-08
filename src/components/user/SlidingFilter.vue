@@ -1,12 +1,12 @@
 <template>
-  <div class="px-4 py-3">
+  <div class="mt-1">
     <p v-if="hasTitle" class="sliding-filter-title uppercase">FILTERI</p>
     <ion-slides :options="slideOpts">
       <ion-slide>
         <ion-button
-            class="sliding-filter-button sliding-filter-button-text h-9 w-32 uppercase"
-            :class="activeSlidingButton === '' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="closest"
+            class="sliding-filter-button sliding-filter-button-text uppercase"
+            :class="activeSlidingButton === 'id' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
+            data-sliding-filter="id"
             @click="sortButtonActivated"
         >
           Najblizi vama
@@ -16,7 +16,7 @@
       </ion-slide>
       <ion-slide>
         <ion-button
-            class="sliding-filter-button sliding-filter-button-text h-9 w-28 uppercase"
+            class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'free' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             data-sliding-filter="free"
             @click="sortButtonActivated"
@@ -28,9 +28,9 @@
       </ion-slide>
       <ion-slide>
         <ion-button
-            class="sliding-filter-button sliding-filter-button-text h-9 w-20 uppercase"
+            class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="id"
+            data-sliding-filter="food"
             @click="sortButtonActivated"
         >
           HRANA
@@ -40,7 +40,7 @@
       </ion-slide>
       <ion-slide>
         <ion-button
-            class="sliding-filter-button sliding-filter-button-text h-9 w-28 uppercase"
+            class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'popular' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             data-sliding-filter="popular"
             @click="sortButtonActivated"
@@ -62,12 +62,12 @@ import {
   IonButton,
   IonSlides,
   IonSlide,
-}                                                    from '@ionic/vue';
+} from '@ionic/vue';
 
 import {
   locationOutline,
   pieChart,
-}                                                    from 'ionicons/icons';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: 'SlidingFilter',
@@ -83,7 +83,7 @@ export default defineComponent({
   emits: ['sortHasChanged'],
   setup(props, { emit }) {
     /* Component properties */
-    let activeSlidingButton = ref('');
+    let activeSlidingButton = ref('id');
     const slideOpts = {
       initialSlide: 0,
       speed: 500,
@@ -124,9 +124,11 @@ export default defineComponent({
 <style scoped>
 ion-button {
   --background-activated: #207DFF;
+  height: 30px;
 }
 
 ion-slide {
-  overflow-x: auto !important;
 }
+
+
 </style>

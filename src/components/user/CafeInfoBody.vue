@@ -1,16 +1,18 @@
 <template>
-  <ion-item class="ion-item-no-padding-x">
+  <ion-item class="ion-item-no-padding-x mt-2 md margin-top-reset">
     <ion-icon :icon="pieChart" class="mr-2 text-yellow-400"></ion-icon>
     <span class="modal-cafe-text-medium mt-0.5">{{ cafe.taken_capacity }} - slobodnih mesta</span>
   </ion-item>
+  <hr class="card-horizontal-ruler mt-1">
   <ion-item class="ion-item-no-padding-x">
-    <div class="flex justify-between">
-      <ion-icon :icon="locationOutline" class="mr-2"></ion-icon>
+    <div class="flex">
+      <ion-icon :icon="locationOutline" class="mr-2 location-icon"></ion-icon>
       <p class="modal-cafe-text-regular">{{ cafe.address }} - {{ cafe.city }}</p>
     </div>
-    <ion-button fill="clear" class="uppercase" slot="end">MAPA</ion-button>
+    <ion-button fill="clear" class="uppercase font-bold" slot="end">MAPA</ion-button>
   </ion-item>
-  <div class="flex justify-start mt-1.5">
+  <hr class="card-horizontal-ruler">
+  <div class="flex justify-start mt-3.5">
     <div class="ion-item-no-padding-x flex">
       <ion-icon :icon="fastFoodOutline" class="mr-2"></ion-icon>
       <p class="modal-cafe-text-regular">hrana</p>
@@ -24,6 +26,7 @@
       <p class="modal-cafe-text-regular">09am-01pm</p>
     </div>
   </div>
+  <hr class="card-horizontal-ruler mt-3.5">
 </template>
 
 <script>
@@ -78,5 +81,8 @@ export default defineComponent({
 <style scoped>
 ion-item {
   --border-style: none;
+}
+ion-button{
+  font-size: 0.7rem !important;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <div class="flex align-middle">
-    <ion-icon :icon="icon" class="mr-1 text-gray-400"></ion-icon>
-    <span class="sliding-filter-title uppercase">{{ title }}</span>
+  <div class="flex relative">
+    <ion-icon :icon="icon" class="text-gray-400 category-filter"></ion-icon>
+    <span class="sliding-filter-title uppercase absolute left-4 top-1/2 transform -translate-y-1/2">{{ title }}</span>
   </div>
 </template>
 
@@ -38,3 +38,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+  ion-icon {
+    font-size: 0.9rem !important;
+  }
+</style>

@@ -1,26 +1,25 @@
 <template>
   <ion-header class="ion-no-border">
     <ion-toolbar>
-      <div class="px-4 py-3 mt-2">
+      <div class="px-4 pt-3 pb-1 pb-2 mt-2 md header-padding-bottom">
         <div v-show="loggedIn" class="flex justify-between">
           <p class="main-toolbar-fade-text">Cao {{ authUser.full_name }}!</p>
           <ion-button fill="clear" href="/test">
             <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
           </ion-button>
         </div>
-        <div v-show="!loggedIn" class="flex justify-around mb-2">
+        <div v-show="!loggedIn" class="flex justify-around">
           <ion-button fill="clear" href="/login">
-            <p class="main-toolbar-fade-text">Login</p>
+            <p class="main-toolbar-fade-text uppercase">Login</p>
           </ion-button>
           <ion-button fill="clear" href="/register">
-            <p class="main-toolbar-fade-text">Register</p>
+            <p class="main-toolbar-fade-text uppercase">Register</p>
           </ion-button>
         </div>
         <h1 class="main-toolbar-heading text-xl">{{ mainHeading }}</h1>
-        <div class="mt-5 flex justify-around items-start">
+        <div class="flex">
           <ion-searchbar
               :value="searchTerm"
-              class="main-toolbar-search-text main-toolbar-search-bg align-middle"
               placeholder="Unesite ime kafica"
               @ionChange="searchInputChanged"
               @keyup.enter="$emit('searchEnterPressed', $event)"
@@ -29,7 +28,6 @@
           <ion-icon v-if="hasSearchFilter" :icon="optionsOutline"
                     class="text-3xl text-gray-400 align-bottom mt-1 md filter-icon"></ion-icon>
         </div>
-
         <slot></slot>
       </div>
     </ion-toolbar>

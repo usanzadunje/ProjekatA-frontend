@@ -3,9 +3,9 @@
     <UserProfileHeader/>
 
     <ion-content>
-      <SlidingFilter class="mt-2" @sortHasChanged="sortHasChanged"/>
+      <SlidingFilter class="mt-3" @sortHasChanged="sortHasChanged"/>
 
-      <div class="px-5 mt-2">
+      <div class="px-5 mt-3">
         <FilterCategoryHeading title="Kafici koje pratim" class="mb-2"/>
 
         <ion-item-sliding v-for="cafe in cafesUserSubscribedTo" :key="cafe.id" class="ion-no-padding mb-5">

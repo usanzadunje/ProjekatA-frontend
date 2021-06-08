@@ -3,7 +3,7 @@
     <div @click="togglePane" class="flex justify-between py-2.5">
       <div>
         <ion-icon :icon="locationOutline" class="align-middle text-gray-400"></ion-icon>
-        <p class="inline-block ml-2.5 cafe-show-menu-headers">{{ title }}</p>
+        <p class="inline-block ml-1 cafe-show-menu-headers">{{ title }}</p>
       </div>
       <ion-icon :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline" class="mt-1 text-gray-400"></ion-icon>
     </div>

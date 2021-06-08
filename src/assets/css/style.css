@@ -20,11 +20,23 @@ ion-input {
 ion-searchbar {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
-    font-size: 14px !important;
+    font-size: 10px !important;
     --background: #F9F9F9 !important;
     --border-radius: 12px !important;
     --box-shadow: none !important;
+    transform: scale(0.9);
+    margin-left: -1.5rem !important;
+    width: 100% !important;
 }
+/*ion-searchbar :first-child {*/
+/*}*/
+/*ion-searchbar :first-child input{*/
+/*    padding-top: 2px !important;*/
+/*    padding-bottom: 2px !important;*/
+/*}*/
+/*ion-searchbar :first-child ion-icon{*/
+/*    transform: translateY(-15%) translateX(15%);*/
+/*}*/
 
 ion-toolbar {
     border-bottom-left-radius: 15px !important;
@@ -53,12 +65,12 @@ ion-modal ion-item {
 }
 
 .custom-modal {
-    --height: 390px;
+    --height: 395px;
     --border-radius: 20px 20px 0 0;
 }
 
 .custom-sub-modal {
-    --height: 320px;
+    --height: 300px;
     --border-radius: 20px 20px 0 0;
 }
 
@@ -110,6 +122,10 @@ ion-toggle {
     START Android specific styles
 */
 /* Filter icon next to searchbar positioned center*/
+.md .header-padding-bottom {
+    padding-bottom: 0.75rem !important;
+}
+
 .md .filter-icon {
     margin-top: 0.55rem;
 }
@@ -126,6 +142,10 @@ ion-toggle {
     background: transparent !important;
 }
 
+.md .margin-top-reset{
+    margin-top: 0px !important;
+}
+
 
 /*
     END Android specific styles
@@ -138,7 +158,6 @@ ion-toggle {
 .ios .margin-left-1 {
     margin-left: 0.75rem;
 }
-
 /*
     END IOS specific styles
 */
@@ -215,12 +234,16 @@ ion-toggle {
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
     color: #9EAAB7;
-    font-size: 12px;
+    font-size: 0.7rem;
     opacity: 0.6;
 }
 
+.category-filter. {
+    font-size: 0.9rem !important;
+}
+
 .sliding-filter-button {
-    --border-radius: 12px;
+    --border-radius: 10px;
     --box-shadow: none;
 }
 
@@ -241,7 +264,7 @@ ion-toggle {
 .sliding-filter-button-text {
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
-    font-size: 10px;
+    font-size: 0.6rem;
 }
 
 /*
@@ -351,8 +374,8 @@ ion-toggle {
 }
 
 .cafe-card-image {
-    height: 42px !important;
-    width: 42px !important;
+    height: 43px !important;
+    width: 43px !important;
     border-radius: 11px !important;
 }
 
@@ -360,7 +383,7 @@ ion-toggle {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     color: #000 !important;
-    font-size: 14px !important;
+    font-size: 0.9rem !important;
     text-align: start;
 }
 
@@ -368,13 +391,13 @@ ion-toggle {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     color: #9EAAB7 !important;
-    font-size: 12px !important;
+    font-size: 13px !important;
 }
 
 .card-horizontal-ruler {
-    border-color: #F3F3F3 !important;
-    border-width: 1px !important;
-    width: 100% !important;
+    border-top: solid 0.5px #F3F3F3 !important;
+    width: 111% !important;
+    transform: translateX(-5%);
 }
 
 /*
@@ -384,6 +407,10 @@ ion-toggle {
 /*
     START MODALS STYLES
 */
+.container-modal{
+    margin-top: -20px !important;
+}
+
 .modal-positioning {
     bottom: 0 !important;
 }
@@ -627,7 +654,7 @@ ion-toggle {
     font-size: 16px !important;
 }
 
-.user-profile-user-location {
+.user-profile-username {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     color: #FFF !important;

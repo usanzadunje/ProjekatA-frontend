@@ -2,53 +2,57 @@
   <ion-content
       class="ion-padding"
   >
-    <ion-item>
-      <h1 class="submodal-heading">Notifikacije</h1>
-    </ion-item>
-    <ion-item>
-      <p class="submodal-paragraph">
-        Obavesti me ukoliko se oslobodi sto u objektu
-        <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
-        u narednih :
-      </p>
-    </ion-item>
-    <ion-item class="ion-no-padding mt-4">
-      <ion-toggle
-          class="pl-4"
-          @ionChange="indefiniteTimerToggle($event)"
-          mode="md"
-          :disabled="isUserSubscribed"
-      ></ion-toggle>
-      <ion-label class="margin-left-1 submodal-fade-text">Neodredjeno</ion-label>
-    </ion-item>
-    <ion-item class="ion-no-padding">
-      <ion-range
-          min="5"
-          max="60"
-          step="5"
-          color="primary"
-          v-model="notificationTime"
-          :disabled="indefiniteTimerActive || isUserSubscribed"
-      ></ion-range>
-      <ion-label class="ml-1 margin-left-1 submodal-alert-time">
-        {{ !isNaN(notificationTime) ? notificationTime + 'min' : '∞' }}
-      </ion-label>
-    </ion-item>
-    <div class="mt-2 mb-3 flex justify-between">
-      <ion-button
-          class="uppercase button-cancel modal-button-border"
-          @click="$emit('dismissSubscriptionModal')"
-      >
-        Otkazi
-      </ion-button>
-      <ion-button
-          class="uppercase button-confirm modal-button-border"
-          @click="toggleSubscription(cafe.id)"
-      >
-        <ion-icon slot="start"
-                  :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-        {{ isUserSubscribed ? 'Ukloni' : 'Potvrdi' }}
-      </ion-button>
+    <div class="relative w-full container-modal">
+      <div class="absolute w-full top-3">
+        <ion-item>
+          <h1 class="submodal-heading">Notifikacije</h1>
+        </ion-item>
+        <ion-item>
+          <p class="submodal-paragraph">
+            Obavesti me ukoliko se oslobodi sto u objektu
+            <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
+            u narednih :
+          </p>
+        </ion-item>
+        <ion-item class="ion-no-padding mt-4">
+          <ion-toggle
+              class="pl-4"
+              @ionChange="indefiniteTimerToggle($event)"
+              mode="md"
+              :disabled="isUserSubscribed"
+          ></ion-toggle>
+          <ion-label class="margin-left-1 submodal-fade-text">Neodredjeno</ion-label>
+        </ion-item>
+        <ion-item class="ion-no-padding">
+          <ion-range
+              min="5"
+              max="60"
+              step="5"
+              color="primary"
+              v-model="notificationTime"
+              :disabled="indefiniteTimerActive || isUserSubscribed"
+          ></ion-range>
+          <ion-label class="ml-1 margin-left-1 submodal-alert-time">
+            {{ !isNaN(notificationTime) ? notificationTime + 'min' : '∞' }}
+          </ion-label>
+        </ion-item>
+        <div class="mt-2 mb-3 flex justify-between">
+          <ion-button
+              class="uppercase button-cancel modal-button-border"
+              @click="$emit('dismissSubscriptionModal')"
+          >
+            Otkazi
+          </ion-button>
+          <ion-button
+              class="uppercase button-confirm modal-button-border"
+              @click="toggleSubscription(cafe.id)"
+          >
+            <ion-icon slot="start"
+                      :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+            {{ isUserSubscribed ? 'Ukloni' : 'Potvrdi' }}
+          </ion-button>
+        </div>
+      </div>
     </div>
 
   </ion-content>

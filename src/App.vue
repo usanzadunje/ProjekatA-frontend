@@ -17,7 +17,7 @@ export default defineComponent({
     IonApp,
     IonRouterOutlet,
   },
-  mounted() {
+  created() {
     store.dispatch("auth/getAuthUser");
   },
 });

@@ -59,9 +59,9 @@
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
-        <ion-item class="ion-item-padding-right">
+        <ion-item class="ion-item-padding-right" @click="window.location.href = 'www.projekata.com'">
           <p class="settings-item-text">Web sajt</p>
-          <ion-button fill="clear" slot="end">
+          <ion-button fill="clear" slot="end" href="//projekata.com">
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
