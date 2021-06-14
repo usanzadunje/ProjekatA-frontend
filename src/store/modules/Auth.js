@@ -50,9 +50,9 @@ export const getters = {
         return !!state.user;
     },
     // Auth user is email verified
-    emailVerified: (state) => {
-        return !!state.user.email_verified;
-    },
+    // emailVerified: (state) => {
+    //     return !!state.user.email_verified;
+    // },
     // Checking if auth user is staff member
     isStaff: (state) => {
         return !!state.user.cafe_id;

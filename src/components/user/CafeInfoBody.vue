@@ -34,14 +34,7 @@
       :backdrop-dismiss="true"
       :swipe-to-close="true"
   >
-    <GoogleMap
-        :disableUI="false"
-        :zoom="20"
-        mapType="roadmap"
-        :center="{ lat: 43.317862492567, lng: 21.895785976058143 }"
-        :cafe="cafe"
-    >
-    </GoogleMap>
+    <GoogleMap/>
   </ion-modal>
 </template>
 

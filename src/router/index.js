@@ -5,7 +5,6 @@ import store                   from '@/store/index';
 /* Middleware imports */
 import middlewarePipeline      from "./middlewarePipeline";
 import auth                    from "@/middleware/auth";
-import verified                from "@/middleware/verified";
 import redirectIfAuthenticated from "@/middleware/redirectIfAuthenticated";
 import staff                   from "@/middleware/staff";
 import redirectIfStaff         from '@/middleware/redirectIfStaff';
@@ -99,13 +98,13 @@ const routes = [
             {
                 path: "/dashboard",
                 name: "dashboard",
-                meta: { middleware: [auth, verified] },
+                meta: { middleware: [auth] },
                 component: () => import(/* webpackChunkName: "Dashboard" */ "../views/user/Dashboard"),
             },
             {
                 path: "/settings",
                 name: "settings",
-                meta: { middleware: [auth, verified] },
+                meta: { middleware: [auth] },
                 component: () => import(/* webpackChunkName: "Settings" */ "../views/user/Settings"),
             },
         ],
