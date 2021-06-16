@@ -1,11 +1,13 @@
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { FacebookLogin } from '@capacitor-community/facebook-login';
+
 export default {
     getUserFromProvider(driver) {
         if(driver === 'google') {
             return useGoogle();
         }
         if(driver === 'facebook') {
-            useFacebook();
+            return useFacebook();
         }
     },
 };
@@ -21,5 +23,15 @@ const useGoogle = async() => {
     };
 };
 const useFacebook = async() => {
-    console.log('facebook');
+    await FacebookLogin.login({ permissions: ['email'] });
+
+    const facebookUser = await FacebookLogin.getProfile({ fields: ['email', 'name'] });
+
+    return {
+        fname: facebookUser.name.split(' ')[0],
+        lname: facebookUser.name.split(' ')[1],
+        email: facebookUser.email,
+        avatar: null,
+        provider_id: facebookUser.id,
+    };
 };

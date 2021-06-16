@@ -5,4 +5,6 @@
     <string name="package_name">com.projekata</string>
     <string name="custom_url_scheme">com.projekata</string>
     <string name="server_client_id">1075012223350-ot9lec3ijhu2dso3ur5ngroepdmtmj74.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">613164169659779</string>
+    <string name="facebook_client_token">613164169659779</string>
 </resources>
