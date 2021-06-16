@@ -20,19 +20,19 @@ export default {
       zoom: 20,
     });
 
-    // CapacitorGoogleMaps.addListener("onMapReady", async function() {
-    //
-    //   CapacitorGoogleMaps.addMarker({
-    //     latitude: 43.217862492567,
-    //     longitude: 43.317862492567,
-    //     title: "Pleasure Cafe",
-    //     snippet: "Custom Snippet",
-    //   });
-    //
-    //   CapacitorGoogleMaps.setMapType({
-    //     "type": "normal"
-    //   })
-    // })
+    CapacitorGoogleMaps.addListener("onMapReady", async function() {
+
+      await CapacitorGoogleMaps.addMarker({
+        latitude: 43.317862492567,
+        longitude: 21.895785976058143,
+        title: "Pleasure Cafe",
+        snippet: "Custom Snippet",
+      });
+
+      await CapacitorGoogleMaps.setMapType({
+        "type": "normal"
+      })
+    })
   },
   unmounted() {
     CapacitorGoogleMaps.close();
