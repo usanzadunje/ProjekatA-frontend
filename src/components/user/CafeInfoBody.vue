@@ -34,7 +34,7 @@
       :backdrop-dismiss="true"
       :swipe-to-close="true"
   >
-    <GoogleMap/>
+    <GoogleMap :cafe="cafe"/>
   </ion-modal>
 </template>
 

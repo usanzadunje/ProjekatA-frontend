@@ -9,10 +9,16 @@ import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-n
 
 export default {
   name: "GoogleMap",
+  props: {
+    cafe: {
+      type: Object,
+      default: null,
+    },
+  },
   mounted() {
     CapacitorGoogleMaps.create({
       width: 325,
-      height: 248,
+      height: 318,
       x: 17,
       y: 210,
       latitude: 43.317862492567,
@@ -20,19 +26,21 @@ export default {
       zoom: 20,
     });
 
-    CapacitorGoogleMaps.addListener("onMapReady", async function() {
+    let name = this.cafe.name;
+    let address = this.cafe.address + " ," + this.cafe.city;
 
+    CapacitorGoogleMaps.addListener("onMapReady", async function() {
       await CapacitorGoogleMaps.addMarker({
         latitude: 43.317862492567,
         longitude: 21.895785976058143,
-        title: "Pleasure Cafe",
-        snippet: "Custom Snippet",
+        title: "" + name,
+        snippet: "" + address,
       });
 
       await CapacitorGoogleMaps.setMapType({
-        "type": "normal"
-      })
-    })
+        "type": "normal",
+      });
+    });
   },
   unmounted() {
     CapacitorGoogleMaps.close();
@@ -43,7 +51,7 @@ export default {
 <style lang="css" scoped>
 #map {
   margin: 2em 1em;
-  height: 250px;
+  height: 320px;
   border: 1px solid black;
 }
 </style>

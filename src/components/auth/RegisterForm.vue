@@ -62,7 +62,7 @@
       ></ion-icon>
     </ion-item>
     <SocialIcons class="mt-7"/>
-    <div class="mt-10">
+    <div class="mt-6">
       <ion-button
           size="large"
           expand="block"
