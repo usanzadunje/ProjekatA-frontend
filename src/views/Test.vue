@@ -11,10 +11,6 @@
 import { IonContent, IonPage } from '@ionic/vue';
 
 
-import { Http } from '@capacitor-community/http';
-import axios    from "axios";
-
-
 export default {
   components: {
     IonContent,
@@ -22,17 +18,7 @@ export default {
   },
   setup() {
 
-    Http.get({
-      url: 'https://projekata-hgego.ondigitalocean.app/api/cafes',
-    }).then((response) => {
-      console.log(response.data);
-    });
 
-    axios.get(
-        `https://projekata-hgego.ondigitalocean.app/api/cafes`,
-    ).then((response) => {
-      console.log(response.data);
-    });
 
 
     return {};
