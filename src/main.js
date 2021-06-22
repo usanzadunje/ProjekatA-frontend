@@ -39,6 +39,13 @@ const app = createApp(App)
     .use(IonicVue)
     .use(router);
 
+app.mixin({
+    data() {
+        return {
+            backendStorageURL: process.env.VUE_APP_STORED_IMAGES_URL,
+        };
+    },
+})
 
 router.isReady().then(() => {
     app.mount('#app');

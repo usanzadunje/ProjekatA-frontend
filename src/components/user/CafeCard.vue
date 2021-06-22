@@ -2,7 +2,7 @@
   <div class="bg-white cafe-card-border-radius">
     <div class="p-4 flex ion-align-items-center">
       <img
-          src="http://192.168.1.203:8200/storage/img/cafe/test.png"
+          :src="`${backendStorageURL}/cafe/test.png`"
           alt=""
           class="cafe-card-image"
       >
@@ -77,7 +77,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-  ion-icon{
-    font-size: 17px !important;
-  }
+ion-icon {
+  font-size: 17px !important;
+}
 </style>

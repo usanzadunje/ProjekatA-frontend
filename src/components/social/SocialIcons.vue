@@ -29,7 +29,8 @@ import SocialAuthService from '@/services/SocialAuthService';
 
 import { logoFacebook, logoGoogle } from 'ionicons/icons';
 
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { GoogleAuth }            from '@codetrix-studio/capacitor-google-auth';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 export default defineComponent({
   name: "SocialIcons",
@@ -42,6 +43,10 @@ export default defineComponent({
   setup() {
     /* Global components */
     const router = useRouter();
+
+    /* Methods */
+    const { showSuccessToast } = useToastNotifications();
+
     /* Event handlers */
     const login = async(driver) => {
       const payload = await SocialAuthService.getUserFromProvider(driver);
@@ -49,6 +54,7 @@ export default defineComponent({
                  .then(async() => {
                    await store.dispatch("auth/getAuthUser");
                    await router.push({ name: 'home' });
+                   await showSuccessToast('Success logged in!');
                  })
                  .catch((error) => {
                    alert(JSON.stringify(error));

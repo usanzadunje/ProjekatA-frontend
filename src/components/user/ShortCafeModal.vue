@@ -1,11 +1,11 @@
 <template>
   <ion-content class="ion-padding">
-    <div class="relative w-full container-modal">
-      <div class="absolute w-full top-3">
+    <div class="relative w-full">
+      <div class="absolute w-full">
         <ion-item class="ion-item-no-padding-x">
           <ion-thumbnail slot="start">
             <img
-                src="http://192.168.1.203:8200/storage/img/cafe/test.png"
+                :src="`${backendStorageURL}/cafe/test.png`"
                 alt="Logo of {{ cafe.name }}"
                 class="modal-thumbnail"
             >
@@ -22,7 +22,7 @@
           <ion-slides ref="slider" :options="slideOpts">
             <ion-slide v-for="i in [1,2,3]" :key="i">
               <img
-                  :src="`http://192.168.1.203:8200/storage/img/cafe/test${i}.png`"
+                  :src="`${backendStorageURL}/cafe/test${i}.png`"
                   alt=""
               >
             </ion-slide>

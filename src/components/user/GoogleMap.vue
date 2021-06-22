@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="map"></div>
+  <div class="relative w-full">
+    <div ref="map" class="absolute w-full modal-positioning" id="map"></div>
   </div>
 </template>
 l
@@ -19,8 +19,8 @@ export default {
     CapacitorGoogleMaps.create({
       width: 325,
       height: 318,
-      x: 17,
-      y: 210,
+      x: this.$refs.map.getBoundingClientRect().x ?? 17,
+      y: this.$refs.map.getBoundingClientRect().y ?? 210,
       latitude: 43.317862492567,
       longitude: 21.895785976058143,
       zoom: 20,

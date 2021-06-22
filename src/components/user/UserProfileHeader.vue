@@ -15,7 +15,7 @@
         <div class="mt-5 flex justify-start">
           <div>
             <img
-                src="http://192.168.1.203:8200/storage/img/user/profile-test.png"
+                :src="`${backendStorageURL}/user/profile-test.png`"
                 alt="Profile picture of user {{ authUser.full_name }}"
                 class="user-profile-picture"
             >

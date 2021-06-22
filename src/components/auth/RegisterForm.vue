@@ -130,15 +130,15 @@ export default defineComponent({
 
 
     /* Methods */
-    const { showErrorToast, showSuccessToast } = useToastNotifications();
+    const { showErrorToast } = useToastNotifications();
 
     /* Event handlers */
     let register = () => {
       Object.assign(newUser, newUser, { fname: null, lname: null, bday: null, phone: null, username: null });
       AuthService.register(newUser)
                  .then(async() => {
+                   newUser = {};
                    await router.push({ name: 'onboarding' });
-                   await showSuccessToast('You have successfully registered!');
                  })
                  .catch(async(errors) => {
                    errorNames.value = getError(errors);

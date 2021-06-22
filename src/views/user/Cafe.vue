@@ -20,7 +20,7 @@
     <ion-content :fullscreen="true" class="ion-padding relative">
       <div class="relative">
         <img
-            src="http://192.168.1.203:8200/storage/img/cafe/cafeshow.png"
+            :src="`${backendStorageURL}/cafe/cafeshow.png`"
             alt="Image of {{ cafe.name }} cafe"
             class="banner-image w-full"
         />
@@ -174,7 +174,6 @@ export default defineComponent({
 
     return {
       /* Global properties */
-      process,
 
       /* Component properties */
       cafe,
