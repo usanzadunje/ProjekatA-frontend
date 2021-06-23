@@ -45,7 +45,7 @@ export default defineComponent({
 </script>
 <style scoped>
 div.bg {
-  background: url('http://http://134.122.86.193/storage/img/onboarding/notification-example.png') no-repeat center fixed;
+  background: url('https://resize.rs/storage/img/onboarding/notification-example.png') no-repeat center fixed;
   background-size: cover;
 }
 </style>

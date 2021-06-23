@@ -81,7 +81,7 @@ import { useRouter } from 'vue-router';
 
 import store from '@/store/index';
 
-import { getError, sleep } from "@/utils/helpers";
+// import { getError, sleep } from "@/utils/helpers";
 
 import {
   IonItem,
@@ -131,7 +131,7 @@ export default defineComponent({
     /* Lifecycle hooks */
 
     /* Methods */
-    const { showErrorToast, showSuccessToast } = useToastNotifications();
+    const { showSuccessToast } = useToastNotifications();
 
     /* Event handlers */
     const login = () => {
@@ -145,9 +145,10 @@ export default defineComponent({
                    await showSuccessToast('Success logged in!');
                  })
                  .catch(async(errors) => {
-                   errorNames.value = getError(errors);
-                   await showErrorToast(errors);
-                   await sleep(Object.keys(errorNames.value).length * 900);
+                   console.log(errors);
+                   // errorNames.value = getError(errors);
+                   // await showErrorToast(errors);
+                   // await sleep(Object.keys(errorNames.value).length * 900);
                    errorNames.value = {};
                  });
 

@@ -33,7 +33,7 @@ export default defineComponent({
 </script>
 <style scoped>
 div.bg {
-  background: #FFF url('http://134.122.86.193/storage/img/auth/login-background.png') no-repeat center top fixed;
+  background: #FFF url('https://resize.rs/storage/img/auth/login-background.png') no-repeat center top fixed;
   background-size: cover;
 }
 </style>
