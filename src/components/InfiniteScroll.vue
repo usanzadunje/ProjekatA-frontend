@@ -76,7 +76,7 @@ export default defineComponent({
                  cafes.value = response.data;
                  initial20Cafes = response.data;
                })
-               .catch((error) => alert(error));
+               .catch((error) => alert(JSON.stringify(error)));
 
     /* Methods */
     // Grabbing 20 more cafes that match required filter
@@ -89,7 +89,7 @@ export default defineComponent({
                    if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
                    cafes.value = cafes.value.concat(response.data);
                  })
-                 .catch((error) => alert(error));
+                 .catch((error) => alert(JSON.stringify(error)));
 
     };
     const filterCafes = (ignoreIfNoSearchTerm = false) => {
@@ -104,7 +104,7 @@ export default defineComponent({
                    if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
                    cafes.value = response.data;
                  })
-                 .catch((error) => alert(error));
+                 .catch((error) => alert(JSON.stringify(error)));
 
     };
 

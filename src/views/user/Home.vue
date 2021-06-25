@@ -157,14 +157,14 @@ export default defineComponent({
                .then((response) => {
                  cafes.currentlyAvailableCafes = response.data;
                })
-               .catch((error) => alert(error));
+               .catch((error) => alert(JSON.stringify(error)));
 
     //*Before mounting fetching initial 4 cafes to show closest to user
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'name', true)
                .then((response) => {
                  cafes.closestToUserCafes = response.data;
                })
-               .catch((error) => alert(error));
+               .catch((error) => alert(JSON.stringify(error)));
 
     /* Event handlers */
     const openModal = (cafe = null, state) => {
@@ -193,19 +193,19 @@ export default defineComponent({
                    .then((response) => {
                      cafes.currentlyAvailableCafes = response.data;
                    })
-                   .catch((error) => alert(error)),
+                   .catch((error) => alert(JSON.stringify(error))),
 
         CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
                    .then((response) => {
                      cafes.closestToUserCafes = response.data;
                    })
-                   .catch((error) => alert(error)),
+                   .catch((error) => alert(JSON.stringify(error))),
       ])
              .then(() => {
                event.target.complete();
              })
              .catch((error) => {
-               alert(error);
+               alert(JSON.stringify(error));
                event.target.complete();
              });
 
