@@ -31,6 +31,8 @@ import { logoFacebook, logoGoogle } from 'ionicons/icons';
 
 import { GoogleAuth }            from '@codetrix-studio/capacitor-google-auth';
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { Device }                from '@capacitor/device';
+import { useStorage }            from '@/services/StorageService';
 
 export default defineComponent({
   name: "SocialIcons",
@@ -43,15 +45,21 @@ export default defineComponent({
   setup() {
     /* Global components */
     const router = useRouter();
+    const { set } = useStorage();
 
     /* Methods */
     const { showSuccessToast } = useToastNotifications();
 
+
     /* Event handlers */
     const login = async(driver) => {
+      const deviceInfo = await Device.getInfo();
       const payload = await SocialAuthService.getUserFromProvider(driver);
+      console.log(payload);
+      payload.device_name = deviceInfo.name || deviceInfo.model;
       AuthService.authenticateSocial(payload)
-                 .then(async() => {
+                 .then(async(response) => {
+                   await set(`projekata_token`, response.data);
                    await store.dispatch("auth/getAuthUser");
                    await router.push({ name: 'home' });
                    await showSuccessToast('Success logged in!');

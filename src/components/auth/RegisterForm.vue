@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, onMounted, reactive, ref } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -105,6 +105,8 @@ import {
   eyeOffOutline,
 }                                from 'ionicons/icons';
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useStorage }            from '@/services/StorageService';
+import { Device }                from '@capacitor/device';
 
 
 export default defineComponent({
@@ -119,6 +121,7 @@ export default defineComponent({
   setup() {
     /* Global properties and methods */
     const router = useRouter();
+    const { set } = useStorage();
 
     /* Component properties */
     let newUser = reactive({});
@@ -128,15 +131,30 @@ export default defineComponent({
     const passwordInput = ref(null);
     const passwordConfirmInput = ref(null);
 
+    /* Lifecycle hooks */
+    onMounted(async() => {
+      const deviceInfo = await Device.getInfo();
+      newUser.device_name = deviceInfo.name || deviceInfo.model;
+    });
 
     /* Methods */
     const { showErrorToast } = useToastNotifications();
 
     /* Event handlers */
     let register = () => {
-      Object.assign(newUser, newUser, { fname: null, lname: null, bday: null, phone: null, username: null });
+      Object.assign(
+          newUser,
+          newUser,
+          {
+            fname: null,
+            lname: null,
+            bday: null,
+            phone: null,
+            username: null,
+          });
       AuthService.register(newUser)
-                 .then(async() => {
+                 .then(async(response) => {
+                   await set(`projekata_token`, response.data);
                    newUser = {};
                    await router.push({ name: 'onboarding' });
                  })

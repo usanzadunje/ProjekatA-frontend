@@ -75,11 +75,13 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue';
+import { defineComponent, ref, reactive, onMounted } from 'vue';
 
 import { useRouter } from 'vue-router';
 
 import store from '@/store/index';
+
+import { Device } from '@capacitor/device';
 
 import { getError, sleep } from "@/utils/helpers";
 
@@ -104,7 +106,8 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-}                        from 'ionicons/icons';
+}                     from 'ionicons/icons';
+import { useStorage } from '@/services/StorageService';
 
 export default defineComponent({
   name: "LoginForm",
@@ -120,6 +123,7 @@ export default defineComponent({
   setup() {
     /* Global properties and methods */
     const router = useRouter();
+    const { set } = useStorage();
 
     /* Component properties */
     let user = reactive({});
@@ -129,6 +133,10 @@ export default defineComponent({
     const emailInput = ref(null);
 
     /* Lifecycle hooks */
+    onMounted(async() => {
+      const deviceInfo = await Device.getInfo();
+      user.device_name = deviceInfo.name || deviceInfo.model;
+    });
 
     /* Methods */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
@@ -136,13 +144,14 @@ export default defineComponent({
     /* Event handlers */
     const login = () => {
       AuthService.login(user)
-                 .then(async() => {
+                 .then(async(response) => {
+                   await set(`projekata_token`, response.data);
                    await store.dispatch("auth/getAuthUser");
                    let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
                    user.email = '';
                    user.password = '';
                    await router.push(homeRoute);
-                   await showSuccessToast('Success logged in!');
+                   await showSuccessToast('Successfully logged in!');
                  })
                  .catch(async(errors) => {
                    alert(errors);

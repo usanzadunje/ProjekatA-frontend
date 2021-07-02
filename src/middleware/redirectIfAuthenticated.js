@@ -1,9 +1,7 @@
-import router from "@/router";
-
 export default function redirectIfAuthenticated({ next, store }) {
     const homeRoute = { name: "home" };
 
-    if(store.getters["auth/loggedIn"] && router.currentRoute.name !== "login") {
+    if(store.getters["auth/loggedIn"]) {
         next(homeRoute);
     }else {
         next();

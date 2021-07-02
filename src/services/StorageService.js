@@ -6,14 +6,14 @@ export function useStorage() {
 
     storage.create()
            .catch((error) => {
-               alert(error)
+               alert(error);
            });
 
-    const set = (key, value) => {
-        storage?.set(key, value);
+    const set = async(key, value) => {
+        await storage?.set(key, value);
     };
 
-    const get = async(key) => {
+    const get = (key) => {
         return storage?.get(key);
     };
 
