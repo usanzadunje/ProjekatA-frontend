@@ -1,7 +1,7 @@
 <template>
   <div class="mt-1">
     <p v-if="hasTitle" class="sliding-filter-title uppercase">FILTERI</p>
-    <ion-slides :options="slideOpts">
+    <ion-slides id="filterSlider" :options="slideOpts">
       <ion-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { defineComponent, nextTick, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 
 import {
   IonIcon,
@@ -88,16 +88,14 @@ export default defineComponent({
       initialSlide: 0,
       speed: 500,
       centeredSlides: false,
-      slidesPerView: 2.3,
+      slidesPerView: 2.7,
     };
 
     /* Lifecycle hook */
     // Without this on android options are not passed to swiper
     onMounted(() => {
-      const slides = document.querySelector("ion-slides");
-      nextTick(() => {
-        slides.options = slideOpts;
-      });
+      const slides = document.getElementById("filterSlider");
+      slides.update();
     });
 
     /* Event handlers */
@@ -128,7 +126,6 @@ ion-button {
 }
 
 ion-slide {
+  margin-left: -10px !important;
 }
-
-
 </style>

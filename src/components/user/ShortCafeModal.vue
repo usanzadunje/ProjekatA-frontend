@@ -17,9 +17,8 @@
         </ion-item>
 
         <CafeInfoBody :cafe="cafe"/>
-
         <ion-item class="mt-6 ion-no-padding">
-          <ion-slides ref="slider" :options="slideOpts">
+          <ion-slides id="gallerySlider" :options="slideOpts">
             <ion-slide v-for="i in [1,2,3]" :key="i">
               <img
                   :src="`${backendStorageURL}/cafe/test${i}.png`"
@@ -65,7 +64,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, toRef, computed } from 'vue';
+import { defineComponent, ref, toRef, computed, onMounted } from 'vue';
 
 import { useStore } from 'vuex';
 
@@ -113,12 +112,6 @@ export default defineComponent({
     },
   },
   emits: ['dismissShortCafeModal', 'subModalOpened'],
-  updated() {
-    const slides = document.querySelector("ion-slides");
-    this.$nextTick(() => {
-      slides.options = this.slideOpts;
-    });
-  },
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
@@ -137,6 +130,10 @@ export default defineComponent({
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
     /* Lifecycle hooks */
+    onMounted(() => {
+      const slides = document.getElementById("gallerySlider");
+      slides.update();
+    });
     /* Checking if user is subscribed to this cafe */
     if(loggedIn.value) {
       CafeService.isUserSubscribed(cafe.value.id)
@@ -173,5 +170,4 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-
 </style>
