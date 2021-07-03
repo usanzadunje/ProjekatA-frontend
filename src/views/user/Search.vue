@@ -5,7 +5,6 @@
         class="pull-transition"
     >
       <UserHeader
-          :hasSearchFilter="false"
           :mainHeading="'Pretraga'"
           :notificationIcon="notificationsOffOutline"
           :searchTerm="cafeSearchString"

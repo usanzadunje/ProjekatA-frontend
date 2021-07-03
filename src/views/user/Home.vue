@@ -1,7 +1,6 @@
 <template>
   <ion-page>
     <UserHeader
-        :hasSearchFilter="true"
         :mainHeading="'Pronadji slobodno mesto'"
         :notificationIcon="notificationsOutline"
         @searchEnterPressed="switchToSearch"

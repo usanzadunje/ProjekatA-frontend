@@ -159,7 +159,6 @@ export default defineComponent({
                    await router.push({ name: 'onboarding' });
                  })
                  .catch(async(errors) => {
-                   alert(errors);
                    errorNames.value = getError(errors);
                    await showErrorToast(errors);
                    await sleep(Object.keys(errorNames.value).length * 900);

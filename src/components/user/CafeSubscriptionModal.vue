@@ -36,9 +36,9 @@
             {{ !isNaN(notificationTime) ? notificationTime + 'min' : '∞' }}
           </ion-label>
         </ion-item>
-        <div class="mt-2 mb-3 flex justify-between">
+        <div class="mt-2 mb-3 flex justify-around">
           <ion-button
-              class="uppercase button-cancel modal-button-border"
+              class="mr-2.5 uppercase button-cancel modal-button-border"
               @click="$emit('dismissSubscriptionModal')"
           >
             Otkazi

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-8">
+  <div id="custom" class="px-8">
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11 auth-input-background"
@@ -45,7 +45,7 @@
             v-model="user.remember"
             mode="md"
         ></ion-checkbox>
-        <ion-text class="ml-2 w-16 absolute top-1/2 transform -translate-y-1/2">Zapamti me</ion-text>
+        <ion-text class="ml-2 absolute top-1/2 transform -translate-y-1/2">Zapamti me</ion-text>
       </div>
       <div class="w-32 absolute top-1/2 right-0 transform -translate-y-1/2">
         <a href="/forgot-password">Zaboravljena lozinka?</a>
@@ -125,6 +125,10 @@ export default defineComponent({
     const router = useRouter();
     const { set } = useStorage();
 
+    window.addEventListener("keyboardDidShow", () => {
+      document.getElementById('custom').style.overflow = "scrollable";
+    });
+
     /* Component properties */
     let user = reactive({});
     let showPassword = ref(false);
@@ -154,7 +158,6 @@ export default defineComponent({
                    await showSuccessToast('Successfully logged in!');
                  })
                  .catch(async(errors) => {
-                   alert(errors);
                    errorNames.value = getError(errors);
                    await showErrorToast(errors);
                    await sleep(Object.keys(errorNames.value).length * 900);
@@ -187,3 +190,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+ion-text{
+  width: 60px !important;
+}
+</style>

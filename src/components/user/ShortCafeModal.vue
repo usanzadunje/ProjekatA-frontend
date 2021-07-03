@@ -28,9 +28,9 @@
             </ion-slide>
           </ion-slides>
         </ion-item>
-        <div class="mt-5 mb-3 flex justify-between">
+        <div class="mt-5 mb-3 flex justify-around">
           <ion-button
-              class="uppercase button-see-more modal-button-border"
+              class="mr-2.5 uppercase button-see-more modal-button-border"
               :href="`/cafes/${cafe.id}`"
               @click="$emit('dismissShortCafeModal')"
           > Pogledaj vise

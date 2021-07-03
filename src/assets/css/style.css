@@ -5,6 +5,7 @@
 */
 ion-content {
     --background: #F6F7FB;
+    --keyboard-offset: 0px;
 }
 
 ion-header {
@@ -26,7 +27,7 @@ ion-searchbar {
     --box-shadow: none !important;
     transform: scale(0.9);
     margin-left: -1.5rem !important;
-    width: 100% !important;
+    width: calc(100% + 3rem) !important;
 }
 /*ion-searchbar :first-child {*/
 /*}*/
@@ -54,6 +55,10 @@ ion-tab-bar {
 
 ion-tab-button {
     --color-selected: #207DFF;
+}
+
+ion-button {
+    --box-shadow: none;
 }
 
 ion-modal ion-content {
@@ -125,6 +130,10 @@ ion-toggle {
     --handle-spacing: 3px;
     --handle-background-checked: #FFF;
     height: 19px;
+}
+
+.scroll-content {
+    padding-bottom: 0 !important;
 }
 
 /*
@@ -354,6 +363,7 @@ ion-toggle {
 .logo-position-login {
     top: 5%;
 }
+
 .content-position-login {
     bottom: 0;
 }
@@ -484,6 +494,7 @@ ion-toggle {
     font-weight: 500 !important;
     color: #232B38 !important;
     font-size: 12px !important;
+    width: 100% !important;
 }
 
 .button-subscribe {
@@ -497,10 +508,10 @@ ion-toggle {
     font-weight: 500 !important;
     color: #FFF !important;
     font-size: 12px !important;
+    width: 100% !important;
 }
 
 .modal-button-border {
-    --box-shadow: none;
     --border-radius: 17px;
 }
 
@@ -551,6 +562,7 @@ ion-toggle {
     font-weight: 500 !important;
     color: #232B38 !important;
     font-size: 12px !important;
+    width: 100% !important;
 }
 
 .button-confirm {
@@ -564,6 +576,7 @@ ion-toggle {
     font-weight: 500 !important;
     color: #FFF !important;
     font-size: 12px !important;
+    width: 100% !important;
 }
 
 /*

@@ -1,4 +1,5 @@
--<template>
+-
+<template>
   <ion-header class="ion-no-border">
     <ion-toolbar>
       <div class="px-4 pt-3 pb-1 pb-2 mt-2 md header-padding-bottom">
@@ -16,8 +17,10 @@
             <p class="main-toolbar-fade-text uppercase">Register</p>
           </ion-button>
         </div>
+
         <h1 class="main-toolbar-heading text-xl">{{ mainHeading }}</h1>
-        <div class="flex">
+
+        <div>
           <ion-searchbar
               :value="searchTerm"
               placeholder="Unesite ime kafica"
@@ -25,8 +28,6 @@
               @keyup.enter="$emit('searchEnterPressed', $event)"
               enterkeyhint="search"
           ></ion-searchbar>
-          <ion-icon v-if="hasSearchFilter" :icon="optionsOutline"
-                    class="text-3xl text-gray-400 align-bottom mt-1 md filter-icon"></ion-icon>
         </div>
         <slot></slot>
       </div>
@@ -53,7 +54,7 @@ export default defineComponent({
     IonButton,
   },
   props: {
-    hasSearchFilter: Boolean,
+    // hasSearchFilter: Boolean,
     mainHeading: String,
     notificationIcon: String,
     searchTerm: String,
@@ -87,5 +88,8 @@ export default defineComponent({
 ion-button {
   padding: 0 0 0.75rem 0 !important;
   margin: 0 -1rem 0 0 !important;
+}
+
+ion-searchbar {
 }
 </style>
