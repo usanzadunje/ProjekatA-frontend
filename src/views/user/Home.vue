@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted, nextTick } from 'vue';
+import { defineComponent, ref, reactive, onMounted } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -114,12 +114,6 @@ export default defineComponent({
       return { path: to.path, query: {}, hash: to.hash };
     }
   },
-  ionViewWillEnter() {
-    // Before entering view style slides according to options
-    document.querySelectorAll("ion-slides").forEach((slide) => {
-      slide.options = this.slideOpts;
-    });
-  },
   setup() {
     /* Global properties */
     const router = useRouter();
@@ -143,11 +137,6 @@ export default defineComponent({
     /* Lifecycle hooks */
     // Without this on android options are not passed to swiper
     onMounted(() => {
-      nextTick(() => {
-        document.querySelectorAll("ion-slides").forEach((slide) => {
-          slide.options = slideOpts;
-        });
-      });
     });
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)

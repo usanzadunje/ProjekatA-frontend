@@ -55,13 +55,14 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import {
   IonIcon,
   IonButton,
   IonSlides,
   IonSlide,
+  onIonViewDidEnter,
 } from '@ionic/vue';
 
 import {
@@ -93,7 +94,7 @@ export default defineComponent({
 
     /* Lifecycle hook */
     // Without this on android options are not passed to swiper
-    onMounted(() => {
+    onIonViewDidEnter(() => {
       const slides = document.getElementById("filterSlider");
       slides.update();
     });
