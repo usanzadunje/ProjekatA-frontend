@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -33,6 +33,7 @@ import { GoogleAuth }            from '@codetrix-studio/capacitor-google-auth';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { Device }                from '@capacitor/device';
 import { useStorage }            from '@/services/StorageService';
+import { getError, sleep }       from '@/utils/helpers';
 
 export default defineComponent({
   name: "SocialIcons",
@@ -43,20 +44,22 @@ export default defineComponent({
     GoogleAuth.init();
   },
   setup() {
-    /* Global components */
+    /* Global properties and methods */
     const router = useRouter();
     const { set } = useStorage();
 
-    /* Methods */
-    const { showSuccessToast } = useToastNotifications();
+    /* Component properties */
+    let errorNames = ref({});
 
+    /* Methods */
+    const { showSuccessToast, showErrorToast } = useToastNotifications();
 
     /* Event handlers */
     const login = async(driver) => {
       const deviceInfo = await Device.getInfo();
       const payload = await SocialAuthService.getUserFromProvider(driver);
-      console.log(payload);
       payload.device_name = deviceInfo.name || deviceInfo.model;
+
       AuthService.authenticateSocial(payload)
                  .then(async(response) => {
                    await set(`projekata_token`, response.data);
@@ -64,8 +67,11 @@ export default defineComponent({
                    await router.push({ name: 'home' });
                    await showSuccessToast('Success logged in!');
                  })
-                 .catch((error) => {
-                   alert(JSON.stringify(error));
+                 .catch(async(errors) => {
+                   errorNames.value = getError(errors);
+                   await showErrorToast(errors);
+                   await sleep(Object.keys(errorNames.value).length * 900);
+                   errorNames.value = {};
                  });
     };
 

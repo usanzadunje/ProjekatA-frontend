@@ -18,7 +18,7 @@
       </ion-refresher>
 
       <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
-      <ion-slides :options="slideOpts" ref="slides">
+      <ion-slides :options="slideOpts">
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.closestToUserCafes.slice(0, 2)"
@@ -52,7 +52,6 @@
           />
         </ion-slide>
       </ion-slides>
-
 
       <ion-modal
           :is-open="isModalOpen"
@@ -119,12 +118,11 @@ export default defineComponent({
   },
   ionViewWillEnter() {
     // Before entering view style slides according to options
-    document.querySelector("ion-slides").options = this.slideOpts;
+    document.querySelectorAll("ion-slides").forEach((slide) => {
+      slide.options = this.slideOpts;
+    });
   },
   setup() {
-    /* Component references */
-    const slides = ref(null);
-
     /* Global properties */
     const router = useRouter();
 
@@ -147,9 +145,10 @@ export default defineComponent({
     /* Lifecycle hooks */
     // Without this on android options are not passed to swiper
     onMounted(() => {
-      const slides = document.querySelector("ion-slides");
       nextTick(() => {
-        slides.options = slideOpts;
+        document.querySelectorAll("ion-slides").forEach((slide) => {
+          slide.options = slideOpts;
+        });
       });
     });
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
@@ -168,7 +167,9 @@ export default defineComponent({
 
     /* Event handlers */
     const openModal = (cafe = null, state) => {
-      document.querySelector("ion-slides").options = slideOpts;
+      document.querySelectorAll("ion-slides").forEach((slide) => {
+        slide.options = slideOpts;
+      });
 
       if(cafe) {
         modalCafe.value = cafe;
@@ -213,8 +214,6 @@ export default defineComponent({
     };
 
     return {
-      slides,
-
       /* Component properties */
       slideOpts,
       cafes,
