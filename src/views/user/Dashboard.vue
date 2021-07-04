@@ -2,15 +2,19 @@
   <ion-page>
     <UserProfileHeader/>
 
-    <ion-content>
-      <SlidingFilter class="mt-3" @sortHasChanged="sortHasChanged"/>
+    <ion-content class="ion-padding">
+      <SlidingFilter @sortHasChanged="sortHasChanged" class="mt-2"/>
 
-      <div class="px-5 mt-3">
+      <div class="mt-3">
         <FilterCategoryHeading title="Kafici koje pratim" class="mb-2"/>
 
         <ion-item-sliding v-for="cafe in cafesUserSubscribedTo" :key="cafe.id" class="ion-no-padding mb-5">
           <ion-item class="ion-no-padding ion-no-margin">
-            <CafeCard :cafe="cafe" class="w-full"/>
+            <CafeCard
+                class="w-full"
+                :cafe="cafe"
+                @click="openModal(cafe.id, true)"
+            />
           </ion-item>
 
           <ion-item-options side="end">
@@ -24,6 +28,20 @@
           </ion-item-options>
         </ion-item-sliding>
       </div>
+
+      <ion-modal
+          :is-open="isModalOpen"
+          css-class="custom-modal"
+          @didDismiss="openModal(false);"
+          :backdrop-dismiss="true"
+          :swipe-to-close="true"
+      >
+        <ShortCafeModal
+            :cafe="modalCafe"
+            @dismissShortCafeModal="openModal(false)"
+        />
+      </ion-modal>
+
     </ion-content>
   </ion-page>
 </template>
@@ -42,12 +60,14 @@ import {
   IonItemOption,
   IonIcon,
   alertController,
+  IonModal,
 } from '@ionic/vue';
 
 import UserProfileHeader     from '@/components/user/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import CafeCard              from '@/components/user/CafeCard';
+import ShortCafeModal        from '@/components/user/ShortCafeModal';
 
 import CafeService from '@/services/CafeService';
 
@@ -66,10 +86,12 @@ export default defineComponent({
     IonItemOptions,
     IonItemOption,
     IonIcon,
+    IonModal,
     UserProfileHeader,
     SlidingFilter,
     FilterCategoryHeading,
     CafeCard,
+    ShortCafeModal,
   },
   computed: {
     ...mapGetters('auth', ['authUser']),
@@ -93,6 +115,11 @@ export default defineComponent({
       centeredSlides: false,
       slidesPerView: 2.7,
     };
+    // Showing/Hiding modal based on this property value
+    const isModalOpen = ref(false);
+    // Cafe which information is sent to modal
+    const modalCafe = ref({});
+
 
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
@@ -102,7 +129,7 @@ export default defineComponent({
         slide.options = slideOpts;
         slide.update();
       });
-    })
+    });
 
     /* Event handlers */
     const sortHasChanged = (sortValue) => {
@@ -133,6 +160,13 @@ export default defineComponent({
           });
       await alert.present();
     };
+    const openModal = async(id = null, state) => {
+      if(id) {
+        let response = await CafeService.show(id);
+        modalCafe.value = response.data;
+      }
+      isModalOpen.value = state;
+    };
 
     /* Methods */
     const unsubscribe = (cafeId) => {
@@ -150,10 +184,13 @@ export default defineComponent({
       cafesUserSubscribedTo,
       sortBy,
       slideOpts,
+      isModalOpen,
+      modalCafe,
 
       /* Event handlers */
       sortHasChanged,
       showAlert,
+      openModal,
 
       /* Icons */
       trashOutline,
@@ -169,6 +206,7 @@ ion-item {
   --border-radius: 15px;
   border-top-right-radius: 15px !important;
   border-bottom-right-radius: 15px !important;
+  --inner-padding-end: 0;
 }
 
 ion-item-options {
@@ -187,5 +225,9 @@ ion-item-option {
 
 ion-item-option:active {
   --background: #E01B43;
+}
+
+ion-content {
+  --padding-top: 0 !important;
 }
 </style>

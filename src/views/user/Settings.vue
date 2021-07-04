@@ -22,7 +22,7 @@
             ></ion-toggle>
           </ion-item>
         </ion-item>
-        <ion-item class="ion-item-padding-right">
+        <ion-item class="ion-item-padding-right" @click="showPrivacy">
           <p class="settings-item-text">Privatnost</p>
           <ion-button fill="clear" slot="end">
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
@@ -53,13 +53,13 @@
           </div>
           <p class="uppercase settings-fade-text ml-2">O aplikaciji</p>
         </ion-item>
-        <ion-item class="ion-item-padding-right">
+        <ion-item class="ion-item-padding-right" @click="showSupportAuthors">
           <p class="settings-item-text">Podrzite autore</p>
           <ion-button fill="clear" slot="end">
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
-        <ion-item class="ion-item-padding-right" @click="window.location.href = 'www.projekata.com'">
+        <ion-item class="ion-item-padding-right" @click="redirectToWebsite">
           <p class="settings-item-text">Web sajt</p>
           <ion-button fill="clear" slot="end" href="//projekata.com">
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
@@ -177,6 +177,15 @@ export default defineComponent({
     const logout = async() => {
       await store.dispatch("auth/logout");
     };
+    const showPrivacy = () => {
+      alert('Privacy');
+    };
+    const showSupportAuthors = () => {
+      alert('Support authors');
+    };
+    const redirectToWebsite = () => {
+      alert('Redirect to website');
+    };
 
     return {
       /* Compunent properties */
@@ -188,6 +197,9 @@ export default defineComponent({
       toggleDarkMode,
       toggleNotifications,
       logout,
+      showPrivacy,
+      showSupportAuthors,
+      redirectToWebsite,
 
       /* Icons from */
       flash,

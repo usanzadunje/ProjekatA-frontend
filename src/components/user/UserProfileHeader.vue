@@ -78,8 +78,6 @@ export default defineComponent({
 ion-toolbar {
   --background: url('https://resize.rs/storage/img/user/header-background.png') no-repeat;
   background-color: #207DFF;
-  border-bottom-left-radius: 33px !important;
-  border-bottom-right-radius: 33px !important;
 }
 
 ion-button {

@@ -61,6 +61,7 @@ export default {
             {
                 params: {
                     sortBy,
+                    getAllColumns: true,
                 },
             },
         );

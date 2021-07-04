@@ -414,9 +414,8 @@ ion-toggle {
 }
 
 .card-horizontal-ruler {
-    border-top: solid 0.5px #F3F3F3 !important;
-    width: 111% !important;
-    transform: translateX(-5%);
+    border-top: solid 1px #F3F3F3 !important;
+    width: 100% !important;
 }
 
 /*
