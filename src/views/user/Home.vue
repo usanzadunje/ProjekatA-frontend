@@ -15,9 +15,8 @@
         >
         </ion-refresher-content>
       </ion-refresher>
-
       <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
-      <ion-slides :options="slideOpts" class="homeSlider">
+      <ion-slides v-show="!showSkeleton" :options="slideOpts" class="homeSlider">
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.closestToUserCafes.slice(0, 2)"
@@ -34,8 +33,13 @@
         </ion-slide>
       </ion-slides>
 
+      <div v-if="showSkeleton">
+        <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
+        <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
+      </div>
+
       <FilterCategoryHeading class="mb-2" :title="'Trenutno slobodni'"/>
-      <ion-slides :options="slideOpts" class="homeSlider">
+      <ion-slides v-show="!showSkeleton" :options="slideOpts" class="homeSlider">
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.currentlyAvailableCafes.slice(0, 2)"
@@ -51,6 +55,11 @@
           />
         </ion-slide>
       </ion-slides>
+
+      <div v-if="showSkeleton">
+        <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
+        <SkeletonCafeCard></SkeletonCafeCard>
+      </div>
 
       <ion-modal
           :is-open="isModalOpen"
@@ -90,6 +99,7 @@ import UserHeader            from '@/components/user/UserHeader';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import HomeSlidingCafeCards  from '@/components/user/HomeSlidingCafeCards';
 import ShortCafeModal        from '@/components/user/ShortCafeModal';
+import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
 import { notificationsOutline } from 'ionicons/icons';
 
@@ -107,6 +117,7 @@ export default defineComponent({
     FilterCategoryHeading,
     HomeSlidingCafeCards,
     ShortCafeModal,
+    SkeletonCafeCard,
   },
   beforeRouteEnter(to) {
     // Before entering route remove query params
@@ -133,17 +144,20 @@ export default defineComponent({
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
     const modalCafe = ref({});
+    let showSkeleton = ref(true);
 
     /* Lifecycle hooks */
     // Without this on android options are not passed to swiper
     onMounted(() => {
-      const slides = document.getElementsByClassName("homeSlider");
-      setTimeout(() => {
-        slides.forEach((slide) => {
-          slide.options = slideOpts;
-          slide.update();
-        });
-      }, 100);
+      if(showSkeleton.value) {
+        const slides = document.getElementsByClassName("homeSlider");
+        setTimeout(() => {
+          slides.forEach((slide) => {
+            slide.options = slideOpts;
+            slide.update();
+          });
+        }, 200);
+      }
     });
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
@@ -156,6 +170,7 @@ export default defineComponent({
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'name', true)
                .then((response) => {
                  cafes.closestToUserCafes = response.data;
+                 showSkeleton.value = false;
                })
                .catch((error) => alert(JSON.stringify(error)));
 
@@ -211,6 +226,7 @@ export default defineComponent({
       cafes,
       isModalOpen,
       modalCafe,
+      showSkeleton,
 
       /* Event handlers */
       openModal,

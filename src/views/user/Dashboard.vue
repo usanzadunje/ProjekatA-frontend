@@ -8,25 +8,33 @@
       <div class="mt-3">
         <FilterCategoryHeading title="Kafici koje pratim" class="mb-2"/>
 
-        <ion-item-sliding v-for="cafe in cafesUserSubscribedTo" :key="cafe.id" class="ion-no-padding mb-5">
-          <ion-item class="ion-no-padding ion-no-margin">
-            <CafeCard
-                class="w-full"
-                :cafe="cafe"
-                @click="openModal(cafe.id, true)"
-            />
-          </ion-item>
+        <div v-if="!showSkeleton">
+          <ion-item-sliding v-for="cafe in cafesUserSubscribedTo" :key="cafe.id" class="ion-no-padding mb-5">
+            <ion-item class="ion-no-padding ion-no-margin">
+              <CafeCard
+                  class="w-full"
+                  :cafe="cafe"
+                  @click="openModal(cafe.id, true)"
+              />
+            </ion-item>
 
-          <ion-item-options side="end">
-            <ion-item-option type="button" @click="showAlert(cafe.id)">
-              <ion-icon
-                  slot="icon-only"
-                  :icon="trashOutline"
-                  class="text-2xl"
-              ></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
+            <ion-item-options side="end">
+              <ion-item-option type="button" @click="showAlert(cafe.id)">
+                <ion-icon
+                    slot="icon-only"
+                    :icon="trashOutline"
+                    class="text-2xl"
+                ></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </div>
+
+        <div v-if="showSkeleton">
+          <div v-for="i in 5" :key="i" class="mb-5">
+            <SkeletonCafeCard></SkeletonCafeCard>
+          </div>
+        </div>
       </div>
 
       <ion-modal
@@ -68,6 +76,7 @@ import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import CafeCard              from '@/components/user/CafeCard';
 import ShortCafeModal        from '@/components/user/ShortCafeModal';
+import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
 import CafeService from '@/services/CafeService';
 
@@ -92,6 +101,7 @@ export default defineComponent({
     FilterCategoryHeading,
     CafeCard,
     ShortCafeModal,
+    SkeletonCafeCard,
   },
   computed: {
     ...mapGetters('auth', ['authUser']),
@@ -101,6 +111,7 @@ export default defineComponent({
     CafeService.getAllCafesUserSubscribedTo(this.sortBy)
                .then((response) => {
                  this.cafesUserSubscribedTo = response.data;
+                 this.showSkeleton = false;
                })
                .catch((error) => console.log(error));
   },
@@ -119,7 +130,7 @@ export default defineComponent({
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
     const modalCafe = ref({});
-
+    let showSkeleton = ref(true);
 
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
@@ -186,6 +197,7 @@ export default defineComponent({
       slideOpts,
       isModalOpen,
       modalCafe,
+      showSkeleton,
 
       /* Event handlers */
       sortHasChanged,

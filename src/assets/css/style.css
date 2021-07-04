@@ -748,6 +748,13 @@ ion-toggle {
     --border-style: none !important;
 }
 
+.logout-button {
+    --padding-top: 1.575rem;
+    --padding-bottom: 1.375rem;
+    --padding-start: 1.8rem;
+    --padding-end: 1.8rem;
+}
+
 /*
     END SETTINGS STYLES
 */

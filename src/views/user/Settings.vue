@@ -65,7 +65,7 @@
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
-        <ion-button class="uppercase" fill="clear" expand="block" @click="logout">
+        <ion-button class="mt-5 uppercase logout-button" fill="clear" expand="block" @click="logout">
           Logout
         </ion-button>
       </div>
