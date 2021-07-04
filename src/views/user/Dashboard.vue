@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 
 import { mapGetters } from 'vuex';
 
@@ -80,13 +80,29 @@ export default defineComponent({
                .then((response) => {
                  this.cafesUserSubscribedTo = response.data;
                })
-               .catch((error) => alert(error));
+               .catch((error) => console.log(error));
   },
   setup() {
     /* Component properties */
     // Cafes user is subscribed to
     let cafesUserSubscribedTo = ref([]);
     let sortBy = ref('name');
+    const slideOpts = {
+      initialSlide: 0,
+      speed: 500,
+      centeredSlides: false,
+      slidesPerView: 2.7,
+    };
+
+    /* Lifecycle hooks */
+    //Setting options for slider inside SlideFilter component
+    onMounted(() => {
+      const slides = document.getElementsByClassName('filterSlider');
+      slides.forEach((slide) => {
+        slide.options = slideOpts;
+        slide.update();
+      });
+    })
 
     /* Event handlers */
     const sortHasChanged = (sortValue) => {
@@ -133,6 +149,7 @@ export default defineComponent({
       /* Component roperties */
       cafesUserSubscribedTo,
       sortBy,
+      slideOpts,
 
       /* Event handlers */
       sortHasChanged,

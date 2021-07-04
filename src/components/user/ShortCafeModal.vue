@@ -132,7 +132,10 @@ export default defineComponent({
     /* Lifecycle hooks */
     onMounted(() => {
       const slides = document.getElementById("gallerySlider");
-      slides.update();
+      setTimeout(() => {
+        slides.options = slideOpts;
+        slides.update();
+      }, 150);
     });
     /* Checking if user is subscribed to this cafe */
     if(loggedIn.value) {

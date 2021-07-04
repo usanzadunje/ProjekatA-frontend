@@ -17,7 +17,7 @@
       </ion-refresher>
 
       <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
-      <ion-slides :options="slideOpts">
+      <ion-slides :options="slideOpts" class="homeSlider">
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.closestToUserCafes.slice(0, 2)"
@@ -35,7 +35,7 @@
       </ion-slides>
 
       <FilterCategoryHeading class="mb-2" :title="'Trenutno slobodni'"/>
-      <ion-slides :options="slideOpts">
+      <ion-slides :options="slideOpts" class="homeSlider">
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.currentlyAvailableCafes.slice(0, 2)"
@@ -137,6 +137,13 @@ export default defineComponent({
     /* Lifecycle hooks */
     // Without this on android options are not passed to swiper
     onMounted(() => {
+      const slides = document.getElementsByClassName("homeSlider");
+      setTimeout(() => {
+        slides.forEach((slide) => {
+          slide.options = slideOpts;
+          slide.update();
+        });
+      }, 100);
     });
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
@@ -154,10 +161,6 @@ export default defineComponent({
 
     /* Event handlers */
     const openModal = (cafe = null, state) => {
-      document.querySelectorAll("ion-slides").forEach((slide) => {
-        slide.options = slideOpts;
-      });
-
       if(cafe) {
         modalCafe.value = cafe;
       }

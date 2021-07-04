@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 
 import {
   IonContent,
@@ -94,7 +94,22 @@ export default defineComponent({
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
     const modalCafe = ref({});
+    const slideOpts = {
+      initialSlide: 0,
+      speed: 500,
+      centeredSlides: false,
+      slidesPerView: 2.7,
+    };
 
+    /* Lifecycle hooks */
+    //Setting options for slider inside SlideFilter component
+    onMounted(() => {
+      const slides = document.getElementsByClassName('filterSlider');
+      slides.forEach((slide) => {
+        slide.options = slideOpts;
+        slide.update();
+      });
+    })
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
@@ -140,6 +155,7 @@ export default defineComponent({
       content,
       isModalOpen,
       modalCafe,
+      slideOpts,
 
       /* Event handlers */
       searchFilterChanged,
