@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted } from 'vue';
+import { defineComponent, ref, reactive, watch } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -146,10 +146,9 @@ export default defineComponent({
     const modalCafe = ref({});
     let showSkeleton = ref(true);
 
-    /* Lifecycle hooks */
-    // Without this on android options are not passed to swiper
-    onMounted(() => {
-      if(showSkeleton.value) {
+    /* Whatcher needed instead of mounted lifecycle hook because there is skeleton text showing */
+    watch(showSkeleton, (newValue) => {
+      if(!newValue){
         const slides = document.getElementsByClassName("homeSlider");
         setTimeout(() => {
           slides.forEach((slide) => {
@@ -158,7 +157,7 @@ export default defineComponent({
           });
         }, 200);
       }
-    });
+    })
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
                .then((response) => {
