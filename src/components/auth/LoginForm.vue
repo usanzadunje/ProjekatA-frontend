@@ -125,9 +125,6 @@ export default defineComponent({
     const router = useRouter();
     const { set } = useStorage();
 
-    window.addEventListener("keyboardDidShow", () => {
-      document.getElementById('custom').style.overflow = "scrollable";
-    });
 
     /* Component properties */
     let user = reactive({});

@@ -34,6 +34,7 @@ import "@/assets/css/style.css";
 /* Vuex */
 import store        from './store';
 
+
 const app = createApp(App)
     .use(store)
     .use(IonicVue)
