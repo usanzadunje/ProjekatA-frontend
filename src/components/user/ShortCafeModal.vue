@@ -23,6 +23,7 @@
               <img
                   :src="`${backendStorageURL}/cafe/test${i}.png`"
                   alt=""
+                  @click="openPreview('' + i)"
               >
             </ion-slide>
           </ion-slides>
@@ -77,12 +78,14 @@ import {
   IonSlides,
   IonSlide,
   IonModal,
+  modalController,
 } from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
+import ImagePreviewModal from '@/components/user/ImagePreviewModal';
 
 import {
   notifications,
@@ -150,6 +153,17 @@ export default defineComponent({
     const openModal = (state) => {
       isModalOpen.value = state;
     };
+    const openPreview = async(img) => {
+      const modal = await modalController
+          .create({
+            component: ImagePreviewModal,
+            cssClass: 'custom-gallery-modal',
+            componentProps: {
+              img,
+            },
+          });
+      return modal.present();
+    };
 
     return {
       /* Component properties */
@@ -164,6 +178,7 @@ export default defineComponent({
 
       /* Event handlers */
       openModal,
+      openPreview,
 
       /* Icons from */
       notifications,
