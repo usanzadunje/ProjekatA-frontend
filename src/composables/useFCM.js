@@ -40,6 +40,7 @@ export function useFCM(userId) {
                     pushNotificationPermission: 'Permission for notifications not granted. Check your settings.',
                 },
             );
+            permission = false;
         }
         return permission;
     };

@@ -30,7 +30,7 @@
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="food"
+            data-sliding-filter="hrana"
             @click="sortButtonActivated"
         >
           HRANA

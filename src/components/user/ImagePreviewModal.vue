@@ -1,9 +1,8 @@
 <template>
   <ion-content :fullscreen="true">
     <ion-item class="close-fake text-center" lines="none">
-      <ion-button @click="dismiss" fill="clear" color="light">
+      <ion-button @click="dismiss" fill="clear" color="light" slot="end">
         <ion-icon :icon="close" slot="start"></ion-icon>
-        Back
       </ion-button>
     </ion-item>
 
@@ -11,7 +10,7 @@
       <ion-slide v-for="i in imgCount" :key="i">
         <div v-if="imgCount !== 1" class="swiper-zoom-container">
           <img
-              :src="`${backendStorageURL}/cafe/${id}_${i}cafe.png`"
+              :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
               alt=""
               @dblclick="zoom(userClickedToZoom)"
           >
@@ -133,7 +132,8 @@ ion-slides {
 
 .close-fake {
   --background: transparent;
-  margin-top: 40px;
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 </style>

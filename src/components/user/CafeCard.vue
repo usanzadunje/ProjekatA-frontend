@@ -2,7 +2,7 @@
   <div class="bg-white cafe-card-border-radius">
     <div class="p-4 flex ion-align-items-center">
       <img
-          :src="`${backendStorageURL}/cafe/test.png`"
+          :src="`${backendStorageURL}/cafe/1_2cafe.png`"
           alt=""
           class="cafe-card-image"
       >

@@ -5,7 +5,7 @@
         <ion-item class="ion-item-no-padding-x">
           <ion-thumbnail slot="start">
             <img
-                :src="`${backendStorageURL}/cafe/test.png`"
+                :src="`${backendStorageURL}/cafe/1_2cafe.png`"
                 alt="Logo of {{ cafe.name }}"
                 class="modal-thumbnail"
             >
@@ -21,9 +21,9 @@
           <ion-slides id="gallerySlider" :options="slideOpts">
             <ion-slide v-for="i in [1,2,3]" :key="i">
               <img
-                  :src="`${backendStorageURL}/cafe/test${i}.png`"
+                  :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
                   alt=""
-                  @click="openPreview(`${backendStorageURL}/cafe/test${i}.png`)"
+                  @click="openPreview(`${backendStorageURL}/cafe/2_${i}cafe.png`)"
               >
             </ion-slide>
           </ion-slides>
@@ -58,7 +58,7 @@
           :cafe="{'id': cafe.id, 'name': cafe.name}"
           :isUserSubscribed="isUserSubscribed"
           @dismissSubscriptionModal="openModal(false);$emit('dismissShortCafeModal')"
-          @userToggledSubscription="isUserSubscribed = !isUserSubscribed"
+          @userToggledSubscription="isUserSubscribed = !isUserSubscribed;$emit('userUnsubscribed')"
       />
     </ion-modal>
   </ion-content>

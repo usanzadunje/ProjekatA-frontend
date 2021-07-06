@@ -20,9 +20,9 @@
     <ion-content :fullscreen="true" class="ion-padding relative">
       <div class="relative">
         <img
-            :src="`${backendStorageURL}/cafe/cafeshow.png`"
-            alt="Image of {{ cafe.name }} cafe"
-            @click="openPreview('2', 2)"
+            :src="`${backendStorageURL}/cafe/1_1cafe.png`"
+            :alt="`Image of ${cafe.name} cafe`"
+            @click="openPreview('1', 2)"
             class="banner-image w-full"
         />
         <div
@@ -133,6 +133,12 @@ export default defineComponent({
     FilterCategoryHeading,
     AccordionList,
     CafeSubscriptionModal,
+  },
+  ionViewWillEnter() {
+    document.querySelectorAll('ion-tab-button')[1].classList.add('tab-selected');
+  },
+  ionViewWillLeave() {
+    document.querySelectorAll('ion-tab-button')[1].classList.remove('tab-selected');
   },
   setup() {
     /* Global properties */

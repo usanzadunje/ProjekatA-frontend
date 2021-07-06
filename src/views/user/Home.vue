@@ -125,6 +125,15 @@ export default defineComponent({
       return { path: to.path, query: {}, hash: to.hash };
     }
   },
+  ionViewDidEnter() {
+    const slides = document.getElementsByClassName("homeSlider");
+    setTimeout(() => {
+      slides.forEach((slide) => {
+        slide.options = this.slideOpts;
+        slide.update();
+      });
+    }, 200);
+  },
   setup() {
     /* Global properties */
     const router = useRouter();
@@ -155,7 +164,7 @@ export default defineComponent({
             slide.options = slideOpts;
             slide.update();
           });
-        }, 200);
+        }, 300);
       }
     })
     //*Before mounting fetching initial 4 cafes to show in currently free cafes

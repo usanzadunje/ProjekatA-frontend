@@ -47,6 +47,8 @@
         <ShortCafeModal
             :cafe="modalCafe"
             @dismissShortCafeModal="openModal(false)"
+            @subModalOpened="hideModal"
+            @userUnsubscribed="refreshCafes"
         />
       </ion-modal>
 
@@ -82,7 +84,8 @@ import CafeService from '@/services/CafeService';
 
 import {
   trashOutline,
-} from 'ionicons/icons';
+}                                from 'ionicons/icons';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 
 export default defineComponent({
@@ -132,6 +135,9 @@ export default defineComponent({
     const modalCafe = ref({});
     let showSkeleton = ref(true);
 
+    /* Methods */
+    const { showSuccessToast } = useToastNotifications();
+
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
     onMounted(() => {
@@ -142,7 +148,7 @@ export default defineComponent({
       });
     });
 
-    /* Event handlers */
+      /* Event handlers */
     const sortHasChanged = (sortValue) => {
       sortBy.value = sortValue;
       CafeService.getAllCafesUserSubscribedTo(sortValue)
@@ -165,6 +171,7 @@ export default defineComponent({
                 text: 'Agree',
                 handler: () => {
                   unsubscribe(cafeId);
+                  showSuccessToast('Successfully unsubscribed!');
                 },
               },
             ],
@@ -179,7 +186,6 @@ export default defineComponent({
       isModalOpen.value = state;
     };
 
-    /* Methods */
     const unsubscribe = (cafeId) => {
       CafeService.unsubscribe(cafeId)
                  .then((response) => {
@@ -188,6 +194,18 @@ export default defineComponent({
                    }
                  })
                  .catch((error) => alert(error));
+    };
+    const refreshCafes = () => {
+      CafeService.getAllCafesUserSubscribedTo(sortBy.value)
+                 .then((response) => {
+                   cafesUserSubscribedTo.value = response.data;
+                 })
+                 .catch((error) => console.log(error));
+    };
+    const hideModal = () => {
+      const modal = document.querySelector('.custom-modal > .modal-wrapper');
+
+      modal.style.height = 0;
     };
 
     return {
@@ -203,6 +221,8 @@ export default defineComponent({
       sortHasChanged,
       showAlert,
       openModal,
+      refreshCafes,
+      hideModal,
 
       /* Icons */
       trashOutline,
