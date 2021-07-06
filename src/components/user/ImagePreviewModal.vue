@@ -5,24 +5,22 @@
         <ion-icon :icon="close" slot="start"></ion-icon>
         Back
       </ion-button>
-
-      <ion-button @click="zoom(true)" fill="clear" color="light">
-        <ion-icon :icon="add" slot="start"></ion-icon>
-        in
-      </ion-button>
-
-      <ion-button @click="zoom(false)" fill="clear" color="light">
-        <ion-icon :icon="remove" slot="start"></ion-icon>
-        out
-      </ion-button>
     </ion-item>
 
     <ion-slides id="imagePreviewSlider" ref="slides">
-      <ion-slide>
-        <div class="swiper-zoom-container">
+      <ion-slide v-for="i in imgCount" :key="i">
+        <div v-if="imgCount !== 1" class="swiper-zoom-container">
           <img
-              :src="`${backendStorageURL}/cafe/cafeshow.png`"
+              :src="`${backendStorageURL}/cafe/${id}_${i}cafe.png`"
               alt=""
+              @dblclick="zoom(userClickedToZoom)"
+          >
+        </div>
+        <div v-else class="swiper-zoom-container">
+          <img
+              :src="id"
+              alt=""
+              @dblclick="zoom(userClickedToZoom)"
           >
         </div>
       </ion-slide>
@@ -59,9 +57,13 @@ export default {
     IonSlide,
   },
   props: {
-    img: {
+    id: {
       type: String,
       default: null,
+    },
+    imgCount: {
+      type: Number,
+      default: 1,
     },
   },
   setup() {
@@ -72,6 +74,7 @@ export default {
         maxRatio: 2,
       },
     };
+    const userClickedToZoom = ref(true);
 
     /* Lifecycle hooks */
     onMounted(() => {
@@ -85,11 +88,12 @@ export default {
     /* Event handlers */
     const zoom = async(zoomIn) => {
       let swiper = await slides?.value?.$el.getSwiper();
-      if(zoomIn){
+      if(zoomIn) {
         swiper.zoom.in();
       }else {
         swiper.zoom.out();
       }
+      userClickedToZoom.value = !userClickedToZoom.value;
     };
     const dismiss = () => {
       modalController.dismiss();
@@ -99,6 +103,7 @@ export default {
       /* Component properties */
       slides,
       slideOpts,
+      userClickedToZoom,
 
       /* Event handlers */
       zoom,

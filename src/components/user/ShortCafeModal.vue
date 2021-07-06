@@ -23,7 +23,7 @@
               <img
                   :src="`${backendStorageURL}/cafe/test${i}.png`"
                   alt=""
-                  @click="openPreview('' + i)"
+                  @click="openPreview(`${backendStorageURL}/cafe/test${i}.png`)"
               >
             </ion-slide>
           </ion-slides>
@@ -153,13 +153,13 @@ export default defineComponent({
     const openModal = (state) => {
       isModalOpen.value = state;
     };
-    const openPreview = async(img) => {
+    const openPreview = async(id) => {
       const modal = await modalController
           .create({
             component: ImagePreviewModal,
-            cssClass: 'custom-gallery-modal',
+            cssClass: 'custom-image-preview-modal',
             componentProps: {
-              img,
+              id,
             },
           });
       return modal.present();

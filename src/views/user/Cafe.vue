@@ -22,6 +22,7 @@
         <img
             :src="`${backendStorageURL}/cafe/cafeshow.png`"
             alt="Image of {{ cafe.name }} cafe"
+            @click="openPreview('2', 2)"
             class="banner-image w-full"
         />
         <div
@@ -98,7 +99,7 @@ import {
   IonContent,
   IonIcon,
   IonButton,
-  IonModal,
+  IonModal, modalController,
 } from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
@@ -114,7 +115,8 @@ import {
   notificationsOutline,
   fastFoodOutline,
 }
-  from 'ionicons/icons';
+                         from 'ionicons/icons';
+import ImagePreviewModal from '@/components/user/ImagePreviewModal';
 
 export default defineComponent({
   name: "Cafe",
@@ -148,11 +150,23 @@ export default defineComponent({
 
     /* Event handlers */
     const openModal = (state, isMapModal = false) => {
-      if(isMapModal){
+      if(isMapModal) {
         isMapModalOpen.value = state;
-      }else{
+      }else {
         isModalOpen.value = state;
       }
+    };
+    const openPreview = async(id, imgCount) => {
+      const modal = await modalController
+          .create({
+            component: ImagePreviewModal,
+            cssClass: 'custom-gallery-modal',
+            componentProps: {
+              id,
+              imgCount,
+            },
+          });
+      return modal.present();
     };
 
     /* Lifecycle hooks */
@@ -186,6 +200,7 @@ export default defineComponent({
 
       /* Event handlers */
       openModal,
+      openPreview,
 
       /* Icons */
       arrowBackOutline,
