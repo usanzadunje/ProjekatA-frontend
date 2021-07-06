@@ -7,7 +7,8 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 
 import AuthService from '../services/AuthService';
 
-import { useStorage } from '@/services/StorageService';
+import { useStorage }            from '@/services/StorageService';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 export function useFCM(userId) {
     /* Global properties */
@@ -17,17 +18,30 @@ export function useFCM(userId) {
     const { get } = useStorage();
 
     /* Methods */
-    const initPush = () => {
-        get(`areNotificationsOn.${userId}`)
-            .then((response) => {
-                if(Capacitor.getPlatform() !== 'web' && !!response) {
-                    registerPush();
-                }
-            })
-            .catch((error) => {
-                alert(error);
-            });
+    const { showErrorToast } = useToastNotifications();
 
+    /* Methods */
+    const initPush = async() => {
+        let permission = false;
+
+        try {
+            permission = await get(`areNotificationsOn.${userId}`);
+        }catch(error) {
+            await showErrorToast(null, { clientStoragePermission: 'Error : Cannot read storage.' });
+            return false;
+        }
+
+        if(Capacitor.getPlatform() !== 'web' && !!permission) {
+            registerPush();
+        }else {
+            await showErrorToast(
+                null,
+                {
+                    pushNotificationPermission: 'Permission for notifications not granted. Check your settings.',
+                },
+            );
+        }
+        return permission;
     };
     const registerPush = () => {
         /* If permission is not granted asks for permission, after granted it registers Push Notifications */

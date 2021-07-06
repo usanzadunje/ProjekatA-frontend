@@ -37,9 +37,9 @@ export default {
         return authClient.put("/user/profile-information", payload);
     },
     async setFcmToken(payload) {
-        return authClient.post("/api/users/fcm-token", payload);
+        return authClient.post("/fcm-token", payload);
     },
     removeFcmToken() {
-        return authClient.post("/api/users/fcm-token/remove");
+        return authClient.post("/fcm-token/remove");
     },
 };

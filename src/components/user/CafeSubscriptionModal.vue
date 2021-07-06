@@ -80,7 +80,8 @@ import {
 
 import { useFCM } from '@/composables/useFCM';
 
-import CafeService from '@/services/CafeService';
+import CafeService               from '@/services/CafeService';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 export default defineComponent({
   name: 'CafeSubscriptionModal',
@@ -115,6 +116,7 @@ export default defineComponent({
     /* Methods */
     /* Method for initializing push notifications for mobile devices */
     const { initPush } = useFCM(store.getters['auth/authUser'].id);
+    const { showSuccessToast } = useToastNotifications();
 
     /* Lifecycle hooks */
     //When user lands on page check if he is already subscribed to cafe
@@ -123,35 +125,40 @@ export default defineComponent({
                  isUserSubscribed.value = !!response.data;
                })
                .catch((error) => alert(error));
-    initPush();
 
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {
       indefiniteTimerActive.value = e.target.checked;
     };
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
-    const toggleSubscription = (cafeId) => {
+    const toggleSubscription = async(cafeId) => {
+      let pushNotificationPermission = await initPush();
+
       if(indefiniteTimerActive.value) {
         notificationTime.value = null;
       }
 
+      if(!pushNotificationPermission){
+        return;
+      }
+
       if(isUserSubscribed.value) {
         CafeService.unsubscribe(cafeId)
-                   .then((response) => {
+                   .then(async(response) => {
                      if(response.data) {
-                       alert(`Successfully unsubscribed!`);
                        isUserSubscribed.value = false;
                        emit('userToggledSubscription');
+                       await showSuccessToast('Successfully unsubscribed!')
                      }
                    })
                    .catch((error) => alert(error));
       }else {
         CafeService.subscribe(cafeId, notificationTime.value)
-                   .then((response) => {
+                   .then(async(response) => {
                      if(response.data) {
-                       alert(`Successfully subscribed!`);
                        isUserSubscribed.value = true;
                        emit('userToggledSubscription');
+                       await showSuccessToast('Successfully subscribed!')
                      }
                    })
                    .catch((error) => alert(error));
