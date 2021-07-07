@@ -5,8 +5,8 @@
       <ion-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
-            :class="activeSlidingButton === 'id' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="id"
+            :class="activeSlidingButton === 'distance' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
+            data-sliding-filter="distance"
             @click="sortButtonActivated"
         >
           Najblizi vama
@@ -17,8 +17,8 @@
       <ion-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
-            :class="activeSlidingButton === 'free' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="free"
+            :class="activeSlidingButton === 'availability' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
+            data-sliding-filter="availability"
             @click="sortButtonActivated"
         >
           SLOBODNI
@@ -30,7 +30,7 @@
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="hrana"
+            data-sliding-filter="food"
             @click="sortButtonActivated"
         >
           HRANA
@@ -83,7 +83,7 @@ export default defineComponent({
   emits: ['sortHasChanged'],
   setup(props, { emit }) {
     /* Component properties */
-    let activeSlidingButton = ref('id');
+    let activeSlidingButton = ref('distance');
 
     /* Event handlers */
     const sortButtonActivated = (event) => {

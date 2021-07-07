@@ -132,7 +132,7 @@ export default defineComponent({
     };
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
     const toggleSubscription = async(cafeId) => {
-      let pushNotificationPermission = await initPush();
+      let pushNotificationPermission = await initPush(isUserSubscribed.value);
 
       if(indefiniteTimerActive.value) {
         notificationTime.value = null;

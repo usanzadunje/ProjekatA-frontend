@@ -21,7 +21,8 @@ export function useFCM(userId) {
     const { showErrorToast } = useToastNotifications();
 
     /* Methods */
-    const initPush = async() => {
+    const initPush = async(isTryingToUnsubscribe = null) => {
+        //isTryingToUnsubscribe => letting user unsubscribe even though notifications arent turned ON
         let permission = false;
 
         try {
@@ -34,15 +35,17 @@ export function useFCM(userId) {
         if(Capacitor.getPlatform() !== 'web' && !!permission) {
             registerPush();
         }else {
-            await showErrorToast(
-                null,
-                {
-                    pushNotificationPermission: 'Permission for notifications not granted. Check your settings.',
-                },
-            );
+            if(!isTryingToUnsubscribe) {
+                await showErrorToast(
+                    null,
+                    {
+                        pushNotificationPermission: 'Permission for notifications not granted. Check your settings.',
+                    },
+                );
+            }
             permission = false;
         }
-        return permission;
+        return permission || isTryingToUnsubscribe;
     };
     const registerPush = () => {
         /* If permission is not granted asks for permission, after granted it registers Push Notifications */
