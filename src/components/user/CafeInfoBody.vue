@@ -30,7 +30,7 @@
   <ion-modal
       :is-open="isModalOpen"
       css-class="custom-map-modal"
-      @didDismiss="openModal(false, true);"
+      @didDismiss="openModal(false);"
       :backdrop-dismiss="true"
       :swipe-to-close="true"
   >
@@ -81,7 +81,6 @@ export default defineComponent({
     /* Event handlers */
     const openModal = (state) => {
       isModalOpen.value = state;
-
     };
 
     return {

@@ -25,8 +25,9 @@ export default defineComponent({
     const { get } = useStorage();
 
     /* Lifecycle hooks */
-    onMounted(() => {
-      get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
+    onMounted(async() => {
+      await store.dispatch("auth/getAuthUser");
+      await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
           .then((response) => {
             document.body.classList.toggle('dark', !!response);
           })

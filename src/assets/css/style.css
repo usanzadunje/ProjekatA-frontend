@@ -87,7 +87,8 @@ ion-modal ion-item {
 }
 
 .custom-map-modal {
-    --height: 410px;
+    --height: 460px;
+    --background: var(--secondary-paint) !important;
     --border-radius: 20px 20px 0 0;
 }
 
