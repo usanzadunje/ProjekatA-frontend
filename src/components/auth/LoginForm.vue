@@ -151,7 +151,7 @@ export default defineComponent({
                    let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
                    user.email = '';
                    user.password = '';
-                   await router.push(homeRoute);
+                   await router.replace(homeRoute);
                    await showSuccessToast('Successfully logged in!');
                  })
                  .catch(async(errors) => {

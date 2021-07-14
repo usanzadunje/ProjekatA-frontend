@@ -64,6 +64,10 @@ ion-button {
     --box-shadow: none;
 }
 
+ion-modal {
+    --background: none !important;
+}
+
 ion-modal ion-content {
     --background: var(--secondary-paint);
 }

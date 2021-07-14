@@ -75,7 +75,9 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-light-shade: #d7d8da;
     --ion-color-light-tint: #f5f6f9;
 
-    /** CUSTOM COLOR SCHEME **/
+    /**
+       START CUSTOM COLOR SCHEME
+    **/
     --primary-heading: #232B38;
 
     --primary-text: #9EAAB7;
@@ -97,6 +99,9 @@ http://ionicframework.com/docs/theming/ */
     --horizontal-divider: #F3F3F3;
 
     --primary-border: #F3F3F3;
+    /**
+      END CUSTOM COLOR SCHEME
+   **/
 }
 
 
@@ -269,6 +274,9 @@ http://ionicframework.com/docs/theming/ */
 }
 
 body.dark {
+    /**
+      START CUSTOM DARK MODE COLOR SCHEME
+   **/
     --primary-heading: #F0F0F2;
 
     --primary-text: #808191;
@@ -296,4 +304,7 @@ body.dark {
     --horizontal-divider: #1F1C2B;
 
     --primary-border: #272736;
+    /**
+      START CUSTOM DARK MODE COLOR SCHEME
+   **/
 }

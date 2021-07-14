@@ -1,6 +1,6 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <ion-router-outlet/>
   </ion-app>
 </template>
 
@@ -27,17 +27,15 @@ export default defineComponent({
     /* Lifecycle hooks */
     onMounted(() => {
       get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
-                  .then((response) => {
-                    document.body.classList.toggle('dark', !!response);
-                  })
-                  .catch(() => {
-                    document.body.classList.toggle('dark', false);
-                  });
-    })
+          .then((response) => {
+            document.body.classList.toggle('dark', !!response);
+          })
+          .catch(() => {
+            document.body.classList.toggle('dark', false);
+          });
+    });
 
-    return {
-
-    };
+    return {};
   },
 });
 </script>

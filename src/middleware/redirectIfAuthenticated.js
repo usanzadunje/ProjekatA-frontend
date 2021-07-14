@@ -1,8 +1,6 @@
-export default function redirectIfAuthenticated({ next, store }) {
-    const homeRoute = { name: "home" };
-
+export default function redirectIfAuthenticated({ from, next, store }) {
     if(store.getters["auth/loggedIn"]) {
-        next(homeRoute);
+        next(from);
     }else {
         next();
     }

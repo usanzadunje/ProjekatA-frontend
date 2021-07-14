@@ -1,4 +1,5 @@
-import router from "@/router";
+import router            from "@/router";
+import { useBackButton } from '@ionic/vue';
 
 import AuthService               from "@/services/AuthService";
 import { useToastNotifications } from '@/composables/useToastNotifications';
@@ -19,13 +20,16 @@ export const mutations = {
 export const actions = {
     //Logging out user and redirecting to login page
     logout({ commit }) {
+        useBackButton(100, () => {
+            router.push({ name: 'home' });
+        });
         const { showSuccessToast } = useToastNotifications();
         const { set } = useStorage();
         return AuthService.logout()
                           .then(async(response) => {
                               commit("SET_USER", null);
                               await set('projekata_token', null);
-                              await router.push({ name: 'login' });
+                              await router.replace({ name: 'login' });
                               showSuccessToast(response.data.success);
                               document.body.classList.toggle('dark', false);
                           });
@@ -43,6 +47,7 @@ export const actions = {
                 .catch(() => {
                     document.body.classList.toggle('dark', false);
                 });
+            return true;
         }catch(error) {
             document.body.classList.toggle('dark', false);
             commit("SET_USER", null);

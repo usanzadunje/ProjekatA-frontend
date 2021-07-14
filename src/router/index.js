@@ -38,30 +38,30 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "Register" */ "../views/auth/Register"),
     },
-    {
-        /* Responsible for showing verification notice view */
-        path: "/email/verify",
-        name: "email.notice",
-        meta: { middleware: [auth] },
-        component: () =>
-            import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/auth/EmailVerificationNotice"),
-    },
+    // {
+    //     /* Responsible for showing verification notice view */
+    //     path: "/email/verify",
+    //     name: "email.notice",
+    //     meta: { middleware: [auth] },
+    //     component: () =>
+    //         import(/* webpackChunkName: "EmailVerificationNotice" */ "../views/auth/EmailVerificationNotice"),
+    // },
 
-    {
-        /* Responsible for showing form for resetting password and sending POST request to backend */
-        path: "/reset-password",
-        name: "password.reset",
-        component: () =>
-            import(/* webpackChunkName: "ResetPassword" */ "../views/auth/ResetPassword"),
-    },
-    {
-        path: "/forgot-password",
-        name: "password.forgot",
-        component: () =>
-            import(
-                /* webpackChunkName: "ForgotPassword" */ "../views/auth/ForgotPassword"
-                ),
-    },
+    // {
+    //     /* Responsible for showing form for resetting password and sending POST request to backend */
+    //     path: "/reset-password",
+    //     name: "password.reset",
+    //     component: () =>
+    //         import(/* webpackChunkName: "ResetPassword" */ "../views/auth/ResetPassword"),
+    // },
+    // {
+    //     path: "/forgot-password",
+    //     name: "password.forgot",
+    //     component: () =>
+    //         import(
+    //             /* webpackChunkName: "ForgotPassword" */ "../views/auth/ForgotPassword"
+    //             ),
+    // },
     /* =============================================
         End unprotected routes from staff
     ============================================= */
