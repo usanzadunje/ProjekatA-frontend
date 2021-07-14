@@ -41,7 +41,7 @@
       <CafeInfoBody :cafe="cafe"/>
 
       <div>
-        <FilterCategoryHeading class="mt-7 mb-2 text-gray-400" :title="'Meni'" :icon="fastFoodOutline"/>
+        <FilterCategoryHeading class="mt-7 mb-2" :title="'Meni'" :icon="fastFoodOutline"/>
         <AccordionList
             class="accordion-list-border-top"
             :title="'Karta pica'"
@@ -50,7 +50,7 @@
         <AccordionList
             class="accordion-list-border-top accordion-list-border-bottom"
             :title="'Hrana'"
-            :items="cafe.offerings?.filter(offer => offer.tag === 'hrana')"
+            :items="cafe.offerings?.filter(offer => offer.tag === 'food')"
         />
       </div>
 
@@ -135,10 +135,10 @@ export default defineComponent({
     CafeSubscriptionModal,
   },
   ionViewWillEnter() {
-    document.querySelectorAll('ion-tab-button')[1].classList.add('tab-selected');
+    document.getElementById('tab-button-search').style.color = '#207DFF';
   },
   ionViewWillLeave() {
-    document.querySelectorAll('ion-tab-button')[1].classList.remove('tab-selected');
+    document.getElementById('tab-button-search').style.color = '';
   },
   setup() {
     /* Global properties */
@@ -221,16 +221,20 @@ export default defineComponent({
 <style scoped>
 ion-toolbar {
   --border-style: none;
-  --background: #FFF;
+  --background: var(--show-paint);
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 
 ion-content {
-  --background: #FFF;
+  --background: var(--show-paint);
 }
 
 ion-item {
   --border-style: none !important;
+}
+
+body.dark {
+  --ion-item-background: #272736;
 }
 </style>

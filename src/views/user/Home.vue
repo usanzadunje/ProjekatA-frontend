@@ -157,7 +157,7 @@ export default defineComponent({
 
     /* Whatcher needed instead of mounted lifecycle hook because there is skeleton text showing */
     watch(showSkeleton, (newValue) => {
-      if(!newValue){
+      if(!newValue) {
         const slides = document.getElementsByClassName("homeSlider");
         setTimeout(() => {
           slides.forEach((slide) => {
@@ -166,7 +166,7 @@ export default defineComponent({
           });
         }, 300);
       }
-    })
+    });
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
                .then((response) => {
@@ -228,7 +228,6 @@ export default defineComponent({
 
     return {
       /* Global properties */
-
       /* Component properties */
       slideOpts,
       cafes,

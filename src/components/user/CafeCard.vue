@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white cafe-card-border-radius">
+  <div class="background-white cafe-card-border-radius">
     <div class="p-4 flex ion-align-items-center">
       <img
           :src="`${backendStorageURL}/cafe/1_2cafe.png`"
@@ -19,11 +19,11 @@
           <span class="cafe-card-fade-text ml-1">{{ cafe.taken_capacity }}</span>
         </div>
         <div class="flex ml-2">
-          <ion-icon :icon="locationOutline" class="text-gray-400"></ion-icon>
+          <ion-icon :icon="locationOutline" class="primary-icon-color"></ion-icon>
           <span class="cafe-card-fade-text ml-1">600m</span>
         </div>
       </div>
-      <div class="flex">
+      <div class="flex primary-icon-color">
         <ion-icon :icon="fastFoodOutline"></ion-icon>
         <ion-icon :icon="leafOutline" class="ml-1"></ion-icon>
       </div>

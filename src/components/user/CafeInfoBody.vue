@@ -6,7 +6,7 @@
   <hr class="card-horizontal-ruler mt-1">
   <ion-item class="ion-item-no-padding-x">
     <div class="flex">
-      <ion-icon :icon="locationOutline" class="mr-2 location-icon"></ion-icon>
+      <ion-icon :icon="locationOutline" class="mr-2 primary-icon-color"></ion-icon>
       <p class="modal-cafe-text-regular">{{ cafe.address }} - {{ cafe.city }}</p>
     </div>
     <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold" slot="end">MAPA</ion-button>
@@ -14,15 +14,15 @@
   <hr class="card-horizontal-ruler">
   <div class="flex justify-start mt-3.5">
     <div class="ion-item-no-padding-x flex">
-      <ion-icon :icon="fastFoodOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="fastFoodOutline" class="mr-2 primary-icon-color"></ion-icon>
       <p class="modal-cafe-text-regular">hrana</p>
     </div>
     <div class="ion-item-no-padding-x flex ml-3.5">
-      <ion-icon :icon="leafOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="leafOutline" class="mr-2 primary-icon-color"></ion-icon>
       <p class="modal-cafe-text-regular">poseduje bastu</p>
     </div>
     <div class="ion-item-no-padding-x flex ml-3.5">
-      <ion-icon :icon="timeOutline" class="mr-2"></ion-icon>
+      <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>
       <p class="modal-cafe-text-regular">09am-01pm</p>
     </div>
   </div>

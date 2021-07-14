@@ -1,6 +1,6 @@
 <template>
   <div class="flex relative">
-    <ion-icon :icon="icon" class="text-gray-400 category-filter"></ion-icon>
+    <ion-icon :icon="icon" class="primary-icon-color category-filter"></ion-icon>
     <span class="sliding-filter-title uppercase absolute left-4 top-1/2 transform -translate-y-1/2">{{ title }}</span>
   </div>
 </template>

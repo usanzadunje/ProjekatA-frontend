@@ -4,7 +4,7 @@
       <div class="px-4 py-3 mt-3 mb-3">
         <div class="flex justify-between">
           <p class="user-profile-header-heading mt-1">Profil</p>
-          <ion-button fill="clear" @click="$router.push({ name: 'settings' })">
+          <ion-button fill="clear" routerLink="/settings">
             <ion-icon
                 slot="icon-only"
                 :icon="settingsOutline"

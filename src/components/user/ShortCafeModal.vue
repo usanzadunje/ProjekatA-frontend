@@ -31,7 +31,7 @@
         <div class="mt-5 mb-3 flex justify-around">
           <ion-button
               class="mr-2.5 uppercase button-see-more modal-button-border"
-              :href="`/cafes/${cafe.id}`"
+              :routerLink="`/cafes/${cafe.id}`"
               @click="$emit('dismissShortCafeModal')"
           > Pogledaj vise
           </ion-button>
@@ -57,7 +57,7 @@
       <CafeSubscriptionModal
           :cafe="{'id': cafe.id, 'name': cafe.name}"
           :isUserSubscribed="isUserSubscribed"
-          @dismissSubscriptionModal="openModal(false);$emit('dismissShortCafeModal')"
+          @dismissSubscriptionModal="openModal(false);"
           @userToggledSubscription="isUserSubscribed = !isUserSubscribed;$emit('userUnsubscribed')"
       />
     </ion-modal>

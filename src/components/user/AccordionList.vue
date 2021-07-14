@@ -2,10 +2,10 @@
   <div class="accordion-list-box">
     <div @click="togglePane" class="flex justify-between py-2.5">
       <div>
-        <ion-icon :icon="locationOutline" class="align-middle text-gray-400"></ion-icon>
+        <ion-icon :icon="locationOutline" class="align-middle primary-icon-color"></ion-icon>
         <p class="inline-block ml-1 cafe-show-menu-headers">{{ title }}</p>
       </div>
-      <ion-icon :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline" class="mt-1 text-gray-400"></ion-icon>
+      <ion-icon :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline" class="mt-1 primary-icon-color"></ion-icon>
     </div>
     <div class="panel" @click="togglePane($event, true)">
       <div v-for="item in items" :key="item">

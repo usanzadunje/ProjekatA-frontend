@@ -9,10 +9,10 @@
           </ion-button>
         </div>
         <div v-show="!loggedIn" class="flex justify-around">
-          <ion-button fill="clear" href="/login">
+          <ion-button fill="clear" routerLink="/login">
             <p class="main-toolbar-fade-text uppercase">Login</p>
           </ion-button>
-          <ion-button fill="clear" href="/register">
+          <ion-button fill="clear" routerLink="/register">
             <p class="main-toolbar-fade-text uppercase">Register</p>
           </ion-button>
         </div>
