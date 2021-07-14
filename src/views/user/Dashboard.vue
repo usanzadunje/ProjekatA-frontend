@@ -18,7 +18,7 @@
               />
             </ion-item>
 
-            <ion-item-options side="end">
+            <ion-item-options side="end" @ionSwipe="showAlert(cafe.id)">
               <ion-item-option type="button" @click="showAlert(cafe.id)">
                 <ion-icon
                     slot="icon-only"
@@ -148,7 +148,7 @@ export default defineComponent({
       });
     });
 
-      /* Event handlers */
+    /* Event handlers */
     const sortHasChanged = (sortValue) => {
       sortBy.value = sortValue;
       CafeService.getAllCafesUserSubscribedTo(sortValue)

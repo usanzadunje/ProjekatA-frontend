@@ -156,7 +156,7 @@ export default defineComponent({
                  .then(async(response) => {
                    await set(`projekata_token`, response.data);
                    newUser = {};
-                   await router.push({ name: 'onboarding' });
+                   await router.replace({ name: 'onboarding' });
                  })
                  .catch(async(errors) => {
                    errorNames.value = getError(errors);
