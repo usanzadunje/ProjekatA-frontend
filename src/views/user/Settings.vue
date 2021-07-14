@@ -16,7 +16,7 @@
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
             <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'ON' : 'OFF' }}</ion-label>
             <ion-toggle
-                id="dark-mode-toggle"
+                :checked="isDarkModeOn"
                 @ionChange="toggleDarkMode($event)"
                 mode="md"
             ></ion-toggle>
@@ -33,7 +33,7 @@
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
             <ion-label class="settings-fade-text">{{ areNotificationsOn ? 'ON' : 'OFF' }}</ion-label>
             <ion-toggle
-                id="notification-toggle"
+                :checked="areNotificationsOn"
                 @ionChange="toggleNotifications($event)"
                 mode="md"
             ></ion-toggle>
@@ -127,19 +127,18 @@ export default defineComponent({
     get(`areNotificationsOn.${store.getters['auth/authUser'].id}`)
         .then((response) => {
           areNotificationsOn.value = !!response;
-          document.getElementById('notification-toggle').checked = areNotificationsOn.value;
         })
-        .catch((error) => {
-          alert(error);
+        .catch(() => {
+          areNotificationsOn.value = false;
         });
     get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
         .then((response) => {
           isDarkModeOn.value = !!response;
-          document.getElementById('dark-mode-toggle').checked = isDarkModeOn.value;
         })
-        .catch((error) => {
-          alert(error);
+        .catch(() => {
+          isDarkModeOn.value = false;
         });
+    document.body.style.setProperty('--ion-item-background', '#F1C2B');
 
     /* Event handlers */
     const toggleDarkMode = (e) => {
@@ -149,8 +148,8 @@ export default defineComponent({
         //Remembering user decision for future usage
         set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, true);
       }
-      document.body.classList.toggle('dark', e.target.checked);
       isDarkModeOn.value = e.target.checked;
+      document.body.classList.toggle('dark', e.target.checked);
     };
     const toggleNotifications = (e) => {
       if(!e.target.checked) {
@@ -211,7 +210,6 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-item {
-  --background: #F6F7FB;
   --border-color: rgba(112, 112, 112, 0.1);
   --inner-padding-end: 0;
 }

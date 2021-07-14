@@ -4,7 +4,7 @@
       <ion-toolbar>
         <div class="flex justify-between mt-3 md margin-top-reset">
           <ion-buttons slot="start">
-            <ion-button href="/home">
+            <ion-button routerLink="/home">
               <ion-icon slot="icon-only" :icon="arrowBackOutline" class="text-gray-400"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -190,6 +190,7 @@ export default defineComponent({
                  })
                  .catch((error) => alert(error));
     }
+    document.body.style.setProperty('--ion-item-background', '#F1C2B');
 
 
     return {
@@ -226,15 +227,8 @@ ion-toolbar {
   border-bottom-right-radius: 0 !important;
 }
 
-ion-content {
-  --background: var(--show-paint);
-}
 
 ion-item {
   --border-style: none !important;
-}
-
-body.dark {
-  --ion-item-background: #272736;
 }
 </style>

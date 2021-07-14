@@ -194,4 +194,7 @@ ion-range {
   --bar-height: 6px;
   --knob-size: 21px;
 }
+ion-range::part(knob) {
+  outline: none !important;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="bg-white cafe-card-border-radius">
+    <div class="background-white cafe-card-border-radius">
       <div class="p-4 flex">
         <ion-thumbnail slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
@@ -45,5 +45,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 </style>

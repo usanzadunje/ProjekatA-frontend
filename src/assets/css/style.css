@@ -273,18 +273,18 @@ ion-toggle {
     --box-shadow: none;
 }
 
-.sliding-filter-inactive-button {
-    --background: var(--secondary-button);
-}
-
 .sliding-filter-button-active {
     --background: #207DFF;
-    --color: #FFF;
+}
+.sliding-filter-button-active::part(native) {
+    color: #FFF;
 }
 
 .sliding-filter-button-inactive {
-    --background: var(--secondary-button);
-    --color: var(--primary-text);
+    --background: var(--secondary-button) !important;
+}
+.sliding-filter-button-inactive::part(native) {
+    color: var(--primary-text);
 }
 
 .sliding-filter-button-text {
@@ -653,6 +653,10 @@ ion-toggle {
     transition: max-height 0.2s ease-in;
 }
 
+.panel-items {
+    color: var(--primary-heading);
+}
+
 .button-subscribe-wide {
     --color: #FFF;
     --padding-top: 1.5rem;
@@ -713,7 +717,7 @@ ion-toggle {
 .settings-heading {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 700 !important;
-    color: #000 !important;
+    color: var(--primary-heading) !important;
     font-size: 20px !important;
 }
 
@@ -727,7 +731,7 @@ ion-toggle {
 .settings-item-text {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 500 !important;
-    color: #000 !important;
+    color: var(--primary-heading) !important;
     font-size: 14px !important;
 }
 

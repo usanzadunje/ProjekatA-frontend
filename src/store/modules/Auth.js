@@ -24,19 +24,27 @@ export const actions = {
         return AuthService.logout()
                           .then(async(response) => {
                               commit("SET_USER", null);
-                              set('projekata_token', null);
-                              if(router.currentRoute.name !== "login") {
-                                  router.push({ name: 'login' });
-                                  await showSuccessToast(response.data.success);
-                              }
+                              await set('projekata_token', null);
+                              await router.push({ name: 'login' });
+                              showSuccessToast(response.data.success);
+                              document.body.classList.toggle('dark', false);
                           });
     },
     // Getting authenticated user info and saving it to store
-    async getAuthUser({ commit }) {
+    async getAuthUser({ commit, state }) {
+        const { get } = useStorage();
         try {
             const response = await AuthService.getAuthUser();
             commit("SET_USER", response.data);
+            get(`isDarkModeOn.${state.user.id}`)
+                .then((response) => {
+                    document.body.classList.toggle('dark', !!response);
+                })
+                .catch(() => {
+                    document.body.classList.toggle('dark', false);
+                });
         }catch(error) {
+            document.body.classList.toggle('dark', false);
             commit("SET_USER", null);
             return false;
         }
