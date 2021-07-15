@@ -11,6 +11,8 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
 
 import store          from '@/store';
 import { useStorage } from '@/services/StorageService';
+import { useI18n }    from 'vue-i18n';
+
 
 export default defineComponent({
   name: 'App',
@@ -23,16 +25,24 @@ export default defineComponent({
 
     /* Methods */
     const { get } = useStorage();
+    const { locale } = useI18n({ useScope: 'global' });
 
     /* Lifecycle hooks */
     onMounted(async() => {
       await store.dispatch("auth/getAuthUser");
-      await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
+      get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
           .then((response) => {
             document.body.classList.toggle('dark', !!response);
           })
           .catch(() => {
             document.body.classList.toggle('dark', false);
+          });
+      get(`localization.${store.getters['auth/authUser'].id}`)
+          .then((response) => {
+            locale.value = response.value || 'sr'
+          })
+          .catch(() => {
+            locale.value = 'sr'
           });
     });
 

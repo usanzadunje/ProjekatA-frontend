@@ -25,7 +25,8 @@ ion-searchbar {
     --background: var(--primary-paint) !important;
     --border-radius: 12px !important;
     --box-shadow: none !important;
-    --placeholder-color	: var(--placeholder-paint) !important;
+    --placeholder-color: var(--placeholder-paint) !important;
+    color: var(--search-color) !important;
     --icon-color: var(--icon-paint) !important;
     transform: scale(0.9);
     margin-left: -1.5rem !important;

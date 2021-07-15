@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import EditForm                                             from "@/components/EditForm";
+// import EditForm                                             from "@/components/EditForm";
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 
 export default {
@@ -56,7 +56,7 @@ export default {
     IonToolbar,
     IonTitle,
     IonContent,
-    EditForm
+    // EditForm
   },
 };
 </script>

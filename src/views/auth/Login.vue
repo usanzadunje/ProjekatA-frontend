@@ -7,7 +7,7 @@
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>
         </div>
         <div class="absolute content-position-login w-full mb-4">
-          <h2 class="text-center secondary-heading">Prijavi se</h2>
+          <h2 class="text-center secondary-heading">{{ $t('login') }}</h2>
           <LoginForm class="mt-8"></LoginForm>
         </div>
       </div>

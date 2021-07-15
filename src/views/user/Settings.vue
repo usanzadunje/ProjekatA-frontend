@@ -2,13 +2,13 @@
   <ion-page>
     <ion-content>
       <ion-item class="no-border mt-3">
-        <h1 class="settings-heading">Podesavanja</h1>
+        <h1 class="settings-heading">{{ $t('settings') }}</h1>
       </ion-item>
       <ion-item class="no-border">
         <div class="settings-icon-badge settings-red-icon-color flex justify-center settings-padding-icon-top">
           <ion-icon :icon="flash" class="text-white"></ion-icon>
         </div>
-        <p class="uppercase settings-fade-text ml-2">Globalna podesavanja</p>
+        <p class="uppercase settings-fade-text ml-2">{{ $t('global') }} {{ $t('settings') }}</p>
       </ion-item>
       <div>
         <ion-item class="ion-item-padding-right">
@@ -23,13 +23,13 @@
           </ion-item>
         </ion-item>
         <ion-item class="ion-item-padding-right" @click="showPrivacy">
-          <p class="settings-item-text">Privatnost</p>
+          <p class="settings-item-text">{{ $t('privacy') }}</p>
           <ion-button fill="clear" slot="end">
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
         <ion-item class="ion-item-padding-right">
-          <p class="settings-item-text">Notifikacije</p>
+          <p class="settings-item-text">{{ $t('notifications') }}</p>
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
             <ion-label class="settings-fade-text">{{ areNotificationsOn ? 'ON' : 'OFF' }}</ion-label>
             <ion-toggle
@@ -39,10 +39,12 @@
             ></ion-toggle>
           </ion-item>
         </ion-item>
-        <ion-item class="ion-item-padding-right">
-          <p class="settings-item-text">Jezik</p>
+        <ion-item class="ion-item-padding-right" @click="chooseLanguage">
+          <p class="settings-item-text">{{ $t('language') }}</p>
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border mr-1">
-            <ion-button fill="clear" class="settings-fade-text">{{ language ?? 'SRB' }}</ion-button>
+            <ion-button fill="clear" class="settings-fade-text">
+              {{ language ?? 'SRB' }}
+            </ion-button>
           </ion-item>
         </ion-item>
       </div>
@@ -51,16 +53,16 @@
           <div class="settings-icon-badge settings-yellow-icon-color flex justify-center settings-padding-icon-top">
             <ion-icon :icon="rocket" class="text-white"></ion-icon>
           </div>
-          <p class="uppercase settings-fade-text ml-2">O aplikaciji</p>
+          <p class="uppercase settings-fade-text ml-2">{{ $t('about') }}</p>
         </ion-item>
         <ion-item class="ion-item-padding-right" @click="showSupportAuthors">
-          <p class="settings-item-text">Podrzite autore</p>
+          <p class="settings-item-text">{{ $t('support') }}</p>
           <ion-button fill="clear" slot="end">
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
         <ion-item class="ion-item-padding-right" @click="redirectToWebsite">
-          <p class="settings-item-text">Web sajt</p>
+          <p class="settings-item-text">{{ $t('site') }}</p>
           <ion-button fill="clear" slot="end" href="//projekata.com">
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
@@ -86,6 +88,7 @@ import {
   IonLabel,
   IonToggle,
   IonButton,
+  pickerController,
 } from '@ionic/vue';
 
 import {
@@ -98,6 +101,10 @@ import AuthService    from '@/services/AuthService';
 import { useStorage } from '@/services/StorageService';
 
 import { useFCM } from '@/composables/useFCM';
+
+import { useI18n } from 'vue-i18n';
+
+import { getLanguages } from '@/lang';
 
 export default defineComponent({
   name: 'Settings',
@@ -119,7 +126,11 @@ export default defineComponent({
     let areNotificationsOn = ref(false);
     let language = ref('SRB');
 
+    /* Methods */
     const { set, get } = useStorage();
+    const { t, locale } = useI18n({ useScope: 'global' });
+    const { initPush } = useFCM(store.getters['auth/authUser'].id);
+
 
     /* Lifecycle hooks */
     //Setting toggle checked attribute to whatever user choose and is persisted in storage
@@ -137,6 +148,13 @@ export default defineComponent({
         })
         .catch(() => {
           isDarkModeOn.value = false;
+        });
+    get(`localization.${store.getters['auth/authUser'].id}`)
+        .then((response) => {
+          language.value = response.text || 'SRB';
+        })
+        .catch(() => {
+          language.value = 'SRB';
         });
     document.body.style.setProperty('--ion-item-background', '#F1C2B');
 
@@ -166,7 +184,6 @@ export default defineComponent({
                    });
 
       }else {
-        const { initPush } = useFCM(store.getters['auth/authUser'].id);
         //Remembering user decision for future usage
         set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
         initPush();
@@ -175,6 +192,38 @@ export default defineComponent({
     };
     const logout = async() => {
       await store.dispatch("auth/logout");
+    };
+    const chooseLanguage = async() => {
+      const picker = await pickerController.create({
+        columns: [
+          {
+            name: 'language',
+            options: getLanguages(language.value),
+          },
+        ],
+        buttons: [
+          {
+            text: t('cancel'),
+            role: "cancel",
+          },
+          {
+            text: t('confirm'),
+            role: "confirm",
+            handler: (value) => {
+              // Direktno se menja locale u i18n
+              locale.value = value.language.value;
+              language.value = value.language.text;
+              picker.dismiss(value.language, "confirm");
+            },
+          },
+        ],
+      });
+      picker.onDidDismiss().then((value) => {
+        //Sacuvas izbor korisnika u storage
+        const localization = value.data;
+        set(`localization.${store.getters['auth/authUser'].id}`, localization);
+      });
+      await picker.present();
     };
     const showPrivacy = () => {
       alert('Privacy');
@@ -187,7 +236,7 @@ export default defineComponent({
     };
 
     return {
-      /* Compunent properties */
+      /* Component properties */
       isDarkModeOn,
       areNotificationsOn,
       language,
@@ -196,6 +245,7 @@ export default defineComponent({
       toggleDarkMode,
       toggleNotifications,
       logout,
+      chooseLanguage,
       showPrivacy,
       showSupportAuthors,
       redirectToWebsite,

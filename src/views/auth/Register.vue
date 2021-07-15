@@ -10,7 +10,7 @@
             id="content"
             class="absolute w-full mb-4"
         >
-          <h2 class="text-center secondary-heading">Registruj se</h2>
+          <h2 class="text-center secondary-heading">{{ $t('register') }}</h2>
           <RegisterForm class="mt-8"></RegisterForm>
         </div>
       </div>

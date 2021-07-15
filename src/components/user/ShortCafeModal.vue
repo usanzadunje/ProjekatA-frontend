@@ -33,7 +33,8 @@
               class="mr-2.5 uppercase button-see-more modal-button-border"
               :routerLink="`/cafes/${cafe.id}`"
               @click="$emit('dismissShortCafeModal')"
-          > Pogledaj vise
+          >
+            {{ $t('more') }}
           </ion-button>
           <ion-button
               class="uppercase button-subscribe modal-button-border"
@@ -42,7 +43,7 @@
           >
             <ion-icon slot="start"
                       :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-            {{ isUserSubscribed ? 'Pretplacen' : 'Pretplati se' }}
+            {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
           </ion-button>
         </div>
       </div>

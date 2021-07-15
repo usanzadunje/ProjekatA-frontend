@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
 
-import App           from './App.vue';
+import App from './App.vue';
 
-import router        from './router';
+import router from './router';
 
 import { IonicVue } from '@ionic/vue';
 
@@ -35,9 +35,11 @@ import "@/assets/css/style.css";
 import store        from './store';
 
 /* Translations */
+import i18n         from './i18n';
 
 
 const app = createApp(App)
+    .use(i18n)
     .use(store)
     .use(IonicVue)
     .use(router);
@@ -48,7 +50,7 @@ app.mixin({
             backendStorageURL: process.env.VUE_APP_STORED_IMAGES_URL,
         };
     },
-})
+});
 
 router.isReady().then(() => {
     app.mount('#app');

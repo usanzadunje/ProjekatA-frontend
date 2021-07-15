@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <UserHeader
-        :mainHeading="'Pronadji slobodno mesto'"
+        :mainHeading="$t('findAvailablePlace')"
         :notificationIcon="notificationsOutline"
         @searchEnterPressed="switchToSearch"
     />
@@ -9,13 +9,13 @@
     <ion-content class="ion-padding">
       <ion-refresher slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
-            pulling-text="Povuci te da osvezite"
+            :pulling-text="$t('refresherPulling')"
             refreshing-spinner="lines"
-            refreshing-text="Osvezava se..."
+            :refreshing-text="$t('refresherText')"
         >
         </ion-refresher-content>
       </ion-refresher>
-      <FilterCategoryHeading class="mb-2" :title="'Najblizi vama'"/>
+      <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
       <ion-slides v-show="!showSkeleton" :options="slideOpts" class="homeSlider">
         <ion-slide>
           <HomeSlidingCafeCards
@@ -38,7 +38,7 @@
         <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
       </div>
 
-      <FilterCategoryHeading class="mb-2" :title="'Trenutno slobodni'"/>
+      <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
       <ion-slides v-show="!showSkeleton" :options="slideOpts" class="homeSlider">
         <ion-slide>
           <HomeSlidingCafeCards

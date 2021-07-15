@@ -21,6 +21,8 @@ import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-n
 
 import { sleep } from '@/utils/helpers';
 
+import { useI18n } from 'vue-i18n';
+
 export default defineComponent({
   name: "GoogleMap",
   props: {
@@ -34,11 +36,13 @@ export default defineComponent({
     let mapContainerBoundingRect = null;
 
     /* Lifecycle hooks */
+    const { t } = useI18n({ useScope: 'global' })
+
     onMounted(async() => {
       const loading = await loadingController
           .create({
             cssClass: 'custom-loading',
-            message: 'Ucitava se...',
+            message: t('loading'),
             duration: 400,
           });
       loading.present();

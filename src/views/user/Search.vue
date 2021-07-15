@@ -5,7 +5,7 @@
         class="pull-transition"
     >
       <UserHeader
-          :mainHeading="'Pretraga'"
+          :mainHeading="$t('search')"
           :notificationIcon="notificationsOffOutline"
           :searchTerm="cafeSearchString"
           @searchFilterChanged="searchFilterChanged"

@@ -99,6 +99,9 @@ http://ionicframework.com/docs/theming/ */
     --horizontal-divider: #F3F3F3;
 
     --primary-border: #F3F3F3;
+
+    --search-color: #000000;
+
     /**
       END CUSTOM COLOR SCHEME
    **/
@@ -304,6 +307,9 @@ body.dark {
     --horizontal-divider: #1F1C2B;
 
     --primary-border: #272736;
+
+    --search-color: #FFFFFF;
+
     /**
       START CUSTOM DARK MODE COLOR SCHEME
    **/

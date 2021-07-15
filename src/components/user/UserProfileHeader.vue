@@ -3,7 +3,7 @@
     <ion-toolbar>
       <div class="px-4 py-3 mt-3 mb-3">
         <div class="flex justify-between">
-          <p class="user-profile-header-heading mt-1">Profil</p>
+          <p class="user-profile-header-heading mt-1">{{ $t('profile') }}</p>
           <ion-button fill="clear" routerLink="/settings">
             <ion-icon
                 slot="icon-only"
@@ -23,7 +23,9 @@
           <div class="ml-3 mt-3 user-profile-user-name">
             <h2 class="user-profile-user-name">{{ authUser.full_name }}</h2>
             <p v-if="authUser.username" class="user-profile-username">{{ authUser.username }}</p>
-            <a v-if="!authUser.username" @click="$router.push({ name: 'settings' })" class="user-profile-username underline">set username</a>
+            <a v-if="!authUser.username" @click="$router.push({ name: 'settings' })" class="user-profile-username underline lowercase">
+              {{ $t('setUsername') }}
+            </a>
           </div>
         </div>
       </div>

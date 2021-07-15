@@ -1,6 +1,6 @@
 <template>
   <div class="mt-1">
-    <p v-if="hasTitle" class="sliding-filter-title uppercase">FILTERI</p>
+    <p v-if="hasTitle" class="sliding-filter-title uppercase">{{ $t('filter', 5) }}</p>
     <ion-slides class="filterSlider">
       <ion-slide>
         <ion-button
@@ -9,7 +9,7 @@
             data-sliding-filter="distance"
             @click="sortButtonActivated"
         >
-          Najblizi vama
+          {{ $t('closest') }}
           <ion-icon slot="start"
                     :icon="locationOutline"></ion-icon>
         </ion-button>
@@ -21,7 +21,7 @@
             data-sliding-filter="availability"
             @click="sortButtonActivated"
         >
-          SLOBODNI
+          {{ $t('available') }}
           <ion-icon slot="start"
                     :icon="pieChart"></ion-icon>
         </ion-button>
@@ -33,7 +33,7 @@
             data-sliding-filter="food"
             @click="sortButtonActivated"
         >
-          HRANA
+          {{ $t('food') }}
           <ion-icon slot="start"
                     :icon="pieChart"></ion-icon>
         </ion-button>
@@ -45,7 +45,7 @@
             data-sliding-filter="popular"
             @click="sortButtonActivated"
         >
-          POPULARNO
+          {{ $t('popular') }}
           <ion-icon slot="start"
                     :icon="pieChart"></ion-icon>
         </ion-button>

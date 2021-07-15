@@ -13,7 +13,7 @@
           type="email"
           inputmode="email"
           debounce="600"
-          placeholder="E-mail adresa"
+          :placeholder="$t('emailAddress')"
           required
       ></ion-input>
     </ion-item>
@@ -30,7 +30,7 @@
           debounce="1"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
-          placeholder="Lozinka"
+          :placeholder="$t('password')"
           required
       ></ion-input>
       <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
@@ -53,7 +53,7 @@
           debounce="1"
           inputmode="password"
           :type="showPasswordConfirm ? 'text' : 'password'"
-          placeholder="Ponovite lozinku"
+          :placeholder="$t('passwordConfirm')"
           required
       ></ion-input>
       <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
@@ -69,7 +69,7 @@
           class="auth-button-size auth-button-border-radius uppercase button-text-white"
           @click="register"
       >
-        Registruj se
+        {{ $t('register') }}
       </ion-button>
       <ion-button
           fill="clear"
@@ -78,7 +78,7 @@
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
       >
-        Prijavi se
+        {{ $t('login') }}
       </ion-button>
     </div>
   </div>

@@ -28,28 +28,27 @@
         <div
             class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
         >
-          GALERIJA
+          {{ $t('gallery') }}
         </div>
       </div>
 
       <div class="mt-4 ion-item-no-padding-x">
         <h1 class="cafe-show-name">{{ cafe.name }}</h1>
-        <p class="cafe-show-offers mt-1">Kafić, hrana, bašta. Nastavi dalje kako bi video šta vam naša aplikacija
-                                         nudi.</p>
+        <p class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
       </div>
 
       <CafeInfoBody :cafe="cafe"/>
 
       <div>
-        <FilterCategoryHeading class="mt-7 mb-2" :title="'Meni'" :icon="fastFoodOutline"/>
+        <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
         <AccordionList
             class="accordion-list-border-top"
-            :title="'Karta pica'"
+            :title="$t('drinksCard')"
             :items="cafe.offerings?.filter(offer => offer.tag === 'pice')"
         />
         <AccordionList
             class="accordion-list-border-top accordion-list-border-bottom"
-            :title="'Hrana'"
+            :title="$t('food')"
             :items="cafe.offerings?.filter(offer => offer.tag === 'food')"
         />
       </div>
@@ -63,7 +62,7 @@
         >
           <ion-icon slot="start"
                     :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-          {{ isUserSubscribed ? 'Pretplacen' : 'Pretplati se' }}
+          {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
         </ion-button>
       </div>
       <ion-modal
@@ -230,5 +229,9 @@ ion-toolbar {
 
 ion-item {
   --border-style: none !important;
+}
+
+ion-content{
+  --background: #FFF;
 }
 </style>

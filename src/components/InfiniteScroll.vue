@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FilterCategoryHeading class="mb-2"/>
+    <FilterCategoryHeading :title="$t('searchResults')" class="mb-2"/>
     <div v-if="!showSkeleton">
       <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
         <CafeCard
@@ -26,7 +26,7 @@
     <ion-infinite-scroll-content
         class="mt-6"
         loading-spinner="lines"
-        loading-text="Ucitavanje rezultata...">
+        :loading-text="$t('refresherText')">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </template>

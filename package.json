@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
     "@capacitor-community/capacitor-googlemaps-native": "^1.1.0",
@@ -35,12 +36,14 @@
     "sass-loader": "^11.0.1",
     "vue": "^3.1.2",
     "vue-awesome-swiper": "^4.1.1",
+    "vue-i18n": "^9.1.0",
     "vue-router": "^4.0.10",
     "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "@capacitor/cli": "^3.0.2",
+    "@intlify/vue-i18n-loader": "^2.1.0",
     "@tailwindcss/postcss7-compat": "^2.2.4",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-e2e-cypress": "~4.5.0",
@@ -56,6 +59,7 @@
     "eslint-plugin-vue": "^7.12.1",
     "postcss": "^7.0.36",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4",
+    "vue-cli-plugin-i18n": "~2.1.1",
     "vue-jest": "^5.0.0-0"
   }
 }

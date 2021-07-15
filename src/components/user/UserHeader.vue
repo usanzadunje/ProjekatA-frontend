@@ -3,17 +3,17 @@
     <ion-toolbar>
       <div class="px-4 pt-3 pb-2 mt-2 md header-padding-bottom">
         <div v-show="loggedIn" class="flex justify-between">
-          <p class="main-toolbar-fade-text">Cao {{ authUser.full_name }}!</p>
-          <ion-button fill="clear" href="/">
+          <p class="main-toolbar-fade-text">{{ $t('hello') }} {{ authUser.full_name }}!</p>
+          <ion-button fill="clear" routerLink="/">
             <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
           </ion-button>
         </div>
         <div v-show="!loggedIn" class="flex justify-around">
           <ion-button fill="clear" routerLink="/login">
-            <p class="main-toolbar-fade-text uppercase">Login</p>
+            <p class="main-toolbar-fade-text uppercase">{{ $t('login') }}</p>
           </ion-button>
           <ion-button fill="clear" routerLink="/register">
-            <p class="main-toolbar-fade-text uppercase">Register</p>
+            <p class="main-toolbar-fade-text uppercase">{{ $t('register') }}</p>
           </ion-button>
         </div>
 
@@ -22,7 +22,7 @@
         <div>
           <ion-searchbar
               :value="searchTerm"
-              placeholder="Unesite ime kafica"
+              :placeholder="$t('searchPlaceholder')"
               @ionChange="searchInputChanged"
               @keyup.enter="$emit('searchEnterPressed', $event)"
               enterkeyhint="search"

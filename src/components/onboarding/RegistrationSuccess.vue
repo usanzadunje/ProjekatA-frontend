@@ -12,8 +12,10 @@
           class="auth-button-size auth-button-border-radius uppercase button-text-white"
           @click="$emit('nextSlide')"
       >
-        NASTAVI DALJE
-        <ion-icon slot="end" :icon="arrowForward"></ion-icon>
+        <div class="w-full flex flex-row justify-between">
+          <div class="mt-1">{{ $t('continue') }}</div>
+          <ion-icon :icon="arrowForward"></ion-icon>
+        </div>
       </ion-button>
     </div>
   </div>
@@ -45,5 +47,9 @@ export default defineComponent({
 div.bg {
   background: url('https://resize.rs/storage/img/onboarding/successful-registration.png') no-repeat center fixed;
   background-size: cover;
+}
+
+ion-icon {
+  font-size: 1.375rem;
 }
 </style>

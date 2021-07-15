@@ -1,7 +1,7 @@
 <template>
   <ion-item class="ion-item-no-padding-x mt-2 md margin-top-reset">
     <ion-icon :icon="pieChart" class="mr-2 text-yellow-400"></ion-icon>
-    <span class="modal-cafe-text-medium mt-0.5">{{ cafe.taken_capacity }} - slobodnih mesta</span>
+    <span class="modal-cafe-text-medium mt-0.5 lowercase">{{ cafe.taken_capacity }} - {{ $t('free') }}</span>
   </ion-item>
   <hr class="card-horizontal-ruler mt-1">
   <ion-item class="ion-item-no-padding-x">
@@ -9,17 +9,17 @@
       <ion-icon :icon="locationOutline" class="mr-2 primary-icon-color"></ion-icon>
       <p class="modal-cafe-text-regular">{{ cafe.address }} - {{ cafe.city }}</p>
     </div>
-    <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold" slot="end">MAPA</ion-button>
+    <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold" slot="end">{{ $t('map') }}</ion-button>
   </ion-item>
   <hr class="card-horizontal-ruler">
   <div class="flex justify-start mt-3.5">
     <div class="ion-item-no-padding-x flex">
       <ion-icon :icon="fastFoodOutline" class="mr-2 primary-icon-color"></ion-icon>
-      <p class="modal-cafe-text-regular">hrana</p>
+      <p class="modal-cafe-text-regular lowercase">{{ $t('food') }}</p>
     </div>
     <div class="ion-item-no-padding-x flex ml-3.5">
       <ion-icon :icon="leafOutline" class="mr-2 primary-icon-color"></ion-icon>
-      <p class="modal-cafe-text-regular">poseduje bastu</p>
+      <p class="modal-cafe-text-regular lowercase">{{ $t('has') }} {{ $t('garden') }}</p>
     </div>
     <div class="ion-item-no-padding-x flex ml-3.5">
       <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>

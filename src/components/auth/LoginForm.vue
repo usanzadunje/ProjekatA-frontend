@@ -14,7 +14,7 @@
           type="email"
           inputmode="email"
           debounce="600"
-          placeholder="marko.markovic@gmail.com"
+          :placeholder="$t('email')"
           autofocus required
       ></ion-input>
     </ion-item>
@@ -59,7 +59,7 @@
           class="auth-button-size auth-button-border-radius uppercase button-text-white"
           @click="login"
       >
-        Prijavi se
+        {{ $t('login') }}
       </ion-button>
       <ion-button
           fill="clear"
@@ -68,7 +68,7 @@
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
       >
-        Registruj se
+        {{ $t('register') }}
       </ion-button>
     </div>
   </div>

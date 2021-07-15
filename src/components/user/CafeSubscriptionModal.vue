@@ -5,13 +5,13 @@
     <div class="relative w-full container-modal">
       <div class="absolute w-full top-3">
         <ion-item>
-          <h1 class="submodal-heading">Notifikacije</h1>
+          <h1 class="submodal-heading">{{ $t('notifications') }}</h1>
         </ion-item>
         <ion-item>
           <p class="submodal-paragraph">
-            Obavesti me ukoliko se oslobodi sto u objektu
+            {{ $t('notificationModal1') }}
             <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
-            u narednih :
+            {{ $t('notificationModal2') }}
           </p>
         </ion-item>
         <ion-item class="ion-no-padding mt-4">
@@ -21,7 +21,7 @@
               mode="md"
               :disabled="isUserSubscribed"
           ></ion-toggle>
-          <ion-label class="margin-left-1 submodal-fade-text">Neodredjeno</ion-label>
+          <ion-label class="margin-left-1 submodal-fade-text">{{ $t('undefined') }}</ion-label>
         </ion-item>
         <ion-item class="ion-no-padding">
           <ion-range
@@ -41,7 +41,7 @@
               class="mr-2.5 uppercase button-cancel modal-button-border"
               @click="$emit('dismissSubscriptionModal')"
           >
-            Otkazi
+            {{ $t('cancel') }}
           </ion-button>
           <ion-button
               class="uppercase button-confirm modal-button-border"
@@ -49,7 +49,7 @@
           >
             <ion-icon slot="start"
                       :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-            {{ isUserSubscribed ? 'Ukloni' : 'Potvrdi' }}
+            {{ isUserSubscribed ? $t('remove') : $t('confirm') }}
           </ion-button>
         </div>
       </div>
