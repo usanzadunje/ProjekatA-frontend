@@ -34,6 +34,8 @@ import "@/assets/css/style.css";
 /* Vuex */
 import store        from './store';
 
+/* Translations */
+
 
 const app = createApp(App)
     .use(store)
