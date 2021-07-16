@@ -39,7 +39,7 @@ export default defineComponent({
           });
       get(`localization.${store.getters['auth/authUser'].id}`)
           .then((response) => {
-            locale.value = response.value || 'sr'
+            locale.value = response.value ?? 'sr'
           })
           .catch(() => {
             locale.value = 'sr'

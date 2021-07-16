@@ -78,7 +78,7 @@ import {
   notificationsOutline,
 } from 'ionicons/icons';
 
-import { useFCM } from '@/composables/useFCM';
+import { useStorage } from '@/services/StorageService';
 
 import CafeService               from '@/services/CafeService';
 import { useToastNotifications } from '@/composables/useToastNotifications';
@@ -114,9 +114,8 @@ export default defineComponent({
     const cafe = toRef(props, 'cafe');
 
     /* Methods */
-    /* Method for initializing push notifications for mobile devices */
-    const { initPush } = useFCM(store.getters['auth/authUser'].id);
-    const { showSuccessToast } = useToastNotifications();
+    const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { get } = useStorage();
 
     /* Lifecycle hooks */
     //When user lands on page check if he is already subscribed to cafe
@@ -132,14 +131,10 @@ export default defineComponent({
     };
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
     const toggleSubscription = async(cafeId) => {
-      let pushNotificationPermission = await initPush(isUserSubscribed.value);
+      let pushNotificationPermission = await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`) ?? false;
 
       if(indefiniteTimerActive.value) {
         notificationTime.value = null;
-      }
-
-      if(!pushNotificationPermission){
-        return;
       }
 
       if(isUserSubscribed.value) {
@@ -148,17 +143,26 @@ export default defineComponent({
                      if(response.data) {
                        isUserSubscribed.value = false;
                        emit('userToggledSubscription');
-                       await showSuccessToast('Successfully unsubscribed!')
+                       await showSuccessToast('Successfully unsubscribed!');
                      }
                    })
                    .catch((error) => alert(error));
       }else {
+        if(!pushNotificationPermission) {
+          await showErrorToast(
+              null,
+              {
+                pushNotificationPermission: 'Permission for notifications not granted. Check your settings.',
+              },
+          );
+          return;
+        }
         CafeService.subscribe(cafeId, notificationTime.value)
                    .then(async(response) => {
                      if(response.data) {
                        isUserSubscribed.value = true;
                        emit('userToggledSubscription');
-                       await showSuccessToast('Successfully subscribed!')
+                       await showSuccessToast('Successfully subscribed!');
                      }
                    })
                    .catch((error) => alert(error));
@@ -194,6 +198,7 @@ ion-range {
   --bar-height: 6px;
   --knob-size: 21px;
 }
+
 ion-range::part(knob) {
   outline: none !important;
 }

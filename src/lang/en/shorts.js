@@ -1,5 +1,5 @@
 export default {
-    "email": "john.doe@example.com",
+    "email": "john.doe{'@'}example.com",
     "password": "Password",
     "passwordConfirm": "Confirm passowrd",
     "emailAddress": "E-mail address",

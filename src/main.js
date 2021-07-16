@@ -35,7 +35,7 @@ import "@/assets/css/style.css";
 import store        from './store';
 
 /* Translations */
-import i18n         from './i18n';
+import { i18n }         from '@/./i18n';
 
 
 const app = createApp(App)

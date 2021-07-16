@@ -1,5 +1,5 @@
 export default {
-    "email": "marko.markovic@nesto.rs",
+    "email": "marko.markovic{'@'}nesto.rs",
     "password": "Lozinka",
     "passwordConfirm": "Ponovite lozinku",
     "emailAddress": "E-mail adresa",

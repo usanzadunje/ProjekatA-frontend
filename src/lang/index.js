@@ -1,17 +1,9 @@
-import srLong  from './translations/longs/sr.js';
-import srShort from './translations/shorts/sr.js';
-import enLong  from './translations/longs/en.js';
-import enShort from './translations/shorts/en.js';
+import { en } from "@/lang/en";
+import { sr } from "@/lang/sr";
 
 export default {
-    sr: {
-        ...srLong,
-        ...srShort,
-    },
-    en: {
-        ...enLong,
-        ...enShort,
-    },
+    sr,
+    en,
 };
 
 export const getLanguages = (selectedLanguage) => {

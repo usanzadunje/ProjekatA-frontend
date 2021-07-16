@@ -7,45 +7,26 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 
 import AuthService from '../services/AuthService';
 
-import { useStorage }            from '@/services/StorageService';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-export function useFCM(userId) {
+export function useFCM() {
     /* Global properties */
     const router = useRouter();
-
-    //Initializing storage and destructuring getter
-    const { get } = useStorage();
 
     /* Methods */
     const { showErrorToast } = useToastNotifications();
 
     /* Methods */
-    const initPush = async(isTryingToUnsubscribe = null) => {
-        //isTryingToUnsubscribe => letting user unsubscribe even though notifications arent turned ON
-        let permission = false;
-
-        try {
-            permission = await get(`areNotificationsOn.${userId}`);
-        }catch(error) {
-            await showErrorToast(null, { clientStoragePermission: 'Error : Cannot read storage.' });
-            return false;
-        }
-
-        if(Capacitor.getPlatform() !== 'web' && !!permission) {
+    const initPush = () => {
+        if(Capacitor.getPlatform() !== 'web') {
             registerPush();
         }else {
-            if(!isTryingToUnsubscribe) {
-                await showErrorToast(
-                    null,
-                    {
-                        pushNotificationPermission: 'Permission for notifications not granted. Check your settings.',
-                    },
-                );
-            }
-            permission = false;
+            showErrorToast(
+                null,
+                {
+                    pushNotificationPermission: 'You cannot register for push notifications on web.',
+                });
         }
-        return permission || isTryingToUnsubscribe;
     };
     const registerPush = () => {
         /* If permission is not granted asks for permission, after granted it registers Push Notifications */
@@ -82,24 +63,20 @@ export function useFCM(userId) {
         PushNotifications.addListener(
             'pushNotificationReceived',
             async(notification) => {
-                await LocalNotifications.schedule({
-                    notifications: [
-                        {
-                            id: notification.data.cafeId,
-                            title: notification.title,
-                            body: notification.body,
-                            autoCancel: true,
-                        },
-                    ],
-                });
+                alert(JSON.stringify(notification));
             },
         );
         PushNotifications.addListener(
             'pushNotificationActionPerformed',
-            () => {
-                router.push({
-                    name: 'cafes',
-                });
+            (notification) => {
+                alert(notification);
+                // let data = notification.notification.data;
+                // router.push({
+                //     name: 'cafe',
+                //     params: {
+                //         id: data.cafe_id
+                //     }
+                // });
             },
         );
         LocalNotifications.addListener(

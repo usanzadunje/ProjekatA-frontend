@@ -19,11 +19,24 @@ export function getError(error) {
 // Timer
 export function sleep(milliseconds) {
     return new Promise((resolve, reject) => {
-        if(milliseconds < 1){
+        if(milliseconds < 1) {
             reject('Invalid time in milliseconds passed.');
         }
         setTimeout(() => {
             resolve();
         }, milliseconds);
-    })
+    });
+}
+
+// Gettings localized string
+export function loadLocaleMessages(locales) {
+    let messages = {};
+    locales.keys().forEach(key => {
+        if(key === './index.js') {
+            return;
+        }
+
+        Object.assign(messages, messages, locales(key).default);
+    });
+    return messages;
 }

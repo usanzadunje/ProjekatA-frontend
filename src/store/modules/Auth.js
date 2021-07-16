@@ -1,7 +1,8 @@
 import router            from "@/router";
 import { useBackButton } from '@ionic/vue';
 
-import AuthService               from "@/services/AuthService";
+import AuthService from "@/services/AuthService";
+
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useStorage }            from '@/services/StorageService';
 

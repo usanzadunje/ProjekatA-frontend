@@ -129,7 +129,7 @@ export default defineComponent({
     /* Methods */
     const { set, get } = useStorage();
     const { t, locale } = useI18n({ useScope: 'global' });
-    const { initPush } = useFCM(store.getters['auth/authUser'].id);
+    const { initPush } = useFCM();
 
 
     /* Lifecycle hooks */
@@ -151,7 +151,7 @@ export default defineComponent({
         });
     get(`localization.${store.getters['auth/authUser'].id}`)
         .then((response) => {
-          language.value = response.text || 'SRB';
+          language.value = response.text ?? 'SRB';
         })
         .catch(() => {
           language.value = 'SRB';

@@ -1,5 +1,6 @@
 import axios          from "axios";
 import { useStorage } from '@/services/StorageService';
+import store          from '@/store';
 
 // Creating axios instance for routes that are api protected
 export const apiClient = axios.create({
@@ -12,11 +13,15 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(async function(config) {
     const { get } = useStorage();
     const token = await get('projekata_token');
+    const locale = await get(`localization.${store.getters['auth/authUser'].id}`);
+
     if(!token) {
         delete config.headers.authorization;
     }else {
         config.headers.authorization = `Bearer ${token}`;
     }
+
+    config.headers['X-Localization'] = locale ? locale.value : 'sr';
 
     return config;
 }, function(error) {

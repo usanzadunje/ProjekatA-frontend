@@ -135,9 +135,14 @@ export default defineComponent({
   },
   ionViewWillEnter() {
     document.getElementById('tab-button-search').style.color = '#207DFF';
+
+    document.querySelector('ion-tabs').style.setProperty("background-color", "var(--show-paint)", "important");
   },
   ionViewWillLeave() {
     document.getElementById('tab-button-search').style.color = '';
+
+    document.querySelector('ion-tabs').style.setProperty("background-color", "var(--primary-paint)", "important");
+
   },
   setup() {
     /* Global properties */
@@ -189,7 +194,6 @@ export default defineComponent({
                  })
                  .catch((error) => alert(error));
     }
-    document.body.style.setProperty('--ion-item-background', '#F1C2B');
 
 
     return {
@@ -219,6 +223,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+
 ion-toolbar {
   --border-style: none;
   --background: var(--show-paint);
@@ -226,12 +231,11 @@ ion-toolbar {
   border-bottom-right-radius: 0 !important;
 }
 
-
 ion-item {
   --border-style: none !important;
 }
 
-ion-content{
-  --background: #FFF;
+ion-content {
+  --background: var(--show-paint);
 }
 </style>
