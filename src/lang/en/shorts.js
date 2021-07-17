@@ -53,4 +53,5 @@ export default {
     "no": "No",
     "agree": "Agree",
     "disagree": "Disagree",
+    "back": "Back",
 }

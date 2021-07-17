@@ -1,14 +1,8 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Error 4O4</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true" class="ion-padding">
-      <div class="max-w-lg p-5 m-auto">
-        <article class="p-5">
+    <ion-content :fullscreen="true">
+      <div class="max-w-lg m-auto vcenter">
+        <article class="p-5 text-center">
           <h1
               class="mb-2 text-6xl font-bold text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to-green-500"
           >
@@ -16,9 +10,10 @@
           </h1>
           <p class="font-bold">
             The page you're looking for is not here.
-            <ion-button href="/">Back home</ion-button>
-            .
           </p>
+          <ion-button fill="clear" routerLink="/" class="m-auto">
+            <p class="main-toolbar-fade-text uppercase">HOME</p>
+          </ion-button>
         </article>
       </div>
     </ion-content>
@@ -28,7 +23,7 @@
 <script>
 import { defineComponent } from 'vue';
 
-import { IonButton, IonPage, IonContent, IonHeader, IonToolbar, IonTitle } from '@ionic/vue';
+import { IonButton, IonPage, IonContent } from '@ionic/vue';
 
 export default defineComponent({
   name: "404",
@@ -36,9 +31,6 @@ export default defineComponent({
     IonButton,
     IonPage,
     IonContent,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
   },
 });
 </script>

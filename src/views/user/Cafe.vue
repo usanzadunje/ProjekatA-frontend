@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, watch } from 'vue';
 
 import { useStore } from 'vuex';
 
@@ -151,7 +151,7 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
 
-    /* Componenet properties */
+    /* Component properties */
     let cafe = ref({});
     const isModalOpen = ref(false);
     const isMapModalOpen = ref(false);
@@ -159,6 +159,7 @@ export default defineComponent({
 
     // Auth prop
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
+
 
     /* Event handlers */
     const openModal = (state, isMapModal = false) => {
@@ -182,7 +183,7 @@ export default defineComponent({
     };
 
     /* Lifecycle hooks */
-    /* Fetching all cafes from backend */
+    /* Fetching cafe from backend */
     CafeService.show(route.params.id)
                .then((response) => {
                  cafe.value = response.data;
@@ -197,6 +198,18 @@ export default defineComponent({
                  .catch((error) => alert(error));
     }
 
+
+    /* Watchers */
+    // Watching for changes of id parameter in cafe show route and fetching right data
+    watch(route, () => {
+      if(route.name === 'cafe' && route.params.id) {
+        CafeService.show(route.params.id)
+                   .then((response) => {
+                     cafe.value = response.data;
+                   })
+                   .catch((error) => alert(error));
+      }
+    });
 
     return {
       /* Global properties */

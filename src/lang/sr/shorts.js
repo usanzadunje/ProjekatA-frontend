@@ -53,5 +53,6 @@ export default {
     "no": "Ne",
     "agree": "Potvrdi",
     "disagree": "Odustani",
+    "back": "Nazad",
 };
 

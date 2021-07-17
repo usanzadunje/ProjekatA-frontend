@@ -151,6 +151,9 @@ ion-toggle {
 .no-padding-top{
     --padding-top: 0 !important;
 }
+.vcenter {
+    margin-top: 50%;
+}
 
 /*
     START Android specific styles
