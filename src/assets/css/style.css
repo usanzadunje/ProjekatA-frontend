@@ -148,6 +148,10 @@ ion-toggle {
     padding-bottom: 0 !important;
 }
 
+.no-padding-top{
+    --padding-top: 0 !important;
+}
+
 /*
     START Android specific styles
 */

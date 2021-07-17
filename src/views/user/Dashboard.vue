@@ -2,7 +2,7 @@
   <ion-page>
     <UserProfileHeader/>
 
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding no-padding-top">
       <SlidingFilter @sortHasChanged="sortHasChanged" class="mt-2"/>
 
       <div class="mt-3">
@@ -266,7 +266,7 @@ ion-item-option:active {
   --background: #E01B43;
 }
 
-ion-content {
-  --padding-top: 0 !important;
-}
+/*ion-content {*/
+/*  --padding-top: 0;*/
+/*}*/
 </style>

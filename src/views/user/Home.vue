@@ -158,7 +158,7 @@ export default defineComponent({
     const modalCafe = ref({});
     let showSkeleton = ref(true);
 
-    /* Whatcher needed instead of mounted lifecycle hook because there is skeleton text showing */
+    /* Watchers needed instead of mounted lifecycle hook because there is skeleton text showing */
     watch(showSkeleton, (newValue) => {
       if(!newValue) {
         const slides = document.getElementsByClassName("homeSlider");
