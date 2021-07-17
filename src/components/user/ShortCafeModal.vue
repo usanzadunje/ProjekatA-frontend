@@ -40,7 +40,7 @@
           <ion-button
               class="uppercase button-subscribe modal-button-border"
               @click="openModal(true);$emit('subModalOpened');"
-              :disabled="!loggedIn"
+              :disabled="isWeb"
           >
             <ion-icon slot="start"
                       :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
@@ -68,6 +68,8 @@
 
 <script>
 import { defineComponent, ref, toRef, computed, onMounted, onUnmounted } from 'vue';
+import { Capacitor } from '@capacitor/core';
+
 
 import { useRoute, useRouter } from 'vue-router';
 
@@ -134,11 +136,14 @@ export default defineComponent({
     const isModalOpen = ref(false);
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
+    const isWeb = ref(false);
 
     //Auth prop
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
     /* Lifecycle hooks */
+    isWeb.value = Capacitor.getPlatform() === 'web';
+
     onMounted(() => {
       const slides = document.getElementById("gallerySlider");
       setTimeout(() => {
@@ -180,6 +185,7 @@ export default defineComponent({
     return {
       /* Component properties */
       slideOpts,
+      isWeb,
 
       /* Component properties */
       isModalOpen,

@@ -89,6 +89,7 @@ import {
   IonToggle,
   IonButton,
   pickerController,
+  onIonViewWillEnter,
 } from '@ionic/vue';
 
 import {
@@ -135,13 +136,15 @@ export default defineComponent({
     /* Lifecycle hooks */
     //Setting toggle checked attribute to whatever user choose and is persisted in storage
     //for notifications
-    get(`areNotificationsOn.${store.getters['auth/authUser'].id}`)
-        .then((response) => {
-          areNotificationsOn.value = !!response;
-        })
-        .catch(() => {
-          areNotificationsOn.value = false;
-        });
+    onIonViewWillEnter(() => {
+      get(`areNotificationsOn.${store.getters['auth/authUser'].id}`)
+          .then((response) => {
+            areNotificationsOn.value = !!response;
+          })
+          .catch(() => {
+            areNotificationsOn.value = false;
+          });
+    })
     get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
         .then((response) => {
           isDarkModeOn.value = !!response;
@@ -186,7 +189,11 @@ export default defineComponent({
       }else {
         //Remembering user decision for future usage
         set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
-        initPush();
+        let noPermission = initPush();
+        if(noPermission) {
+          e.target.disabled = true;
+          e.target.checked = false;
+        }
       }
       areNotificationsOn.value = e.target.checked;
     };

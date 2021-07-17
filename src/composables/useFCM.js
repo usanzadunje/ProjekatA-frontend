@@ -9,9 +9,12 @@ import AuthService from '../services/AuthService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
+import { useI18n } from 'vue-i18n';
+
 export function useFCM() {
     /* Global properties */
     const router = useRouter();
+    const { t } = useI18n();
 
     /* Methods */
     const { showErrorToast } = useToastNotifications();
@@ -24,8 +27,9 @@ export function useFCM() {
             showErrorToast(
                 null,
                 {
-                    pushNotificationPermission: 'You cannot register for push notifications on web.',
+                    pushNotificationPermission: t('warningWebNotification'),
                 });
+            return true;
         }
     };
     const registerPush = () => {
@@ -35,7 +39,11 @@ export function useFCM() {
                              if(permission.receive === 'granted') {
                                  await PushNotifications.register();
                              }else {
-                                 alert('No permission for push notifications granted');
+                                 showErrorToast(
+                                     null,
+                                     {
+                                         pushNotificationPermission: t('warningNoNotificationPermission'),
+                                     });
                              }
                          });
 

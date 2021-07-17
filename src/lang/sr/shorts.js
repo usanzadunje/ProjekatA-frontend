@@ -48,6 +48,10 @@ export default {
     "setUsername" : "Podesi korisnicko ime",
     "subscribedPlaces" : "Mesta koja pratim",
     "findAvailablePlace": "Pronađi slobodno mesto",
-    "loading": "Učitava se..."
+    "loading": "Učitava se...",
+    "yes": "Da",
+    "no": "Ne",
+    "agree": "Potvrdi",
+    "disagree": "Odustani",
 };
 

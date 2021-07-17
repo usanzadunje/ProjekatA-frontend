@@ -86,6 +86,7 @@ import {
   trashOutline,
 }                                from 'ionicons/icons';
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useI18n }               from 'vue-i18n';
 
 
 export default defineComponent({
@@ -125,6 +126,7 @@ export default defineComponent({
   },
   setup() {
     /* Global properties */
+    const { t } = useI18n();
 
     /* Component properties */
     // Cafes user is subscribed to
@@ -167,18 +169,18 @@ export default defineComponent({
     const showAlert = async(cafeId) => {
       const alert = await alertController
           .create({
-            header: 'Unsubscribing from cafe',
-            message: 'Are you sure you want to delete cafe from subscription list?',
+            header: t('alertUnsubscribeHeader'),
+            message:t('alertUnsubscribeMessage'),
             buttons: [
               {
-                text: 'Disagree',
+                text: t('disagree'),
                 role: 'cancel',
               },
               {
-                text: 'Agree',
+                text: t('agree'),
                 handler: () => {
                   unsubscribe(cafeId);
-                  showSuccessToast('Successfully unsubscribed!');
+                  showSuccessToast(t('successSubscribe'));
                 },
               },
             ],

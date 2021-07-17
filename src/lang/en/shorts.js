@@ -48,5 +48,9 @@ export default {
     "setUsername" : "Set username",
     "subscribedPlaces" : "Places i am subscribed to",
     "findAvailablePlace": "Find available place",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "yes": "Yes",
+    "no": "No",
+    "agree": "Agree",
+    "disagree": "Disagree",
 }

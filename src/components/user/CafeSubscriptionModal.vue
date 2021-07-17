@@ -70,7 +70,7 @@ import {
   IonButton,
   IonToggle,
   IonRange,
-  IonLabel,
+  IonLabel, alertController,
 } from '@ionic/vue';
 
 import {
@@ -82,6 +82,9 @@ import { useStorage } from '@/services/StorageService';
 
 import CafeService               from '@/services/CafeService';
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useFCM }                from '@/composables/useFCM';
+
+import { useI18n }               from 'vue-i18n';
 
 export default defineComponent({
   name: 'CafeSubscriptionModal',
@@ -104,6 +107,7 @@ export default defineComponent({
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
+    const { t } = useI18n();
 
     /* Component properties */
     let notificationTime = ref(15);
@@ -114,8 +118,41 @@ export default defineComponent({
     const cafe = toRef(props, 'cafe');
 
     /* Methods */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
-    const { get } = useStorage();
+    const { showSuccessToast } = useToastNotifications();
+    const { get, set } = useStorage();
+    const { initPush } = useFCM();
+    const showAlert = async(cafeId) => {
+      const alert = await alertController
+          .create({
+            header: t('alertNotificationsOffHeader'),
+            message: t('alertNotificationsOffMessage'),
+            buttons: [
+              {
+                text: t('no'),
+                role: 'cancel',
+              },
+              {
+                text: t('yes'),
+                handler: () => {
+                  set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
+                  initPush();
+                  CafeService.subscribe(cafeId, notificationTime.value)
+                             .then(async(response) => {
+                               if(response.data) {
+                                 isUserSubscribed.value = true;
+                                 emit('userToggledSubscription');
+                                 await showSuccessToast(t('successSubscribe'));
+                               }
+                             })
+                             .catch((error) => {
+                               alert(error);
+                             });
+                },
+              },
+            ],
+          });
+      await alert.present();
+    };
 
     /* Lifecycle hooks */
     //When user lands on page check if he is already subscribed to cafe
@@ -143,18 +180,13 @@ export default defineComponent({
                      if(response.data) {
                        isUserSubscribed.value = false;
                        emit('userToggledSubscription');
-                       await showSuccessToast('Successfully unsubscribed!');
+                       await showSuccessToast(t('successSubscribe'));
                      }
                    })
                    .catch((error) => alert(error));
       }else {
         if(!pushNotificationPermission) {
-          await showErrorToast(
-              null,
-              {
-                pushNotificationPermission: 'Permission for notifications not granted. Check your settings.',
-              },
-          );
+          await showAlert(cafeId);
           return;
         }
         CafeService.subscribe(cafeId, notificationTime.value)
@@ -162,7 +194,7 @@ export default defineComponent({
                      if(response.data) {
                        isUserSubscribed.value = true;
                        emit('userToggledSubscription');
-                       await showSuccessToast('Successfully subscribed!');
+                       await showSuccessToast(t('successSubscribe'));
                      }
                    })
                    .catch((error) => alert(error));
