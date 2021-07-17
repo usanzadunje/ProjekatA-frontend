@@ -14,7 +14,7 @@
               <CafeCard
                   class="w-full"
                   :cafe="cafe"
-                  @click="openModal(cafe.id, true)"
+                  @click="openModal(true, cafe.id)"
               />
             </ion-item>
 
@@ -110,6 +110,9 @@ export default defineComponent({
     ...mapGetters('auth', ['authUser']),
   },
   ionViewDidEnter() {
+    let shouldOpenModal = !!this.$route.query.openModal;
+    this.openModal(shouldOpenModal);
+
     //*Everytime user comes to the page give him view of fresh cafes he has subscribed to
     CafeService.getAllCafesUserSubscribedTo(this.sortBy)
                .then((response) => {
@@ -117,8 +120,12 @@ export default defineComponent({
                  this.showSkeleton = false;
                })
                .catch((error) => console.log(error));
+
+
   },
   setup() {
+    /* Global properties */
+
     /* Component properties */
     // Cafes user is subscribed to
     let cafesUserSubscribedTo = ref([]);
@@ -178,7 +185,7 @@ export default defineComponent({
           });
       await alert.present();
     };
-    const openModal = async(id = null, state) => {
+    const openModal = async(state, id = null) => {
       if(id) {
         let response = await CafeService.show(id);
         modalCafe.value = response.data;

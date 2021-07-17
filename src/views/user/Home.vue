@@ -20,14 +20,14 @@
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.closestToUserCafes.slice(0, 2)"
-              @openCafeModal="openModal($event, true)"
+              @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
         </ion-slide>
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.closestToUserCafes.slice(2, 4)"
-              @openCafeModal="openModal($event, true)"
+              @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
         </ion-slide>
@@ -43,14 +43,14 @@
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.currentlyAvailableCafes.slice(0, 2)"
-              @openCafeModal="openModal($event, true)"
+              @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
         </ion-slide>
         <ion-slide>
           <HomeSlidingCafeCards
               :cafes="cafes.currentlyAvailableCafes.slice(2, 4)"
-              @openCafeModal="openModal($event, true)"
+              @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
         </ion-slide>
@@ -121,11 +121,14 @@ export default defineComponent({
   },
   beforeRouteEnter(to) {
     // Before entering route remove query params
-    if(Object.keys(to.query).length) {
+    if(Object.keys(to.query).length && !to.query.openModal) {
       return { path: to.path, query: {}, hash: to.hash };
     }
   },
   ionViewDidEnter() {
+    let shouldOpenModal = !!this.$route.query.openModal;
+    this.openModal(shouldOpenModal);
+
     const slides = document.getElementsByClassName("homeSlider");
     setTimeout(() => {
       slides.forEach((slide) => {
@@ -183,7 +186,7 @@ export default defineComponent({
                .catch((error) => alert(JSON.stringify(error)));
 
     /* Event handlers */
-    const openModal = (cafe = null, state) => {
+    const openModal = (state, cafe = null) => {
       if(cafe) {
         modalCafe.value = cafe;
       }

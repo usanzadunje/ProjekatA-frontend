@@ -4,7 +4,8 @@
       <ion-toolbar>
         <div class="flex justify-between mt-3 md margin-top-reset">
           <ion-buttons slot="start">
-            <ion-button routerLink="/home">
+            <ion-button
+                :routerLink="`${$route.query.redirect ?? '/home'}`">
               <ion-icon slot="icon-only" :icon="arrowBackOutline" class="text-gray-400"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -134,15 +135,16 @@ export default defineComponent({
     CafeSubscriptionModal,
   },
   ionViewWillEnter() {
-    document.getElementById('tab-button-search').style.color = '#207DFF';
+    setTimeout(() => {
+      document.getElementById('tab-button-search').style.color = '#207DFF';
 
-    document.querySelector('ion-tabs').style.setProperty("background-color", "var(--show-paint)", "important");
+      document.querySelector('ion-tabs').style.setProperty("background-color", "var(--show-paint)", "important");
+    }, 200);
   },
   ionViewWillLeave() {
     document.getElementById('tab-button-search').style.color = '';
 
     document.querySelector('ion-tabs').style.setProperty("background-color", "var(--primary-paint)", "important");
-
   },
   setup() {
     /* Global properties */

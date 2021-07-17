@@ -19,7 +19,7 @@
           :cafeSearchString="cafeSearchString"
           :sortBy="sortBy"
           @scrollToTop="scrollToTop"
-          @openCafeModal="openModal($event, true)"
+          @openCafeModal="openModal(true, $event)"
       />
 
       <ion-modal
@@ -68,14 +68,24 @@ export default defineComponent({
     InfiniteScroll,
     ShortCafeModal,
   },
+  // beforeRouteEnter(to) {
+  //   // Before entering route remove query params
+  //   // if(Object.keys(to.query).length) {
+  //   //   return { path: to.path, query: {}, hash: to.hash };
+  //   // }
+  // },
   ionViewWillEnter() {
     // Before enterning vuew check if there is search term if there is
     // Set search input to search term passed from Home page
     // And remove query string
     if(this.$route.query.searchTerm || this.$route.query.searchTerm === '') {
       this.cafeSearchString = this.$route.query.searchTerm;
-      this.$router.push({ path: 'search', query: {} });
+      this.$router.replace();
     }
+  },
+  ionViewDidEnter() {
+    let shouldOpenModal = !!this.$route.query.openModal;
+    this.openModal(shouldOpenModal);
   },
   ionViewWillLeave() {
     // Before leaving page remove search input value and clear search string
@@ -109,7 +119,7 @@ export default defineComponent({
         slide.options = slideOpts;
         slide.update();
       });
-    })
+    });
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
@@ -129,7 +139,7 @@ export default defineComponent({
 
       scrollTopOffset.value = scrollElement.scrollTop;
     };
-    const openModal = (cafe = null, state) => {
+    const openModal = (state, cafe = null) => {
       if(cafe) {
         modalCafe.value = cafe;
       }

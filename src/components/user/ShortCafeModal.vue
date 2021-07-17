@@ -28,10 +28,11 @@
             </ion-slide>
           </ion-slides>
         </ion-item>
+
         <div class="mt-5 mb-3 flex justify-around">
           <ion-button
               class="mr-2.5 uppercase button-see-more modal-button-border"
-              :routerLink="`/cafes/${cafe.id}`"
+              :routerLink="`/cafes/${cafe.id}?redirect=${$route.path + '?openModal=true'}`"
               @click="$emit('dismissShortCafeModal')"
           >
             {{ $t('more') }}
@@ -66,7 +67,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, toRef, computed, onMounted } from 'vue';
+import { defineComponent, ref, toRef, computed, onMounted, onUnmounted } from 'vue';
+
+import { useRoute, useRouter } from 'vue-router';
 
 import { useStore } from 'vuex';
 
@@ -119,6 +122,8 @@ export default defineComponent({
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
+    const route = useRoute();
+    const router= useRouter();
 
     /* Component properties */
     const slideOpts = {
@@ -140,6 +145,12 @@ export default defineComponent({
         slides.options = slideOpts;
         slides.update();
       }, 150);
+    });
+
+    onUnmounted(() => {
+      if(route.query.openModal) {
+        router.replace();
+      }
     });
     /* Checking if user is subscribed to this cafe */
     if(loggedIn.value) {

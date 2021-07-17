@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-tabs id="tabs">
+    <ion-tabs id="tabs" @ionTabsDidChange="clearRedirectQuery">
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="home" href="/home">
           <ion-icon
@@ -31,7 +31,9 @@
 </template>
 
 <script>
-import { defineComponent  } from 'vue';
+import { defineComponent } from 'vue';
+
+import { useRoute, useRouter } from 'vue-router';
 
 import { mapGetters } from 'vuex';
 
@@ -63,8 +65,20 @@ export default defineComponent({
     ...mapGetters('auth', ['loggedIn']),
   },
   setup() {
+    /* Global properties */
+    const route = useRoute();
+    const router = useRouter();
+
+    /* Event handlers */
+    const clearRedirectQuery = () => {
+      if(route.query.redirect){
+        router.replace();
+      }
+    };
 
     return {
+      clearRedirectQuery,
+
       /* Icons from */
       homeOutline,
       searchOutline,
