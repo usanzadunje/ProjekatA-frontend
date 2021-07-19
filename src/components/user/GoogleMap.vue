@@ -8,7 +8,7 @@
     </div>
 
     <div class="ml-4 mt-6 text-center">
-      <h1 class="main-toolbar-heading text-xl">{{ cafe.address + ', ' + cafe.city }}</h1>
+      <h1 class="main-toolbar-heading text-xl">Distance : {{ distance }}</h1>
     </div>
   </div>
 </template>
@@ -21,7 +21,8 @@ import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-n
 
 import { sleep } from '@/utils/helpers';
 
-import { useI18n } from 'vue-i18n';
+import { useI18n }        from 'vue-i18n';
+import { useGeolocation } from '@/composables/useGeolocation';
 
 export default defineComponent({
   name: "GoogleMap",
@@ -37,6 +38,8 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     const { t } = useI18n({ useScope: 'global' })
+
+    const { getCurrentPosition } = useGeolocation();
 
     onMounted(async() => {
       const loading = await loadingController
@@ -74,6 +77,11 @@ export default defineComponent({
           "type": "normal",
         });
       });
+
+      const { latitude, longitude } = await getCurrentPosition();
+      console.log(latitude, longitude);
+
+
     });
   },
   unmounted() {

@@ -20,7 +20,7 @@
         </div>
         <div class="flex ml-2">
           <ion-icon :icon="locationOutline" class="primary-icon-color"></ion-icon>
-          <span class="cafe-card-fade-text ml-1">600m</span>
+          <span class="cafe-card-fade-text ml-1">{{ cafe.distance }}m</span>
         </div>
       </div>
       <div class="flex primary-icon-color">

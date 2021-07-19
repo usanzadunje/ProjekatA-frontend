@@ -1,18 +1,34 @@
 import * as API from "@/services/API";
 
+import { Geolocation } from '@capacitor/geolocation';
+
+const options = {
+    enableHighAccuracy: true,
+    timeout: 1000,
+};
+
 export default {
     // Listing all cafes
     index() {
         return API.apiClient.get(`/cafes`);
     },
     // Getting cafes in chunks
-    getCafeCardsChunkInfo(
+    async getCafeCardsChunkInfo(
         start = 0,
         numberOfCafes = 20,
         filter = '',
         sortBy = 'name',
         getAllColumns = false,
     ) {
+        let latitude = 0;
+        let longitude = 0;
+        if(sortBy === 'distance'){
+            const position = await Geolocation.getCurrentPosition(options);
+
+            latitude  = position.coords.latitude;
+            longitude  = position.coords.longitude;
+        }
+
         // Only fetching columns needed to show in cafe card component
         // Search and Home screen have it
         return API.apiClient.get(
@@ -22,12 +38,14 @@ export default {
                     filter,
                     sortBy,
                     getAllColumns,
+                    latitude,
+                    longitude,
                 },
             },
         );
     },
     // Getting only one specific cafe
-    show(id) {
+    async show(id) {
         // Only getting
         return API.apiClient.get(
             `/cafes/${id}`,
@@ -55,12 +73,34 @@ export default {
         return API.apiClient.post(`/users/subscribed/cafe/${cafeId}`);
     },
     // Listing all cafes user is subscribed to
-    getAllCafesUserSubscribedTo(sortBy = 'name') {
+    async getAllCafesUserSubscribedTo(sortBy = 'name') {
+        let latitude = 0;
+        let longitude = 0;
+        if(sortBy === 'distance'){
+            const position = await Geolocation.getCurrentPosition(options);
+
+            latitude  = position.coords.latitude;
+            longitude  = position.coords.longitude;
+        }
+
         return API.apiClient.get(
             `/users/cafes/subscriptions`,
             {
                 params: {
                     sortBy,
+                    latitude,
+                    longitude,
+                },
+            },
+        );
+    },
+    getDistance(cafeId, lat, lng) {
+        return API.apiClient.get(
+            `/cafes/${cafeId}/distance`,
+            {
+                params: {
+                    lat,
+                    lng,
                 },
             },
         );

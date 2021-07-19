@@ -98,7 +98,7 @@ export default defineComponent({
 
     /* Component properties */
     const cafeSearchString = ref('');
-    const sortBy = ref('');
+    const sortBy = ref('distance');
     let scrollTopOffset = ref(0);
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);

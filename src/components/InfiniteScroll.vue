@@ -126,7 +126,7 @@ export default defineComponent({
       setTimeout(() => {
         loadMoreCafes();
         ev.target.complete();
-      }, 500);
+      }, 300);
     };
 
     const openCafeModal = (cafeId) => {

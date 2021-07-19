@@ -4,7 +4,7 @@
       <div class="px-4 pt-3 pb-2 mt-2 md header-padding-bottom">
         <div v-show="loggedIn" class="flex justify-between">
           <p class="main-toolbar-fade-text">{{ $t('hello') }} {{ authUser.full_name }}!</p>
-          <ion-button fill="clear" routerLink="/das">
+          <ion-button fill="clear" routerLink="/test">
             <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
           </ion-button>
         </div>

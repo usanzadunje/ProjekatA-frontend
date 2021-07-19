@@ -49,7 +49,25 @@
         </ion-slide>
         <ion-slide>
           <HomeSlidingCafeCards
-              :cafes="cafes.currentlyAvailableCafes.slice(2, 4)"
+              :cafes="cafes.currentlyAvailableCafes.slice(0, 2)"
+              @openCafeModal="openModal(true, $event)"
+              class="pr-3"
+          />
+        </ion-slide>
+      </ion-slides>
+
+      <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
+      <ion-slides v-show="!showSkeleton" :options="slideOpts" class="homeSlider">
+        <ion-slide>
+          <HomeSlidingCafeCards
+              :cafes="cafes.foodCafes.slice(0, 2)"
+              @openCafeModal="openModal(true, $event)"
+              class="pr-3"
+          />
+        </ion-slide>
+        <ion-slide>
+          <HomeSlidingCafeCards
+              :cafes="cafes.foodCafes.slice(0, 2)"
               @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
@@ -151,12 +169,15 @@ export default defineComponent({
     let cafes = reactive({
       currentlyAvailableCafes: [],
       closestToUserCafes: [],
+      foodCafes: [],
     });
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
     const modalCafe = ref({});
     let showSkeleton = ref(true);
+
+    /* Methods */
 
     /* Watchers needed instead of mounted lifecycle hook because there is skeleton text showing */
     watch(showSkeleton, (newValue) => {
@@ -170,20 +191,30 @@ export default defineComponent({
         }, 300);
       }
     });
+
+
+    /* Lifecycle hooks */
+    //*Before mounting fetching initial 4 cafes to show closest to user
+    CafeService.getCafeCardsChunkInfo(0, 4, '', 'distance', true)
+               .then((response) => {
+                 cafes.closestToUserCafes = response.data;
+               })
+               .catch((error) => alert(JSON.stringify(error)));
     //*Before mounting fetching initial 4 cafes to show in currently free cafes
     CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
                .then((response) => {
                  cafes.currentlyAvailableCafes = response.data;
                })
                .catch((error) => alert(JSON.stringify(error)));
-
     //*Before mounting fetching initial 4 cafes to show closest to user
-    CafeService.getCafeCardsChunkInfo(0, 4, '', 'name', true)
+    CafeService.getCafeCardsChunkInfo(0, 4, '', 'food', true)
                .then((response) => {
-                 cafes.closestToUserCafes = response.data;
+                 cafes.foodCafes = response.data;
                  showSkeleton.value = false;
+
                })
                .catch((error) => alert(JSON.stringify(error)));
+
 
     /* Event handlers */
     const openModal = (state, cafe = null) => {
@@ -202,21 +233,28 @@ export default defineComponent({
       //Clearing search input after leaving page
       e.target.value = null;
     };
-    const refresh = (event) => {
+    const refresh = async(event) => {
       // Only after both cafe arrays have been updated then complete refresher
       // Fetching 4 cafes in each category with new live data
       Promise.all([
+        CafeService.getCafeCardsChunkInfo(0, 4, '', 'distance', true)
+                   .then((response) => {
+                     cafes.closestToUserCafes = response.data;
+                   })
+                   .catch((error) => alert(JSON.stringify(error))),
+
         CafeService.getCafeCardsChunkInfo(0, 4, '', 'name', true)
                    .then((response) => {
                      cafes.currentlyAvailableCafes = response.data;
                    })
                    .catch((error) => alert(JSON.stringify(error))),
 
-        CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
+        CafeService.getCafeCardsChunkInfo(0, 4, '', 'food', true)
                    .then((response) => {
-                     cafes.closestToUserCafes = response.data;
+                     cafes.foodCafes = response.data;
                    })
                    .catch((error) => alert(JSON.stringify(error))),
+
       ])
              .then(() => {
                event.target.complete();
