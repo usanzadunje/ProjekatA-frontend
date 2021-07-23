@@ -8,14 +8,14 @@
     </div>
 
     <div class="ml-4 mt-6 text-center">
-      <h1 class="main-toolbar-heading text-xl">Distance : {{ distance }}</h1>
+      <h1 class="main-toolbar-heading text-xl">Distance : {{ distance }}m</h1>
     </div>
   </div>
 </template>
 l
 <script>
-import { defineComponent, onMounted } from 'vue';
-import { loadingController }          from '@ionic/vue';
+import { defineComponent, onMounted, ref } from 'vue';
+import { loadingController }               from '@ionic/vue';
 
 import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-native';
 
@@ -23,6 +23,8 @@ import { sleep } from '@/utils/helpers';
 
 import { useI18n }        from 'vue-i18n';
 import { useGeolocation } from '@/composables/useGeolocation';
+import CafeService        from '@/services/CafeService';
+import { useStore }       from 'vuex';
 
 export default defineComponent({
   name: "GoogleMap",
@@ -33,15 +35,22 @@ export default defineComponent({
     },
   },
   setup(props) {
+    /* Global properties */
+    const store = useStore();
+
     /* Component properties */
     let mapContainerBoundingRect = null;
+    let distance = ref(0);
+
+    /* Methods */
+    const { t } = useI18n({ useScope: 'global' });
+    const { tryGettingLocation } = useGeolocation();
+
 
     /* Lifecycle hooks */
-    const { t } = useI18n({ useScope: 'global' })
-
-    const { getCurrentPosition } = useGeolocation();
-
     onMounted(async() => {
+      await tryGettingLocation();
+
       const loading = await loadingController
           .create({
             cssClass: 'custom-loading',
@@ -57,20 +66,28 @@ export default defineComponent({
         height: mapContainerBoundingRect.height - 4,
         x: mapContainerBoundingRect.x + 2,
         y: mapContainerBoundingRect.y + 2,
-        latitude: 43.317862492567,
-        longitude: 21.895785976058143,
-        zoom: 20,
+        latitude: Number(props.cafe.latitude) ?? 43.317862492567,
+        longitude: Number(props.cafe.longitude) ?? 21.895785976058143,
+        zoom: 16,
+        liteMode: true,
       });
 
-      let name = props.cafe.name;
-      let address = props.cafe.address + " ," + props.cafe.city;
-
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
+        distance.value = Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude));
+
         await CapacitorGoogleMaps.addMarker({
-          latitude: 43.317862492567,
-          longitude: 21.895785976058143,
-          title: "" + name,
-          snippet: "" + address,
+          latitude: Number(props.cafe.latitude) ?? 43.317862492567,
+          longitude: Number(props.cafe.longitude) ?? 21.895785976058143,
+          title: props.cafe.name,
+          snippet: props.cafe.address + " ," + props.cafe.city,
+        });
+
+        await CapacitorGoogleMaps.addMarker({
+          latitude: store.getters['global/position'].latitude,
+          longitude: store.getters['global/position'].longitude,
+          title: 'Your postion',
+          snippet: 'This is your current position',
+          opacity: 2.5,
         });
 
         await CapacitorGoogleMaps.setMapType({
@@ -78,11 +95,11 @@ export default defineComponent({
         });
       });
 
-      const { latitude, longitude } = await getCurrentPosition();
-      console.log(latitude, longitude);
-
-
     });
+
+    return {
+      distance,
+    };
   },
   unmounted() {
     CapacitorGoogleMaps.close();

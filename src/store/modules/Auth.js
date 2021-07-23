@@ -1,5 +1,4 @@
 import router            from "@/router";
-import { useBackButton } from '@ionic/vue';
 
 import AuthService from "@/services/AuthService";
 
@@ -16,14 +15,12 @@ export const mutations = {
     SET_USER(state, user) {
         state.user = user;
     },
+
 };
 
 export const actions = {
     //Logging out user and redirecting to login page
     logout({ commit }) {
-        useBackButton(100, () => {
-            router.push({ name: 'home' });
-        });
         const { showSuccessToast } = useToastNotifications();
         const { set } = useStorage();
         return AuthService.logout()

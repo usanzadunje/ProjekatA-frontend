@@ -40,14 +40,14 @@
       ></ion-icon>
     </ion-item>
     <div class="relative flex justify-between mt-3.5 px-4 utility-text">
-      <div class="relative">
+      <div class="relative" style="width: 130px">
         <ion-checkbox
             v-model="user.remember"
             mode="md"
         ></ion-checkbox>
-        <ion-text class="ml-2 absolute top-1/2 transform -translate-y-1/2">Zapamti me</ion-text>
+        <ion-text class="ml-2 absolute top-1/2 transform -translate-y-1/2 fixed-utility-text">Zapamti me</ion-text>
       </div>
-      <div class="w-32 absolute top-1/2 right-0 transform -translate-y-1/2">
+      <div class="absolute top-1/2 right-0 transform -translate-y-1/2 fixed-utility-text" style="width: 140px">
         <a href="/forgot-password">Zaboravljena lozinka?</a>
       </div>
     </div>
@@ -188,7 +188,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-text{
+ion-text {
   width: 60px !important;
 }
 </style>

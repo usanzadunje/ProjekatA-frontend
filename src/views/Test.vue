@@ -22,11 +22,14 @@ export default {
   setup() {
     const result = ref(0);
 
-    const { getCurrentPosition } = useGeolocation();
+    const { getCurrentPosition, watchCurrentPosition } = useGeolocation();
 
 
     onMounted(async() => {
       const { latitude, longitude } = await getCurrentPosition();
+      const res = await watchCurrentPosition();
+
+      console.log(res);
 
       const R = 6371e3; // metres
       const f1 = latitude * Math.PI/180; // φ, λ in radians

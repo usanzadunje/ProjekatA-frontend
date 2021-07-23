@@ -5,7 +5,7 @@
       <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
         <CafeCard
             :cafe="cafe"
-            @click="openCafeModal(cafe.id)"
+            @click="$emit('openCafeModal', cafe)"
         />
       </div>
     </div>
@@ -32,7 +32,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch, toRefs } from 'vue';
+import { defineComponent, ref, watch, toRefs, onMounted } from 'vue';
+
+import { useStore } from 'vuex';
 
 import {
   IonInfiniteScroll,
@@ -41,9 +43,11 @@ import {
 
 import CafeService from '@/services/CafeService';
 
-import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import CafeCard              from '@/components/user/CafeCard';
-import SkeletonCafeCard              from '@/components/user/SkeletonCafeCard';
+import FilterCategoryHeading     from '@/components/user/FilterCategoryHeading';
+import CafeCard                  from '@/components/user/CafeCard';
+import SkeletonCafeCard          from '@/components/user/SkeletonCafeCard';
+import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useI18n }               from 'vue-i18n';
 
 export default defineComponent({
   name: "InfiniteScroll",
@@ -66,6 +70,8 @@ export default defineComponent({
   },
   emits: ['scrollToTop', 'openCafeModal'],
   setup(props, { emit }) {
+    /* Global properties */
+    const store = useStore();
     /* Component properties */
     // All non filtered cafes
     let cafes = ref([]);
@@ -81,45 +87,107 @@ export default defineComponent({
     let isInfiniteScrollDisabled = ref(false);
     let showSkeleton = ref(true);
 
+    /* Methods */
+
     /* Lifecycle hooks */
     //*Before mounting fetching initial 20 cafes to show
-    CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, sortBy.value)
-               .then((response) => {
-                 cafes.value = response.data;
-                 showSkeleton.value = false;
-                 initial20Cafes = response.data;
-               })
-               .catch((error) => alert(JSON.stringify(error)));
+    onMounted(() => {
+      CafeService.getCafeCardsChunkInfo(
+          cafeStart, 20,
+          cafeSearchString.value, sortBy.value, true,
+          store.getters['global/position'].latitude,
+          store.getters['global/position'].longitude,
+      )
+                 .then((response) => {
+                   cafes.value = response.data;
+                   showSkeleton.value = false;
+                   initial20Cafes = response.data;
+                 })
+                 .catch((error) => {
+                   showSkeleton.value = false;
+                   if(error.response && error.response.status !== 404) {
+                     showErrorToast(
+                         null,
+                         {
+                           pushNotificationPermission: t('dataFetchingError'),
+                         });
+                   }
+                   CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, 'default', true, 0, 0)
+                              .then((response) => {
+                                cafes.value = response.data;
+                                initial20Cafes = response.data;
+                                sortBy.value = 'default';
+                              })
+                              .catch(() => {
+                                showSkeleton.value = false;
+                                showErrorToast(
+                                    null,
+                                    {
+                                      pushNotificationPermission: t('dataFetchingError'),
+                                    });
+                              });
+                 });
+    })
 
     /* Methods */
     // Grabbing 20 more cafes that match required filter
     const loadMoreCafes = () => {
       cafeStart += 20;
-      CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, sortBy.value)
+      CafeService.getCafeCardsChunkInfo(
+          cafeStart, 20,
+          cafeSearchString.value, sortBy.value, true,
+          store.getters['global/position'].latitude,
+          store.getters['global/position'].longitude,
+      )
                  .then((response) => {
                    // There are no more records
                    if(!response.data) return;
                    if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
                    cafes.value = cafes.value.concat(response.data);
                  })
-                 .catch((error) => alert(JSON.stringify(error)));
+                 .catch((error) => {
+                   if(error.response && error.response.status !== 404) {
+                     showErrorToast(
+                         null,
+                         {
+                           pushNotificationPermission: t('dataFetchingError'),
+                         });
+                   }
+                 });
 
     };
-    const filterCafes = (ignoreIfNoSearchTerm = false) => {
+    const filterCafes = async(ignoreIfNoSearchTerm = false) => {
       //If there is no search term all cafes are returned
       if(!cafeSearchString.value && !ignoreIfNoSearchTerm) {
         return cafes.value = initial20Cafes;
       }
 
-      CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, sortBy.value)
-                 .then((response) => {
-                   if(!response.data) return;
-                   if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
-                   cafes.value = response.data;
-                 })
-                 .catch((error) => alert(JSON.stringify(error)));
+      setTimeout(() => {
+        CafeService.getCafeCardsChunkInfo(
+            cafeStart, 20,
+            cafeSearchString.value, sortBy.value, true,
+            store.getters['global/position'].latitude,
+            store.getters['global/position'].longitude,
+        )
+                   .then((response) => {
+                     if(!response.data) return;
+                     if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
+                     cafes.value = response.data;
+                   })
+                   .catch((error) => {
+                     if(error.response && error.response.status !== 404) {
+                       showErrorToast(
+                           null,
+                           {
+                             pushNotificationPermission: t('dataFetchingError'),
+                           });
+                     }
+                   });
+      }, 300);
 
     };
+    const { showErrorToast } = useToastNotifications();
+    const { t } = useI18n();
 
     /* Event handlers */
     const loadData = (ev) => {
@@ -127,13 +195,6 @@ export default defineComponent({
         loadMoreCafes();
         ev.target.complete();
       }, 300);
-    };
-
-    const openCafeModal = (cafeId) => {
-      CafeService.show(cafeId)
-                 .then((response) => {
-                   emit('openCafeModal', response.data);
-                 });
     };
 
     /* Watchers */
@@ -149,6 +210,7 @@ export default defineComponent({
     // when new button for sorting is clicked initial 20 cafes are changed to appear correctly
     // (be sorted) on initial view show
     watch(sortBy, () => {
+      console.log(sortBy.value);
       isInfiniteScrollDisabled.value = false;
       cafeStart = 0;
       filterCafes(true);
@@ -163,7 +225,6 @@ export default defineComponent({
       showSkeleton,
 
       /* Event handlers */
-      openCafeModal,
 
       /* Methods */
       loadMoreCafes,

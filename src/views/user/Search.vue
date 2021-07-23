@@ -54,6 +54,8 @@ import SlidingFilter  from '@/components/user/SlidingFilter';
 import InfiniteScroll from '@/components/InfiniteScroll';
 import ShortCafeModal from '@/components/user/ShortCafeModal';
 
+import { useGeolocation } from '@/composables/useGeolocation';
+
 import { notificationsOffOutline } from 'ionicons/icons';
 
 
@@ -111,9 +113,12 @@ export default defineComponent({
       slidesPerView: 2.7,
     };
 
+    /* Methods */
+    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
-    onMounted(() => {
+    onMounted(async() => {
       const slides = document.getElementsByClassName('filterSlider');
       slides.forEach((slide) => {
         slide.options = slideOpts;
@@ -125,7 +130,11 @@ export default defineComponent({
     const searchFilterChanged = (searchInputValue) => {
       cafeSearchString.value = searchInputValue;
     };
-    const sortHasChanged = (sortValue) => {
+    const sortHasChanged = async(sortValue) => {
+      if(sortBy.value === 'distance') {
+        await checkForLocationPermission();
+      }
+      await tryGettingLocation();
       sortBy.value = sortValue;
     };
     const pullAnimation = async() => {

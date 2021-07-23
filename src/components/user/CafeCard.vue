@@ -20,7 +20,7 @@
         </div>
         <div class="flex ml-2">
           <ion-icon :icon="locationOutline" class="primary-icon-color"></ion-icon>
-          <span class="cafe-card-fade-text ml-1">{{ cafe.distance }}m</span>
+          <span class="cafe-card-fade-text ml-1">{{ distance }}m</span>
         </div>
       </div>
       <div class="flex primary-icon-color">
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 
 import {
   IonIcon,
@@ -43,7 +43,8 @@ import {
   pieChart,
   fastFoodOutline,
   leafOutline,
-} from 'ionicons/icons';
+}                  from 'ionicons/icons';
+import CafeService from '@/services/CafeService';
 
 export default defineComponent({
   name: 'CafeCard',
@@ -56,14 +57,16 @@ export default defineComponent({
       default: null,
     },
   },
-  setup() {
+  setup(props) {
     /* Component properties */
+    const distance = computed(() => Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude)));
 
     /* Event handlers */
 
 
     return {
-      /* Properties */
+      /* Component Properties */
+      distance,
 
       /* Event listeners */
 

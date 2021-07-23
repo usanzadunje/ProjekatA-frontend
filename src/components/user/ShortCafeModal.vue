@@ -60,7 +60,8 @@
           :cafe="{'id': cafe.id, 'name': cafe.name}"
           :isUserSubscribed="isUserSubscribed"
           @dismissSubscriptionModal="openModal(false);"
-          @userToggledSubscription="isUserSubscribed = !isUserSubscribed;$emit('userUnsubscribed')"
+          @userToggledSubscription="isUserSubscribed = !isUserSubscribed"
+          @userUnsubscribed="$emit('userUnsubscribed')"
       />
     </ion-modal>
   </ion-content>
@@ -68,7 +69,7 @@
 
 <script>
 import { defineComponent, ref, toRef, computed, onMounted, onUnmounted } from 'vue';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor }                                                     from '@capacitor/core';
 
 
 import { useRoute, useRouter } from 'vue-router';
@@ -91,7 +92,7 @@ import CafeService from '@/services/CafeService';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
-import ImagePreviewModal from '@/components/user/ImagePreviewModal';
+import ImagePreviewModal     from '@/components/user/ImagePreviewModal';
 
 import {
   notifications,
@@ -120,12 +121,12 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissShortCafeModal', 'subModalOpened'],
+  emits: ['dismissShortCafeModal', 'subModalOpened', 'userUnsubscribed'],
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
     const route = useRoute();
-    const router= useRouter();
+    const router = useRouter();
 
     /* Component properties */
     const slideOpts = {

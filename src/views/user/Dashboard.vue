@@ -14,7 +14,7 @@
               <CafeCard
                   class="w-full"
                   :cafe="cafe"
-                  @click="openModal(true, cafe.id)"
+                  @click="openModal(true, cafe)"
               />
             </ion-item>
 
@@ -48,7 +48,7 @@
             :cafe="modalCafe"
             @dismissShortCafeModal="openModal(false)"
             @subModalOpened="hideModal"
-            @userUnsubscribed="refreshCafes"
+            @userUnsubscribed="removeUnsubscribed"
         />
       </ion-modal>
 
@@ -59,7 +59,7 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 
-import { mapGetters } from 'vuex';
+import { mapGetters, useStore } from 'vuex';
 
 import {
   IonContent,
@@ -87,6 +87,7 @@ import {
 }                                from 'ionicons/icons';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useI18n }               from 'vue-i18n';
+import { useGeolocation }        from '@/composables/useGeolocation';
 
 
 export default defineComponent({
@@ -113,25 +114,24 @@ export default defineComponent({
   ionViewDidEnter() {
     let shouldOpenModal = !!this.$route.query.openModal;
     this.openModal(shouldOpenModal);
-
-    //*Everytime user comes to the page give him view of fresh cafes he has subscribed to
-    CafeService.getAllCafesUserSubscribedTo(this.sortBy)
+    // Everytime user comes to the page give him view of fresh cafes he has subscribed to
+    CafeService.getAllCafesUserSubscribedTo(this.sortBy, this.$store.getters['global/position'].latitude, this.$store.getters['global/position'].longitude)
                .then((response) => {
                  this.cafesUserSubscribedTo = response.data;
                  this.showSkeleton = false;
                })
                .catch((error) => console.log(error));
 
-
   },
   setup() {
     /* Global properties */
+    const store = useStore();
     const { t } = useI18n();
 
     /* Component properties */
     // Cafes user is subscribed to
     let cafesUserSubscribedTo = ref([]);
-    let sortBy = ref('name');
+    let sortBy = ref('distance');
     const slideOpts = {
       initialSlide: 0,
       speed: 500,
@@ -146,10 +146,11 @@ export default defineComponent({
 
     /* Methods */
     const { showSuccessToast } = useToastNotifications();
+    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
-    onMounted(() => {
+    onMounted(async() => {
       const slides = document.getElementsByClassName('filterSlider');
       slides.forEach((slide) => {
         slide.options = slideOpts;
@@ -158,9 +159,13 @@ export default defineComponent({
     });
 
     /* Event handlers */
-    const sortHasChanged = (sortValue) => {
+    const sortHasChanged = async(sortValue) => {
       sortBy.value = sortValue;
-      CafeService.getAllCafesUserSubscribedTo(sortValue)
+      if(sortBy.value === 'distance') {
+        await checkForLocationPermission();
+      }
+      await tryGettingLocation();
+      CafeService.getAllCafesUserSubscribedTo(sortValue, store.getters['global/position'].latitude, store.getters['global/position'].longitude)
                  .then((response) => {
                    cafesUserSubscribedTo.value = response.data;
                  })
@@ -170,7 +175,7 @@ export default defineComponent({
       const alert = await alertController
           .create({
             header: t('alertUnsubscribeHeader'),
-            message:t('alertUnsubscribeMessage'),
+            message: t('alertUnsubscribeMessage'),
             buttons: [
               {
                 text: t('disagree'),
@@ -187,10 +192,9 @@ export default defineComponent({
           });
       await alert.present();
     };
-    const openModal = async(state, id = null) => {
-      if(id) {
-        let response = await CafeService.show(id);
-        modalCafe.value = response.data;
+    const openModal = async(state, cafe = null) => {
+      if(cafe) {
+        modalCafe.value = cafe;
       }
       isModalOpen.value = state;
     };
@@ -199,17 +203,17 @@ export default defineComponent({
       CafeService.unsubscribe(cafeId)
                  .then((response) => {
                    if(response.data) {
-                     cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter((cafe) => cafe.id !== cafeId);
+                     cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter(cafe => cafe.id !== cafeId);
                    }
                  })
                  .catch((error) => alert(error));
     };
-    const refreshCafes = () => {
-      CafeService.getAllCafesUserSubscribedTo(sortBy.value)
+    const removeUnsubscribed = () => {
+      CafeService.getAllCafesUserSubscribedTo(sortBy.value, store.getters['global/position'].latitude, store.getters['global/position'].longitude)
                  .then((response) => {
                    cafesUserSubscribedTo.value = response.data;
                  })
-                 .catch((error) => console.log(error));
+                 .catch((error) => alert(error));
     };
     const hideModal = () => {
       const modal = document.querySelector('.custom-modal > .modal-wrapper');
@@ -230,7 +234,7 @@ export default defineComponent({
       sortHasChanged,
       showAlert,
       openModal,
-      refreshCafes,
+      removeUnsubscribed,
       hideModal,
 
       /* Icons */

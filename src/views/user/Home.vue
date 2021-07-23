@@ -7,7 +7,7 @@
     />
 
     <ion-content class="ion-padding">
-      <ion-refresher slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+      <ion-refresher pull-min="45" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             :pulling-text="$t('refresherPulling')"
             refreshing-spinner="lines"
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, watch } from 'vue';
+import { defineComponent, ref, reactive, watch, onMounted } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -119,7 +119,12 @@ import HomeSlidingCafeCards  from '@/components/user/HomeSlidingCafeCards';
 import ShortCafeModal        from '@/components/user/ShortCafeModal';
 import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
-import { notificationsOutline } from 'ionicons/icons';
+import { notificationsOutline }  from 'ionicons/icons';
+import { useToastNotifications } from '@/composables/useToastNotifications';
+
+import { useI18n }        from 'vue-i18n';
+import { useGeolocation } from '@/composables/useGeolocation';
+import { useStore }       from 'vuex';
 
 export default defineComponent({
   name: 'Home',
@@ -158,6 +163,7 @@ export default defineComponent({
   setup() {
     /* Global properties */
     const router = useRouter();
+    const store = useStore();
 
     /* Component properties */
     const slideOpts = {
@@ -178,6 +184,9 @@ export default defineComponent({
     let showSkeleton = ref(true);
 
     /* Methods */
+    const { showErrorToast } = useToastNotifications();
+    const { t } = useI18n();
+    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
     /* Watchers needed instead of mounted lifecycle hook because there is skeleton text showing */
     watch(showSkeleton, (newValue) => {
@@ -194,26 +203,56 @@ export default defineComponent({
 
 
     /* Lifecycle hooks */
-    //*Before mounting fetching initial 4 cafes to show closest to user
-    CafeService.getCafeCardsChunkInfo(0, 4, '', 'distance', true)
-               .then((response) => {
-                 cafes.closestToUserCafes = response.data;
-               })
-               .catch((error) => alert(JSON.stringify(error)));
-    //*Before mounting fetching initial 4 cafes to show in currently free cafes
-    CafeService.getCafeCardsChunkInfo(0, 4, '', 'id', true)
-               .then((response) => {
-                 cafes.currentlyAvailableCafes = response.data;
-               })
-               .catch((error) => alert(JSON.stringify(error)));
-    //*Before mounting fetching initial 4 cafes to show closest to user
-    CafeService.getCafeCardsChunkInfo(0, 4, '', 'food', true)
-               .then((response) => {
-                 cafes.foodCafes = response.data;
-                 showSkeleton.value = false;
+    // Because getting lat and lng takes long tame wait for it to happen and then hit API with correct lat and lng values
+    const unsubscribeWatcher = store.subscribe((mutation) => {
+      if(mutation.type === 'global/SET_POSITION') {
+        CafeService.getCafeCardsChunkInfo(
+            0, 4,
+            '', 'distance', true,
+            store.getters['global/position'].latitude,
+            store.getters['global/position'].longitude,
+        ).then((response) => {
+          cafes.closestToUserCafes = response.data;
 
-               })
-               .catch((error) => alert(JSON.stringify(error)));
+          unsubscribeWatcher();
+        }).catch(() => {
+          showErrorToast(
+              null,
+              {
+                pushNotificationPermission: t('dataFetchingError'),
+              });
+        });
+      }
+    });
+    //Before fetching cafes by distance get location and then pass it to query string in API call to backend
+    onMounted(async() => {
+      Promise.all([
+        CafeService.getCafeCardsChunkInfo(
+            0, 4,
+            '', 'default', true,
+            store.getters['global/position'].latitude,
+            store.getters['global/position'].longitude,
+        ),
+
+        CafeService.getCafeCardsChunkInfo(
+            0, 4,
+            '', 'food', true,
+            store.getters['global/position'].latitude,
+            store.getters['global/position'].longitude,
+        ),
+      ]).then((response) => {
+        cafes.currentlyAvailableCafes = response[0].data;
+        cafes.foodCafes = response[1].data;
+
+        showSkeleton.value = false;
+      }).catch(() => {
+        showErrorToast(
+            null,
+            {
+              pushNotificationPermission: t('dataFetchingError'),
+            });
+      });
+    });
 
 
     /* Event handlers */
@@ -234,37 +273,45 @@ export default defineComponent({
       e.target.value = null;
     };
     const refresh = async(event) => {
+      await checkForLocationPermission();
+      await tryGettingLocation();
       // Only after both cafe arrays have been updated then complete refresher
       // Fetching 4 cafes in each category with new live data
       Promise.all([
-        CafeService.getCafeCardsChunkInfo(0, 4, '', 'distance', true)
-                   .then((response) => {
-                     cafes.closestToUserCafes = response.data;
-                   })
-                   .catch((error) => alert(JSON.stringify(error))),
+        CafeService.getCafeCardsChunkInfo(
+            0, 4,
+            '', 'distance', true,
+            store.getters['global/position'].latitude,
+            store.getters['global/position'].longitude,
+        ),
 
-        CafeService.getCafeCardsChunkInfo(0, 4, '', 'name', true)
-                   .then((response) => {
-                     cafes.currentlyAvailableCafes = response.data;
-                   })
-                   .catch((error) => alert(JSON.stringify(error))),
+        CafeService.getCafeCardsChunkInfo(
+            0, 4,
+            '', 'default', true,
+            store.getters['global/position'].latitude,
+            store.getters['global/position'].longitude,
+        ),
 
-        CafeService.getCafeCardsChunkInfo(0, 4, '', 'food', true)
-                   .then((response) => {
-                     cafes.foodCafes = response.data;
-                   })
-                   .catch((error) => alert(JSON.stringify(error))),
+        CafeService.getCafeCardsChunkInfo(
+            0, 4,
+            '', 'food', true,
+            store.getters['global/position'].latitude,
+            store.getters['global/position'].longitude,
+        ),
+      ]).then((response) => {
+        cafes.closestToUserCafes = response[0].data;
+        cafes.currentlyAvailableCafes = response[1].data;
+        cafes.foodCafes = response[2].data;
 
-      ])
-             .then(() => {
-               event.target.complete();
-             })
-             .catch((error) => {
-               alert(JSON.stringify(error));
-               event.target.complete();
-             });
-
-
+        event.target.complete();
+      }).catch(() => {
+        showErrorToast(
+            null,
+            {
+              pushNotificationPermission: t('dataFetchingError'),
+            });
+        event.target.complete();
+      });
     };
 
     return {

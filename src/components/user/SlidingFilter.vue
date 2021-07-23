@@ -78,7 +78,10 @@ export default defineComponent({
     IonSlide,
   },
   props: {
-    hasTitle: Boolean,
+    hasTitle: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['sortHasChanged'],
   setup(props, { emit }) {

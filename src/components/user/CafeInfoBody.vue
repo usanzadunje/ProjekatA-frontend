@@ -9,7 +9,10 @@
       <ion-icon :icon="locationOutline" class="mr-2 primary-icon-color"></ion-icon>
       <p class="modal-cafe-text-regular">{{ cafe.address }} - {{ cafe.city }}</p>
     </div>
-    <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold" slot="end">{{ $t('map') }}</ion-button>
+    <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold" slot="end">{{
+        $t('map')
+                                                                                             }}
+    </ion-button>
   </ion-item>
   <hr class="card-horizontal-ruler">
   <div class="flex justify-start mt-3.5">

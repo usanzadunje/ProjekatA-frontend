@@ -1,11 +1,6 @@
 import * as API from "@/services/API";
 
-import { Geolocation } from '@capacitor/geolocation';
-
-const options = {
-    enableHighAccuracy: true,
-    timeout: 1000,
-};
+import store from "@/store";
 
 export default {
     // Listing all cafes
@@ -19,16 +14,9 @@ export default {
         filter = '',
         sortBy = 'name',
         getAllColumns = false,
+        latitude = 0,
+        longitude = 0,
     ) {
-        let latitude = 0;
-        let longitude = 0;
-        if(sortBy === 'distance'){
-            const position = await Geolocation.getCurrentPosition(options);
-
-            latitude  = position.coords.latitude;
-            longitude  = position.coords.longitude;
-        }
-
         // Only fetching columns needed to show in cafe card component
         // Search and Home screen have it
         return API.apiClient.get(
@@ -73,16 +61,7 @@ export default {
         return API.apiClient.post(`/users/subscribed/cafe/${cafeId}`);
     },
     // Listing all cafes user is subscribed to
-    async getAllCafesUserSubscribedTo(sortBy = 'name') {
-        let latitude = 0;
-        let longitude = 0;
-        if(sortBy === 'distance'){
-            const position = await Geolocation.getCurrentPosition(options);
-
-            latitude  = position.coords.latitude;
-            longitude  = position.coords.longitude;
-        }
-
+    async getAllCafesUserSubscribedTo(sortBy = 'default', latitude = 0, longitude = 0) {
         return API.apiClient.get(
             `/users/cafes/subscriptions`,
             {
@@ -94,15 +73,23 @@ export default {
             },
         );
     },
-    getDistance(cafeId, lat, lng) {
-        return API.apiClient.get(
-            `/cafes/${cafeId}/distance`,
-            {
-                params: {
-                    lat,
-                    lng,
-                },
-            },
-        );
+    getDistance(placeLatitude = 0, placeLongitude = 0) {
+        const latitude = store.getters['global/position'].latitude;
+        const longitude = store.getters['global/position'].longitude;
+
+        const R = 6371e3; // metres
+        const f1 = latitude * Math.PI/180; // φ, λ in radians
+        const f2 = placeLatitude * Math.PI/180;
+        const df = (placeLatitude-latitude) * Math.PI/180;
+        const dl = (placeLongitude-longitude) * Math.PI/180;
+
+        const a = Math.sin(df/2) * Math.sin(df/2) +
+            Math.cos(f1) * Math.cos(f2) *
+            Math.sin(dl/2) * Math.sin(dl/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+
+         // in metres
+        return R * c;
     },
 };

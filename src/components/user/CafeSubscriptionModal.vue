@@ -84,7 +84,7 @@ import CafeService               from '@/services/CafeService';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useFCM }                from '@/composables/useFCM';
 
-import { useI18n }               from 'vue-i18n';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'CafeSubscriptionModal',
@@ -103,7 +103,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissSubscriptionModal', 'userToggledSubscription'],
+  emits: ['dismissSubscriptionModal', 'userToggledSubscription', 'userUnsubscribed'],
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
@@ -180,7 +180,8 @@ export default defineComponent({
                      if(response.data) {
                        isUserSubscribed.value = false;
                        emit('userToggledSubscription');
-                       await showSuccessToast(t('successSubscribe'));
+                       emit('userUnsubscribed');
+                       await showSuccessToast(t('successUnsubscribe'));
                      }
                    })
                    .catch((error) => alert(error));
