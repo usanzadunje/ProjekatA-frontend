@@ -3,6 +3,14 @@
     <UserProfileHeader/>
 
     <ion-content class="ion-padding no-padding-top">
+      <ion-refresher pull-min="45" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+        <ion-refresher-content
+            :pulling-text="$t('refresherPulling')"
+            refreshing-spinner="lines"
+            :refreshing-text="$t('refresherText')"
+        >
+        </ion-refresher-content>
+      </ion-refresher>
       <SlidingFilter @sortHasChanged="sortHasChanged" class="mt-2"/>
 
       <div class="mt-3">
@@ -71,6 +79,9 @@ import {
   IonIcon,
   alertController,
   IonModal,
+  IonRefresher,
+  IonRefresherContent,
+  onIonViewDidEnter,
 } from '@ionic/vue';
 
 import UserProfileHeader     from '@/components/user/UserProfileHeader';
@@ -87,6 +98,7 @@ import {
 }                                from 'ionicons/icons';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useI18n }               from 'vue-i18n';
+import { useRoute }              from 'vue-router';
 import { useGeolocation }        from '@/composables/useGeolocation';
 
 
@@ -101,6 +113,8 @@ export default defineComponent({
     IonItemOption,
     IonIcon,
     IonModal,
+    IonRefresher,
+    IonRefresherContent,
     UserProfileHeader,
     SlidingFilter,
     FilterCategoryHeading,
@@ -111,22 +125,11 @@ export default defineComponent({
   computed: {
     ...mapGetters('auth', ['authUser']),
   },
-  ionViewDidEnter() {
-    let shouldOpenModal = !!this.$route.query.openModal;
-    this.openModal(shouldOpenModal);
-    // Everytime user comes to the page give him view of fresh cafes he has subscribed to
-    CafeService.getAllCafesUserSubscribedTo(this.sortBy, this.$store.getters['global/position'].latitude, this.$store.getters['global/position'].longitude)
-               .then((response) => {
-                 this.cafesUserSubscribedTo = response.data;
-                 this.showSkeleton = false;
-               })
-               .catch((error) => console.log(error));
-
-  },
   setup() {
     /* Global properties */
     const store = useStore();
     const { t } = useI18n();
+    const route = useRoute();
 
     /* Component properties */
     // Cafes user is subscribed to
@@ -145,8 +148,29 @@ export default defineComponent({
     let showSkeleton = ref(true);
 
     /* Methods */
-    const { showSuccessToast } = useToastNotifications();
+    const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const refresh = async(event) => {
+      await checkForLocationPermission();
+      await tryGettingLocation();
+      // Only after both cafe arrays have been updated then complete refresher
+      // Fetching 4 cafes in each category with new live data
+      CafeService.getAllCafesUserSubscribedTo(sortBy.value, store.getters['global/position'].latitude, store.getters['global/position'].longitude)
+                 .then((response) => {
+                   cafesUserSubscribedTo.value = response.data;
+
+                   event.target.complete();
+                 })
+                 .catch(() => {
+                   showErrorToast(
+                       null,
+                       {
+                         pushNotificationPermission: t('dataFetchingError'),
+                       });
+
+                   event.target.complete();
+                 });
+    };
 
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
@@ -156,6 +180,46 @@ export default defineComponent({
         slide.options = slideOpts;
         slide.update();
       });
+
+      CafeService.getAllCafesUserSubscribedTo(
+          sortBy.value,
+          store.getters['global/position'].latitude,
+          store.getters['global/position'].longitude,
+      )
+                 .then((response) => {
+                   cafesUserSubscribedTo.value = response.data;
+                   showSkeleton.value = false;
+                 })
+                 .catch(() => {
+                   showErrorToast(
+                       null,
+                       {
+                         pushNotificationPermission: t('dataFetchingError'),
+                       });
+                   showSkeleton.value = false;
+                 });
+    });
+    onIonViewDidEnter(() => {
+      let shouldOpenModal = !!route.query.openModal;
+      openModal(shouldOpenModal);
+      // Everytime user comes to the page give him view of fresh cafes he has subscribed to
+      CafeService.getAllCafesUserSubscribedTo(
+          sortBy.value,
+          store.getters['global/position'].latitude,
+          store.getters['global/position'].longitude,
+      )
+                 .then((response) => {
+                   cafesUserSubscribedTo.value = response.data;
+                   showSkeleton.value = false;
+                 })
+                 .catch(() => {
+                   showErrorToast(
+                       null,
+                       {
+                         pushNotificationPermission: t('dataFetchingError'),
+                       });
+                   showSkeleton.value = false;
+                 });
     });
 
     /* Event handlers */
@@ -236,6 +300,7 @@ export default defineComponent({
       openModal,
       removeUnsubscribed,
       hideModal,
+      refresh,
 
       /* Icons */
       trashOutline,

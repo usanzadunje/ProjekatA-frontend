@@ -1,5 +1,13 @@
 <template>
   <div>
+    <ion-refresher pull-max="0" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+      <ion-refresher-content
+          :pulling-text="$t('refresherPulling')"
+          refreshing-spinner="lines"
+          :refreshing-text="$t('refresherText')"
+      >
+      </ion-refresher-content>
+    </ion-refresher>
     <FilterCategoryHeading :title="$t('searchResults')" class="mb-2"/>
     <div v-if="!showSkeleton">
       <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
@@ -39,6 +47,8 @@ import { useStore } from 'vuex';
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonRefresher,
+  IonRefresherContent,
 } from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
@@ -46,14 +56,18 @@ import CafeService from '@/services/CafeService';
 import FilterCategoryHeading     from '@/components/user/FilterCategoryHeading';
 import CafeCard                  from '@/components/user/CafeCard';
 import SkeletonCafeCard          from '@/components/user/SkeletonCafeCard';
+
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useI18n }               from 'vue-i18n';
+import { useGeolocation }        from '@/composables/useGeolocation';
 
 export default defineComponent({
   name: "InfiniteScroll",
   components: {
     IonInfiniteScroll,
     IonInfiniteScrollContent,
+    IonRefresher,
+    IonRefresherContent,
     FilterCategoryHeading,
     CafeCard,
     SkeletonCafeCard,
@@ -86,8 +100,6 @@ export default defineComponent({
     // Property to enable / disable loading infinite scroll animation and action
     let isInfiniteScrollDisabled = ref(false);
     let showSkeleton = ref(true);
-
-    /* Methods */
 
     /* Lifecycle hooks */
     //*Before mounting fetching initial 20 cafes to show
@@ -127,7 +139,7 @@ export default defineComponent({
                                     });
                               });
                  });
-    })
+    });
 
     /* Methods */
     // Grabbing 20 more cafes that match required filter
@@ -188,6 +200,52 @@ export default defineComponent({
     };
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
+    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const refresh = async(event) => {
+      await checkForLocationPermission();
+      await tryGettingLocation();
+      // Only after both cafe arrays have been updated then complete refresher
+      // Fetching 4 cafes in each category with new live data
+      CafeService.getCafeCardsChunkInfo(
+          cafeStart, 20,
+          cafeSearchString.value, sortBy.value, true,
+          store.getters['global/position'].latitude,
+          store.getters['global/position'].longitude,
+      )
+                 .then((response) => {
+                   cafes.value = response.data;
+                   initial20Cafes = response.data;
+
+                   event.target.complete();
+                 })
+                 .catch((error) => {
+                   if(error.response && error.response.status !== 404) {
+                     showErrorToast(
+                         null,
+                         {
+                           pushNotificationPermission: t('dataFetchingError'),
+                         });
+
+                     event.target.complete();
+                   }
+                   CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, 'default', true, 0, 0)
+                              .then((response) => {
+                                cafes.value = response.data;
+                                initial20Cafes = response.data;
+                                sortBy.value = 'default';
+
+                                event.target.complete();
+                              })
+                              .catch(() => {
+                                showErrorToast(
+                                    null,
+                                    {
+                                      pushNotificationPermission: t('dataFetchingError'),
+                                    });
+                                event.target.complete();
+                              });
+                 });
+    };
 
     /* Event handlers */
     const loadData = (ev) => {
@@ -209,8 +267,12 @@ export default defineComponent({
     // Watching for a change on sortBy(term for sorting records) prop
     // when new button for sorting is clicked initial 20 cafes are changed to appear correctly
     // (be sorted) on initial view show
-    watch(sortBy, () => {
-      console.log(sortBy.value);
+    watch(sortBy, async() => {
+      if(sortBy.value === 'distance') {
+        await checkForLocationPermission();
+      }
+      await tryGettingLocation();
+
       isInfiniteScrollDisabled.value = false;
       cafeStart = 0;
       filterCafes(true);
@@ -225,10 +287,9 @@ export default defineComponent({
       showSkeleton,
 
       /* Event handlers */
-
-      /* Methods */
       loadMoreCafes,
       loadData,
+      refresh,
 
       /* Icons */
 

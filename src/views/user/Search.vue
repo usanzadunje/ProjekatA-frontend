@@ -54,8 +54,6 @@ import SlidingFilter  from '@/components/user/SlidingFilter';
 import InfiniteScroll from '@/components/InfiniteScroll';
 import ShortCafeModal from '@/components/user/ShortCafeModal';
 
-import { useGeolocation } from '@/composables/useGeolocation';
-
 import { notificationsOffOutline } from 'ionicons/icons';
 
 
@@ -114,7 +112,6 @@ export default defineComponent({
     };
 
     /* Methods */
-    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
@@ -131,10 +128,6 @@ export default defineComponent({
       cafeSearchString.value = searchInputValue;
     };
     const sortHasChanged = async(sortValue) => {
-      if(sortBy.value === 'distance') {
-        await checkForLocationPermission();
-      }
-      await tryGettingLocation();
       sortBy.value = sortValue;
     };
     const pullAnimation = async() => {
