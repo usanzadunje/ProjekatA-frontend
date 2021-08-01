@@ -1,19 +1,18 @@
 <template>
-  <ion-item class="ion-item-no-padding-x mt-2 md margin-top-reset">
+  <ion-item class="flex items-center ion-item-no-padding-x mt-2 md margin-top-reset">
     <ion-icon :icon="pieChart" class="mr-2 text-yellow-400"></ion-icon>
-    <span class="modal-cafe-text-medium mt-0.5 lowercase">{{ cafe.taken_capacity }} - {{ $t('free') }}</span>
+    <span class="modal-cafe-text-medium lowercase">{{ cafe.taken_capacity }} - {{ $t('free') }}</span>
   </ion-item>
   <hr class="card-horizontal-ruler mt-1">
-  <ion-item class="ion-item-no-padding-x">
+  <div class="flex justify-between items-center">
     <div class="flex">
-      <ion-icon :icon="locationOutline" class="mr-2 primary-icon-color"></ion-icon>
+      <ion-icon :icon="locationOutline" class="flex-shrink-0 mr-2 primary-icon-color"></ion-icon>
       <p class="modal-cafe-text-regular">{{ cafe.address }} - {{ cafe.city }}</p>
     </div>
-    <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold" slot="end">{{
-        $t('map')
-                                                                                             }}
+    <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold">
+      {{ $t('map') }}
     </ion-button>
-  </ion-item>
+  </div>
   <hr class="card-horizontal-ruler">
   <div class="flex justify-start mt-3.5">
     <div class="ion-item-no-padding-x flex">

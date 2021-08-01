@@ -45,8 +45,8 @@ export default {
     "filter": "Filter | Filters",
     "searchResults": "Search results",
     "undefined": "Undefined",
-    "setUsername" : "Set username",
-    "subscribedPlaces" : "Places i am subscribed to",
+    "setUsername": "Set username",
+    "subscribedPlaces": "Places i am subscribed to",
     "findAvailablePlace": "Find available place",
     "loading": "Loading...",
     "yes": "Yes",
@@ -54,4 +54,6 @@ export default {
     "agree": "Agree",
     "disagree": "Disagree",
     "back": "Back",
-}
+    "loggingOut": "Logging out...",
+    "checking": "Checking",
+};

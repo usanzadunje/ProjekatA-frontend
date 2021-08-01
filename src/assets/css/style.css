@@ -78,7 +78,7 @@ ion-modal ion-item {
 }
 
 .custom-modal {
-    --height: 410px;
+    --height: 420px;
     --border-radius: 20px 20px 0 0;
 }
 
@@ -150,11 +150,17 @@ ion-toggle {
     padding-bottom: 0 !important;
 }
 
-.no-padding-top{
+.no-padding-top {
     --padding-top: 0 !important;
 }
+
 .vcenter {
     margin-top: 50%;
+}
+
+.small-icon-size {
+    height: 15px;
+    width: 15px;
 }
 
 /*
@@ -291,6 +297,7 @@ ion-toggle {
 .sliding-filter-button-active {
     --background: #207DFF;
 }
+
 .sliding-filter-button-active::part(native) {
     color: #FFF;
 }
@@ -298,6 +305,7 @@ ion-toggle {
 .sliding-filter-button-inactive {
     --background: var(--secondary-button) !important;
 }
+
 .sliding-filter-button-inactive::part(native) {
     color: var(--primary-text);
 }
@@ -344,7 +352,8 @@ ion-toggle {
     color: var(--primary-text);
     font-size: 0.6rem;
 }
-.fixed-utility-text{
+
+.fixed-utility-text {
     font-size: 10px;
 }
 
@@ -386,25 +395,6 @@ ion-toggle {
 .error-border {
     border: 2px solid red !important;
 }
-
-.logo-position-login {
-    top: 5%;
-}
-
-.content-position-login {
-    bottom: 0;
-}
-
-@media only screen and (max-width: 600px) {
-    .content-position-register {
-        color: red !important;
-    }
-}
-
-.content-position-register {
-    color: blue !important;
-}
-
 
 /*
     END LOGIN/REGISTER STYLES

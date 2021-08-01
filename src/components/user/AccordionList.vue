@@ -1,11 +1,12 @@
 <template>
   <div class="accordion-list-box">
-    <div @click="togglePane" class="flex justify-between py-2.5">
-      <div>
-        <ion-icon :icon="locationOutline" class="align-middle primary-icon-color"></ion-icon>
+    <div @click="togglePane" class="flex justify-between items-center py-2.5">
+      <div class="flex">
+        <ion-icon :icon="icon" class="primary-icon-color"></ion-icon>
         <p class="inline-block ml-1 cafe-show-menu-headers">{{ title }}</p>
       </div>
-      <ion-icon :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline" class="mt-1 primary-icon-color"></ion-icon>
+      <ion-icon :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline"
+                class="primary-icon-color"></ion-icon>
     </div>
     <div class="panel" @click="togglePane($event, true)">
       <div v-for="item in items" :key="item">
@@ -23,7 +24,6 @@ import {
 } from '@ionic/vue';
 
 import {
-  locationOutline,
   chevronDownOutline,
   chevronForwardOutline,
 } from 'ionicons/icons';
@@ -40,6 +40,10 @@ export default defineComponent({
     },
     items: {
       type: Array,
+      default: null,
+    },
+    icon: {
+      type: String,
       default: null,
     },
   },
@@ -71,7 +75,6 @@ export default defineComponent({
       togglePane,
 
       /* Icons from */
-      locationOutline,
       chevronDownOutline,
       chevronForwardOutline,
     };

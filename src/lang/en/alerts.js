@@ -7,8 +7,9 @@ export default {
     "alertUnsubscribeMessage": "Are you sure you want to delete this place from subscription list?",
     "warningWebNotification": "You cannot register for push notifications on web.",
     "warningNoNotificationPermission": "No permission for push notifications granted.",
-    "geoLocationUnexpected": "There is problem with your GPS, geo location functions may not work.",
+    "geoLocationUnexpected": "There is problem with your GPS.",
     "warningNoGeoLocationPermission": "Permission not granted for location.",
     "dataFetchingError": "There was problem while fetching data. Please try again.",
     "generalAlertError": "Unexpected error has occurred. Please try again",
+    "warningGoogleMapsError": "We couldn't load map for you.",
 };

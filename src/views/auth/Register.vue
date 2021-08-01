@@ -1,14 +1,14 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="relative background-image-container bg">
-        <div class="absolute logo-position-login w-full">
+      <div class="flex flex-col justify-between background-image-container bg">
+        <div class="mt-10 w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>
         </div>
         <div
             id="content"
-            class="absolute w-full mb-4"
+            class="w-full mt-10 mb-4"
         >
           <h2 class="text-center secondary-heading">{{ $t('register') }}</h2>
           <RegisterForm class="mt-8"></RegisterForm>
@@ -32,17 +32,9 @@ export default defineComponent({
     IonPage,
     IonContent,
   },
-  mounted() {
-    if(this.clientDeviceHeight > 720) {
-      document.getElementById('content').style.bottom = '0';
-    }else {
-      document.getElementById('content').style.top = '40%';
-    }
-  },
-  data() {
-    return {
-      clientDeviceHeight: document.documentElement.clientHeight ?? 500,
-    };
+  setup() {
+
+    return {};
   },
 });
 </script>

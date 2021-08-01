@@ -19,52 +19,58 @@
     </ion-header>
 
     <ion-content :fullscreen="true" class="ion-padding relative">
-      <div class="relative">
-        <img
-            :src="`${backendStorageURL}/cafe/1_1cafe.png`"
-            :alt="`Image of ${cafe.name} cafe`"
-            @click="openPreview('1', 2)"
-            class="banner-image w-full"
-        />
-        <div
-            class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
-        >
-          {{ $t('gallery') }}
+      <div id="flex" class="flex flex-col justify-between">
+        <div>
+          <div class="relative">
+            <img
+                :src="`${backendStorageURL}/cafe/1_1cafe.png`"
+                :alt="`Image of ${cafe.name} cafe`"
+                @click="openPreview('1', 2)"
+                class="banner-image w-full"
+            />
+            <div
+                class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
+            >
+              {{ $t('gallery') }}
+            </div>
+          </div>
+
+          <div class="mt-4 ion-item-no-padding-x">
+            <h1 class="cafe-show-name">{{ cafe.name }}</h1>
+            <p class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
+          </div>
+
+          <CafeInfoBody :cafe="cafe"/>
+
+          <div>
+            <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
+            <AccordionList
+                class="accordion-list-border-top"
+                :title="$t('drinksCard')"
+                :items="cafe.offerings?.filter(offer => offer.tag === 'pice')"
+                :icon="beerOutline"
+            />
+            <AccordionList
+                class="accordion-list-border-top accordion-list-border-bottom"
+                :title="$t('food')"
+                :items="cafe.offerings?.filter(offer => offer.tag === 'food')"
+                :icon="pizzaOutline"
+            />
+          </div>
         </div>
-      </div>
 
-      <div class="mt-4 ion-item-no-padding-x">
-        <h1 class="cafe-show-name">{{ cafe.name }}</h1>
-        <p class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
-      </div>
-
-      <CafeInfoBody :cafe="cafe"/>
-
-      <div>
-        <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
-        <AccordionList
-            class="accordion-list-border-top"
-            :title="$t('drinksCard')"
-            :items="cafe.offerings?.filter(offer => offer.tag === 'pice')"
-        />
-        <AccordionList
-            class="accordion-list-border-top accordion-list-border-bottom"
-            :title="$t('food')"
-            :items="cafe.offerings?.filter(offer => offer.tag === 'food')"
-        />
-      </div>
-
-      <div class="mt-10">
-        <ion-button
-            class="uppercase button-subscribe-wide button-sub-wide-position"
-            expand="block"
-            @click="openModal(true)"
-            :disabled="!loggedIn"
-        >
-          <ion-icon slot="start"
-                    :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-          {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
-        </ion-button>
+        <div class="mt-10">
+          <ion-button
+              class="uppercase button-subscribe-wide"
+              expand="block"
+              @click="openModal(true)"
+              :disabled="!loggedIn"
+          >
+            <ion-icon slot="start"
+                      :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+            {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
+          </ion-button>
+        </div>
       </div>
       <ion-modal
           :is-open="isModalOpen"
@@ -114,9 +120,13 @@ import {
   notifications,
   notificationsOutline,
   fastFoodOutline,
+  pizzaOutline,
+  beerOutline,
 }
-                         from 'ionicons/icons';
-import ImagePreviewModal from '@/components/user/ImagePreviewModal';
+                                 from 'ionicons/icons';
+import ImagePreviewModal         from '@/components/user/ImagePreviewModal';
+import { useI18n }               from 'vue-i18n';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 export default defineComponent({
   name: "Cafe",
@@ -161,6 +171,10 @@ export default defineComponent({
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
 
+    /* Methods */
+    const { t } = useI18n();
+    const { showErrorToast } = useToastNotifications();
+
     /* Event handlers */
     const openModal = (state, isMapModal = false) => {
       if(isMapModal) {
@@ -188,14 +202,26 @@ export default defineComponent({
                .then((response) => {
                  cafe.value = response.data;
                })
-               .catch((error) => alert(error));
+               .catch(() => {
+                 showErrorToast(
+                     null,
+                     {
+                       generalError: t('dataFetchingError'),
+                     });
+               });
     /* Checking if user is subscribed to this cafe */
     if(loggedIn.value) {
       CafeService.isUserSubscribed(route.params.id)
                  .then((response) => {
                    isUserSubscribed.value = !!response.data;
                  })
-                 .catch((error) => alert(error));
+                 .catch(() => {
+                   showErrorToast(
+                       null,
+                       {
+                         generalError: t('dataFetchingError'),
+                       });
+                 });
     }
 
 
@@ -207,7 +233,13 @@ export default defineComponent({
                    .then((response) => {
                      cafe.value = response.data;
                    })
-                   .catch((error) => alert(error));
+                   .catch(() => {
+                     showErrorToast(
+                         null,
+                         {
+                           generalError: t('dataFetchingError'),
+                         });
+                   });
       }
     });
 
@@ -232,6 +264,8 @@ export default defineComponent({
       notifications,
       notificationsOutline,
       fastFoodOutline,
+      pizzaOutline,
+      beerOutline,
     };
   },
 
@@ -252,5 +286,11 @@ ion-item {
 
 ion-content {
   --background: var(--show-paint);
+}
+
+@media screen and (min-height: 740px) {
+  #flex {
+    height: 100% !important;
+  }
 }
 </style>

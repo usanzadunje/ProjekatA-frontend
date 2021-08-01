@@ -39,29 +39,32 @@
                 class="text-xl text-gray-500"
       ></ion-icon>
     </ion-item>
-    <div class="relative flex justify-between mt-3.5 px-4 utility-text">
-      <div class="relative" style="width: 130px">
+    <div class="relative flex justify-between items-center mt-3.5 px-4 utility-text">
+      <div class="flex items-center">
         <ion-checkbox
             v-model="user.remember"
             mode="md"
         ></ion-checkbox>
-        <ion-text class="ml-2 absolute top-1/2 transform -translate-y-1/2 fixed-utility-text">Zapamti me</ion-text>
+        <ion-text class="ml-2 fixed-utility-text" style="width: 65px">Zapamti me</ion-text>
       </div>
-      <div class="absolute top-1/2 right-0 transform -translate-y-1/2 fixed-utility-text" style="width: 140px">
+      <div class="fixed-utility-text" style="width: 110px">
         <a href="/forgot-password">Zaboravljena lozinka?</a>
       </div>
     </div>
     <SocialIcons class="mt-7"/>
     <div class="mt-6">
       <ion-button
+          :disabled="loading"
           size="large"
           expand="block"
-          class="auth-button-size auth-button-border-radius uppercase button-text-white"
+          class="auth-button-size auth-button-border-radius uppercase button-text-white relative"
           @click="login"
       >
-        {{ $t('login') }}
+        {{ loading ? $t('checking') : $t('login') }}
+        <ion-spinner v-if="loading" name="crescent" class="absolute right-0"></ion-spinner>
       </ion-button>
       <ion-button
+          :disabled="loading"
           fill="clear"
           routerLink="/register"
           size="large"
@@ -81,7 +84,9 @@ import { useRouter } from 'vue-router';
 
 import store from '@/store/index';
 
-import { Device } from '@capacitor/device';
+import { Device }   from '@capacitor/device';
+import { Keyboard } from '@capacitor/keyboard';
+
 
 import { getError, sleep } from "@/utils/helpers";
 
@@ -92,6 +97,7 @@ import {
   IonText,
   IonButton,
   IonCheckbox,
+  IonSpinner,
 }
   from "@ionic/vue";
 
@@ -118,6 +124,7 @@ export default defineComponent({
     IonText,
     IonButton,
     IonCheckbox,
+    IonSpinner,
     SocialIcons,
   },
   setup() {
@@ -132,6 +139,7 @@ export default defineComponent({
     let errorNames = ref({});
     const passwordInput = ref(null);
     const emailInput = ref(null);
+    const loading = ref(false);
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -144,6 +152,8 @@ export default defineComponent({
 
     /* Event handlers */
     const login = () => {
+      loading.value = true;
+      Keyboard.hide();
       AuthService.login(user)
                  .then(async(response) => {
                    await set(`projekata_token`, response.data);
@@ -153,10 +163,12 @@ export default defineComponent({
                    user.password = '';
                    await router.replace(homeRoute);
                    await showSuccessToast('Successfully logged in!');
+                   loading.value = false;
                  })
                  .catch(async(errors) => {
                    errorNames.value = getError(errors);
                    await showErrorToast(errors);
+                   loading.value = false;
                    await sleep(Object.keys(errorNames.value).length * 900);
                    errorNames.value = {};
                  });
@@ -173,6 +185,7 @@ export default defineComponent({
       errorNames,
       passwordInput,
       emailInput,
+      loading,
 
       /* Event handlers  */
       login,
@@ -188,7 +201,5 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-text {
-  width: 60px !important;
-}
+
 </style>

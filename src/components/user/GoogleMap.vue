@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="cafeMapModal" class="absolute bottom-0 w-full ion-padding">
     <div class="ml-4 mt-8 text-center">
       <h1 class="main-toolbar-heading text-xl">{{ cafe.name }}</h1>
     </div>
@@ -12,7 +12,7 @@
     </div>
   </div>
 </template>
-l
+
 <script>
 import { defineComponent, onMounted, ref } from 'vue';
 import { loadingController }               from '@ionic/vue';
@@ -21,10 +21,11 @@ import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-n
 
 import { sleep } from '@/utils/helpers';
 
-import { useI18n }        from 'vue-i18n';
-import { useGeolocation } from '@/composables/useGeolocation';
-import CafeService        from '@/services/CafeService';
-import { useStore }       from 'vuex';
+import { useI18n }               from 'vue-i18n';
+import { useGeolocation }        from '@/composables/useGeolocation';
+import CafeService               from '@/services/CafeService';
+import { useStore }              from 'vuex';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 export default defineComponent({
   name: "GoogleMap",
@@ -45,6 +46,7 @@ export default defineComponent({
     /* Methods */
     const { t } = useI18n({ useScope: 'global' });
     const { tryGettingLocation } = useGeolocation();
+    const { showErrorToast } = useToastNotifications();
 
 
     /* Lifecycle hooks */
@@ -55,22 +57,35 @@ export default defineComponent({
           .create({
             cssClass: 'custom-loading',
             message: t('loading'),
-            duration: 400,
           });
-      loading.present();
+      await loading.present();
       await sleep(350);
 
+
       mapContainerBoundingRect = document.getElementById('map').getBoundingClientRect();
-      await CapacitorGoogleMaps.create({
-        width: mapContainerBoundingRect.width - 4,
-        height: mapContainerBoundingRect.height - 4,
-        x: mapContainerBoundingRect.x + 2,
-        y: mapContainerBoundingRect.y + 2,
-        latitude: Number(props.cafe.latitude) ?? 43.317862492567,
-        longitude: Number(props.cafe.longitude) ?? 21.895785976058143,
-        zoom: 16,
-        liteMode: true,
-      });
+      try {
+        await CapacitorGoogleMaps.create({
+          width: mapContainerBoundingRect.width - 4,
+          height: mapContainerBoundingRect.height - 4,
+          x: mapContainerBoundingRect.x + 2,
+          y: mapContainerBoundingRect.y + 2,
+          latitude: Number(props.cafe.latitude) ?? 43.317862492567,
+          longitude: Number(props.cafe.longitude) ?? 21.895785976058143,
+          zoom: 16,
+          liteMode: true,
+        });
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              pushNotificationPermission: t('warningGoogleMapsError'),
+            });
+        loading.dismiss();
+      }
+
+      const height = document.querySelector('#cafeMapModal').getClientRects()[0].height;
+      document.querySelector('.custom-map-modal .modal-wrapper').style.height = height + 'px';
+
 
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
         distance.value = Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude));
@@ -95,6 +110,7 @@ export default defineComponent({
         });
       });
 
+      loading.dismiss();
     });
 
     return {

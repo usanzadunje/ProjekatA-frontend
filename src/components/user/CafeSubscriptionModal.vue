@@ -1,57 +1,53 @@
 <template>
-  <ion-content
-      class="ion-padding"
-  >
-    <div class="relative w-full container-modal">
-      <div class="absolute w-full top-3">
-        <ion-item>
-          <h1 class="submodal-heading">{{ $t('notifications') }}</h1>
-        </ion-item>
-        <ion-item>
-          <p class="submodal-paragraph">
-            {{ $t('notificationModal1') }}
-            <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
-            {{ $t('notificationModal2') }}
-          </p>
-        </ion-item>
-        <ion-item class="ion-no-padding mt-4">
-          <ion-toggle
-              class="pl-4"
-              @ionChange="indefiniteTimerToggle($event)"
-              mode="md"
-              :disabled="isUserSubscribed"
-          ></ion-toggle>
-          <ion-label class="margin-left-1 submodal-fade-text">{{ $t('undefined') }}</ion-label>
-        </ion-item>
-        <ion-item class="ion-no-padding">
-          <ion-range
-              min="5"
-              max="60"
-              step="5"
-              color="primary"
-              v-model="notificationTime"
-              :disabled="indefiniteTimerActive || isUserSubscribed"
-          ></ion-range>
-          <ion-label class="ml-1 margin-left-1 submodal-alert-time">
-            {{ !isNaN(notificationTime) ? notificationTime + 'min' : '∞' }}
-          </ion-label>
-        </ion-item>
-        <div class="mt-2 mb-3 flex justify-around">
-          <ion-button
-              class="mr-2.5 uppercase button-cancel modal-button-border"
-              @click="$emit('dismissSubscriptionModal')"
-          >
-            {{ $t('cancel') }}
-          </ion-button>
-          <ion-button
-              class="uppercase button-confirm modal-button-border"
-              @click="toggleSubscription(cafe.id)"
-          >
-            <ion-icon slot="start"
-                      :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-            {{ isUserSubscribed ? $t('remove') : $t('confirm') }}
-          </ion-button>
-        </div>
+  <ion-content>
+    <div id="cafeSubModal" class="absolute bottom-0 w-full ion-padding">
+      <ion-item>
+        <h1 class="submodal-heading">{{ $t('notifications') }}</h1>
+      </ion-item>
+      <ion-item>
+        <p class="submodal-paragraph">
+          {{ $t('notificationModal1') }}
+          <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
+          {{ $t('notificationModal2') }}
+        </p>
+      </ion-item>
+      <ion-item class="ion-no-padding mt-4">
+        <ion-toggle
+            class="pl-4"
+            @ionChange="indefiniteTimerToggle($event)"
+            mode="md"
+            :disabled="isUserSubscribed"
+        ></ion-toggle>
+        <ion-label class="margin-left-1 submodal-fade-text">{{ $t('undefined') }}</ion-label>
+      </ion-item>
+      <ion-item class="ion-no-padding">
+        <ion-range
+            min="5"
+            max="60"
+            step="5"
+            color="primary"
+            v-model="notificationTime"
+            :disabled="indefiniteTimerActive || isUserSubscribed"
+        ></ion-range>
+        <ion-label class="ml-1 margin-left-1 submodal-alert-time">
+          {{ !isNaN(notificationTime) ? notificationTime + 'min' : '∞' }}
+        </ion-label>
+      </ion-item>
+      <div class="mt-2 mb-3 flex justify-around">
+        <ion-button
+            class="mr-2.5 uppercase button-cancel modal-button-border"
+            @click="$emit('dismissSubscriptionModal')"
+        >
+          {{ $t('cancel') }}
+        </ion-button>
+        <ion-button
+            class="uppercase button-confirm modal-button-border"
+            @click="toggleSubscription(cafe.id)"
+        >
+          <ion-icon slot="start"
+                    :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+          {{ isUserSubscribed ? $t('remove') : $t('confirm') }}
+        </ion-button>
       </div>
     </div>
 
@@ -59,7 +55,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, toRef } from 'vue';
+import { defineComponent, ref, toRef, onMounted } from 'vue';
 
 import { useStore } from 'vuex';
 
@@ -118,7 +114,7 @@ export default defineComponent({
     const cafe = toRef(props, 'cafe');
 
     /* Methods */
-    const { showSuccessToast } = useToastNotifications();
+    const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { get, set } = useStorage();
     const { initPush } = useFCM();
     const showAlert = async(cafeId) => {
@@ -144,8 +140,12 @@ export default defineComponent({
                                  await showSuccessToast(t('successSubscribe'));
                                }
                              })
-                             .catch((error) => {
-                               alert(error);
+                             .catch(() => {
+                               showErrorToast(
+                                   null,
+                                   {
+                                     generalError: t('generalAlertError'),
+                                   });
                              });
                 },
               },
@@ -160,7 +160,19 @@ export default defineComponent({
                .then((response) => {
                  isUserSubscribed.value = !!response.data;
                })
-               .catch((error) => alert(error));
+               .catch(() => {
+                 showErrorToast(
+                     null,
+                     {
+                       generalError: t('generalAlertError'),
+                     });
+               });
+    onMounted(() => {
+      setTimeout(() => {
+        const height = document.querySelector('#cafeSubModal').getClientRects()[0].height;
+        document.querySelector('.custom-sub-modal .modal-wrapper').style.height = height + 'px';
+      }, 300);
+    });
 
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {
@@ -184,7 +196,13 @@ export default defineComponent({
                        await showSuccessToast(t('successUnsubscribe'));
                      }
                    })
-                   .catch((error) => alert(error));
+                   .catch(() => {
+                     showErrorToast(
+                         null,
+                         {
+                           generalError: t('generalAlertError'),
+                         });
+                   });
       }else {
         if(!pushNotificationPermission) {
           await showAlert(cafeId);
@@ -198,7 +216,13 @@ export default defineComponent({
                        await showSuccessToast(t('successSubscribe'));
                      }
                    })
-                   .catch((error) => alert(error));
+                   .catch(() => {
+                     showErrorToast(
+                         null,
+                         {
+                           generalError: t('generalAlertError'),
+                         });
+                   });
       }
 
     };

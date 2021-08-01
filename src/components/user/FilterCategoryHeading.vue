@@ -1,7 +1,7 @@
 <template>
-  <div class="flex relative">
+  <div class="flex items-center">
     <ion-icon :icon="icon" class="primary-icon-color category-filter"></ion-icon>
-    <span class="sliding-filter-title uppercase absolute left-4 top-1/2 transform -translate-y-1/2">{{ title }}</span>
+    <span class="sliding-filter-title uppercase ml-0.5">{{ title }}</span>
   </div>
 </template>
 

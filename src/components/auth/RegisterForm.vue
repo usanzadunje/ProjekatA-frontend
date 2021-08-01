@@ -64,14 +64,17 @@
     <SocialIcons class="mt-7"/>
     <div class="mt-6">
       <ion-button
+          :disabled="loading"
           size="large"
           expand="block"
-          class="auth-button-size auth-button-border-radius uppercase button-text-white"
+          class="auth-button-size auth-button-border-radius uppercase button-text-white relative"
           @click="register"
       >
-        {{ $t('register') }}
+        {{ loading ? $t('checking') : $t('register') }}
+        <ion-spinner v-if="loading" name="crescent" class="absolute right-0"></ion-spinner>
       </ion-button>
       <ion-button
+          :disabled="loading"
           fill="clear"
           routerLink="/login"
           size="large"
@@ -89,7 +92,7 @@ import { defineComponent, onMounted, reactive, ref } from 'vue';
 
 import { useRouter } from 'vue-router';
 
-import { IonItem, IonInput, IonIcon, IonButton } from "@ionic/vue";
+import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
 
 import AuthService from "@/services/AuthService";
 
@@ -106,7 +109,9 @@ import {
 }                                from 'ionicons/icons';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useStorage }            from '@/services/StorageService';
-import { Device }                from '@capacitor/device';
+
+import { Device }   from '@capacitor/device';
+import { Keyboard } from '@capacitor/keyboard';
 
 
 export default defineComponent({
@@ -116,6 +121,7 @@ export default defineComponent({
     IonInput,
     IonIcon,
     IonButton,
+    IonSpinner,
     SocialIcons,
   },
   setup() {
@@ -130,6 +136,7 @@ export default defineComponent({
     let errorNames = ref({});
     const passwordInput = ref(null);
     const passwordConfirmInput = ref(null);
+    const loading = ref(false);
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -142,6 +149,8 @@ export default defineComponent({
 
     /* Event handlers */
     let register = () => {
+      loading.value = true;
+      Keyboard.hide();
       Object.assign(
           newUser,
           newUser,
@@ -157,10 +166,12 @@ export default defineComponent({
                    await set(`projekata_token`, response.data);
                    newUser = {};
                    await router.replace({ name: 'onboarding' });
+                   loading.value = false;
                  })
                  .catch(async(errors) => {
                    errorNames.value = getError(errors);
                    await showErrorToast(errors);
+                   loading.value = false;
                    await sleep(Object.keys(errorNames.value).length * 900);
                    errorNames.value = {};
                  });
@@ -181,6 +192,7 @@ export default defineComponent({
       errorNames,
       passwordInput,
       passwordConfirmInput,
+      loading,
 
       /* Event handlers */
       register,

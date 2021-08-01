@@ -1,6 +1,6 @@
 <template>
   <div class="background-white cafe-card-border-radius">
-    <div class="p-4 flex ion-align-items-center">
+    <div class="p-4 flex items-center">
       <img
           :src="`${backendStorageURL}/cafe/1_2cafe.png`"
           alt=""
@@ -12,7 +12,7 @@
       </div>
     </div>
     <hr class="card-horizontal-ruler">
-    <div class="px-3 pt-3 pb-2.5 flex justify-between">
+    <div class="flex justify-between items-center px-3 pt-3 pb-2.5">
       <div class="flex">
         <div class="flex">
           <ion-icon :icon="pieChart" class="text-yellow-400"></ion-icon>
@@ -23,7 +23,7 @@
           <span class="cafe-card-fade-text ml-1">{{ distance }}m</span>
         </div>
       </div>
-      <div class="flex primary-icon-color">
+      <div class="primary-icon-color">
         <ion-icon :icon="fastFoodOutline"></ion-icon>
         <ion-icon :icon="leafOutline" class="ml-1"></ion-icon>
       </div>

@@ -54,5 +54,7 @@ export default {
     "agree": "Potvrdi",
     "disagree": "Odustani",
     "back": "Nazad",
+    "loggingOut": "Odjavljujem se...",
+    "checking": "Proveravam",
 };
 

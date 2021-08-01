@@ -1,52 +1,50 @@
 <template>
-  <ion-content class="ion-padding">
-    <div class="relative w-full">
-      <div class="absolute w-full">
-        <ion-item class="ion-item-no-padding-x">
-          <ion-thumbnail slot="start">
-            <img
-                :src="`${backendStorageURL}/cafe/1_2cafe.png`"
-                alt="Logo of {{ cafe.name }}"
-                class="modal-thumbnail"
-            >
-          </ion-thumbnail>
-          <div>
-            <h1 class="modal-cafe-name-text">{{ cafe.name }}</h1>
-            <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
-          </div>
-        </ion-item>
-
-        <CafeInfoBody :cafe="cafe"/>
-        <ion-item class="mt-6 ion-no-padding">
-          <ion-slides id="gallerySlider" :options="slideOpts">
-            <ion-slide v-for="i in [1,2,3]" :key="i">
-              <img
-                  :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
-                  alt=""
-                  @click="openPreview(`${backendStorageURL}/cafe/2_${i}cafe.png`)"
-              >
-            </ion-slide>
-          </ion-slides>
-        </ion-item>
-
-        <div class="mt-5 mb-3 flex justify-around">
-          <ion-button
-              class="mr-2.5 uppercase button-see-more modal-button-border"
-              :routerLink="`/cafes/${cafe.id}?redirect=${$route.path + '?openModal=true'}`"
-              @click="$emit('dismissShortCafeModal')"
+  <ion-content>
+    <div id="shortCafeModal" class="absolute bottom-0 w-full ion-padding">
+      <ion-item class="ion-item-no-padding-x">
+        <ion-thumbnail slot="start">
+          <img
+              :src="`${backendStorageURL}/cafe/1_2cafe.png`"
+              alt="Logo of {{ cafe.name }}"
+              class="modal-thumbnail"
           >
-            {{ $t('more') }}
-          </ion-button>
-          <ion-button
-              class="uppercase button-subscribe modal-button-border"
-              @click="openModal(true);$emit('subModalOpened');"
-              :disabled="isWeb"
-          >
-            <ion-icon slot="start"
-                      :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-            {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
-          </ion-button>
+        </ion-thumbnail>
+        <div>
+          <h1 class="modal-cafe-name-text">{{ cafe.name }}</h1>
+          <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
         </div>
+      </ion-item>
+
+      <CafeInfoBody :cafe="cafe"/>
+      <ion-item class="mt-6 ion-no-padding">
+        <ion-slides id="gallerySlider" :options="slideOpts">
+          <ion-slide v-for="i in [1,2,3]" :key="i">
+            <img
+                :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
+                alt=""
+                @click="openPreview(`${backendStorageURL}/cafe/2_${i}cafe.png`)"
+            >
+          </ion-slide>
+        </ion-slides>
+      </ion-item>
+
+      <div class="mt-5 mb-3 flex justify-around">
+        <ion-button
+            class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
+            :routerLink="`/cafes/${cafe.id}?redirect=${$route.path + '?openModal=true'}`"
+            @click="$emit('dismissShortCafeModal')"
+        >
+          {{ $t('more') }}
+        </ion-button>
+        <ion-button
+            class="flex-shrink uppercase button-subscribe modal-button-border"
+            @click="openModal(true);$emit('subModalOpened');"
+            :disabled="isSubDisabled"
+        >
+          <ion-icon slot="start"
+                    :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+          {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
+        </ion-button>
       </div>
     </div>
     <ion-modal
@@ -137,20 +135,23 @@ export default defineComponent({
     const isModalOpen = ref(false);
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
-    const isWeb = ref(false);
+    const isSubDisabled = ref(true);
 
     //Auth prop
-    let loggedIn = computed(() => store.getters['auth/loggedIn']);
+    const loggedIn = computed(() => store.getters['auth/loggedIn']);
 
     /* Lifecycle hooks */
-    isWeb.value = Capacitor.getPlatform() === 'web';
+    isSubDisabled.value = Capacitor.getPlatform() === 'web' || !loggedIn.value;
 
     onMounted(() => {
       const slides = document.getElementById("gallerySlider");
       setTimeout(() => {
         slides.options = slideOpts;
         slides.update();
-      }, 150);
+
+        const height = document.querySelector('#shortCafeModal').getClientRects()[0].height;
+        document.querySelector('.custom-modal .modal-wrapper').style.height = height + 'px';
+      }, 300);
     });
 
     onUnmounted(() => {
@@ -186,7 +187,7 @@ export default defineComponent({
     return {
       /* Component properties */
       slideOpts,
-      isWeb,
+      isSubDisabled,
 
       /* Component properties */
       isModalOpen,

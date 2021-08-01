@@ -89,7 +89,7 @@ import {
   IonToggle,
   IonButton,
   pickerController,
-  onIonViewWillEnter,
+  onIonViewWillEnter, loadingController,
 } from '@ionic/vue';
 
 import {
@@ -144,7 +144,7 @@ export default defineComponent({
           .catch(() => {
             areNotificationsOn.value = false;
           });
-    })
+    });
     get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
         .then((response) => {
           isDarkModeOn.value = !!response;
@@ -198,7 +198,14 @@ export default defineComponent({
       areNotificationsOn.value = e.target.checked;
     };
     const logout = async() => {
+      const loading = await loadingController
+          .create({
+            cssClass: 'custom-loading',
+            message: t('loggingOut'),
+          });
+      await loading.present();
       await store.dispatch("auth/logout");
+      loading.dismiss();
     };
     const chooseLanguage = async() => {
       const picker = await pickerController.create({

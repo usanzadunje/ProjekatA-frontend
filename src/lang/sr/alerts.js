@@ -12,5 +12,5 @@ export default {
     "dataFetchingError": "Problem prilikom prikupljanja podataka. Pokusajte ponovo.",
     "generalAlertError": "Doslo je do neocekivane greske. Molimo vas pokusajte ponovo.",
     "warningNoGeoLocationPermission": "Nije odobreno koriscenje lokacije.",
-
+    "warningGoogleMapsError": "Ne mozemo da ucitamo mapu.",
 };

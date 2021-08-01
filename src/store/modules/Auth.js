@@ -1,9 +1,8 @@
-import router            from "@/router";
+import router from "@/router";
 
 import AuthService from "@/services/AuthService";
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useStorage }            from '@/services/StorageService';
+import { useStorage } from '@/services/StorageService';
 
 export const namespaced = true;
 
@@ -21,14 +20,12 @@ export const mutations = {
 export const actions = {
     //Logging out user and redirecting to login page
     logout({ commit }) {
-        const { showSuccessToast } = useToastNotifications();
         const { set } = useStorage();
         return AuthService.logout()
-                          .then(async(response) => {
+                          .then(async() => {
                               commit("SET_USER", null);
                               await set('projekata_token', null);
                               await router.replace({ name: 'login' });
-                              showSuccessToast(response.data.success);
                               document.body.classList.toggle('dark', false);
                           });
     },
