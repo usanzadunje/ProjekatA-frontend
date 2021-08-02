@@ -56,5 +56,6 @@ export default {
     "back": "Nazad",
     "loggingOut": "Odjavljujem se...",
     "checking": "Proveravam",
+    "undo": "Ponisti",
 };
 

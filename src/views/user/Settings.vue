@@ -200,8 +200,10 @@ export default defineComponent({
     const logout = async() => {
       const loading = await loadingController
           .create({
+            spinner: 'crescent',
             cssClass: 'custom-loading',
             message: t('loggingOut'),
+            mode: 'ios',
           });
       await loading.present();
       await store.dispatch("auth/logout");

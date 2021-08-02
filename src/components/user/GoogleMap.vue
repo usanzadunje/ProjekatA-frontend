@@ -59,6 +59,8 @@ export default defineComponent({
           .create({
             cssClass: 'custom-loading',
             message: t('loading'),
+            spinner: 'crescent',
+            mode: 'ios',
           });
       await loading.present();
       await sleep(400);
@@ -86,7 +88,7 @@ export default defineComponent({
         loading.dismiss();
       }
 
-      const height = content.value?.getBoundingClientRect().height ?? 420;
+      const height = content.value?.getBoundingClientRect().height ?? 460;
       document.querySelector('.custom-map-modal .modal-wrapper').style.height = height + 'px';
 
       CapacitorGoogleMaps.addListener("onMapReady", async function() {

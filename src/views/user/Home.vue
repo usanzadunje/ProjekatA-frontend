@@ -197,8 +197,6 @@ export default defineComponent({
     });
     //Before fetching cafes by distance get location and then pass it to query string in API call to backend
     onMounted(async() => {
-      openModal(true);
-      openModal(false);
       Promise.all([
         CafeService.getCafeCardsChunkInfo(
             0, 4,
@@ -214,6 +212,9 @@ export default defineComponent({
             store.getters['global/position'].longitude,
         ),
       ]).then((response) => {
+        openModal(true, response[0].data[0]);
+        openModal(false);
+
         cafes.currentlyAvailable = response[0].data;
         cafes.haveFood = response[1].data;
 

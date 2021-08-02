@@ -66,7 +66,8 @@ import {
   IonButton,
   IonToggle,
   IonRange,
-  IonLabel, alertController,
+  IonLabel,
+  alertController,
 } from '@ionic/vue';
 
 import {
@@ -121,6 +122,7 @@ export default defineComponent({
           .create({
             header: t('alertNotificationsOffHeader'),
             message: t('alertNotificationsOffMessage'),
+            mode: 'ios',
             buttons: [
               {
                 text: t('no'),
@@ -168,9 +170,9 @@ export default defineComponent({
                });
     onMounted(() => {
       setTimeout(() => {
-        const height = content.value?.getBoundingClientRect()?.height ?? 420;
+        const height = content.value?.getBoundingClientRect()?.height ?? 320;
         document.querySelector('.custom-sub-modal .modal-wrapper').style.height = height + 'px';
-      }, 500);
+      }, 400);
     });
 
     /* Event Handlers */

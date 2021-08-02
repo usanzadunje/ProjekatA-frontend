@@ -146,7 +146,7 @@ export default defineComponent({
         document.querySelector('.custom-modal .modal-wrapper').style.height = height + 'px';
 
         gallerySlider?.value?.$el.update();
-      }, 500);
+      }, 400);
     });
 
     onUnmounted(() => {

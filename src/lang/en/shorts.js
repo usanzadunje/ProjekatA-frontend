@@ -56,4 +56,5 @@ export default {
     "back": "Back",
     "loggingOut": "Logging out...",
     "checking": "Checking",
+    "undo": "Undo",
 };

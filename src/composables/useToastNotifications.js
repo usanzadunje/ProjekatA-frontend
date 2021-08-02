@@ -1,8 +1,8 @@
 import { computed, ref }   from 'vue';
-
+import { i18n }            from '@/i18n';
 import { toastController } from '@ionic/vue';
 
-import { getError }        from '@/utils/helpers';
+import { getError } from '@/utils/helpers';
 
 
 export function useToastNotifications() {
@@ -23,6 +23,26 @@ export function useToastNotifications() {
     const getErrorMessage = (key) => {
         return errors.value[key];
     };
+    //Generating classic notification toast
+    const showUndoToast = async(message, callback) => {
+        const toast = await toastController.create({
+            duration: 300000,
+            message: message,
+            cssClass: 'undo-toast',
+            mode: 'ios',
+            buttons: [
+                {
+                    side: 'end',
+                    text: i18n.global.t('undo').toUpperCase(),
+                    cssClass: 'undo-toast-button',
+                    handler: callback,
+                },
+            ],
+        });
+
+        toast.style.top = '-50px';
+        await toast.present();
+    };
     //Generating toast success notifications
     const showSuccessToast = async(message) => {
         const toast = await toastController
@@ -31,9 +51,10 @@ export function useToastNotifications() {
                 position: 'top',
                 message: message,
                 cssClass: 'success-toast',
-            })
-        return toast.present();
-    }
+                mode: 'ios',
+            });
+        await toast.present();
+    };
 
     //Generating toast error notifications
     const showErrorToast = async(backendErrors, errorMessage = null) => {
@@ -45,6 +66,7 @@ export function useToastNotifications() {
                 position: 'top',
                 message: getErrorMessage(errorKeys.value[i]),
                 cssClass: 'error-toast',
+                mode: 'ios',
             });
             toast.style.top = `${55 * i}px`;
             await toast.present();
@@ -53,7 +75,8 @@ export function useToastNotifications() {
 
     return {
         /* Methods */
+        showUndoToast,
         showSuccessToast,
-        showErrorToast
+        showErrorToast,
     };
 }
