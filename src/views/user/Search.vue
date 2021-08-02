@@ -2,7 +2,6 @@
   <ion-page>
     <div
         id="header"
-        class="pull-transition"
     >
       <UserHeader
           :mainHeading="$t('search')"
@@ -14,12 +13,13 @@
       </UserHeader>
     </div>
 
-    <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation()" class="ion-padding">
+    <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation($event)" class="ion-padding">
       <InfiniteScroll
           :cafeSearchString="cafeSearchString"
           :sortBy="sortBy"
           @scrollToTop="scrollToTop"
           @openCafeModal="openModal(true, $event)"
+          @infiniteScrollActive="infiniteScrollLoadingActive = !infiniteScrollLoadingActive"
       />
 
       <ion-modal
@@ -40,14 +40,17 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
-
+import { defineComponent, ref } from 'vue';
+import { useRoute, useRouter }  from 'vue-router';
 import {
   IonContent,
   IonPage,
   IonModal,
+  onIonViewWillEnter,
+  onIonViewDidEnter,
+  onIonViewWillLeave,
 }
-  from '@ionic/vue';
+                                from '@ionic/vue';
 
 import UserHeader     from '@/components/user/UserHeader';
 import SlidingFilter  from '@/components/user/SlidingFilter';
@@ -68,59 +71,40 @@ export default defineComponent({
     InfiniteScroll,
     ShortCafeModal,
   },
-  // beforeRouteEnter(to) {
-  //   // Before entering route remove query params
-  //   // if(Object.keys(to.query).length) {
-  //   //   return { path: to.path, query: {}, hash: to.hash };
-  //   // }
-  // },
-  ionViewWillEnter() {
-    // Before enterning vuew check if there is search term if there is
-    // Set search input to search term passed from Home page
-    // And remove query string
-    if(this.$route.query.searchTerm || this.$route.query.searchTerm === '') {
-      this.cafeSearchString = this.$route.query.searchTerm;
-      this.$router.replace();
-    }
-  },
-  ionViewDidEnter() {
-    let shouldOpenModal = !!this.$route.query.openModal;
-    this.openModal(shouldOpenModal);
-  },
-  ionViewWillLeave() {
-    // Before leaving page remove search input value and clear search string
-    document.querySelector('ion-searchbar div input').value = null;
-    this.cafeSearchString = '';
-  },
   setup() {
-    /* Component references */
-    const content = ref(null);
+    /* Global properties */
+    const route = useRoute();
+    const router = useRouter();
 
     /* Component properties */
+    const content = ref(null);
     const cafeSearchString = ref('');
     const sortBy = ref('distance');
-    let scrollTopOffset = ref(0);
+    const scrollTopOffset = ref(0);
+    const prevScrollDirectionDown = ref(false);
+    const infiniteScrollLoadingActive = ref(false);
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
     const modalCafe = ref({});
-    const slideOpts = {
-      initialSlide: 0,
-      speed: 500,
-      centeredSlides: false,
-      slidesPerView: 2.7,
-    };
-
-    /* Methods */
 
     /* Lifecycle hooks */
-    //Setting options for slider inside SlideFilter component
-    onMounted(async() => {
-      const slides = document.getElementsByClassName('filterSlider');
-      slides.forEach((slide) => {
-        slide.options = slideOpts;
-        slide.update();
-      });
+    onIonViewWillEnter(() => {
+      // Before enterning vuew check if there is search term if there is
+      // Set search input to search term passed from Home page
+      // And remove query string
+      if(route.query.searchTerm || route.query.searchTerm === '') {
+        cafeSearchString.value = route.query.searchTerm;
+        router.replace();
+      }
+    });
+    onIonViewDidEnter(() => {
+      openModal(!!route.query.openModal);
+    });
+    onIonViewWillLeave(() => {
+      // Before leaving page remove search input value and clear search string
+      document.querySelector('ion-searchbar div input').value = null;
+      cafeSearchString.value = '';
     });
 
     /* Event handlers */
@@ -130,16 +114,29 @@ export default defineComponent({
     const sortHasChanged = async(sortValue) => {
       sortBy.value = sortValue;
     };
-    const pullAnimation = async() => {
-      let scrollElement = await content.value?.$el.getScrollElement();
+    const pullAnimation = async(event) => {
+      let currentScrollDirectionDown = event.detail.currentY > scrollTopOffset.value;
+      const header = document.querySelector('#header');
 
-      if(scrollElement.scrollTop > scrollTopOffset.value) {
-        document.querySelector('#header').classList.add('hide-header');
-      }else {
-        document.querySelector('#header').classList.remove('hide-header');
+      if(
+          event.detail.currentY <= 0 ||
+          event.detail.currentY === scrollTopOffset.value ||
+          currentScrollDirectionDown === prevScrollDirectionDown.value ||
+          infiniteScrollLoadingActive.value
+      ) {
+        scrollTopOffset.value = event.detail.currentY;
+
+        return;
       }
 
-      scrollTopOffset.value = scrollElement.scrollTop;
+      if(event.detail.currentY > scrollTopOffset.value) {
+        header.classList.add('hide-header');
+      }else {
+        header.classList.remove('hide-header');
+      }
+
+      scrollTopOffset.value = event.detail.currentY;
+      prevScrollDirectionDown.value = currentScrollDirectionDown;
     };
     const openModal = (state, cafe = null) => {
       if(cafe) {
@@ -167,7 +164,7 @@ export default defineComponent({
       content,
       isModalOpen,
       modalCafe,
-      slideOpts,
+      infiniteScrollLoadingActive,
 
       /* Event handlers */
       searchFilterChanged,
@@ -187,10 +184,6 @@ export default defineComponent({
 </script>
 <style scoped>
 .hide-header {
-  margin-top: -266px !important;
-}
-
-.pull-transition {
-  transition: all 0.5s ease-in;
+  display: none;
 }
 </style>

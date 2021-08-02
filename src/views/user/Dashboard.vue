@@ -6,7 +6,7 @@
       <ion-refresher pull-min="45" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             :pulling-text="$t('refresherPulling')"
-            refreshing-spinner="lines"
+            refreshing-spinner="crescent"
             :refreshing-text="$t('refresherText')"
         >
         </ion-refresher-content>
@@ -66,9 +66,9 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
-
-import { mapGetters, useStore } from 'vuex';
-
+import { useRoute }                        from 'vue-router';
+import { mapGetters, useStore }            from 'vuex';
+import { useI18n }                         from 'vue-i18n';
 import {
   IonContent,
   IonPage,
@@ -82,7 +82,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   onIonViewDidEnter,
-} from '@ionic/vue';
+}                                          from '@ionic/vue';
 
 import UserProfileHeader     from '@/components/user/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
@@ -93,13 +93,12 @@ import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
 import CafeService from '@/services/CafeService';
 
+import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useGeolocation }        from '@/composables/useGeolocation';
+
 import {
   trashOutline,
-}                                from 'ionicons/icons';
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useI18n }               from 'vue-i18n';
-import { useRoute }              from 'vue-router';
-import { useGeolocation }        from '@/composables/useGeolocation';
+} from 'ionicons/icons';
 
 
 export default defineComponent({
@@ -133,19 +132,13 @@ export default defineComponent({
 
     /* Component properties */
     // Cafes user is subscribed to
-    let cafesUserSubscribedTo = ref([]);
-    let sortBy = ref('distance');
-    const slideOpts = {
-      initialSlide: 0,
-      speed: 500,
-      centeredSlides: false,
-      slidesPerView: 2.7,
-    };
+    const cafesUserSubscribedTo = ref([]);
+    const sortBy = ref('distance');
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
     const modalCafe = ref({});
-    let showSkeleton = ref(true);
+    const showSkeleton = ref(true);
 
     /* Methods */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
@@ -175,12 +168,6 @@ export default defineComponent({
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
     onMounted(async() => {
-      const slides = document.getElementsByClassName('filterSlider');
-      slides.forEach((slide) => {
-        slide.options = slideOpts;
-        slide.update();
-      });
-
       CafeService.getAllCafesUserSubscribedTo(
           sortBy.value,
           store.getters['global/position'].latitude,
@@ -200,8 +187,7 @@ export default defineComponent({
                  });
     });
     onIonViewDidEnter(() => {
-      let shouldOpenModal = !!route.query.openModal;
-      openModal(shouldOpenModal);
+      openModal(!!route.query.openModal);
       // Everytime user comes to the page give him view of fresh cafes he has subscribed to
       CafeService.getAllCafesUserSubscribedTo(
           sortBy.value,
@@ -286,10 +272,9 @@ export default defineComponent({
     };
 
     return {
-      /* Component roperties */
+      /* Component properties */
       cafesUserSubscribedTo,
       sortBy,
-      slideOpts,
       isModalOpen,
       modalCafe,
       showSkeleton,

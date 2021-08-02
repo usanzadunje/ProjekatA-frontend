@@ -1,6 +1,6 @@
 <template>
   <ion-content>
-    <div id="cafeSubModal" class="absolute bottom-0 w-full ion-padding">
+    <div ref="content" class="absolute bottom-0 w-full ion-padding">
       <ion-item>
         <h1 class="submodal-heading">{{ $t('notifications') }}</h1>
       </ion-item>
@@ -108,10 +108,9 @@ export default defineComponent({
     /* Component properties */
     let notificationTime = ref(15);
     let indefiniteTimerActive = ref(false);
-
     const isUserSubscribed = ref(false);
-
     const cafe = toRef(props, 'cafe');
+    const content = ref(null);
 
     /* Methods */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
@@ -169,9 +168,9 @@ export default defineComponent({
                });
     onMounted(() => {
       setTimeout(() => {
-        const height = document.querySelector('#cafeSubModal').getClientRects()[0].height;
+        const height = content.value?.getBoundingClientRect()?.height ?? 420;
         document.querySelector('.custom-sub-modal .modal-wrapper').style.height = height + 'px';
-      }, 300);
+      }, 500);
     });
 
     /* Event Handlers */
@@ -233,6 +232,7 @@ export default defineComponent({
       notificationTime,
       indefiniteTimerActive,
       isUserSubscribed,
+      content,
 
       /* Event handlers */
       indefiniteTimerToggle,

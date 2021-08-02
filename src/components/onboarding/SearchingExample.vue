@@ -46,7 +46,7 @@ export default defineComponent({
 </script>
 <style scoped>
 div.bg {
-  background: url('https://resize.rs/storage/img/onboarding/searching-example.png') no-repeat center fixed;
+  background: url('https://resize.rs/storage/img/onboarding/searching-example.png') no-repeat center;
   background-size: cover;
 }
 ion-icon {

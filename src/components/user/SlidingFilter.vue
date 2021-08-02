@@ -1,7 +1,7 @@
 <template>
   <div class="mt-1">
-    <p v-if="hasTitle" class="sliding-filter-title uppercase">{{ $t('filter', 5) }}</p>
-    <ion-slides class="filterSlider">
+    <p v-if="hasTitle" class="sliding-filter-title uppercase ml-1">{{ $t('filter', 5) }}</p>
+    <ion-slides :options="slideOpts">
       <ion-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
@@ -10,8 +10,7 @@
             @click="sortButtonActivated"
         >
           {{ $t('closest') }}
-          <ion-icon slot="start"
-                    :icon="locationOutline"></ion-icon>
+          <ion-icon slot="start" :icon="locationOutline"></ion-icon>
         </ion-button>
       </ion-slide>
       <ion-slide>
@@ -22,8 +21,7 @@
             @click="sortButtonActivated"
         >
           {{ $t('available') }}
-          <ion-icon slot="start"
-                    :icon="pieChart"></ion-icon>
+          <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
       </ion-slide>
       <ion-slide>
@@ -34,8 +32,7 @@
             @click="sortButtonActivated"
         >
           {{ $t('food') }}
-          <ion-icon slot="start"
-                    :icon="pieChart"></ion-icon>
+          <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
       </ion-slide>
       <ion-slide>
@@ -46,8 +43,7 @@
             @click="sortButtonActivated"
         >
           {{ $t('popular') }}
-          <ion-icon slot="start"
-                    :icon="pieChart"></ion-icon>
+          <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
       </ion-slide>
     </ion-slides>
@@ -87,6 +83,10 @@ export default defineComponent({
   setup(props, { emit }) {
     /* Component properties */
     let activeSlidingButton = ref('distance');
+    const slideOpts = {
+      freeMode: true,
+      slidesPerView: 2.7,
+    };
 
     /* Event handlers */
     const sortButtonActivated = (event) => {
@@ -97,6 +97,7 @@ export default defineComponent({
     return {
       /* Component properties */
       activeSlidingButton,
+      slideOpts,
 
       /* Event listeners */
       sortButtonActivated,
@@ -111,9 +112,6 @@ export default defineComponent({
 <style scoped>
 ion-button {
   height: 30px;
-}
-
-ion-slide {
-  margin-left: -4px !important;
+  width: 113px;
 }
 </style>

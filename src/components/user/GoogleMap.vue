@@ -1,10 +1,10 @@
 <template>
-  <div id="cafeMapModal" class="absolute bottom-0 w-full ion-padding">
+  <div ref="content" class="absolute bottom-0 w-full ion-padding">
     <div class="ml-4 mt-8 text-center">
       <h1 class="main-toolbar-heading text-xl">{{ cafe.name }}</h1>
     </div>
 
-    <div id="map" class="mx-4 my-2">
+    <div ref="map" id="map" class="mx-4 my-2">
     </div>
 
     <div class="ml-4 mt-6 text-center">
@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
-import { loadingController }               from '@ionic/vue';
+import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
+import { loadingController }                            from '@ionic/vue';
 
 import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-native';
 
@@ -42,6 +42,8 @@ export default defineComponent({
     /* Component properties */
     let mapContainerBoundingRect = null;
     let distance = ref(0);
+    let map = ref(null);
+    let content = ref(null);
 
     /* Methods */
     const { t } = useI18n({ useScope: 'global' });
@@ -59,10 +61,11 @@ export default defineComponent({
             message: t('loading'),
           });
       await loading.present();
-      await sleep(350);
+      await sleep(400);
 
 
-      mapContainerBoundingRect = document.getElementById('map').getBoundingClientRect();
+      mapContainerBoundingRect = map.value?.getBoundingClientRect();
+
       try {
         await CapacitorGoogleMaps.create({
           width: mapContainerBoundingRect.width - 4,
@@ -83,9 +86,8 @@ export default defineComponent({
         loading.dismiss();
       }
 
-      const height = document.querySelector('#cafeMapModal').getClientRects()[0].height;
+      const height = content.value?.getBoundingClientRect().height ?? 420;
       document.querySelector('.custom-map-modal .modal-wrapper').style.height = height + 'px';
-
 
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
         distance.value = Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude));
@@ -112,18 +114,21 @@ export default defineComponent({
 
       loading.dismiss();
     });
+    onUnmounted(() => {
+      CapacitorGoogleMaps.close();
+    });
 
     return {
+      /* Component properties */
+      map,
+      content,
       distance,
     };
-  },
-  unmounted() {
-    CapacitorGoogleMaps.close();
   },
 });
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 #map {
   height: 300px;
   border: 1px solid black;

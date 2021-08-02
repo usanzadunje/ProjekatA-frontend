@@ -6,7 +6,7 @@
       </ion-button>
     </ion-item>
 
-    <ion-slides id="imagePreviewSlider" ref="slides">
+    <ion-slides ref="imagePreviewSlider" :options="slideOpts">
       <ion-slide v-for="i in imgCount" :key="i">
         <div v-if="imgCount !== 1" class="swiper-zoom-container">
           <img
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
 import {
   IonContent,
   IonItem,
@@ -36,14 +37,13 @@ import {
   IonSlides,
   IonSlide,
   modalController,
-} from '@ionic/vue';
+}                         from '@ionic/vue';
 
 import {
   close,
   add,
   remove,
-}                         from 'ionicons/icons';
-import { onMounted, ref } from 'vue';
+} from 'ionicons/icons';
 
 export default {
   name: 'ImagePreviewModal',
@@ -67,7 +67,7 @@ export default {
   },
   setup() {
     /* Component properties */
-    const slides = ref(null);
+    const imagePreviewSlider = ref(null);
     const slideOpts = {
       zoom: {
         maxRatio: 2,
@@ -77,16 +77,15 @@ export default {
 
     /* Lifecycle hooks */
     onMounted(() => {
-      const slides = document.getElementById("imagePreviewSlider");
+      imagePreviewSlider?.value?.$el.update();
       setTimeout(() => {
-        slides.options = slideOpts;
-        slides.update();
-      }, 150);
+        imagePreviewSlider?.value?.$el.update();
+      }, 500);
     });
 
     /* Event handlers */
     const zoom = async(zoomIn) => {
-      let swiper = await slides?.value?.$el.getSwiper();
+      let swiper = await imagePreviewSlider?.value?.$el.getSwiper();
       if(zoomIn) {
         swiper.zoom.in();
       }else {
@@ -100,7 +99,7 @@ export default {
 
     return {
       /* Component properties */
-      slides,
+      imagePreviewSlider,
       slideOpts,
       userClickedToZoom,
 

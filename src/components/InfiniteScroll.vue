@@ -3,7 +3,7 @@
     <ion-refresher pull-max="0" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
       <ion-refresher-content
           :pulling-text="$t('refresherPulling')"
-          refreshing-spinner="lines"
+          refreshing-spinner="crescent"
           :refreshing-text="$t('refresherText')"
       >
       </ion-refresher-content>
@@ -33,7 +33,7 @@
   >
     <ion-infinite-scroll-content
         class="mt-6"
-        loading-spinner="lines"
+        loading-spinner="crescent"
         :loading-text="$t('refresherText')">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
@@ -41,24 +41,22 @@
 
 <script>
 import { defineComponent, ref, watch, toRefs, onMounted } from 'vue';
-
-import { useStore } from 'vuex';
-
+import { useStore }                                       from 'vuex';
+import { useI18n }                                        from 'vue-i18n';
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonRefresher,
   IonRefresherContent,
-} from '@ionic/vue';
+}                                                         from '@ionic/vue';
+
+import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
+import CafeCard              from '@/components/user/CafeCard';
+import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
 import CafeService from '@/services/CafeService';
 
-import FilterCategoryHeading     from '@/components/user/FilterCategoryHeading';
-import CafeCard                  from '@/components/user/CafeCard';
-import SkeletonCafeCard          from '@/components/user/SkeletonCafeCard';
-
 import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useI18n }               from 'vue-i18n';
 import { useGeolocation }        from '@/composables/useGeolocation';
 
 export default defineComponent({
@@ -82,24 +80,24 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['scrollToTop', 'openCafeModal'],
+  emits: ['scrollToTop', 'openCafeModal', 'infiniteScrollActive'],
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
     /* Component properties */
     // All non filtered cafes
-    let cafes = ref([]);
+    const cafes = ref([]);
     // Initial 20 cafes that are shown when no filters are applied
     let initial20Cafes = null;
     // Search term for filtering records
-    let { cafeSearchString } = toRefs(props);
+    const { cafeSearchString } = toRefs(props);
     // Term for sorting records in specific order
-    let { sortBy } = toRefs(props);
+    const { sortBy } = toRefs(props);
     // From which number on to take cafe records
     let cafeStart = 0;
     // Property to enable / disable loading infinite scroll animation and action
-    let isInfiniteScrollDisabled = ref(false);
-    let showSkeleton = ref(true);
+    const isInfiniteScrollDisabled = ref(false);
+    const showSkeleton = ref(true);
 
     /* Lifecycle hooks */
     //*Before mounting fetching initial 20 cafes to show
@@ -153,11 +151,15 @@ export default defineComponent({
       )
                  .then((response) => {
                    // There are no more records
-                   if(!response.data) return;
+                   if(response.data === 'false') {
+                     isInfiniteScrollDisabled.value = true;
+                     return;
+                   }
                    if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
                    cafes.value = cafes.value.concat(response.data);
                  })
                  .catch((error) => {
+                   isInfiniteScrollDisabled.value = true;
                    if(error.response && error.response.status !== 404) {
                      showErrorToast(
                          null,
@@ -249,9 +251,11 @@ export default defineComponent({
 
     /* Event handlers */
     const loadData = (ev) => {
+      emit('infiniteScrollActive');
       setTimeout(() => {
         loadMoreCafes();
         ev.target.complete();
+        emit('infiniteScrollActive');
       }, 300);
     };
 

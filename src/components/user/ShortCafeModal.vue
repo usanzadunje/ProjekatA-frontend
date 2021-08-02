@@ -1,6 +1,6 @@
 <template>
   <ion-content>
-    <div id="shortCafeModal" class="absolute bottom-0 w-full ion-padding">
+    <div ref="content" class="absolute bottom-0 w-full ion-padding">
       <ion-item class="ion-item-no-padding-x">
         <ion-thumbnail slot="start">
           <img
@@ -17,7 +17,7 @@
 
       <CafeInfoBody :cafe="cafe"/>
       <ion-item class="mt-6 ion-no-padding">
-        <ion-slides id="gallerySlider" :options="slideOpts">
+        <ion-slides ref="gallerySlider" :options="slideOpts">
           <ion-slide v-for="i in [1,2,3]" :key="i">
             <img
                 :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
@@ -67,13 +67,9 @@
 
 <script>
 import { defineComponent, ref, toRef, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter }                                           from 'vue-router';
+import { useStore }                                                      from 'vuex';
 import { Capacitor }                                                     from '@capacitor/core';
-
-
-import { useRoute, useRouter } from 'vue-router';
-
-import { useStore } from 'vuex';
-
 import {
   IonContent,
   IonThumbnail,
@@ -84,20 +80,19 @@ import {
   IonSlide,
   IonModal,
   modalController,
-} from '@ionic/vue';
-
-import CafeService from '@/services/CafeService';
+}                                                                        from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
 import ImagePreviewModal     from '@/components/user/ImagePreviewModal';
+
+import CafeService from '@/services/CafeService';
 
 import {
   notifications,
   notificationsOutline,
 
 } from 'ionicons/icons';
-
 
 export default defineComponent({
   name: 'ShortCafeModal',
@@ -128,30 +123,30 @@ export default defineComponent({
 
     /* Component properties */
     const slideOpts = {
-      initialSlide: 0,
-      speed: 500,
       slidesPerView: 2.2,
     };
     const isModalOpen = ref(false);
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
     const isSubDisabled = ref(true);
+    const gallerySlider = ref(null);
+    const content = ref(null);
 
-    //Auth prop
+    /* Computed properties */
     const loggedIn = computed(() => store.getters['auth/loggedIn']);
 
     /* Lifecycle hooks */
     isSubDisabled.value = Capacitor.getPlatform() === 'web' || !loggedIn.value;
 
     onMounted(() => {
-      const slides = document.getElementById("gallerySlider");
-      setTimeout(() => {
-        slides.options = slideOpts;
-        slides.update();
+      gallerySlider?.value?.$el.update();
 
-        const height = document.querySelector('#shortCafeModal').getClientRects()[0].height;
+      setTimeout(() => {
+        const height = content.value?.getBoundingClientRect()?.height ?? 420;
         document.querySelector('.custom-modal .modal-wrapper').style.height = height + 'px';
-      }, 300);
+
+        gallerySlider?.value?.$el.update();
+      }, 500);
     });
 
     onUnmounted(() => {
@@ -188,12 +183,12 @@ export default defineComponent({
       /* Component properties */
       slideOpts,
       isSubDisabled,
-
-      /* Component properties */
       isModalOpen,
       isUserSubscribed,
+      gallerySlider,
+      content,
 
-      /* Auth prop*/
+      /* Computed properties */
       loggedIn,
 
       /* Event handlers */

@@ -10,23 +10,23 @@
       <ion-refresher pull-min="45" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             :pulling-text="$t('refresherPulling')"
-            refreshing-spinner="lines"
+            refreshing-spinner="crescent"
             :refreshing-text="$t('refresherText')"
         >
         </ion-refresher-content>
       </ion-refresher>
       <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
-      <ion-slides v-show="!showSkeleton" :options="slideOpts" class="homeSlider">
+      <ion-slides v-show="!showSkeleton" :options="slideOpts">
         <ion-slide>
           <HomeSlidingCafeCards
-              :cafes="cafes.closestToUserCafes.slice(0, 2)"
+              :cafes="cafes.closestToUser.slice(0, 2)"
               @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
         </ion-slide>
         <ion-slide>
           <HomeSlidingCafeCards
-              :cafes="cafes.closestToUserCafes.slice(2, 4)"
+              :cafes="cafes.closestToUser.slice(2, 4)"
               @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
@@ -39,17 +39,17 @@
       </div>
 
       <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
-      <ion-slides v-show="!showSkeleton" :options="slideOpts" class="homeSlider">
+      <ion-slides v-show="!showSkeleton" :options="slideOpts">
         <ion-slide>
           <HomeSlidingCafeCards
-              :cafes="cafes.currentlyAvailableCafes.slice(0, 2)"
+              :cafes="cafes.currentlyAvailable.slice(0, 2)"
               @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
         </ion-slide>
         <ion-slide>
           <HomeSlidingCafeCards
-              :cafes="cafes.currentlyAvailableCafes.slice(0, 2)"
+              :cafes="cafes.currentlyAvailable.slice(2, 4)"
               @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
@@ -57,17 +57,17 @@
       </ion-slides>
 
       <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
-      <ion-slides v-show="!showSkeleton" :options="slideOpts" class="homeSlider">
+      <ion-slides v-show="!showSkeleton" :options="slideOpts">
         <ion-slide>
           <HomeSlidingCafeCards
-              :cafes="cafes.foodCafes.slice(0, 2)"
+              :cafes="cafes.haveFood.slice(0, 2)"
               @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
         </ion-slide>
         <ion-slide>
           <HomeSlidingCafeCards
-              :cafes="cafes.foodCafes.slice(0, 2)"
+              :cafes="cafes.haveFood.slice(2, 4)"
               @openCafeModal="openModal(true, $event)"
               class="pr-3"
           />
@@ -97,10 +97,10 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, watch, onMounted } from 'vue';
-
-import { useRouter } from 'vue-router';
-
+import { defineComponent, ref, reactive, onMounted } from 'vue';
+import { useRouter, useRoute }                       from 'vue-router';
+import { useStore }                                  from 'vuex';
+import { useI18n }                                   from 'vue-i18n';
 import {
   IonContent,
   IonPage,
@@ -109,7 +109,8 @@ import {
   IonSlide,
   IonRefresher,
   IonRefresherContent,
-} from '@ionic/vue';
+  onIonViewDidEnter,
+}                                                    from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
 
@@ -119,12 +120,10 @@ import HomeSlidingCafeCards  from '@/components/user/HomeSlidingCafeCards';
 import ShortCafeModal        from '@/components/user/ShortCafeModal';
 import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
-import { notificationsOutline }  from 'ionicons/icons';
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useGeolocation }        from '@/composables/useGeolocation';
 
-import { useI18n }        from 'vue-i18n';
-import { useGeolocation } from '@/composables/useGeolocation';
-import { useStore }       from 'vuex';
+import { notificationsOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'Home',
@@ -148,59 +147,31 @@ export default defineComponent({
       return { path: to.path, query: {}, hash: to.hash };
     }
   },
-  ionViewDidEnter() {
-    let shouldOpenModal = !!this.$route.query.openModal;
-    this.openModal(shouldOpenModal);
-
-    const slides = document.getElementsByClassName("homeSlider");
-    setTimeout(() => {
-      slides.forEach((slide) => {
-        slide.options = this.slideOpts;
-        slide.update();
-      });
-    }, 200);
-  },
   setup() {
     /* Global properties */
     const router = useRouter();
+    const route = useRoute();
     const store = useStore();
 
     /* Component properties */
     const slideOpts = {
-      initialSlide: 0,
-      speed: 300,
       slidesPerView: 1.1,
     };
-    // Cafes closest to user
-    let cafes = reactive({
-      currentlyAvailableCafes: [],
-      closestToUserCafes: [],
-      foodCafes: [],
+    const cafes = reactive({
+      currentlyAvailable: [],
+      closestToUser: [],
+      haveFood: [],
     });
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
     const modalCafe = ref({});
-    let showSkeleton = ref(true);
+    const showSkeleton = ref(true);
 
     /* Methods */
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
-
-    /* Watchers needed instead of mounted lifecycle hook because there is skeleton text showing */
-    watch(showSkeleton, (newValue) => {
-      if(!newValue) {
-        const slides = document.getElementsByClassName("homeSlider");
-        setTimeout(() => {
-          slides.forEach((slide) => {
-            slide.options = slideOpts;
-            slide.update();
-          });
-        }, 300);
-      }
-    });
-
 
     /* Lifecycle hooks */
     // Because getting lat and lng takes long tame wait for it to happen and then hit API with correct lat and lng values
@@ -212,7 +183,7 @@ export default defineComponent({
             store.getters['global/position'].latitude,
             store.getters['global/position'].longitude,
         ).then((response) => {
-          cafes.closestToUserCafes = response.data;
+          cafes.closestToUser = response.data;
 
           unsubscribeWatcher();
         }).catch(() => {
@@ -226,6 +197,8 @@ export default defineComponent({
     });
     //Before fetching cafes by distance get location and then pass it to query string in API call to backend
     onMounted(async() => {
+      openModal(true);
+      openModal(false);
       Promise.all([
         CafeService.getCafeCardsChunkInfo(
             0, 4,
@@ -241,8 +214,8 @@ export default defineComponent({
             store.getters['global/position'].longitude,
         ),
       ]).then((response) => {
-        cafes.currentlyAvailableCafes = response[0].data;
-        cafes.foodCafes = response[1].data;
+        cafes.currentlyAvailable = response[0].data;
+        cafes.haveFood = response[1].data;
 
         showSkeleton.value = false;
       }).catch(() => {
@@ -253,7 +226,9 @@ export default defineComponent({
             });
       });
     });
-
+    onIonViewDidEnter(() => {
+      openModal(!!route.query.openModal);
+    });
 
     /* Event handlers */
     const openModal = (state, cafe = null) => {
@@ -299,9 +274,9 @@ export default defineComponent({
             store.getters['global/position'].longitude,
         ),
       ]).then((response) => {
-        cafes.closestToUserCafes = response[0].data;
-        cafes.currentlyAvailableCafes = response[1].data;
-        cafes.foodCafes = response[2].data;
+        cafes.closestToUser = response[0].data;
+        cafes.currentlyAvailable = response[1].data;
+        cafes.haveFood = response[2].data;
 
         event.target.complete();
       }).catch(() => {
