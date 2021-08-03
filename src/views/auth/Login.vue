@@ -23,7 +23,7 @@ import { IonPage, IonContent } from '@ionic/vue';
 import LoginForm from '@/components/auth/LoginForm';
 
 export default defineComponent({
-  name: "Login",
+  name: "EditForm",
   components: {
     LoginForm,
     IonPage,

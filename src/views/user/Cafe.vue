@@ -154,6 +154,7 @@ export default defineComponent({
     /* Component properties */
     let cafe = ref({});
     const isUserSubscribed = ref(false);
+    let searchTab = null;
 
     // Auth prop
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
@@ -191,15 +192,16 @@ export default defineComponent({
                      });
                });
     onIonViewWillEnter(() => {
-      document.getElementById('tab-button-search').style.color = '#207DFF';
-
-      document.querySelector('ion-tabs').style.setProperty("background-color", "var(--show-paint)", "important");
+      searchTab = document.getElementById('tab-button-search');
+      if(searchTab) {
+        searchTab.style.color = '#207DFF';
+      }
     });
 
     onIonViewWillLeave(() => {
-      document.getElementById('tab-button-search').style.color = '';
-
-      document.querySelector('ion-tabs').style.setProperty("background-color", "var(--primary-paint)", "important");
+      if(searchTab) {
+        searchTab.style.colorr = '';
+      }
     });
     /* Checking if user is subscribed to this cafe */
     if(loggedIn.value) {
@@ -269,10 +271,6 @@ ion-toolbar {
   --background: var(--show-paint);
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
-}
-
-ion-item {
-  --border-style: none !important;
 }
 
 ion-content {

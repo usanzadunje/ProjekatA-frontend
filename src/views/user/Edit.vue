@@ -1,79 +1,92 @@
-<!--test template-->
 <template>
   <ion-page>
     <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Edit</ion-title>
+      <ion-toolbar mode="ios">
+        <ion-buttons slot="start">
+          <ion-back-button
+              mode="ios"
+              defaultHref="/dashboard"
+              :text="$t('back')"
+              :icon="chevronBackOutline">
+            >
+          </ion-back-button>
+        </ion-buttons>
+        <ion-title mode="ios">{{ $t('updateProfile') }}</ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <!--      <ion-item-->
-      <!--          lines="none"-->
-      <!--          class="border rounded-2xl h-12 auth-input-background"-->
-      <!--          :class="{ 'error-border' : errorNames.hasOwnProperty('fname') }"-->
-      <!--      >-->
-      <!--        <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>-->
-      <!--        <ion-input-->
-      <!--            v-model.lazy="newUser.fname"-->
-      <!--            autocomplete="given-name"-->
-      <!--            type="text"-->
-      <!--            inputmode="text"-->
-      <!--            debounce="600"-->
-      <!--            placeholder="Ime"-->
-      <!--            autofocus required-->
-      <!--        ></ion-input>-->
-      <!--      </ion-item>-->
-      <!--      <ion-item-->
-      <!--          lines="none"-->
-      <!--          class="border rounded-2xl h-12 mt-3.5 auth-input-background"-->
-      <!--          :class="{ 'error-border' : errorNames.hasOwnProperty('lname') }"-->
-      <!--      >-->
-      <!--        <ion-icon :icon="personOutline" class="mr-2 text-black"></ion-icon>-->
-      <!--        <ion-input-->
-      <!--            v-model.lazy="newUser.lname"-->
-      <!--            autocomplete="family-name"-->
-      <!--            type="text"-->
-      <!--            inputmode="text"-->
-      <!--            debounce="600"-->
-      <!--            placeholder="Prezime"-->
-      <!--            required-->
-      <!--        ></ion-input>-->
-      <!--      </ion-item>-->
+      <EditForm/>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-// import EditForm                                             from "@/components/EditForm";
+import { defineComponent } from 'vue';
 import {
   IonPage,
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonContent,
+  IonButtons,
+  IonTitle,
+  IonBackButton,
   onIonViewWillEnter,
   onIonViewWillLeave,
-} from '@ionic/vue';
+}                          from '@ionic/vue';
 
-export default {
+import EditForm from '@/components/user/EditForm';
+
+import { arrowBackOutline, chevronBackOutline } from 'ionicons/icons';
+
+export default defineComponent({
   name: "Edit",
   components: {
     IonPage,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
-    // EditForm
+    IonButtons,
+    IonTitle,
+    IonBackButton,
+    EditForm,
   },
   setup() {
+    /* Component properties */
+    let settingsTab = null;
+    /* Lifecycle hooks */
     onIonViewWillEnter(() => {
-      document.getElementById('tab-button-settings').style.color = '#207DFF';
+      settingsTab = document.getElementById('tab-button-settings');
+      if(settingsTab) {
+        settingsTab.style.color = '#207DFF';
+      }
+    });
+    onIonViewWillLeave(() => {
+      if(settingsTab) {
+        settingsTab.style.color = '';
+      }
     });
 
-    onIonViewWillLeave(() => {
-      document.getElementById('tab-button-settings').style.color = '';
-    });
+    return {
+      /* Icons */
+      arrowBackOutline,
+      chevronBackOutline,
+    };
   },
-};
+});
 </script>
+<style scoped>
+ion-toolbar {
+  --background: var(--show-paint);
+  border-bottom-left-radius: unset !important;
+  border-bottom-right-radius: unset !important;
+}
+
+ion-content {
+  --background: var(--show-paint);
+}
+
+ion-title {
+  --color: var(--primary-heading)
+}
+</style>

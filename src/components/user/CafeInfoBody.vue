@@ -1,8 +1,8 @@
 <template>
-  <ion-item class="flex items-center ion-item-no-padding-x mt-2 md margin-top-reset">
-    <ion-icon :icon="pieChart" class="mr-2 text-yellow-400"></ion-icon>
+  <div class="flex justify-start items-center py-2 ion-item-no-padding-x mt-2 ">
+    <ion-icon :icon="pieChart" class="mr-2 text-yellow-400" style="font-size: 25px"></ion-icon>
     <span class="modal-cafe-text-medium lowercase">{{ cafe.taken_capacity }} - {{ $t('free') }}</span>
-  </ion-item>
+  </div>
   <hr class="card-horizontal-ruler mt-1">
   <div class="flex justify-between items-center">
     <div class="flex">
@@ -46,7 +46,6 @@ import { defineComponent } from 'vue';
 import {
   IonIcon,
   IonButton,
-  IonItem,
   IonModal,
 } from '@ionic/vue';
 
@@ -69,7 +68,6 @@ export default defineComponent({
   components: {
     IonIcon,
     IonButton,
-    IonItem,
     IonModal,
     GoogleMap,
   },

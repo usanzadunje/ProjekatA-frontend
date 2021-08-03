@@ -58,4 +58,14 @@ export default {
     "checking": "Checking",
     "undo": "Undo",
     "noSettingsText": "How should we call you?",
+    "updateProfile": "Update your profile",
+    "fname": "First name",
+    "lname": "Last name",
+    "username": "Username",
+    "birthday": "Birthday",
+    "phone": "Phone",
+    "update": "Update",
+    "selectDate": "Select date",
+    "done": "Done",
+
 };

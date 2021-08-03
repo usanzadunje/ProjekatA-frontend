@@ -58,5 +58,14 @@ export default {
     "checking": "Proveravam",
     "undo": "Ponisti",
     "noSettingsText": "Kako da vas zovemo?",
+    "updateProfile": "Izmenite svoj profil",
+    "fname": "Ime",
+    "lname": "Prezime",
+    "username": "Korisnicko ime",
+    "birthday": "Rodjendan",
+    "phone": "Telefon",
+    "update": "Izmeni",
+    "selectDate": "Izaberite datum",
+    "done": "Gotovo",
 };
 
