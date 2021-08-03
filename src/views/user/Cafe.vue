@@ -91,12 +91,9 @@
 
 <script>
 import { defineComponent, ref, computed, watch } from 'vue';
-
-import { useStore } from 'vuex';
-
-import { useRoute } from 'vue-router';
-
-
+import { useStore }                              from 'vuex';
+import { useRoute }                              from 'vue-router';
+import { useI18n }                               from 'vue-i18n';
 import {
   IonPage,
   IonHeader,
@@ -106,15 +103,18 @@ import {
   IonIcon,
   IonButton,
   IonModal, modalController,
-} from '@ionic/vue';
+}                                                from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import AccordionList         from '@/components/user/AccordionList';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
+import ImagePreviewModal     from '@/components/user/ImagePreviewModal';
 
 import CafeService from '@/services/CafeService';
 
+import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useModal }              from '@/composables/useModal';
 import {
   arrowBackOutline,
   notifications,
@@ -124,9 +124,7 @@ import {
   beerOutline,
 }
                                  from 'ionicons/icons';
-import ImagePreviewModal         from '@/components/user/ImagePreviewModal';
-import { useI18n }               from 'vue-i18n';
-import { useToastNotifications } from '@/composables/useToastNotifications';
+
 
 export default defineComponent({
   name: "Cafe",
@@ -160,29 +158,21 @@ export default defineComponent({
     /* Global properties */
     const route = useRoute();
     const store = useStore();
+    const { t } = useI18n();
 
     /* Component properties */
     let cafe = ref({});
-    const isModalOpen = ref(false);
-    const isMapModalOpen = ref(false);
     const isUserSubscribed = ref(false);
 
     // Auth prop
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
 
 
-    /* Methods */
-    const { t } = useI18n();
+    /* Composables */
     const { showErrorToast } = useToastNotifications();
+    const { isModalOpen, openModal } = useModal();
 
     /* Event handlers */
-    const openModal = (state, isMapModal = false) => {
-      if(isMapModal) {
-        isMapModalOpen.value = state;
-      }else {
-        isModalOpen.value = state;
-      }
-    };
     const openPreview = async(id, imgCount) => {
       const modal = await modalController
           .create({
@@ -249,7 +239,6 @@ export default defineComponent({
       /* Component properties */
       cafe,
       isModalOpen,
-      isMapModalOpen,
       isUserSubscribed,
 
       //Auth prop

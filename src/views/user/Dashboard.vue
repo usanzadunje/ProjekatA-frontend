@@ -100,7 +100,8 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 import {
   trashOutline,
-} from 'ionicons/icons';
+}                   from 'ionicons/icons';
+import { useModal } from '@/composables/useModal';
 
 
 export default defineComponent({
@@ -136,15 +137,14 @@ export default defineComponent({
     // Cafes user is subscribed to
     const cafesUserSubscribedTo = ref([]);
     const sortBy = ref('distance');
-    // Showing/Hiding modal based on this property value
-    const isModalOpen = ref(false);
-    // Cafe which information is sent to modal
-    const modalCafe = ref({});
     const showSkeleton = ref(true);
 
-    /* Methods */
+    /* Composables */
     const { showUndoToast, showSuccessToast, showErrorToast } = useToastNotifications();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
+
+    /* Methods */
     const refresh = async(event) => {
       await checkForLocationPermission();
       await tryGettingLocation();
@@ -178,9 +178,6 @@ export default defineComponent({
             store.getters['global/position'].longitude,
         );
         cafesUserSubscribedTo.value = response.data;
-
-        openModal(true, response.data[0]);
-        openModal(false);
       }catch(error) {
         showErrorToast(
             null,
@@ -256,12 +253,6 @@ export default defineComponent({
           });
       await alert.present();
     };
-    const openModal = async(state, cafe = null) => {
-      if(cafe) {
-        modalCafe.value = cafe;
-      }
-      isModalOpen.value = state;
-    };
 
     const unsubscribe = async(cafeId) => {
       try {
@@ -308,11 +299,6 @@ export default defineComponent({
               pushNotificationPermission: t('dataFetchingError'),
             });
       }
-    };
-    const hideModal = () => {
-      const modal = document.querySelector('.custom-modal > .modal-wrapper');
-
-      modal.style.height = 0;
     };
 
     return {

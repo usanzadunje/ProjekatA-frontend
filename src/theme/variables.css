@@ -102,6 +102,10 @@ http://ionicframework.com/docs/theming/ */
 
     --search-color: #000000;
 
+    --short-modal-height: 420px;
+    --sub-modal-height: 320px;
+    --map-modal-height: 460px;
+
     /**
       END CUSTOM COLOR SCHEME
    **/

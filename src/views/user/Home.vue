@@ -122,6 +122,7 @@ import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
+import { useModal }             from '@/composables/useModal';
 
 import { notificationsOutline } from 'ionicons/icons';
 
@@ -162,16 +163,14 @@ export default defineComponent({
       closestToUser: [],
       haveFood: [],
     });
-    // Showing/Hiding modal based on this property value
-    const isModalOpen = ref(false);
-    // Cafe which information is sent to modal
-    const modalCafe = ref({});
+
     const showSkeleton = ref(true);
 
-    /* Methods */
+    /* Composables */
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
 
     /* Lifecycle hooks */
     // Because getting lat and lng takes long tame wait for it to happen and then hit API with correct lat and lng values
@@ -213,7 +212,7 @@ export default defineComponent({
         ),
       ]).then((response) => {
         openModal(true, response[0].data[0]);
-        openModal(false);
+        // openModal(false);
 
         cafes.currentlyAvailable = response[0].data;
         cafes.haveFood = response[1].data;
@@ -232,17 +231,6 @@ export default defineComponent({
     });
 
     /* Event handlers */
-    const openModal = (state, cafe = null) => {
-      if(cafe) {
-        modalCafe.value = cafe;
-      }
-      isModalOpen.value = state;
-    };
-    const hideModal = () => {
-      const modal = document.querySelector('.custom-modal > .modal-wrapper');
-
-      modal.style.height = 0;
-    };
     const switchToSearch = (e) => {
       router.push({ path: 'search', query: { searchTerm: e.target.value } });
       //Clearing search input after leaving page

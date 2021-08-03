@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import {
   IonIcon,
@@ -60,7 +60,9 @@ import {
 }
   from 'ionicons/icons';
 
-import GoogleMap from '@/components/user/GoogleMap';
+import GoogleMap    from '@/components/user/GoogleMap';
+
+import { useModal } from '@/composables/useModal';
 
 export default defineComponent({
   name: "CafeInfoBody",
@@ -78,12 +80,10 @@ export default defineComponent({
     },
   },
   setup() {
-    const isModalOpen = ref(false);
 
-    /* Event handlers */
-    const openModal = (state) => {
-      isModalOpen.value = state;
-    };
+    /* Composables */
+    const { isModalOpen, openModal } = useModal();
+
 
     return {
       /* Component properties */

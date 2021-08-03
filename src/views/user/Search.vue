@@ -57,6 +57,8 @@ import SlidingFilter  from '@/components/user/SlidingFilter';
 import InfiniteScroll from '@/components/InfiniteScroll';
 import ShortCafeModal from '@/components/user/ShortCafeModal';
 
+import { useModal }                from '@/composables/useModal';
+
 import { notificationsOffOutline } from 'ionicons/icons';
 
 
@@ -83,10 +85,9 @@ export default defineComponent({
     const scrollTopOffset = ref(0);
     const prevScrollDirectionDown = ref(false);
     const infiniteScrollLoadingActive = ref(false);
-    // Showing/Hiding modal based on this property value
-    const isModalOpen = ref(false);
-    // Cafe which information is sent to modal
-    const modalCafe = ref({});
+
+    /* Composables */
+    const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
@@ -137,17 +138,6 @@ export default defineComponent({
 
       scrollTopOffset.value = event.detail.currentY;
       prevScrollDirectionDown.value = currentScrollDirectionDown;
-    };
-    const openModal = (state, cafe = null) => {
-      if(cafe) {
-        modalCafe.value = cafe;
-      }
-      isModalOpen.value = state;
-    };
-    const hideModal = () => {
-      const modal = document.querySelector('.custom-modal > .modal-wrapper');
-
-      modal.style.height = 0;
     };
 
     /* Methods */

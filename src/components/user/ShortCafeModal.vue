@@ -140,11 +140,11 @@ export default defineComponent({
 
     onMounted(() => {
       gallerySlider?.value?.$el.update();
-
       setTimeout(() => {
         const height = content.value?.getBoundingClientRect()?.height ?? 420;
-        document.querySelector('.custom-modal .modal-wrapper').style.height = height + 'px';
-
+        document.documentElement.style.setProperty('--short-modal-height', height + 'px');
+        console.log(getComputedStyle(document.documentElement)
+            .getPropertyValue('--short-modal-height'));
         gallerySlider?.value?.$el.update();
       }, 400);
     });

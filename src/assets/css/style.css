@@ -78,17 +78,17 @@ ion-modal ion-item {
 }
 
 .custom-modal {
-    --height: 420px;
+    --height: var(--short-modal-height);
     --border-radius: 20px 20px 0 0;
 }
 
 .custom-sub-modal {
-    --height: 320px;
+    --height: var(--sub-modal-height);
     --border-radius: 20px 20px 0 0;
 }
 
 .custom-map-modal {
-    --height: 460px;
+    --height: var(--map-modal-height);
     --background: var(--secondary-paint) !important;
     --border-radius: 20px 20px 0 0;
 }
