@@ -57,7 +57,7 @@ import SlidingFilter  from '@/components/user/SlidingFilter';
 import InfiniteScroll from '@/components/InfiniteScroll';
 import ShortCafeModal from '@/components/user/ShortCafeModal';
 
-import { useModal }                from '@/composables/useModal';
+import { useModal } from '@/composables/useModal';
 
 import { notificationsOffOutline } from 'ionicons/icons';
 
@@ -118,7 +118,6 @@ export default defineComponent({
     const pullAnimation = async(event) => {
       let currentScrollDirectionDown = event.detail.currentY > scrollTopOffset.value;
       const header = document.querySelector('#header');
-
       if(
           event.detail.currentY <= 0 ||
           event.detail.currentY === scrollTopOffset.value ||

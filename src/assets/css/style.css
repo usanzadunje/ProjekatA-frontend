@@ -78,6 +78,7 @@ ion-modal ion-item {
 }
 
 .custom-modal {
+    visibility: visible;
     --height: var(--short-modal-height);
     --border-radius: 20px 20px 0 0;
 }

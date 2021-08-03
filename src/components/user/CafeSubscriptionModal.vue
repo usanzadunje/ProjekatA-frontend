@@ -172,8 +172,6 @@ export default defineComponent({
       setTimeout(() => {
         const height = content.value?.getBoundingClientRect()?.height ?? 320;
         document.documentElement.style.setProperty('--sub-modal-height', height + 'px');
-        console.log(getComputedStyle(document.documentElement)
-            .getPropertyValue('--sub-modal-height'));
       }, 400);
     });
 

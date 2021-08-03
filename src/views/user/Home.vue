@@ -122,7 +122,7 @@ import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
-import { useModal }             from '@/composables/useModal';
+import { useModal }              from '@/composables/useModal';
 
 import { notificationsOutline } from 'ionicons/icons';
 
@@ -211,9 +211,6 @@ export default defineComponent({
             store.getters['global/position'].longitude,
         ),
       ]).then((response) => {
-        openModal(true, response[0].data[0]);
-        // openModal(false);
-
         cafes.currentlyAvailable = response[0].data;
         cafes.haveFood = response[1].data;
 

@@ -90,8 +90,6 @@ export default defineComponent({
 
       const height = content.value?.getBoundingClientRect().height ?? 460;
       document.documentElement.style.setProperty('--map-modal-height', height + 'px');
-      console.log(getComputedStyle(document.documentElement)
-          .getPropertyValue('--map-modal-height'));
 
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
         distance.value = Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude));

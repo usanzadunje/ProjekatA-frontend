@@ -1,6 +1,6 @@
 <template>
   <ion-content>
-    <div ref="content" class="absolute bottom-0 w-full ion-padding">
+    <div id="short-modal" class="absolute bottom-0 w-full ion-padding">
       <ion-item class="ion-item-no-padding-x">
         <ion-thumbnail slot="start">
           <img
@@ -66,10 +66,10 @@
 </template>
 
 <script>
-import { defineComponent, ref, toRef, computed, onMounted, onUnmounted } from 'vue';
-import { useRoute, useRouter }                                           from 'vue-router';
-import { useStore }                                                      from 'vuex';
-import { Capacitor }                                                     from '@capacitor/core';
+import { defineComponent, ref, toRef, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter }                                 from 'vue-router';
+import { useStore }                                            from 'vuex';
+import { Capacitor }                                           from '@capacitor/core';
 import {
   IonContent,
   IonThumbnail,
@@ -80,7 +80,7 @@ import {
   IonSlide,
   IonModal,
   modalController,
-}                                                                        from '@ionic/vue';
+}                                                              from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
@@ -130,22 +130,20 @@ export default defineComponent({
     const cafe = toRef(props, 'cafe');
     const isSubDisabled = ref(true);
     const gallerySlider = ref(null);
-    const content = ref(null);
 
     /* Computed properties */
-    const loggedIn = computed(() => store.getters['auth/loggedIn']);
 
     /* Lifecycle hooks */
-    isSubDisabled.value = Capacitor.getPlatform() === 'web' || !loggedIn.value;
+    isSubDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
 
     onMounted(() => {
       gallerySlider?.value?.$el.update();
+
       setTimeout(() => {
-        const height = content.value?.getBoundingClientRect()?.height ?? 420;
-        document.documentElement.style.setProperty('--short-modal-height', height + 'px');
-        console.log(getComputedStyle(document.documentElement)
-            .getPropertyValue('--short-modal-height'));
         gallerySlider?.value?.$el.update();
+
+        const height = document.getElementById('short-modal').getBoundingClientRect()?.height ?? 420;
+        document.documentElement.style.setProperty('--short-modal-height', height + 'px');
       }, 400);
     });
 
@@ -155,12 +153,14 @@ export default defineComponent({
       }
     });
     /* Checking if user is subscribed to this cafe */
-    if(loggedIn.value) {
+    if(store.getters['auth/loggedIn']) {
       CafeService.isUserSubscribed(cafe.value.id)
                  .then((response) => {
                    isUserSubscribed.value = !!response.data;
                  })
-                 .catch((error) => alert(error));
+                 .catch(() => {
+                   isUserSubscribed.value = false;
+                 });
     }
 
     /* Event handlers */
@@ -186,10 +186,8 @@ export default defineComponent({
       isModalOpen,
       isUserSubscribed,
       gallerySlider,
-      content,
 
       /* Computed properties */
-      loggedIn,
 
       /* Event handlers */
       openModal,
