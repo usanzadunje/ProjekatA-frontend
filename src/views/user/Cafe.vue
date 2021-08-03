@@ -102,7 +102,10 @@ import {
   IonContent,
   IonIcon,
   IonButton,
-  IonModal, modalController,
+  IonModal,
+  modalController,
+  onIonViewWillEnter,
+  onIonViewWillLeave,
 }                                                from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
@@ -141,18 +144,6 @@ export default defineComponent({
     FilterCategoryHeading,
     AccordionList,
     CafeSubscriptionModal,
-  },
-  ionViewWillEnter() {
-    setTimeout(() => {
-      document.getElementById('tab-button-search').style.color = '#207DFF';
-
-      document.querySelector('ion-tabs').style.setProperty("background-color", "var(--show-paint)", "important");
-    }, 200);
-  },
-  ionViewWillLeave() {
-    document.getElementById('tab-button-search').style.color = '';
-
-    document.querySelector('ion-tabs').style.setProperty("background-color", "var(--primary-paint)", "important");
   },
   setup() {
     /* Global properties */
@@ -199,6 +190,17 @@ export default defineComponent({
                        generalError: t('dataFetchingError'),
                      });
                });
+    onIonViewWillEnter(() => {
+      document.getElementById('tab-button-search').style.color = '#207DFF';
+
+      document.querySelector('ion-tabs').style.setProperty("background-color", "var(--show-paint)", "important");
+    });
+
+    onIonViewWillLeave(() => {
+      document.getElementById('tab-button-search').style.color = '';
+
+      document.querySelector('ion-tabs').style.setProperty("background-color", "var(--primary-paint)", "important");
+    });
     /* Checking if user is subscribed to this cafe */
     if(loggedIn.value) {
       CafeService.isUserSubscribed(route.params.id)

@@ -211,6 +211,8 @@ export default defineComponent({
             store.getters['global/position'].longitude,
         ),
       ]).then((response) => {
+        openModal(true, response[0].data[0]);
+        openModal(false);
         cafes.currentlyAvailable = response[0].data;
         cafes.haveFood = response[1].data;
 

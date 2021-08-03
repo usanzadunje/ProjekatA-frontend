@@ -75,11 +75,11 @@ const routes = [
         component: UserLayout,
         children: [
             {
-                path: "",
+                path: "/",
                 redirect: "/home",
             },
             {
-                path: "home",
+                path: "/home",
                 name: "home",
                 component: () => import(/* webpackChunkName: "Home" */ "../views/user/Home"),
             },
@@ -90,7 +90,7 @@ const routes = [
                     import(/* webpackChunkName: "Cafe" */ "../views/user/Cafe"),
             },
             {
-                path: "search",
+                path: "/search",
                 name: "search",
                 component: () => import(/* webpackChunkName: "Search" */ "../views/user/Search"),
                 props: true,
@@ -106,6 +106,12 @@ const routes = [
                 name: "settings",
                 meta: { middleware: [auth] },
                 component: () => import(/* webpackChunkName: "Settings" */ "../views/user/Settings"),
+            },
+            {
+                path: "/edit",
+                name: "edit",
+                meta: { middleware: [auth] },
+                component: () => import(/* webpackChunkName: "Edit" */ "../views/user/Edit"),
             },
         ],
     },
@@ -128,13 +134,13 @@ const routes = [
         meta: { middleware: [auth, staff] },
         children: [
             {
-                path: "tables",
+                path: "/tables",
                 name: "staff.tables",
                 component: () =>
                     import(/* webpackChunkName: "TableStaff" */ "../views/staff/Tables"),
             },
             {
-                path: "home",
+                path: "/home",
                 name: "staff.home",
                 component: () =>
                     import(/* webpackChunkName: "HomeStaff" */ "../views/staff/Home"),

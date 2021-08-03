@@ -1,10 +1,10 @@
 <template>
   <ion-header class="ion-no-border">
     <ion-toolbar>
-      <div class="px-4 py-3 mt-3 mb-3">
+      <div class="px-4 py-3 mt-3 mb-3 relative">
         <div class="flex justify-between">
           <p class="user-profile-header-heading mt-1">{{ $t('profile') }}</p>
-          <ion-button fill="clear" routerLink="/settings">
+          <ion-button fill="clear" @click="openSettingsPopover($event)">
             <ion-icon
                 slot="icon-only"
                 :icon="settingsOutline"
@@ -23,8 +23,8 @@
           <div class="ml-3 mt-3 user-profile-user-name">
             <h2 class="user-profile-user-name">{{ authUser.full_name }}</h2>
             <p v-if="authUser.username" class="user-profile-username">{{ authUser.username }}</p>
-            <a v-if="!authUser.username" @click="$router.push({ name: 'settings' })" class="user-profile-username underline lowercase">
-              {{ $t('setUsername') }}
+            <a v-else @click="$router.push({ name: 'edit' })" class="user-profile-username underline lowercase">
+              {{ $t('noSettingsText') }}
             </a>
           </div>
         </div>
@@ -42,7 +42,10 @@ import {
   IonIcon,
   IonToolbar,
   IonButton,
+  popoverController,
 }                     from '@ionic/vue';
+
+import SettingsPopover from '@/components/user/popovers/SettingsPopover';
 
 import {
   settingsOutline,
@@ -61,14 +64,31 @@ export default defineComponent({
   },
   emits: ['searchFilterChanged'],
   setup(props, { emit }) {
+    /* Component properties */
+
     /* Event handlers */
     const searchInputChanged = (e) => {
       emit('searchFilterChanged', e.target.value);
     };
+    const openSettingsPopover = async(event) => {
+      const popover = await popoverController
+          .create({
+            component: SettingsPopover,
+            cssClass: 'custom-popover',
+            event: event,
+            translucent: true,
+            showBackdrop: false,
+            mode: 'ios',
+          });
+      await popover.present();
+    };
 
     return {
+      /* Component properties */
+
       /* Event handlers */
       searchInputChanged,
+      openSettingsPopover,
 
       /* Icons */
       settingsOutline,

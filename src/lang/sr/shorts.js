@@ -57,5 +57,6 @@ export default {
     "loggingOut": "Odjavljujem se...",
     "checking": "Proveravam",
     "undo": "Ponisti",
+    "noSettingsText": "Kako da vas zovemo?",
 };
 

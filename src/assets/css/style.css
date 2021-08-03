@@ -109,6 +109,9 @@ ion-modal ion-item {
     bottom: 0 !important;
 }
 
+.custom-popover{
+}
+
 .undo-toast {
     --color: #FFF;
     --background: #222428;

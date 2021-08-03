@@ -8,11 +8,10 @@
     </div>
     <div class="absolute left-8 bottom-8 w-5/6">
       <ion-button
-          routerLink="/"
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-white"
-          @click="$emit('nextSlide')"
+          @click="$router.replace({ name: 'home' });"
       >
         <div class="w-full flex flex-row justify-between">
           <div class="mt-1">{{ $t('continue') }}</div>

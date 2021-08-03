@@ -208,7 +208,7 @@ export default defineComponent({
       await tryGettingLocation();
       // Only after both cafe arrays have been updated then complete refresher
       // Fetching 4 cafes in each category with new live data
-      
+
       document.querySelector('#header').classList.remove('hide-header')
 
       CafeService.getCafeCardsChunkInfo(

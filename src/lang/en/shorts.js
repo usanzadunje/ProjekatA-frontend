@@ -57,4 +57,5 @@ export default {
     "loggingOut": "Logging out...",
     "checking": "Checking",
     "undo": "Undo",
+    "noSettingsText": "How should we call you?",
 };
