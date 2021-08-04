@@ -47,7 +47,7 @@
             <AccordionList
                 class="accordion-list-border-top"
                 :title="$t('drinksCard')"
-                :items="cafe.offerings?.filter(offer => offer.tag === 'pice')"
+                :items="cafe.offerings?.filter(offer => offer.tag === 'drink')"
                 :icon="beerOutline"
             />
             <AccordionList
@@ -90,8 +90,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, watch } from 'vue';
-import { useStore }                              from 'vuex';
+import { defineComponent, ref, computed, watch, onMounted } from 'vue';
+import { useStore }                                         from 'vuex';
 import { useRoute }                              from 'vue-router';
 import { useI18n }                               from 'vue-i18n';
 import {
@@ -156,13 +156,58 @@ export default defineComponent({
     const isUserSubscribed = ref(false);
     let searchTab = null;
 
-    // Auth prop
+    /* Computed properties */
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
-
 
     /* Composables */
     const { showErrorToast } = useToastNotifications();
     const { isModalOpen, openModal } = useModal();
+
+    /* Lifecycle hooks */
+    /* Fetching cafe from backend */
+    onMounted(() => {
+      getCafe();
+      if(loggedIn.value) {
+        try {
+          const response = CafeService.isUserSubscribed(route.params.id);
+
+          isUserSubscribed.value = !!response.data;
+        }catch(error) {
+          showErrorToast(
+              null,
+              {
+                generalError: t('dataFetchingError'),
+              });
+        }
+      }
+    })
+    onIonViewWillEnter(() => {
+      searchTab = document.getElementById('tab-button-search');
+      if(searchTab) {
+        searchTab.style.color = '#207DFF';
+      }
+    });
+    onIonViewWillLeave(() => {
+      if(searchTab) {
+        searchTab.style.color = '';
+      }
+    });
+
+    /* Methods */
+    const getCafe = async() => {
+      try {
+        const response = await CafeService.show(route.params.id);
+
+        cafe.value = response.data;
+      }catch(error) {
+        showErrorToast(
+            null,
+            {
+              generalError: t('dataFetchingError'),
+            });
+      }
+    };
+
 
     /* Event handlers */
     const openPreview = async(id, imgCount) => {
@@ -178,62 +223,12 @@ export default defineComponent({
       return modal.present();
     };
 
-    /* Lifecycle hooks */
-    /* Fetching cafe from backend */
-    CafeService.show(route.params.id)
-               .then((response) => {
-                 cafe.value = response.data;
-               })
-               .catch(() => {
-                 showErrorToast(
-                     null,
-                     {
-                       generalError: t('dataFetchingError'),
-                     });
-               });
-    onIonViewWillEnter(() => {
-      searchTab = document.getElementById('tab-button-search');
-      if(searchTab) {
-        searchTab.style.color = '#207DFF';
-      }
-    });
-
-    onIonViewWillLeave(() => {
-      if(searchTab) {
-        searchTab.style.colorr = '';
-      }
-    });
-    /* Checking if user is subscribed to this cafe */
-    if(loggedIn.value) {
-      CafeService.isUserSubscribed(route.params.id)
-                 .then((response) => {
-                   isUserSubscribed.value = !!response.data;
-                 })
-                 .catch(() => {
-                   showErrorToast(
-                       null,
-                       {
-                         generalError: t('dataFetchingError'),
-                       });
-                 });
-    }
-
 
     /* Watchers */
     // Watching for changes of id parameter in cafe show route and fetching right data
-    watch(route, () => {
+    watch(route, async() => {
       if(route.name === 'cafe' && route.params.id) {
-        CafeService.show(route.params.id)
-                   .then((response) => {
-                     cafe.value = response.data;
-                   })
-                   .catch(() => {
-                     showErrorToast(
-                         null,
-                         {
-                           generalError: t('dataFetchingError'),
-                         });
-                   });
+        getCafe();
       }
     });
 
@@ -245,7 +240,7 @@ export default defineComponent({
       isModalOpen,
       isUserSubscribed,
 
-      //Auth prop
+      /* Computed properties */
       loggedIn,
 
       /* Event handlers */

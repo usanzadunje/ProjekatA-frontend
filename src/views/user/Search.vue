@@ -19,7 +19,7 @@
           :sortBy="sortBy"
           @scrollToTop="scrollToTop"
           @openCafeModal="openModal(true, $event)"
-          @infiniteScrollActive="infiniteScrollLoadingActive = !infiniteScrollLoadingActive"
+          @infiniteScrollToggle="infiniteScrollLoading = !infiniteScrollLoading"
       />
 
       <ion-modal
@@ -84,7 +84,7 @@ export default defineComponent({
     const sortBy = ref('distance');
     const scrollTopOffset = ref(0);
     const prevScrollDirectionDown = ref(false);
-    const infiniteScrollLoadingActive = ref(false);
+    const infiniteScrollLoading = ref(false);
 
     /* Composables */
     const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
@@ -116,13 +116,15 @@ export default defineComponent({
       sortBy.value = sortValue;
     };
     const pullAnimation = async(event) => {
+      if(infiniteScrollLoading.value){
+        return;
+      }
       let currentScrollDirectionDown = event.detail.currentY > scrollTopOffset.value;
       const header = document.querySelector('#header');
       if(
           event.detail.currentY <= 0 ||
           event.detail.currentY === scrollTopOffset.value ||
-          currentScrollDirectionDown === prevScrollDirectionDown.value ||
-          infiniteScrollLoadingActive.value
+          currentScrollDirectionDown === prevScrollDirectionDown.value
       ) {
         scrollTopOffset.value = event.detail.currentY;
 
@@ -153,7 +155,7 @@ export default defineComponent({
       content,
       isModalOpen,
       modalCafe,
-      infiniteScrollLoadingActive,
+      infiniteScrollLoading,
 
       /* Event handlers */
       searchFilterChanged,

@@ -33,18 +33,18 @@
 
 <script>
 import { defineComponent, computed } from 'vue';
-
 import {
   IonIcon,
-} from '@ionic/vue';
+}                                    from '@ionic/vue';
+
+import CafeService from '@/services/CafeService';
 
 import {
   locationOutline,
   pieChart,
   fastFoodOutline,
   leafOutline,
-}                  from 'ionicons/icons';
-import CafeService from '@/services/CafeService';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: 'CafeCard',

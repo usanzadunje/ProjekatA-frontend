@@ -56,9 +56,8 @@
 
 <script>
 import { defineComponent, ref, toRef, onMounted } from 'vue';
-
-import { useStore } from 'vuex';
-
+import { useStore }                               from 'vuex';
+import { useI18n }                                from 'vue-i18n';
 import {
   IonContent,
   IonItem,
@@ -68,20 +67,18 @@ import {
   IonRange,
   IonLabel,
   alertController,
-} from '@ionic/vue';
+}                                                 from '@ionic/vue';
+
+import { useStorage } from '@/services/StorageService';
+import CafeService    from '@/services/CafeService';
+
+import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useFCM }                from '@/composables/useFCM';
 
 import {
   notifications,
   notificationsOutline,
 } from 'ionicons/icons';
-
-import { useStorage } from '@/services/StorageService';
-
-import CafeService               from '@/services/CafeService';
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useFCM }                from '@/composables/useFCM';
-
-import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'CafeSubscriptionModal',
@@ -113,10 +110,26 @@ export default defineComponent({
     const cafe = toRef(props, 'cafe');
     const content = ref(null);
 
-    /* Methods */
+    /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
-    const { get, set } = useStorage();
     const { initPush } = useFCM();
+
+    /* Methods */
+    const { get, set } = useStorage();
+    const subscribe = async(cafeId) => {
+      try {
+        await CafeService.subscribe(cafeId, notificationTime.value);
+        isUserSubscribed.value = true;
+        emit('userToggledSubscription');
+        await showSuccessToast(t('successSubscribe'));
+      }catch(error) {
+        showErrorToast(
+            null,
+            {
+              generalError: t('generalAlertError'),
+            });
+      }
+    };
     const showAlert = async(cafeId) => {
       const alert = await alertController
           .create({
@@ -130,24 +143,10 @@ export default defineComponent({
               },
               {
                 text: t('yes'),
-                handler: () => {
+                handler: async() => {
                   set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
-                  initPush();
-                  CafeService.subscribe(cafeId, notificationTime.value)
-                             .then(async(response) => {
-                               if(response.data) {
-                                 isUserSubscribed.value = true;
-                                 emit('userToggledSubscription');
-                                 await showSuccessToast(t('successSubscribe'));
-                               }
-                             })
-                             .catch(() => {
-                               showErrorToast(
-                                   null,
-                                   {
-                                     generalError: t('generalAlertError'),
-                                   });
-                             });
+                  await initPush();
+                  await subscribe(cafeId);
                 },
               },
             ],
@@ -181,49 +180,32 @@ export default defineComponent({
     };
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
     const toggleSubscription = async(cafeId) => {
-      let pushNotificationPermission = await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`) ?? false;
+      const pushNotificationPermission = await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`) ?? false;
 
       if(indefiniteTimerActive.value) {
         notificationTime.value = null;
       }
 
       if(isUserSubscribed.value) {
-        CafeService.unsubscribe(cafeId)
-                   .then(async(response) => {
-                     if(response.data) {
-                       isUserSubscribed.value = false;
-                       emit('userToggledSubscription');
-                       emit('userUnsubscribed');
-                       await showSuccessToast(t('successUnsubscribe'));
-                     }
-                   })
-                   .catch(() => {
-                     showErrorToast(
-                         null,
-                         {
-                           generalError: t('generalAlertError'),
-                         });
-                   });
+        try {
+          await CafeService.unsubscribe(cafeId);
+          isUserSubscribed.value = false;
+          emit('userToggledSubscription');
+          emit('userUnsubscribed');
+          await showSuccessToast(t('successUnsubscribe'));
+        }catch(error) {
+          showErrorToast(
+              null,
+              {
+                generalError: t('generalAlertError'),
+              });
+        }
       }else {
         if(!pushNotificationPermission) {
           await showAlert(cafeId);
           return;
         }
-        CafeService.subscribe(cafeId, notificationTime.value)
-                   .then(async(response) => {
-                     if(response.data) {
-                       isUserSubscribed.value = true;
-                       emit('userToggledSubscription');
-                       await showSuccessToast(t('successSubscribe'));
-                     }
-                   })
-                   .catch(() => {
-                     showErrorToast(
-                         null,
-                         {
-                           generalError: t('generalAlertError'),
-                         });
-                   });
+        await subscribe();
       }
 
     };

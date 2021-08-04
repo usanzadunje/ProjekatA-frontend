@@ -6,6 +6,8 @@ export default {
     "remember": "Remember me",
     "forget": "Forgot password?",
     "login": "Login",
+    "successLogin": "Successfully logged in!",
+    "successUpdate": "Successfully updated profile information!",
     "register": "Register",
     "continue": "Continue",
     "hello": "Hello",
@@ -67,5 +69,6 @@ export default {
     "update": "Update",
     "selectDate": "Select date",
     "done": "Done",
+    "unknown": "Unknown",
 
 };

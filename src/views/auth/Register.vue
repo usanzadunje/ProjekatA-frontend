@@ -20,10 +20,9 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { IonPage, IonContent } from '@ionic/vue';
 
 import RegisterForm from "@/components/auth/RegisterForm";
-
-import { IonPage, IonContent } from '@ionic/vue';
 
 export default defineComponent({
   name: "Register",

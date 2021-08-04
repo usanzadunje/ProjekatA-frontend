@@ -18,7 +18,6 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-
 import {
   IonIcon,
 } from '@ionic/vue';

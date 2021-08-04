@@ -56,7 +56,7 @@
             :cafe="modalCafe"
             @dismissShortCafeModal="openModal(false)"
             @subModalOpened="hideModal"
-            @userUnsubscribed="updateSubscriptions"
+            @userUnsubscribed="getSubscriptions"
         />
       </ion-modal>
 
@@ -95,13 +95,13 @@ import CafeService from '@/services/CafeService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
+import { useModal }              from '@/composables/useModal';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 import {
   trashOutline,
-}                   from 'ionicons/icons';
-import { useModal } from '@/composables/useModal';
+} from 'ionicons/icons';
 
 
 export default defineComponent({
@@ -144,53 +144,21 @@ export default defineComponent({
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
 
-    /* Methods */
-    const refresh = async(event) => {
-      await checkForLocationPermission();
-      await tryGettingLocation();
-      // Only after both cafe arrays have been updated then complete refresher
-      // Fetching 4 cafes in each category with new live data
-      try {
-        const response = await CafeService.getAllCafesUserSubscribedTo(
-            sortBy.value,
-            store.getters['global/position'].latitude,
-            store.getters['global/position'].longitude,
-        );
-        cafesUserSubscribedTo.value = response.data;
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              pushNotificationPermission: t('dataFetchingError'),
-            });
-      }finally {
-        event.target.complete();
-      }
-    };
-
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
     onMounted(async() => {
-      try {
-        const response = await CafeService.getAllCafesUserSubscribedTo(
-            sortBy.value,
-            store.getters['global/position'].latitude,
-            store.getters['global/position'].longitude,
-        );
-        cafesUserSubscribedTo.value = response.data;
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              pushNotificationPermission: t('dataFetchingError'),
-            });
-      }finally {
-        showSkeleton.value = false;
-      }
+      await getSubscriptions();
+      showSkeleton.value = false;
     });
     onIonViewDidEnter(async() => {
       openModal(!!route.query.openModal);
       // Everytime user comes to the page give him view of fresh cafes he has subscribed to
+      await getSubscriptions();
+      showSkeleton.value = false;
+    });
+
+    /* Methods */
+    const getSubscriptions = async() => {
       try {
         const response = await CafeService.getAllCafesUserSubscribedTo(
             sortBy.value,
@@ -204,10 +172,18 @@ export default defineComponent({
             {
               pushNotificationPermission: t('dataFetchingError'),
             });
-      }finally {
-        showSkeleton.value = false;
       }
-    });
+    };
+    const refresh = async(event) => {
+      if(sortBy.value === 'distance') {
+        await checkForLocationPermission();
+      }
+      await tryGettingLocation();
+
+      await getSubscriptions();
+
+      event.target.complete();
+    };
 
     /* Event handlers */
     const sortHasChanged = async(sortValue) => {
@@ -216,20 +192,7 @@ export default defineComponent({
         await checkForLocationPermission();
       }
       await tryGettingLocation();
-      try {
-        const response = CafeService.getAllCafesUserSubscribedTo(
-            sortValue,
-            store.getters['global/position'].latitude,
-            store.getters['global/position'].longitude,
-        );
-        cafesUserSubscribedTo.value = response.data;
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              pushNotificationPermission: t('dataFetchingError'),
-            });
-      }
+      await getSubscriptions();
     };
     const showAlert = async(cafeId) => {
       const alert = await alertController
@@ -257,8 +220,10 @@ export default defineComponent({
     const unsubscribe = async(cafeId) => {
       try {
         await CafeService.unsubscribe(cafeId);
-        cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter(cafe => cafe.id !== cafeId);
-      }catch(e) {
+        cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter((cafe) => {
+          return cafe.id !== cafeId;
+        });
+      }catch(error) {
         showErrorToast(
             null,
             {
@@ -280,26 +245,11 @@ export default defineComponent({
                 generalError: t('generalAlertError'),
               });
         }finally {
-          await updateSubscriptions();
+          await getSubscriptions();
         }
       });
     };
-    const updateSubscriptions = async() => {
-      try {
-        const response = await CafeService.getAllCafesUserSubscribedTo(
-            sortBy.value,
-            store.getters['global/position'].latitude,
-            store.getters['global/position'].longitude,
-        );
-        cafesUserSubscribedTo.value = response.data;
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              pushNotificationPermission: t('dataFetchingError'),
-            });
-      }
-    };
+
 
     return {
       /* Component properties */
@@ -313,7 +263,7 @@ export default defineComponent({
       sortHasChanged,
       showAlert,
       openModal,
-      updateSubscriptions,
+      getSubscriptions,
       hideModal,
       refresh,
       unsubscribeSwiping,

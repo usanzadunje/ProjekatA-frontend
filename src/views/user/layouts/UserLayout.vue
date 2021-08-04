@@ -31,19 +31,16 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-
+import { defineComponent }     from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
-import { mapGetters } from 'vuex';
-
+import { mapGetters }          from 'vuex';
 import {
   IonIcon,
   IonPage,
   IonTabBar,
   IonTabButton,
   IonTabs,
-} from '@ionic/vue';
+}                              from '@ionic/vue';
 
 import {
   homeOutline,
@@ -71,12 +68,13 @@ export default defineComponent({
 
     /* Event handlers */
     const clearRedirectQuery = () => {
-      if(route.query.redirect){
+      if(route.query.redirect) {
         router.replace();
       }
     };
 
     return {
+      /* Event handlers */
       clearRedirectQuery,
 
       /* Icons from */

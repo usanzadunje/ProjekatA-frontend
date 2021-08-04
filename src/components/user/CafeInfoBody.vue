@@ -49,6 +49,10 @@ import {
   IonModal,
 } from '@ionic/vue';
 
+import GoogleMap from '@/components/user/GoogleMap';
+
+import { useModal } from '@/composables/useModal';
+
 import {
   pieChart,
   locationOutline,
@@ -58,10 +62,6 @@ import {
 
 }
   from 'ionicons/icons';
-
-import GoogleMap    from '@/components/user/GoogleMap';
-
-import { useModal } from '@/composables/useModal';
 
 export default defineComponent({
   name: "CafeInfoBody",

@@ -26,7 +26,7 @@ export function useToastNotifications() {
     //Generating classic notification toast
     const showUndoToast = async(message, callback) => {
         const toast = await toastController.create({
-            duration: 300000,
+            duration: 3000,
             message: message,
             cssClass: 'undo-toast',
             mode: 'ios',

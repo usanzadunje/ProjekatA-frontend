@@ -16,13 +16,16 @@
           <div>
             <img
                 :src="`${authUser.avatar ?? backendStorageURL + '/user/profile-test.png'}`"
-                alt="Profile picture of user {{ authUser.full_name }}"
+                alt="Profile picture of user {{ `${authUser.fname} ${authUser.lname}` }}"
                 class="user-profile-picture"
             >
           </div>
           <div class="ml-3 mt-3 user-profile-user-name">
-            <h2 class="user-profile-user-name">{{ authUser.full_name }}</h2>
-            <p v-if="authUser.username" class="user-profile-username">{{ authUser.username }}</p>
+            <div v-if="authUser.username || authUser.fname || authUser.lname">
+              <h2 v-if="authUser.fname || authUser.lname" class="user-profile-user-name">
+                {{ `${authUser.fname ?? ''} ${authUser.lname ?? ''}` }}</h2>
+              <p v-if="authUser.username" class="user-profile-username">{{ authUser.username }}</p>
+            </div>
             <a v-else @click="$router.push({ name: 'edit' })" class="user-profile-username underline lowercase">
               {{ $t('noSettingsText') }}
             </a>
@@ -35,15 +38,14 @@
 
 <script>
 import { defineComponent } from 'vue';
-
-import { mapGetters } from 'vuex';
+import { mapGetters }      from 'vuex';
 import {
   IonHeader,
   IonIcon,
   IonToolbar,
   IonButton,
   popoverController,
-}                     from '@ionic/vue';
+}                          from '@ionic/vue';
 
 import SettingsPopover from '@/components/user/popovers/SettingsPopover';
 

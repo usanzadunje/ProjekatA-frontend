@@ -6,6 +6,8 @@ export default {
     "remember": "Zapamti me",
     "forget": "Zaboravljena lozinka?",
     "login": "Prijavi se",
+    "successLogin": "Uspesno ste se ulogovali!",
+    "successUpdate": "Uspesno ste izmenili podatke!",
     "register": "Registruj se",
     "continue": "Nastavi dalje",
     "hello": "Ćao",
@@ -67,5 +69,6 @@ export default {
     "update": "Izmeni",
     "selectDate": "Izaberite datum",
     "done": "Gotovo",
+    "unknown": "Neznanac",
 };
 

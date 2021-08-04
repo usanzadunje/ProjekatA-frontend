@@ -8,7 +8,7 @@ export default {
         return API.apiClient.get(`/cafes`);
     },
     // Getting cafes in chunks
-    async getCafeCardsChunkInfo(
+    getCafeCardsChunkInfo(
         start = 0,
         numberOfCafes = 20,
         filter = '',
@@ -33,7 +33,7 @@ export default {
         );
     },
     // Getting only one specific cafe
-    async show(id) {
+    show(id) {
         // Only getting
         return API.apiClient.get(
             `/cafes/${id}`,
@@ -47,23 +47,23 @@ export default {
     // Subscribing user to specific cafe
     subscribe(cafeId, notificationTime = null) {
         if(notificationTime) {
-            return API.apiClient.post(`/users/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime}`);
+            return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime}`);
         }else {
-            return API.apiClient.post(`/users/subscribe/cafe/${cafeId}/notify-in-next/`);
+            return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/`);
         }
     },
     // Unsubscribing user to specific cafe
     unsubscribe(cafeId) {
-        return API.apiClient.post(`/users/unsubscribe/cafe/${cafeId}`);
+        return API.apiClient.post(`/user/unsubscribe/cafe/${cafeId}`);
     },
     // Checking whether user is subscribed to specific cafe
     isUserSubscribed(cafeId) {
-        return API.apiClient.post(`/users/subscribed/cafe/${cafeId}`);
+        return API.apiClient.post(`/user/subscribed/cafe/${cafeId}`);
     },
     // Listing all cafes user is subscribed to
-    async getAllCafesUserSubscribedTo(sortBy = 'default', latitude = 0, longitude = 0) {
+    getAllCafesUserSubscribedTo(sortBy = 'default', latitude = 0, longitude = 0) {
         return API.apiClient.get(
-            `/users/cafes/subscriptions`,
+            `/user/cafes/subscriptions`,
             {
                 params: {
                     sortBy,

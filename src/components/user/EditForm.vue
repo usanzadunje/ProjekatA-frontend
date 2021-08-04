@@ -87,7 +87,7 @@
       <ion-input
           ref="phoneInput"
           v-model="user.phone"
-          @keyup.enter="bdayInput.$el?.setFocus()"
+          @keyup.enter="update"
           type="tel"
           debounce="600"
           :placeholder="$t('phone')"
@@ -101,7 +101,7 @@
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-white relative"
-          @click="login"
+          @click="update"
       >
         {{ loading ? $t('checking') : $t('update') }}
         <ion-spinner v-if="loading" name="crescent" class="absolute right-0"></ion-spinner>
@@ -109,7 +109,7 @@
       <ion-button
           :disabled="loading"
           fill="clear"
-          routerLink="/register"
+          routerLink="/dashboard"
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
@@ -122,16 +122,9 @@
 
 <script>
 import { defineComponent, ref, reactive, onMounted } from 'vue';
-
-import { useRouter } from 'vue-router';
-
-import store from '@/store/index';
-
-import { Keyboard } from '@capacitor/keyboard';
-
-
-import { getError, sleep } from "@/utils/helpers";
-
+import { useRouter }                                 from 'vue-router';
+import { useStore }                                  from 'vuex';
+import { useI18n }                                   from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -141,11 +134,15 @@ import {
   IonDatetime,
   IonLabel,
 }
-  from "@ionic/vue";
+                                                     from "@ionic/vue";
 
 import AuthService from "@/services/AuthService";
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
+
+import { getError, sleep } from "@/utils/helpers";
+
+import { Keyboard } from '@capacitor/keyboard';
 
 import {
   mailOutline,
@@ -169,6 +166,8 @@ export default defineComponent({
   setup() {
     /* Global properties and methods */
     const router = useRouter();
+    const store = useStore();
+    const { t } = useI18n();
 
     /* Component properties */
     let user = reactive({});
@@ -185,36 +184,38 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     onMounted(async() => {
-      user.bday = '1997-07-21';
+      user.fname = store.getters['auth/authUser'].fname;
+      user.lname = store.getters['auth/authUser'].lname;
+      user.username = store.getters['auth/authUser'].username;
+      user.email = store.getters['auth/authUser'].email;
+      user.bday = store.getters['auth/authUser'].bday;
+      user.phone = store.getters['auth/authUser'].phone;
     });
 
-    /* Methods */
+    /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
 
     /* Event handlers */
-    const login = () => {
-      user.bday = user.bday.slice(0, 10)
+    const update = async() => {
+      if(user.bday) {
+        user.bday = user.bday.slice(0, 10);
+      }
       loading.value = true;
       Keyboard.hide();
       // Napraviti update metoduy u service
-      AuthService.login(user)
-                 .then(async() => {
-                   await store.dispatch("auth/getAuthUser");
-                   let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
-                   user.email = '';
-                   user.password = '';
-                   await router.replace(homeRoute);
-                   await showSuccessToast('Successfully logged in!');
-                   loading.value = false;
-                 })
-                 .catch(async(errors) => {
-                   errorNames.value = getError(errors);
-                   await showErrorToast(errors);
-                   loading.value = false;
-                   await sleep(Object.keys(errorNames.value).length * 900);
-                   errorNames.value = {};
-                 });
-
+      try {
+        await AuthService.updateUser(user);
+        await store.dispatch("auth/getAuthUser");
+        showSuccessToast(t('successUpdate'));
+        await router.push({ name: 'dashboard' });
+      }catch(errors) {
+        errorNames.value = getError(errors);
+        await showErrorToast(errors);
+        await sleep(Object.keys(errorNames.value).length * 900);
+        errorNames.value = {};
+      }finally {
+        loading.value = false;
+      }
     };
     const togglePasswordShow = () => {
       showPassword.value = !showPassword.value;
@@ -235,7 +236,7 @@ export default defineComponent({
       loading,
 
       /* Event handlers  */
-      login,
+      update,
       togglePasswordShow,
 
       /* Icons */

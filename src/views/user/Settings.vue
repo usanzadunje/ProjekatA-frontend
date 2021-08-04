@@ -28,6 +28,12 @@
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
+        <ion-item class="ion-item-padding-right" routerLink="/dashboard">
+          <p class="settings-item-text">{{ $t('profile') }}</p>
+          <ion-button fill="clear" slot="end" routerLink="/dashboard">
+            <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
+          </ion-button>
+        </ion-item>
         <ion-item class="ion-item-padding-right">
           <p class="settings-item-text">{{ $t('notifications') }}</p>
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
@@ -77,9 +83,9 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-
-import { useStore } from 'vuex';
-
+import { useStore }             from 'vuex';
+import { useI18n }              from 'vue-i18n';
+import { getLanguages }         from '@/lang';
 import {
   IonContent,
   IonPage,
@@ -90,22 +96,19 @@ import {
   IonButton,
   pickerController,
   onIonViewWillEnter, loadingController,
-} from '@ionic/vue';
+}                               from '@ionic/vue';
+
+import AuthService from '@/services/AuthService';
+
+import { useStorage }            from '@/services/StorageService';
+import { useFCM }                from '@/composables/useFCM';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
   flash,
   chevronForward,
   rocket,
 } from 'ionicons/icons';
-
-import AuthService    from '@/services/AuthService';
-import { useStorage } from '@/services/StorageService';
-
-import { useFCM } from '@/composables/useFCM';
-
-import { useI18n } from 'vue-i18n';
-
-import { getLanguages } from '@/lang';
 
 export default defineComponent({
   name: 'Settings',
@@ -131,35 +134,26 @@ export default defineComponent({
     const { set, get } = useStorage();
     const { t, locale } = useI18n({ useScope: 'global' });
     const { initPush } = useFCM();
+    const { showErrorToast } = useToastNotifications();
 
 
     /* Lifecycle hooks */
     //Setting toggle checked attribute to whatever user choose and is persisted in storage
     //for notifications
-    onIonViewWillEnter(() => {
-      get(`areNotificationsOn.${store.getters['auth/authUser'].id}`)
-          .then((response) => {
-            areNotificationsOn.value = !!response;
-          })
-          .catch(() => {
-            areNotificationsOn.value = false;
-          });
+    onIonViewWillEnter(async() => {
+      try {
+        areNotificationsOn.value = !!await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`);
+        isDarkModeOn.value = !!await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`);
+        const storedLang = await get(`localization.${store.getters['auth/authUser'].id}`);
+        language.value = storedLang.text;
+      }catch(e) {
+        areNotificationsOn.value = false;
+        isDarkModeOn.value = false;
+        language.value = 'SRB';
+      }
+
+      document.body.style.setProperty('--ion-item-background', '#F1C2B');
     });
-    get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
-        .then((response) => {
-          isDarkModeOn.value = !!response;
-        })
-        .catch(() => {
-          isDarkModeOn.value = false;
-        });
-    get(`localization.${store.getters['auth/authUser'].id}`)
-        .then((response) => {
-          language.value = response.text ?? 'SRB';
-        })
-        .catch(() => {
-          language.value = 'SRB';
-        });
-    document.body.style.setProperty('--ion-item-background', '#F1C2B');
 
     /* Event handlers */
     const toggleDarkMode = (e) => {
@@ -172,24 +166,24 @@ export default defineComponent({
       isDarkModeOn.value = e.target.checked;
       document.body.classList.toggle('dark', e.target.checked);
     };
-    const toggleNotifications = (e) => {
+    const toggleNotifications = async(e) => {
       if(!e.target.checked) {
         /* Remove FCM token thus disabling notifications */
-        AuthService.removeFcmToken()
-                   .then((response) => {
-                     if(response.data) {
-                       //Remembering user decision for future usage
-                       set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, false);
-                     }
-                   })
-                   .catch((error) => {
-                     alert(error);
-                   });
-
+        try {
+          const response = await AuthService.removeFcmToken();
+          if(response && response.data) {
+            set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, false);
+          }
+        }catch(error) {
+          showErrorToast(
+              null,
+              {
+                pushNotificationPermission: t('generalAlertError'),
+              });
+        }
       }else {
-        //Remembering user decision for future usage
         set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
-        let noPermission = initPush();
+        const noPermission = await initPush();
         if(noPermission) {
           e.target.disabled = true;
           e.target.checked = false;

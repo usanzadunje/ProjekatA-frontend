@@ -79,17 +79,9 @@
 
 <script>
 import { defineComponent, ref, reactive, onMounted } from 'vue';
-
-import { useRouter } from 'vue-router';
-
-import store from '@/store/index';
-
-import { Device }   from '@capacitor/device';
-import { Keyboard } from '@capacitor/keyboard';
-
-
-import { getError, sleep } from "@/utils/helpers";
-
+import { useRouter }                                 from 'vue-router';
+import { useStore }                                  from 'vuex';
+import { useI18n } from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -101,19 +93,24 @@ import {
 }
   from "@ionic/vue";
 
-import AuthService from "@/services/AuthService";
-
 import SocialIcons from '@/components/social/SocialIcons';
 
+import AuthService from "@/services/AuthService";
+
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useStorage }            from '@/services/StorageService';
+
+import { getError, sleep } from "@/utils/helpers";
+
+import { Device }   from '@capacitor/device';
+import { Keyboard } from '@capacitor/keyboard';
 
 import {
   mailOutline,
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-}                     from 'ionicons/icons';
-import { useStorage } from '@/services/StorageService';
+}                  from 'ionicons/icons';
 
 export default defineComponent({
   name: "LoginForm",
@@ -130,6 +127,8 @@ export default defineComponent({
   setup() {
     /* Global properties and methods */
     const router = useRouter();
+    const store = useStore();
+    const { t } = useI18n();
     const { set } = useStorage();
 
 
@@ -147,31 +146,30 @@ export default defineComponent({
       user.device_name = deviceInfo.name || deviceInfo.model;
     });
 
-    /* Methods */
+    /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
 
     /* Event handlers */
-    const login = () => {
+    const login = async() => {
       loading.value = true;
       Keyboard.hide();
-      AuthService.login(user)
-                 .then(async(response) => {
-                   await set(`projekata_token`, response.data);
-                   await store.dispatch("auth/getAuthUser");
-                   let homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
-                   user.email = '';
-                   user.password = '';
-                   await router.replace(homeRoute);
-                   await showSuccessToast('Successfully logged in!');
-                   loading.value = false;
-                 })
-                 .catch(async(errors) => {
-                   errorNames.value = getError(errors);
-                   await showErrorToast(errors);
-                   loading.value = false;
-                   await sleep(Object.keys(errorNames.value).length * 900);
-                   errorNames.value = {};
-                 });
+      try {
+        const response = await AuthService.login(user);
+        await set(`projekata_token`, response.data.token);
+        await store.dispatch("auth/getAuthUser");
+        const homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
+        user.email = '';
+        user.password = '';
+        await router.replace(homeRoute);
+        showSuccessToast(t('successLogin'));
+      }catch(errors) {
+        errorNames.value = getError(errors);
+        await showErrorToast(errors);
+        await sleep(Object.keys(errorNames.value).length * 900);
+        errorNames.value = {};
+      } finally {
+        loading.value = false;
+      }
 
     };
     const togglePasswordShow = () => {

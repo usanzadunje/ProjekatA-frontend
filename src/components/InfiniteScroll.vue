@@ -26,7 +26,7 @@
   </div>
 
   <ion-infinite-scroll
-      @ionInfinite="loadData($event)"
+      @ionInfinite="loadMoreCafes($event)"
       threshold="100px"
       id="infinite-scroll"
       :disabled="isInfiniteScrollDisabled"
@@ -80,195 +80,94 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['scrollToTop', 'openCafeModal', 'infiniteScrollActive'],
+  emits: ['scrollToTop', 'openCafeModal', 'infiniteScrollToggle'],
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
+
     /* Component properties */
-    // All non filtered cafes
     const cafes = ref([]);
-    // Initial 20 cafes that are shown when no filters are applied
-    let initial20Cafes = null;
-    // Search term for filtering records
     const { cafeSearchString } = toRefs(props);
-    // Term for sorting records in specific order
     const { sortBy } = toRefs(props);
-    // From which number on to take cafe records
-    let cafeStart = 0;
-    // Property to enable / disable loading infinite scroll animation and action
     const isInfiniteScrollDisabled = ref(false);
     const showSkeleton = ref(true);
+    // From which number on to take cafe records
+    let cafeStart = 0;
 
     /* Lifecycle hooks */
     //*Before mounting fetching initial 20 cafes to show
-    onMounted(() => {
-      CafeService.getCafeCardsChunkInfo(
-          cafeStart, 20,
-          cafeSearchString.value, sortBy.value, true,
-          store.getters['global/position'].latitude,
-          store.getters['global/position'].longitude,
-      )
-                 .then((response) => {
-                   cafes.value = response.data;
-                   showSkeleton.value = false;
-                   initial20Cafes = response.data;
-                 })
-                 .catch((error) => {
-                   showSkeleton.value = false;
-                   if(error.response && error.response.status !== 404) {
-                     showErrorToast(
-                         null,
-                         {
-                           pushNotificationPermission: t('dataFetchingError'),
-                         });
-                   }
-                   CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, 'default', true, 0, 0)
-                              .then((response) => {
-                                cafes.value = response.data;
-                                initial20Cafes = response.data;
-                                sortBy.value = 'default';
-                              })
-                              .catch(() => {
-                                showSkeleton.value = false;
-                                showErrorToast(
-                                    null,
-                                    {
-                                      pushNotificationPermission: t('dataFetchingError'),
-                                    });
-                              });
-                 });
+    onMounted(async() => {
+      await getCafes();
+      showSkeleton.value = false;
     });
 
-    /* Methods */
-    // Grabbing 20 more cafes that match required filter
-    const loadMoreCafes = () => {
-      cafeStart += 20;
-      CafeService.getCafeCardsChunkInfo(
-          cafeStart, 20,
-          cafeSearchString.value, sortBy.value, true,
-          store.getters['global/position'].latitude,
-          store.getters['global/position'].longitude,
-      )
-                 .then((response) => {
-                   // There are no more records
-                   if(response.data === 'false') {
-                     isInfiniteScrollDisabled.value = true;
-                     return;
-                   }
-                   if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
-                   cafes.value = cafes.value.concat(response.data);
-                 })
-                 .catch((error) => {
-                   isInfiniteScrollDisabled.value = true;
-                   if(error.response && error.response.status !== 404) {
-                     showErrorToast(
-                         null,
-                         {
-                           pushNotificationPermission: t('dataFetchingError'),
-                         });
-                   }
-                 });
-
-    };
-    const filterCafes = async(ignoreIfNoSearchTerm = false) => {
-      //If there is no search term all cafes are returned
-      if(!cafeSearchString.value && !ignoreIfNoSearchTerm) {
-        return cafes.value = initial20Cafes;
-      }
-
-      setTimeout(() => {
-        CafeService.getCafeCardsChunkInfo(
-            cafeStart, 20,
-            cafeSearchString.value, sortBy.value, true,
-            store.getters['global/position'].latitude,
-            store.getters['global/position'].longitude,
-        )
-                   .then((response) => {
-                     if(!response.data) return;
-                     if(response.data.length < 20) isInfiniteScrollDisabled.value = true;
-                     cafes.value = response.data;
-                   })
-                   .catch((error) => {
-                     if(error.response && error.response.status !== 404) {
-                       showErrorToast(
-                           null,
-                           {
-                             pushNotificationPermission: t('dataFetchingError'),
-                           });
-                     }
-                   });
-      }, 300);
-
-    };
+    /* Composables */
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+
+    /* Methods */
+    const getCafes = async(start = 0, concat = false) => {
+      try {
+        const response = await CafeService.getCafeCardsChunkInfo(
+            start, 20,
+            cafeSearchString.value, sortBy.value, true,
+            store.getters['global/position'].latitude,
+            store.getters['global/position'].longitude,
+        );
+
+        if(!response.data) {
+          isInfiniteScrollDisabled.value = true;
+          return;
+        }
+        if(response.data.length < 20) {
+          isInfiniteScrollDisabled.value = true;
+        }
+
+        if(concat) {
+          cafes.value = cafes.value.concat(response.data);
+        }else {
+          cafes.value = response.data;
+        }
+      }catch(error) {
+        showErrorToast(
+            null,
+            {
+              pushNotificationPermission: t('dataFetchingError'),
+            });
+      }
+    };
     const refresh = async(event) => {
-      await checkForLocationPermission();
+      if(sortBy.value === 'distance') {
+        await checkForLocationPermission();
+      }
       await tryGettingLocation();
       // Only after both cafe arrays have been updated then complete refresher
       // Fetching 4 cafes in each category with new live data
 
-      document.querySelector('#header').classList.remove('hide-header')
+      document.querySelector('#header').classList.remove('hide-header');
 
-      CafeService.getCafeCardsChunkInfo(
-          cafeStart, 20,
-          cafeSearchString.value, sortBy.value, true,
-          store.getters['global/position'].latitude,
-          store.getters['global/position'].longitude,
-      )
-                 .then((response) => {
-                   cafes.value = response.data;
-                   initial20Cafes = response.data;
-
-                   event.target.complete();
-                 })
-                 .catch((error) => {
-                   if(error.response && error.response.status !== 404) {
-                     showErrorToast(
-                         null,
-                         {
-                           pushNotificationPermission: t('dataFetchingError'),
-                         });
-
-                     event.target.complete();
-                   }
-                   CafeService.getCafeCardsChunkInfo(cafeStart, 20, cafeSearchString.value, 'default', true, 0, 0)
-                              .then((response) => {
-                                cafes.value = response.data;
-                                initial20Cafes = response.data;
-                                sortBy.value = 'default';
-
-                                event.target.complete();
-                              })
-                              .catch(() => {
-                                showErrorToast(
-                                    null,
-                                    {
-                                      pushNotificationPermission: t('dataFetchingError'),
-                                    });
-                                event.target.complete();
-                              });
-                 });
+      await getCafes();
+      event.target.complete();
     };
 
     /* Event handlers */
-    const loadData = (ev) => {
-      emit('infiniteScrollActive');
-      setTimeout(() => {
-        loadMoreCafes();
-        ev.target.complete();
-        emit('infiniteScrollActive');
-      }, 300);
+    const loadMoreCafes = async(ev) => {
+      emit('infiniteScrollToggle');
+      cafeStart += 20;
+      await getCafes(cafeStart, true);
+      emit('infiniteScrollToggle');
+
+      ev?.target.complete();
     };
 
     /* Watchers */
     // Watching for a change on cafeSearchString(search term from search input) prop
     // resetting all the variables for filtered data and loading first 20 records from new filtered data
-    watch(cafeSearchString, () => {
+    watch(cafeSearchString, async() => {
       isInfiniteScrollDisabled.value = false;
       cafeStart = 0;
-      filterCafes();
+      getCafes();
       emit('scrollToTop');
     });
     // Watching for a change on sortBy(term for sorting records) prop
@@ -282,7 +181,7 @@ export default defineComponent({
 
       isInfiniteScrollDisabled.value = false;
       cafeStart = 0;
-      filterCafes(true);
+      getCafes();
       emit('scrollToTop');
     });
 
@@ -295,7 +194,6 @@ export default defineComponent({
 
       /* Event handlers */
       loadMoreCafes,
-      loadData,
       refresh,
 
       /* Icons */

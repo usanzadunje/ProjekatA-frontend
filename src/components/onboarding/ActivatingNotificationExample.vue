@@ -23,11 +23,10 @@
 </template>
 
 <script>
-import { defineComponent }     from 'vue';
+import { defineComponent } from 'vue';
+import { IonButton, IonIcon } from '@ionic/vue';
 
-import { IonButton, IonIcon }  from '@ionic/vue';
-
-import { arrowForward }       from 'ionicons/icons';
+import { arrowForward } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'ActivatingNotificationExample',
@@ -35,7 +34,8 @@ export default defineComponent({
     IonButton,
     IonIcon,
   },
-  data() {
+  setup() {
+
     return {
       /* Icons */
       arrowForward,
@@ -48,6 +48,7 @@ div.bg {
   background: url('https://resize.rs/storage/img/onboarding/notification-example.png') no-repeat center;
   background-size: cover;
 }
+
 ion-icon {
   font-size: 1.375rem;
 }

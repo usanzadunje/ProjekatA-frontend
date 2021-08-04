@@ -23,8 +23,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-
+import { defineComponent }    from 'vue';
 import { IonButton, IonIcon } from '@ionic/vue';
 
 import { arrowForward } from 'ionicons/icons';
@@ -35,7 +34,7 @@ export default defineComponent({
     IonButton,
     IonIcon,
   },
-  data() {
+  setup() {
     return {
       /* Icons */
       arrowForward,
@@ -48,6 +47,7 @@ div.bg {
   background: url('https://resize.rs/storage/img/onboarding/cafe-preview-example.png') no-repeat center;
   background-size: cover;
 }
+
 ion-icon {
   font-size: 1.375rem;
 }

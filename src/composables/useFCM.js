@@ -1,15 +1,14 @@
 import { useRouter } from 'vue-router';
-
 import { Capacitor } from '@capacitor/core';
+import { useI18n } from 'vue-i18n';
+
+import AuthService from '@/services/AuthService';
+
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import { PushNotifications }  from '@capacitor/push-notifications';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
-import AuthService from '../services/AuthService';
-
-import { useToastNotifications } from '@/composables/useToastNotifications';
-
-import { useI18n } from 'vue-i18n';
 
 export function useFCM() {
     /* Global properties */
@@ -20,9 +19,9 @@ export function useFCM() {
     const { showErrorToast } = useToastNotifications();
 
     /* Methods */
-    const initPush = () => {
+    const initPush = async() => {
         if(Capacitor.getPlatform() !== 'web') {
-            registerPush();
+            await registerPush();
         }else {
             showErrorToast(
                 null,
@@ -32,40 +31,55 @@ export function useFCM() {
             return true;
         }
     };
-    const registerPush = () => {
+    const registerPush = async() => {
         /* If permission is not granted asks for permission, after granted it registers Push Notifications */
-        PushNotifications.requestPermissions()
-                         .then(async(permission) => {
-                             if(permission.receive === 'granted') {
-                                 await PushNotifications.register();
-                             }else {
-                                 showErrorToast(
-                                     null,
-                                     {
-                                         pushNotificationPermission: t('warningNoNotificationPermission'),
-                                     });
-                             }
-                         });
+        try {
+            const permission = await PushNotifications.requestPermissions();
+            if(permission.receive === 'granted') {
+                await PushNotifications.register();
+            }else {
+                showErrorToast(
+                    null,
+                    {
+                        pushNotificationPermission: t('warningNoNotificationPermission'),
+                    });
+            }
+        }catch(error) {
+            showErrorToast(
+                null,
+                {
+                    pushNotificationPermission: t('generalAlertError'),
+                });
+        }
+
 
         /* Event listeners */
         PushNotifications.addListener(
             'registration',
-            (token) => {
+            async(token) => {
                 const payload = {
                     fcm_token: token.value,
                 };
                 /* Saving token from FCM into user table */
-                AuthService.setFcmToken(payload)
-                           .then()
-                           .catch((error) => {
-                               alert(error);
-                           });
+                try {
+                    await AuthService.setFcmToken(payload);
+                }catch(e) {
+                    showErrorToast(
+                        null,
+                        {
+                            pushNotificationPermission: t('generalAlertError'),
+                        });
+                }
             },
         );
         PushNotifications.addListener(
             'registrationError',
-            (error) => {
-                alert('Error on registration: ' + JSON.stringify(error));
+            () => {
+                showErrorToast(
+                    null,
+                    {
+                        pushNotificationPermission: t('generalAlertError'),
+                    });
             },
         );
         PushNotifications.addListener(

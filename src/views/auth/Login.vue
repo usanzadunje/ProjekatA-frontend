@@ -17,8 +17,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
-
-import { IonPage, IonContent } from '@ionic/vue';
+import { IonPage, IonContent }             from '@ionic/vue';
 
 import LoginForm from '@/components/auth/LoginForm';
 
@@ -30,7 +29,8 @@ export default defineComponent({
     IonContent,
   },
   setup() {
-    let clientHeight = ref(700);
+    /* Component properties */
+    const clientHeight = ref(700);
 
     /* Lifecycle hooks */
     onMounted(() => {
@@ -42,6 +42,7 @@ export default defineComponent({
 
 
     return {
+      /* Component properties */
       clientHeight,
     };
   },

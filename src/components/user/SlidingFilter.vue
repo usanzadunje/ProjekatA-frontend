@@ -52,7 +52,6 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-
 import {
   IonIcon,
   IonButton,

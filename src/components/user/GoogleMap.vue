@@ -15,17 +15,18 @@
 
 <script>
 import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
+import { useStore }              from 'vuex';
+import { useI18n }               from 'vue-i18n';
 import { loadingController }                            from '@ionic/vue';
+
+import CafeService               from '@/services/CafeService';
+
+import { useGeolocation }        from '@/composables/useGeolocation';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-native';
 
 import { sleep } from '@/utils/helpers';
-
-import { useI18n }               from 'vue-i18n';
-import { useGeolocation }        from '@/composables/useGeolocation';
-import CafeService               from '@/services/CafeService';
-import { useStore }              from 'vuex';
-import { useToastNotifications } from '@/composables/useToastNotifications';
 
 export default defineComponent({
   name: "GoogleMap",
@@ -45,11 +46,12 @@ export default defineComponent({
     let map = ref(null);
     let content = ref(null);
 
-    /* Methods */
-    const { t } = useI18n({ useScope: 'global' });
+    /* Composables */
     const { tryGettingLocation } = useGeolocation();
     const { showErrorToast } = useToastNotifications();
 
+    /* Methods */
+    const { t } = useI18n({ useScope: 'global' });
 
     /* Lifecycle hooks */
     onMounted(async() => {

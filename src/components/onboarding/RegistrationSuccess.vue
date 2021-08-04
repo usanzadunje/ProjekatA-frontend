@@ -23,7 +23,6 @@
 
 <script>
 import { defineComponent } from 'vue';
-
 import { IonButton, IonIcon } from '@ionic/vue';
 
 import { arrowForward } from 'ionicons/icons';
@@ -34,7 +33,7 @@ export default defineComponent({
     IonButton,
     IonIcon,
   },
-  data() {
+  setup() {
     return {
       /* Icons */
 

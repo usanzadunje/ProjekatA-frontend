@@ -1,14 +1,13 @@
 import { ref }       from 'vue';
 import { useStore }  from 'vuex';
 import { Capacitor } from "@capacitor/core";
+import { useI18n } from 'vue-i18n';
+
+import LocationService from '@/services/LocationService';
 
 import { Geolocation } from '@capacitor/geolocation';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
-
-import { useI18n } from 'vue-i18n';
-
-import LocationService from '@/services/LocationService';
 
 
 export function useGeolocation() {

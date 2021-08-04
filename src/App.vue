@@ -6,12 +6,12 @@
 
 <script>
 import { defineComponent, onMounted } from 'vue';
+import store                          from '@/store';
+import { IonApp, IonRouterOutlet }    from '@ionic/vue';
+import { useI18n }                    from 'vue-i18n';
 
-import { IonApp, IonRouterOutlet } from '@ionic/vue';
+import { useStorage } from '@/services/StorageService';
 
-import store              from '@/store';
-import { useStorage }     from '@/services/StorageService';
-import { useI18n }        from 'vue-i18n';
 import { useGeolocation } from '@/composables/useGeolocation';
 
 export default defineComponent({
@@ -24,6 +24,8 @@ export default defineComponent({
     /* Global properties */
     /* Methods */
     const { get } = useStorage();
+
+    /* Composables */
     const { locale } = useI18n({ useScope: 'global' });
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
@@ -35,20 +37,18 @@ export default defineComponent({
       await checkForLocationPermission();
       await tryGettingLocation();
 
-      get(`isDarkModeOn.${store.getters['auth/authUser'].id}`)
-          .then((response) => {
-            document.body.classList.toggle('dark', !!response);
-          })
-          .catch(() => {
-            document.body.classList.toggle('dark', false);
-          });
-      get(`localization.${store.getters['auth/authUser'].id}`)
-          .then((response) => {
-            locale.value = response.value ?? 'sr';
-          })
-          .catch(() => {
-            locale.value = 'sr';
-          });
+      try {
+        const storedDarkMode = await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`);
+        document.body.classList.toggle('dark', !!storedDarkMode);
+
+        const storedLocale = await get(`localization.${store.getters['auth/authUser'].id}`);
+        locale.value = storedLocale.value ?? 'sr';
+
+      }catch(error) {
+        document.body.classList.toggle('dark', false);
+        locale.value = 'sr';
+
+      }
     });
 
     return {};

@@ -88,6 +88,8 @@ import ImagePreviewModal     from '@/components/user/ImagePreviewModal';
 
 import CafeService from '@/services/CafeService';
 
+import { useModal } from '@/composables/useModal';
+
 import {
   notifications,
   notificationsOutline,
@@ -125,17 +127,26 @@ export default defineComponent({
     const slideOpts = {
       slidesPerView: 2.2,
     };
-    const isModalOpen = ref(false);
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
     const isSubDisabled = ref(true);
     const gallerySlider = ref(null);
 
-    /* Computed properties */
+    /* Composables */
+    const { isModalOpen, openModal } = useModal();
 
     /* Lifecycle hooks */
     isSubDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
-
+    /* Checking if user is subscribed to this cafe */
+    if(store.getters['auth/loggedIn']) {
+      CafeService.isUserSubscribed(cafe.value.id)
+                 .then((response) => {
+                   isUserSubscribed.value = !!response.data;
+                 })
+                 .catch(() => {
+                   isUserSubscribed.value = false;
+                 });
+    }
     onMounted(() => {
       gallerySlider?.value?.$el.update();
 
@@ -152,21 +163,8 @@ export default defineComponent({
         router.replace();
       }
     });
-    /* Checking if user is subscribed to this cafe */
-    if(store.getters['auth/loggedIn']) {
-      CafeService.isUserSubscribed(cafe.value.id)
-                 .then((response) => {
-                   isUserSubscribed.value = !!response.data;
-                 })
-                 .catch(() => {
-                   isUserSubscribed.value = false;
-                 });
-    }
 
     /* Event handlers */
-    const openModal = (state) => {
-      isModalOpen.value = state;
-    };
     const openPreview = async(id) => {
       const modal = await modalController
           .create({

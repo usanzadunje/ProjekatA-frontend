@@ -88,17 +88,21 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, ref } from 'vue';
-
-import { useRouter } from 'vue-router';
-
+import { defineComponent, onMounted, reactive, ref }         from 'vue';
+import { useRouter }                                         from 'vue-router';
 import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
-
-import AuthService from "@/services/AuthService";
 
 import SocialIcons from '@/components/social/SocialIcons';
 
+import AuthService    from "@/services/AuthService";
+import { useStorage } from '@/services/StorageService';
+
+import { useToastNotifications } from '@/composables/useToastNotifications';
+
 import { getError, sleep } from "@/utils/helpers";
+
+import { Device }   from '@capacitor/device';
+import { Keyboard } from '@capacitor/keyboard';
 
 import {
   personOutline,
@@ -106,13 +110,7 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-}                                from 'ionicons/icons';
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useStorage }            from '@/services/StorageService';
-
-import { Device }   from '@capacitor/device';
-import { Keyboard } from '@capacitor/keyboard';
-
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "RegisterForm",
@@ -144,11 +142,11 @@ export default defineComponent({
       newUser.device_name = deviceInfo.name || deviceInfo.model;
     });
 
-    /* Methods */
+    /* Composables */
     const { showErrorToast } = useToastNotifications();
 
     /* Event handlers */
-    let register = () => {
+    let register = async() => {
       loading.value = true;
       Keyboard.hide();
       Object.assign(
@@ -161,20 +159,19 @@ export default defineComponent({
             phone: null,
             username: null,
           });
-      AuthService.register(newUser)
-                 .then(async(response) => {
-                   await set(`projekata_token`, response.data);
-                   newUser = {};
-                   await router.replace({ name: 'onboarding' });
-                   loading.value = false;
-                 })
-                 .catch(async(errors) => {
-                   errorNames.value = getError(errors);
-                   await showErrorToast(errors);
-                   loading.value = false;
-                   await sleep(Object.keys(errorNames.value).length * 900);
-                   errorNames.value = {};
-                 });
+      try {
+        const response = await AuthService.register(newUser);
+        await set(`projekata_token`, response.data.token);
+        newUser = {};
+        await router.replace({ name: 'onboarding' });
+      }catch(errors) {
+        errorNames.value = getError(errors);
+        await showErrorToast(errors);
+        await sleep(Object.keys(errorNames.value).length * 900);
+        errorNames.value = {};
+      } finally {
+        loading.value = false;
+      }
     };
     let togglePasswordShow = (passwordConfirm = false) => {
       if(passwordConfirm) {

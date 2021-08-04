@@ -3,7 +3,13 @@
     <ion-toolbar>
       <div class="px-4 pt-3 pb-2 mt-2 md header-padding-bottom">
         <div v-show="loggedIn" class="flex justify-between">
-          <p class="main-toolbar-fade-text">{{ $t('hello') }} {{ authUser.full_name }}!</p>
+          <p class="main-toolbar-fade-text">
+            {{ $t('hello') }}
+            <span v-if="authUser.fname || authUser.lname">
+              {{ `${authUser.fname ?? ''} ${authUser.lname ?? ''}` }}!
+            </span>
+            <span class="lowercase" v-else>{{ $t('unknown') }}!</span>
+          </p>
           <ion-button fill="clear" routerLink="/test">
             <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
           </ion-button>
@@ -35,10 +41,8 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-
-import { mapGetters } from 'vuex';
-
+import { defineComponent }                                         from 'vue';
+import { mapGetters }                                              from 'vuex';
 import { IonHeader, IonIcon, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
 
 import { optionsOutline } from 'ionicons/icons';
