@@ -1,7 +1,9 @@
 export default {
     "email": "john.doe{'@'}example.com",
     "password": "Password",
-    "passwordConfirm": "Confirm passowrd",
+    "passwordConfirm": "Confirm password",
+    "passwordOld": "Current password",
+    "passwordChange": "Change password",
     "emailAddress": "E-mail address",
     "remember": "Remember me",
     "forget": "Forgot password?",

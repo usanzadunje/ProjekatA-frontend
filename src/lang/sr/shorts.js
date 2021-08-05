@@ -2,6 +2,8 @@ export default {
     "email": "marko.markovic{'@'}nesto.rs",
     "password": "Lozinka",
     "passwordConfirm": "Ponovite lozinku",
+    "passwordOld": "Trenutna lozinka",
+    "passwordChange": "Izmenite lozinku",
     "emailAddress": "E-mail adresa",
     "remember": "Zapamti me",
     "forget": "Zaboravljena lozinka?",

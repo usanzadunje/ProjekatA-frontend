@@ -36,8 +36,6 @@ export default defineComponent({
       await checkForLocationPermission();
       await tryGettingLocation();
 
-      console.log(await get('projekata_token'));
-
       try {
         const storedDarkMode = await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`);
         document.body.classList.toggle('dark', !!storedDarkMode);

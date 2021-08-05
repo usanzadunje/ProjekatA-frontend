@@ -97,6 +97,82 @@
           required
       ></ion-input>
     </ion-item>
+    <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2">
+      <ion-label class="settings-fade-text">{{ $t('passwordChange') }}</ion-label>
+      <ion-toggle
+          :checked="showPasswordEdit"
+          @ionChange="togglePasswordShow(0)"
+          mode="md"
+      ></ion-toggle>
+    </ion-item>
+    <div v-if="showPasswordEdit">
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+      >
+        <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            v-model="user.old_password"
+            @keyup.enter="passwordInput.$el?.setFocus()"
+            debounce="1"
+            inputmode="password"
+            :type="showOldPassword ? 'text' : 'password'"
+            :placeholder="$t('passwordOld')"
+            required
+        ></ion-input>
+        <ion-icon :icon="showOldPassword ? eyeOutline : eyeOffOutline"
+                  @click="togglePasswordShow(1)"
+                  class="text-xl text-gray-500"
+        >
+
+        </ion-icon>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+      >
+        <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            ref="passwordInput"
+            v-model="user.password"
+            @keyup.enter="passwordConfirmInput.$el?.setFocus()"
+            debounce="1"
+            inputmode="password"
+            :type="showPassword ? 'text' : 'password'"
+            :placeholder="$t('password')"
+            required
+        ></ion-input>
+        <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
+                  @click="togglePasswordShow(2)"
+                  class="text-xl text-gray-500"
+        >
+
+        </ion-icon>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+      >
+        <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            ref="passwordConfirmInput"
+            v-model="user.password_confirmation"
+            @keyup.enter="update"
+            debounce="1"
+            inputmode="password"
+            :type="showPasswordConfirm ? 'text' : 'password'"
+            :placeholder="$t('passwordConfirm')"
+            required
+        ></ion-input>
+        <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
+                  @click="togglePasswordShow(3)"
+                  class="text-xl text-gray-500"
+        ></ion-icon>
+      </ion-item>
+    </div>
 
     <div class="mt-6">
       <ion-button
@@ -136,6 +212,7 @@ import {
   IonSpinner,
   IonDatetime,
   IonLabel,
+  IonToggle,
 }
                                                      from "@ionic/vue";
 
@@ -164,6 +241,7 @@ export default defineComponent({
     IonButton,
     IonSpinner,
     IonDatetime,
+    IonToggle,
     IonLabel,
   },
   setup() {
@@ -174,7 +252,9 @@ export default defineComponent({
 
     /* Component properties */
     let user = reactive({});
+    let showOldPassword = ref(false);
     let showPassword = ref(false);
+    let showPasswordConfirm = ref(false);
     let errorNames = ref({});
     const fnameInput = ref(null);
     const lnameInput = ref(null);
@@ -183,7 +263,9 @@ export default defineComponent({
     const bdayInput = ref(null);
     const phoneInput = ref(null);
     const passwordInput = ref(null);
+    const passwordConfirmInput = ref(null);
     const loading = ref(false);
+    const showPasswordEdit = ref(false);
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -220,14 +302,34 @@ export default defineComponent({
         loading.value = false;
       }
     };
-    const togglePasswordShow = () => {
-      showPassword.value = !showPassword.value;
+    const togglePasswordShow = (input) => {
+      switch(input) {
+        case 0:
+          showPasswordEdit.value = !showPasswordEdit.value;
+          break;
+        case 1:
+          showOldPassword.value = !showOldPassword.value;
+          break;
+        case 2:
+          showPassword.value = !showPassword.value;
+          break;
+        case 3:
+          showPasswordConfirm.value = !showPasswordConfirm.value;
+          break;
+        default:
+          showPasswordEdit.value = !showPasswordEdit.value;
+          showOldPassword.value = !showOldPassword.value;
+          showPassword.value = !showPassword.value;
+          showPasswordConfirm.value = !showPasswordConfirm.value;
+      }
     };
 
     return {
       /* Component properties */
       user,
+      showOldPassword,
       showPassword,
+      showPasswordConfirm,
       errorNames,
       fnameInput,
       lnameInput,
@@ -236,7 +338,9 @@ export default defineComponent({
       phoneInput,
       emailInput,
       passwordInput,
+      passwordConfirmInput,
       loading,
+      showPasswordEdit,
 
       /* Event handlers  */
       update,
