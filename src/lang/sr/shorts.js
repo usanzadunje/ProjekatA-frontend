@@ -47,8 +47,8 @@ export default {
     "filter": "Filter | Filteri",
     "searchResults": "Rezultati pretrage",
     "undefined": "Neodređeno",
-    "setUsername" : "Podesi korisnicko ime",
-    "subscribedPlaces" : "Mesta koja pratim",
+    "setUsername": "Podesi korisnicko ime",
+    "subscribedPlaces": "Mesta koja pratim",
     "findAvailablePlace": "Pronađi slobodno mesto",
     "loading": "Učitava se...",
     "yes": "Da",
@@ -70,5 +70,6 @@ export default {
     "selectDate": "Izaberite datum",
     "done": "Gotovo",
     "unknown": "Neznanac",
+    "or": "ili",
 };
 

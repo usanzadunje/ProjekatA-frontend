@@ -35,7 +35,7 @@ import "@/assets/css/style.css";
 import store        from './store';
 
 /* Translations */
-import { i18n }         from '@/./i18n';
+import { i18n }     from '@/./i18n';
 
 
 const app = createApp(App)
@@ -43,6 +43,17 @@ const app = createApp(App)
     .use(store)
     .use(IonicVue)
     .use(router);
+/* Custom directives */
+app.directive('capitalize', {
+    updated(el) {
+        el.value = el.value.charAt(0).toUpperCase() + el.value.slice(1);
+    },
+});
+app.directive('update-swiper', {
+    mounted(el) {
+        el.update();
+    },
+});
 
 app.mixin({
     data() {

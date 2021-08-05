@@ -8,14 +8,15 @@
       <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           ref="emailInput"
-          v-model.lazy="user.email"
+          v-model.lazy="user.login"
           @keyup.enter="passwordInput.$el?.setFocus()"
           autocomplete="email"
-          type="email"
-          inputmode="email"
+          type="text"
+          inputmode="text"
           debounce="600"
-          :placeholder="$t('email')"
-          autofocus required
+          :placeholder="`E-mail ${$t('or')} ${$t('username').toLowerCase()}`"
+          :autofocus="true"
+          required
       ></ion-input>
     </ion-item>
     <ion-item
@@ -81,7 +82,7 @@
 import { defineComponent, ref, reactive, onMounted } from 'vue';
 import { useRouter }                                 from 'vue-router';
 import { useStore }                                  from 'vuex';
-import { useI18n } from 'vue-i18n';
+import { useI18n }                                   from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -91,7 +92,7 @@ import {
   IonCheckbox,
   IonSpinner,
 }
-  from "@ionic/vue";
+                                                     from "@ionic/vue";
 
 import SocialIcons from '@/components/social/SocialIcons';
 
@@ -110,7 +111,7 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-}                  from 'ionicons/icons';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "LoginForm",
@@ -158,7 +159,7 @@ export default defineComponent({
         await set(`projekata_token`, response.data.token);
         await store.dispatch("auth/getAuthUser");
         const homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
-        user.email = '';
+        user.login = '';
         user.password = '';
         await router.replace(homeRoute);
         showSuccessToast(t('successLogin'));
@@ -167,7 +168,7 @@ export default defineComponent({
         await showErrorToast(errors);
         await sleep(Object.keys(errorNames.value).length * 900);
         errorNames.value = {};
-      } finally {
+      }finally {
         loading.value = false;
       }
 

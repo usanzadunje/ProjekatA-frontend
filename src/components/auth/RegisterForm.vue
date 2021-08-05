@@ -14,6 +14,7 @@
           inputmode="email"
           debounce="600"
           :placeholder="$t('emailAddress')"
+          :autofocus="true"
           required
       ></ion-input>
     </ion-item>
@@ -139,7 +140,7 @@ export default defineComponent({
     /* Lifecycle hooks */
     onMounted(async() => {
       const deviceInfo = await Device.getInfo();
-      newUser.device_name = deviceInfo.name || deviceInfo.model;
+      newUser.device_name = (deviceInfo.name || deviceInfo.model) || 'random';
     });
 
     /* Composables */

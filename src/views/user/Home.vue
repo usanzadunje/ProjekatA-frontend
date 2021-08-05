@@ -236,6 +236,7 @@ export default defineComponent({
         cafes.currentlyAvailable = response[1].data;
         cafes.haveFood = response[2].data;
       }catch(error) {
+        alert(JSON.stringify(error))
         showErrorToast(
             null,
             {
@@ -282,10 +283,6 @@ export default defineComponent({
 });
 </script>
 <style>
-ion-refresher {
-  background: #F6F7FB !important;
-}
-
 ion-refresher-content {
   margin-top: 3px !important;
 }

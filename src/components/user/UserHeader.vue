@@ -5,10 +5,9 @@
         <div v-show="loggedIn" class="flex justify-between">
           <p class="main-toolbar-fade-text">
             {{ $t('hello') }}
-            <span v-if="authUser.fname || authUser.lname">
-              {{ `${authUser.fname ?? ''} ${authUser.lname ?? ''}` }}!
+            <span>
+              {{ displayName }}!
             </span>
-            <span class="lowercase" v-else>{{ $t('unknown') }}!</span>
           </p>
           <ion-button fill="clear" routerLink="/test">
             <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
@@ -30,7 +29,7 @@
               :value="searchTerm"
               :placeholder="$t('searchPlaceholder')"
               @ionChange="searchInputChanged"
-              @keyup.enter="$emit('searchEnterPressed', $event)"
+              @keyup.enter="searchEnterPressed($event)"
               enterkeyhint="search"
           ></ion-searchbar>
         </div>
@@ -44,6 +43,8 @@
 import { defineComponent }                                         from 'vue';
 import { mapGetters }                                              from 'vuex';
 import { IonHeader, IonIcon, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
+
+import { Keyboard } from '@capacitor/keyboard';
 
 import { optionsOutline } from 'ionicons/icons';
 
@@ -63,7 +64,7 @@ export default defineComponent({
     searchTerm: String,
   },
   computed: {
-    ...mapGetters('auth', ['authUser', 'loggedIn']),
+    ...mapGetters('auth', ['authUser', 'displayName', 'loggedIn']),
   },
   emits: ['searchFilterChanged', 'searchEnterPressed'],
   setup(props, { emit }) {
@@ -73,6 +74,10 @@ export default defineComponent({
     const searchInputChanged = (e) => {
       emit('searchFilterChanged', e.target.value);
     };
+    const searchEnterPressed = (e) => {
+      Keyboard.hide();
+      emit('searchEnterPressed', e);
+    };
 
 
     return {
@@ -80,6 +85,7 @@ export default defineComponent({
 
       /* Event handlers */
       searchInputChanged,
+      searchEnterPressed,
 
       /* Icons from */
       optionsOutline,

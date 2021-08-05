@@ -28,9 +28,9 @@
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
-        <ion-item class="ion-item-padding-right" routerLink="/dashboard">
+        <ion-item class="ion-item-padding-right" routerLink="/edit">
           <p class="settings-item-text">{{ $t('profile') }}</p>
-          <ion-button fill="clear" slot="end" routerLink="/dashboard">
+          <ion-button fill="clear" slot="end">
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
@@ -150,17 +150,23 @@ export default defineComponent({
         areNotificationsOn.value = false;
         isDarkModeOn.value = false;
         language.value = 'SRB';
+      }finally {
+        if(isDarkModeOn.value) {
+          document.body.style.setProperty('--ion-item-background', '#1F1C2B');
+        }else {
+          document.body.style.setProperty('--ion-item-background', '#F6F7FB');
+        }
       }
 
-      document.body.style.setProperty('--ion-item-background', '#F1C2B');
     });
 
     /* Event handlers */
     const toggleDarkMode = (e) => {
       if(!e.target.checked) {
+        document.body.style.setProperty('--ion-item-background', '#F6F7FB')
         set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, false);
       }else {
-        //Remembering user decision for future usage
+        document.body.style.setProperty('--ion-item-background', '#1F1C2B');
         set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, true);
       }
       isDarkModeOn.value = e.target.checked;

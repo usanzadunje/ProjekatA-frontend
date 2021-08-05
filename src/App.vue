@@ -29,13 +29,14 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' });
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
-
     /* Lifecycle hooks */
     onMounted(async() => {
       await store.dispatch("auth/getAuthUser");
 
       await checkForLocationPermission();
       await tryGettingLocation();
+
+      console.log(await get('projekata_token'));
 
       try {
         const storedDarkMode = await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`);

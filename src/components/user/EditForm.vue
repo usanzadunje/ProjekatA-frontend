@@ -7,12 +7,14 @@
     >
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
+          v-capitalize
           v-model.lazy="user.fname"
           @keyup.enter="lnameInput.$el?.setFocus()"
           type="text"
           debounce="600"
           :placeholder="$t('fname')"
-          autofocus required
+          :autofocus="true"
+          required
       ></ion-input>
     </ion-item>
     <ion-item
@@ -22,6 +24,7 @@
     >
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
+          v-capitalize
           ref="lnameInput"
           v-model="user.lname"
           @keyup.enter="usernameInput.$el?.setFocus()"

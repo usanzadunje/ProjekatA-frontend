@@ -1,7 +1,8 @@
 import router from "@/router";
 
-import AuthService from "@/services/AuthService";
+import { i18n } from "@/i18n";
 
+import AuthService    from "@/services/AuthService";
 import { useStorage } from '@/services/StorageService';
 
 export const namespaced = true;
@@ -56,10 +57,21 @@ export const getters = {
     authUser: (state) => {
         return state.user ?? {};
     },
-    // Property true when something is loading
-    loading: (state) => {
-        return state.loading;
+    displayName: (state) => {
+        let displayName;
+        if(state.user?.fname && state.user?.lname) {
+            displayName = state.user.fname + ' ' + state.user.lname;
+        }else if(state.user?.fname) {
+            displayName = state.user.fname;
+        }else {
+            displayName = state.user?.lname ?? state.user?.username;
+        }
+        return displayName || i18n.global.t('unknown');
     },
+    // Property true when something is loading
+    // loading: (state) => {
+    //     return state.loading;
+    // },
     // Auth user state logged in or not
     loggedIn: (state) => {
         return !!state.user;

@@ -65,6 +65,14 @@ ion-button {
     --box-shadow: none;
 }
 
+ion-refresher {
+    background: var(--primary-paint) !important;
+}
+
+ion-spinner {
+    color: var(--primary-heading);
+}
+
 ion-modal {
     --background: none !important;
 }

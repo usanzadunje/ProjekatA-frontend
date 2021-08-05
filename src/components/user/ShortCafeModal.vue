@@ -17,7 +17,7 @@
 
       <CafeInfoBody :cafe="cafe"/>
       <ion-item class="mt-6 ion-no-padding">
-        <ion-slides ref="gallerySlider" :options="slideOpts">
+        <ion-slides v-update-swiper :options="slideOpts">
           <ion-slide v-for="i in [1,2,3]" :key="i">
             <img
                 :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
@@ -130,7 +130,6 @@ export default defineComponent({
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
     const isSubDisabled = ref(true);
-    const gallerySlider = ref(null);
 
     /* Composables */
     const { isModalOpen, openModal } = useModal();
@@ -148,11 +147,7 @@ export default defineComponent({
                  });
     }
     onMounted(() => {
-      gallerySlider?.value?.$el.update();
-
       setTimeout(() => {
-        gallerySlider?.value?.$el.update();
-
         const height = document.getElementById('short-modal').getBoundingClientRect()?.height ?? 420;
         document.documentElement.style.setProperty('--short-modal-height', height + 'px');
       }, 400);
@@ -183,7 +178,6 @@ export default defineComponent({
       isSubDisabled,
       isModalOpen,
       isUserSubscribed,
-      gallerySlider,
 
       /* Computed properties */
 

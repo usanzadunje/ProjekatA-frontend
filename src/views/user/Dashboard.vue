@@ -181,7 +181,6 @@ export default defineComponent({
       await tryGettingLocation();
 
       await getSubscriptions();
-
       event.target.complete();
     };
 

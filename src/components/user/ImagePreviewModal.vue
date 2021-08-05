@@ -6,7 +6,7 @@
       </ion-button>
     </ion-item>
 
-    <ion-slides ref="imagePreviewSlider" :options="slideOpts">
+    <ion-slides v-update-swiper :options="slideOpts">
       <ion-slide v-for="i in imgCount" :key="i">
         <div v-if="imgCount !== 1" class="swiper-zoom-container">
           <img
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import {
   IonContent,
   IonItem,
@@ -76,12 +76,6 @@ export default {
     const userClickedToZoom = ref(true);
 
     /* Lifecycle hooks */
-    onMounted(() => {
-      imagePreviewSlider?.value?.$el.update();
-      setTimeout(() => {
-        imagePreviewSlider?.value?.$el.update();
-      }, 500);
-    });
 
     /* Event handlers */
     const zoom = async(zoomIn) => {

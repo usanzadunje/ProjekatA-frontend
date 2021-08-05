@@ -70,5 +70,5 @@ export default {
     "selectDate": "Select date",
     "done": "Done",
     "unknown": "Unknown",
-
+    "or": "or",
 };

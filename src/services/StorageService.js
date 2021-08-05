@@ -1,12 +1,15 @@
+import { i18n } from '@/i18n';
+
 import { Storage } from '@ionic/storage';
 
 export function useStorage() {
 
     const storage = new Storage();
 
+    /* Composables */
     storage.create()
-           .catch((error) => {
-               alert(error);
+           .catch(() => {
+               alert(`${i18n.global.t('generalAlertError')}`);
            });
 
     const set = async(key, value) => {
