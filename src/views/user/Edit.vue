@@ -16,13 +16,13 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <EditForm/>
+      <EditForm :clearPassword="clearPassword"/>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   IonPage,
   IonHeader,
@@ -33,7 +33,7 @@ import {
   IonBackButton,
   onIonViewWillEnter,
   onIonViewWillLeave,
-}                          from '@ionic/vue';
+}                               from '@ionic/vue';
 
 import EditForm from '@/components/user/EditForm';
 
@@ -54,20 +54,27 @@ export default defineComponent({
   setup() {
     /* Component properties */
     let settingsTab = null;
+    const clearPassword = ref(false);
+
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
+      clearPassword.value = false;
       settingsTab = document.getElementById('tab-button-settings');
       if(settingsTab) {
         settingsTab.style.color = '#207DFF';
       }
     });
     onIonViewWillLeave(() => {
+      clearPassword.value = true;
       if(settingsTab) {
         settingsTab.style.color = '';
       }
     });
 
     return {
+      /* Component properties */
+      clearPassword,
+
       /* Icons */
       arrowBackOutline,
       chevronBackOutline,

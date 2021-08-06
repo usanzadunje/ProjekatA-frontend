@@ -101,11 +101,11 @@
       <ion-label class="settings-fade-text">{{ $t('passwordChange') }}</ion-label>
       <ion-toggle
           :checked="showPasswordEdit"
-          @ionChange="togglePasswordShow(0)"
+          @ionChange="togglePasswordShow(0, $event)"
           mode="md"
       ></ion-toggle>
     </ion-item>
-    <div v-if="showPasswordEdit">
+    <div v-show="showPasswordEdit">
       <ion-item
           lines="none"
           class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
@@ -141,14 +141,13 @@
             debounce="1"
             inputmode="password"
             :type="showPassword ? 'text' : 'password'"
-            :placeholder="$t('password')"
+            :placeholder="$t('passwordNew')"
             required
         ></ion-input>
         <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
                   @click="togglePasswordShow(2)"
                   class="text-xl text-gray-500"
         >
-
         </ion-icon>
       </ion-item>
       <ion-item
@@ -200,10 +199,10 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted } from 'vue';
-import { useRouter }                                 from 'vue-router';
-import { useStore }                                  from 'vuex';
-import { useI18n }                                   from 'vue-i18n';
+import { defineComponent, ref, reactive, onMounted, toRefs, watch } from 'vue';
+import { useRouter }                                                from 'vue-router';
+import { useStore }                                                 from 'vuex';
+import { useI18n }                                                  from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -214,7 +213,7 @@ import {
   IonLabel,
   IonToggle,
 }
-                                                     from "@ionic/vue";
+                                                                    from "@ionic/vue";
 
 import AuthService from "@/services/AuthService";
 
@@ -244,7 +243,13 @@ export default defineComponent({
     IonToggle,
     IonLabel,
   },
-  setup() {
+  props: {
+    clearPassword: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props) {
     /* Global properties and methods */
     const router = useRouter();
     const store = useStore();
@@ -266,6 +271,7 @@ export default defineComponent({
     const passwordConfirmInput = ref(null);
     const loading = ref(false);
     const showPasswordEdit = ref(false);
+    const { clearPassword } = toRefs(props);
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -285,6 +291,11 @@ export default defineComponent({
       if(user.bday) {
         user.bday = user.bday.slice(0, 10);
       }
+      if((!user.old_password && !user.password) || !showPasswordEdit.value) {
+        delete user.old_password;
+        delete user.password;
+        delete user.password_confirmation;
+      }
       loading.value = true;
       Keyboard.hide();
       // Napraviti update metoduy u service
@@ -302,10 +313,10 @@ export default defineComponent({
         loading.value = false;
       }
     };
-    const togglePasswordShow = (input) => {
+    const togglePasswordShow = (input, e = null) => {
       switch(input) {
         case 0:
-          showPasswordEdit.value = !showPasswordEdit.value;
+          showPasswordEdit.value = e.target.checked;
           break;
         case 1:
           showOldPassword.value = !showOldPassword.value;
@@ -324,6 +335,15 @@ export default defineComponent({
       }
     };
 
+    /* Watchers */
+    watch(clearPassword, () => {
+      if(clearPassword.value) {
+        showPasswordEdit.value = false;
+        showOldPassword.value = false;
+        showPassword.value = false;
+        showPasswordConfirm.value = false;
+      }
+    });
     return {
       /* Component properties */
       user,

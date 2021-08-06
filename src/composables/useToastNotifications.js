@@ -59,17 +59,31 @@ export function useToastNotifications() {
     //Generating toast error notifications
     const showErrorToast = async(backendErrors, errorMessage = null) => {
         errors.value = errorMessage ?? getError(backendErrors);
-
         for(let i = 0; i < errorKeys.value.length; i++) {
-            const toast = await toastController.create({
-                duration: 1500,
-                position: 'top',
-                message: getErrorMessage(errorKeys.value[i]),
-                cssClass: 'error-toast',
-                mode: 'ios',
-            });
-            toast.style.top = `${55 * i}px`;
-            await toast.present();
+            if(getErrorMessage(errorKeys.value[i]).length > 1) {
+                for(let j = 0; j < getErrorMessage(errorKeys.value[i]).length; j++) {
+                    const toast = await toastController.create({
+                        duration: 1500,
+                        position: 'top',
+                        message: getErrorMessage(errorKeys.value[i])[j],
+                        cssClass: 'error-toast',
+                        mode: 'ios',
+                    });
+                    toast.style.top = `${(55 * i) + (55 * j)}px`;
+                    await toast.present();
+                }
+            }else {
+                const toast = await toastController.create({
+                    duration: 1500,
+                    position: 'top',
+                    message: getErrorMessage(errorKeys.value[i]),
+                    cssClass: 'error-toast',
+                    mode: 'ios',
+                });
+                toast.style.top = `${55 * i}px`;
+                await toast.present();
+            }
+
         }
     };
 

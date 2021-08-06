@@ -3,6 +3,7 @@ export default {
     "password": "Lozinka",
     "passwordConfirm": "Ponovite lozinku",
     "passwordOld": "Trenutna lozinka",
+    "passwordNew": "Nova lozinka",
     "passwordChange": "Izmenite lozinku",
     "emailAddress": "E-mail adresa",
     "remember": "Zapamti me",

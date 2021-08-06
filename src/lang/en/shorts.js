@@ -3,6 +3,7 @@ export default {
     "password": "Password",
     "passwordConfirm": "Confirm password",
     "passwordOld": "Current password",
+    "passwordNew": "New password",
     "passwordChange": "Change password",
     "emailAddress": "E-mail address",
     "remember": "Remember me",
