@@ -111,7 +111,8 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-} from 'ionicons/icons';
+}                   from 'ionicons/icons';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: "RegisterForm",
@@ -126,6 +127,7 @@ export default defineComponent({
   setup() {
     /* Global properties and methods */
     const router = useRouter();
+    const store = useStore();
     const { set } = useStorage();
 
     /* Component properties */
@@ -165,12 +167,16 @@ export default defineComponent({
         await set(`projekata_token`, response.data.token);
         newUser = {};
         await router.replace({ name: 'onboarding' });
+        set(`localization.${store.getters['auth/authUser'].id}`, {
+          text: 'SRB',
+          value: 'sr',
+        });
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);
         await sleep(Object.keys(errorNames.value).length * 900);
         errorNames.value = {};
-      } finally {
+      }finally {
         loading.value = false;
       }
     };

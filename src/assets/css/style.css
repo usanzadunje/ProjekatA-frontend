@@ -73,6 +73,10 @@ ion-spinner {
     color: var(--primary-heading);
 }
 
+ion-item {
+    --transition: none !important;
+}
+
 ion-modal {
     --background: none !important;
 }
@@ -117,7 +121,7 @@ ion-modal ion-item {
     bottom: 0 !important;
 }
 
-.custom-popover{
+.custom-popover {
 }
 
 .undo-toast {

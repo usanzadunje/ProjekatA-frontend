@@ -100,8 +100,8 @@ import {
 
 import AuthService from '@/services/AuthService';
 
-import { useStorage }            from '@/services/StorageService';
-import { useFCM }                from '@/composables/useFCM';
+import { useStorage } from '@/services/StorageService';
+import { useFCM } from '@/composables/useFCM';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
@@ -144,30 +144,24 @@ export default defineComponent({
       try {
         areNotificationsOn.value = !!await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`);
         isDarkModeOn.value = !!await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`);
-        const storedLang = await get(`localization.${store.getters['auth/authUser'].id}`);
+        const storedLang = await get(`localization.${store.getters['auth/authUser'].id}`) ?? {
+          text: 'SRB',
+          value: 'sr',
+        };
         language.value = storedLang.text;
       }catch(e) {
         areNotificationsOn.value = false;
         isDarkModeOn.value = false;
         language.value = 'SRB';
-      }finally {
-        if(isDarkModeOn.value) {
-          document.body.style.setProperty('--ion-item-background', '#1F1C2B');
-        }else {
-          document.body.style.setProperty('--ion-item-background', '#F6F7FB');
-        }
       }
-
     });
 
     /* Event handlers */
-    const toggleDarkMode = (e) => {
+    const toggleDarkMode = async(e) => {
       if(!e.target.checked) {
-        document.body.style.setProperty('--ion-item-background', '#F6F7FB')
-        set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, false);
+        await set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, false);
       }else {
-        document.body.style.setProperty('--ion-item-background', '#1F1C2B');
-        set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, true);
+        await set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, true);
       }
       isDarkModeOn.value = e.target.checked;
       document.body.classList.toggle('dark', e.target.checked);
@@ -276,6 +270,7 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-item {
+  --background: var(--primary-paint);
   --border-color: rgba(112, 112, 112, 0.1);
   --inner-padding-end: 0;
 }

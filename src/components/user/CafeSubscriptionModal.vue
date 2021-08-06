@@ -144,9 +144,9 @@ export default defineComponent({
               {
                 text: t('yes'),
                 handler: async() => {
-                  set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
                   await initPush();
                   await subscribe(cafeId);
+                  set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
                 },
               },
             ],
@@ -205,7 +205,7 @@ export default defineComponent({
           await showAlert(cafeId);
           return;
         }
-        await subscribe();
+        await subscribe(cafeId);
       }
 
     };
@@ -232,6 +232,10 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+ion-item {
+  --background: var(--secondary-paint);
+}
+
 ion-range {
   --bar-background: #F6F7FB;
   --bar-background-active: #1B6DE0;

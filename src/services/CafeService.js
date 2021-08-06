@@ -46,11 +46,7 @@ export default {
     },
     // Subscribing user to specific cafe
     subscribe(cafeId, notificationTime = null) {
-        if(notificationTime) {
-            return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime}`);
-        }else {
-            return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/`);
-        }
+        return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime ?? ''}`);
     },
     // Unsubscribing user to specific cafe
     unsubscribe(cafeId) {
@@ -78,18 +74,18 @@ export default {
         const longitude = store.getters['global/position'].longitude;
 
         const R = 6371e3; // metres
-        const f1 = latitude * Math.PI/180; // φ, λ in radians
-        const f2 = placeLatitude * Math.PI/180;
-        const df = (placeLatitude-latitude) * Math.PI/180;
-        const dl = (placeLongitude-longitude) * Math.PI/180;
+        const f1 = latitude * Math.PI / 180; // φ, λ in radians
+        const f2 = placeLatitude * Math.PI / 180;
+        const df = (placeLatitude - latitude) * Math.PI / 180;
+        const dl = (placeLongitude - longitude) * Math.PI / 180;
 
-        const a = Math.sin(df/2) * Math.sin(df/2) +
+        const a = Math.sin(df / 2) * Math.sin(df / 2) +
             Math.cos(f1) * Math.cos(f2) *
-            Math.sin(dl/2) * Math.sin(dl/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            Math.sin(dl / 2) * Math.sin(dl / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 
-         // in metres
+        // in metres
         return R * c;
     },
 };

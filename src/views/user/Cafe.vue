@@ -64,7 +64,7 @@
               class="uppercase button-subscribe-wide"
               expand="block"
               @click="openModal(true)"
-              :disabled="!loggedIn"
+              :disabled="!loggedIn || platformIsWeb"
           >
             <ion-icon slot="start"
                       :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
@@ -92,8 +92,9 @@
 <script>
 import { defineComponent, ref, computed, watch, onMounted } from 'vue';
 import { useStore }                                         from 'vuex';
-import { useRoute }                              from 'vue-router';
-import { useI18n }                               from 'vue-i18n';
+import { useRoute }                                         from 'vue-router';
+import { useI18n }                                          from 'vue-i18n';
+import { Capacitor }                                        from '@capacitor/core';
 import {
   IonPage,
   IonHeader,
@@ -106,7 +107,7 @@ import {
   modalController,
   onIonViewWillEnter,
   onIonViewWillLeave,
-}                                                from '@ionic/vue';
+}                                                           from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
@@ -152,9 +153,10 @@ export default defineComponent({
     const { t } = useI18n();
 
     /* Component properties */
-    let cafe = ref({});
+    const cafe = ref({});
     const isUserSubscribed = ref(false);
     let searchTab = null;
+    const platformIsWeb = Capacitor.getPlatform() === 'web';
 
     /* Computed properties */
     let loggedIn = computed(() => store.getters['auth/loggedIn']);
@@ -167,20 +169,7 @@ export default defineComponent({
     /* Fetching cafe from backend */
     onMounted(() => {
       getCafe();
-      if(loggedIn.value) {
-        try {
-          const response = CafeService.isUserSubscribed(route.params.id);
-
-          isUserSubscribed.value = !!response.data;
-        }catch(error) {
-          showErrorToast(
-              null,
-              {
-                generalError: t('dataFetchingError'),
-              });
-        }
-      }
-    })
+    });
     onIonViewWillEnter(() => {
       searchTab = document.getElementById('tab-button-search');
       if(searchTab) {
@@ -197,8 +186,11 @@ export default defineComponent({
     const getCafe = async() => {
       try {
         const response = await CafeService.show(route.params.id);
-
         cafe.value = response.data;
+        if(loggedIn.value) {
+          const subscriptionResponse = await CafeService.isUserSubscribed(route.params.id);
+          isUserSubscribed.value = !!subscriptionResponse.data;
+        }
       }catch(error) {
         showErrorToast(
             null,
@@ -239,6 +231,7 @@ export default defineComponent({
       cafe,
       isModalOpen,
       isUserSubscribed,
+      platformIsWeb,
 
       /* Computed properties */
       loggedIn,

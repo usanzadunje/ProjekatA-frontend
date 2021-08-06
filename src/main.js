@@ -50,8 +50,11 @@ app.directive('capitalize', {
     },
 });
 app.directive('update-swiper', {
-    mounted(el) {
+    updated(el) {
         el.update();
+        setTimeout(() => {
+            el.update();
+        }, 200);
     },
 });
 
