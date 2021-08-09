@@ -17,12 +17,17 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
-import { IonPage, IonContent }             from '@ionic/vue';
+import {
+  IonPage,
+  IonContent,
+  useBackButton,
+}                                          from '@ionic/vue';
 
-import LoginForm from '@/components/auth/LoginForm';
+import LoginForm               from '@/components/auth/LoginForm';
+import { useRouter, useRoute } from 'vue-router';
 
 export default defineComponent({
-  name: "EditForm",
+  name: "Login",
   components: {
     LoginForm,
     IonPage,
@@ -31,8 +36,18 @@ export default defineComponent({
   setup() {
     /* Component properties */
     const clientHeight = ref(700);
+    const router = useRouter();
+    const route = useRoute();
+
 
     /* Lifecycle hooks */
+    useBackButton(10, (processNextHandler) => {
+      if(route.name === 'login') {
+        router.push({ name: 'home' });
+      }else {
+        processNextHandler();
+      }
+    });
     onMounted(() => {
       setTimeout(() => {
         clientHeight.value = document.querySelector('#login').offsetHeight;
