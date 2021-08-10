@@ -16,7 +16,7 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <EditForm :clearPassword="clearPassword"/>
+      <EditForm :clearInputs="clearInputs"/>
     </ion-content>
   </ion-page>
 </template>
@@ -54,18 +54,18 @@ export default defineComponent({
   setup() {
     /* Component properties */
     let settingsTab = null;
-    const clearPassword = ref(false);
+    const clearInputs = ref(false);
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
-      clearPassword.value = false;
+      clearInputs.value = false;
       settingsTab = document.getElementById('tab-button-settings');
       if(settingsTab) {
         settingsTab.style.color = '#207DFF';
       }
     });
     onIonViewWillLeave(() => {
-      clearPassword.value = true;
+      clearInputs.value = true;
       if(settingsTab) {
         settingsTab.style.color = '';
       }
@@ -73,8 +73,7 @@ export default defineComponent({
 
     return {
       /* Component properties */
-      clearPassword,
-
+      clearInputs,
       /* Icons */
       arrowBackOutline,
       chevronBackOutline,
@@ -84,6 +83,7 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-toolbar {
+  --border-style: none !important;
   --background: var(--show-paint);
   border-bottom-left-radius: unset !important;
   border-bottom-right-radius: unset !important;

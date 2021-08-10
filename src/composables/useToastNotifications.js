@@ -40,7 +40,7 @@ export function useToastNotifications() {
             ],
         });
 
-        toast.style.top = '-50px';
+        toast.style.top = '-3.5rem';
         await toast.present();
     };
     //Generating toast success notifications
@@ -60,7 +60,7 @@ export function useToastNotifications() {
     const showErrorToast = async(backendErrors, errorMessage = null) => {
         errors.value = errorMessage ?? getError(backendErrors);
         for(let i = 0; i < errorKeys.value.length; i++) {
-            if(getErrorMessage(errorKeys.value[i]).length > 1) {
+            if(getErrorMessage(errorKeys.value[i]).length > 1 && typeof getErrorMessage(errorKeys.value[i]) === 'object') {
                 for(let j = 0; j < getErrorMessage(errorKeys.value[i]).length; j++) {
                     const toast = await toastController.create({
                         duration: 1500,
@@ -69,7 +69,7 @@ export function useToastNotifications() {
                         cssClass: 'error-toast',
                         mode: 'ios',
                     });
-                    toast.style.top = `${(55 * i) + (55 * j)}px`;
+                    toast.style.top = `${(3.5 * i) + (3.5 * j)}rem`;
                     await toast.present();
                 }
             }else {
@@ -80,7 +80,7 @@ export function useToastNotifications() {
                     cssClass: 'error-toast',
                     mode: 'ios',
                 });
-                toast.style.top = `${55 * i}px`;
+                toast.style.top = `${3.5 * i}rem`;
                 await toast.present();
             }
 

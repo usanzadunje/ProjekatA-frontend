@@ -1,5 +1,21 @@
 <template>
-  <div id="custom" class="px-8 mt-20">
+  <div id="custom" class="px-8 mt-5">
+    <div
+        class="flex justify-center mb-2"
+    >
+      <ion-thumbnail
+          class="user-profile-picture-edit"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('avatar') }"
+          @click="selectImageSource"
+      >
+        <img
+            ref="avatarDisplay"
+            class="user-profile-picture-edit"
+            alt="avatar"
+            :src="avatar"
+        >
+      </ion-thumbnail>
+    </div>
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11 auth-input-background"
@@ -199,10 +215,10 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted, toRefs, watch } from 'vue';
-import { useRouter }                                                from 'vue-router';
-import { useStore }                                                 from 'vuex';
-import { useI18n }                                                  from 'vue-i18n';
+import { defineComponent, ref, reactive, onMounted, toRefs, watch, computed } from 'vue';
+import { useRouter }                                                          from 'vue-router';
+import { useStore }                                                           from 'vuex';
+import { useI18n }                                                            from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -212,16 +228,18 @@ import {
   IonDatetime,
   IonLabel,
   IonToggle,
+  IonThumbnail,
 }
-                                                                    from "@ionic/vue";
+                                                                              from "@ionic/vue";
 
 import AuthService from "@/services/AuthService";
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
-
-import { getError, sleep } from "@/utils/helpers";
+import { usePhotos }             from '@/composables/usePhotos';
 
 import { Keyboard } from '@capacitor/keyboard';
+
+import { getError, sleep } from "@/utils/helpers";
 
 import {
   mailOutline,
@@ -242,9 +260,10 @@ export default defineComponent({
     IonDatetime,
     IonToggle,
     IonLabel,
+    IonThumbnail,
   },
   props: {
-    clearPassword: {
+    clearInputs: {
       type: Boolean,
       default: false,
     },
@@ -254,6 +273,10 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const { t } = useI18n();
+    //Authenticated user
+    const authUser = computed(() => {
+      return store.getters['auth/authUser'];
+    });
 
     /* Component properties */
     let user = reactive({});
@@ -269,32 +292,31 @@ export default defineComponent({
     const phoneInput = ref(null);
     const passwordInput = ref(null);
     const passwordConfirmInput = ref(null);
+    const avatarDisplay = ref(null);
     const loading = ref(false);
     const showPasswordEdit = ref(false);
-    const { clearPassword } = toRefs(props);
+    const { clearInputs } = toRefs(props);
+    const avatar = ref(authUser.value.avatar);
 
     /* Lifecycle hooks */
     onMounted(async() => {
-      user.fname = store.getters['auth/authUser'].fname;
-      user.lname = store.getters['auth/authUser'].lname;
-      user.username = store.getters['auth/authUser'].username;
-      user.email = store.getters['auth/authUser'].email;
-      user.bday = store.getters['auth/authUser'].bday;
-      user.phone = store.getters['auth/authUser'].phone;
+      user.fname = authUser.value.fname;
+      user.lname = authUser.value.lname;
+      user.username = authUser.value.username;
+      user.email = authUser.value.email;
+      user.bday = authUser.value.bday;
+      user.phone = authUser.value.phone;
     });
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { photo, selectImageSource } = usePhotos();
+
 
     /* Event handlers */
     const update = async() => {
       if(user.bday) {
         user.bday = user.bday.slice(0, 10);
-      }
-      if((!user.old_password && !user.password) || !showPasswordEdit.value) {
-        delete user.old_password;
-        delete user.password;
-        delete user.password_confirmation;
       }
       loading.value = true;
       Keyboard.hide();
@@ -303,7 +325,8 @@ export default defineComponent({
         await AuthService.updateUser(user);
         await store.dispatch("auth/getAuthUser");
         showSuccessToast(t('successUpdate'));
-        await router.push({ name: 'dashboard' });
+        const query = user.avatar ? { refreshAvatar: 'true' } : null;
+        await router.push({ name: 'dashboard', query });
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);
@@ -336,15 +359,32 @@ export default defineComponent({
     };
 
     /* Watchers */
-    watch(clearPassword, () => {
-      if(clearPassword.value) {
+    watch(clearInputs, () => {
+      if(clearInputs.value) {
         showPasswordEdit.value = false;
         showOldPassword.value = false;
         showPassword.value = false;
         showPasswordConfirm.value = false;
+        delete user.old_password;
+        delete user.password;
+        delete user.password_confirmation;
+
+        delete user.avatar;
+        avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
+      }
+    });
+    watch(photo, () => {
+      if(photo?.value) {
+        user.avatar = photo.value;
+
+        avatarDisplay.value.src = photo.value;
       }
     });
     return {
+      /* Global properties */
+      store,
+      authUser,
+
       /* Component properties */
       user,
       showOldPassword,
@@ -359,12 +399,15 @@ export default defineComponent({
       emailInput,
       passwordInput,
       passwordConfirmInput,
+      avatarDisplay,
       loading,
       showPasswordEdit,
+      avatar,
 
       /* Event handlers  */
       update,
       togglePasswordShow,
+      selectImageSource,
 
       /* Icons */
       personOutline,

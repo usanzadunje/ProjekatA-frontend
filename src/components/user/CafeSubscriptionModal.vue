@@ -43,9 +43,12 @@
         <ion-button
             class="uppercase button-confirm modal-button-border"
             @click="toggleSubscription(cafe.id)"
+            :disabled="isSubButtonDisabled"
         >
-          <ion-icon slot="start"
-                    :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="isUserSubscribed ? notifications : notificationsOutline"
+          ></ion-icon>
           {{ isUserSubscribed ? $t('remove') : $t('confirm') }}
         </ion-button>
       </div>
@@ -109,6 +112,7 @@ export default defineComponent({
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
     const content = ref(null);
+    const isSubButtonDisabled = ref(false);
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
@@ -180,6 +184,7 @@ export default defineComponent({
     };
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
     const toggleSubscription = async(cafeId) => {
+      isSubButtonDisabled.value = true;
       const pushNotificationPermission = await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`) ?? false;
 
       if(indefiniteTimerActive.value) {
@@ -203,11 +208,12 @@ export default defineComponent({
       }else {
         if(!pushNotificationPermission) {
           await showAlert(cafeId);
+          isSubButtonDisabled.value = false;
           return;
         }
         await subscribe(cafeId);
       }
-
+      isSubButtonDisabled.value = false;
     };
 
 
@@ -217,6 +223,7 @@ export default defineComponent({
       indefiniteTimerActive,
       isUserSubscribed,
       content,
+      isSubButtonDisabled,
 
       /* Event handlers */
       indefiniteTimerToggle,

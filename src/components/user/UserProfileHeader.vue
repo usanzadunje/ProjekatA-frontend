@@ -15,15 +15,17 @@
         <div class="mt-5 flex justify-start">
           <div>
             <img
-                :src="`${authUser.avatar ?? backendStorageURL + '/user/profile-test.png'}`"
-                alt="Profile picture of user {{ `${authUser.fname} ${authUser.lname}` }}"
+                ref="avatarDisplay"
+                :src="authUser.avatar"
+                :alt="`Profile picture of user ${authUser.fname} ${authUser.lname}`"
                 class="user-profile-picture"
             >
           </div>
           <div class="ml-3 mt-3 user-profile-user-name">
             <div v-if="authUser.username || authUser.fname || authUser.lname">
               <h2 v-if="authUser.fname || authUser.lname" class="user-profile-user-name">
-                {{ `${authUser.fname ?? ''} ${authUser.lname ?? ''}` }}</h2>
+                {{ `${authUser.fname ?? ''} ${authUser.lname ?? ''}` }}
+              </h2>
               <p v-if="authUser.username" class="user-profile-username">{{ authUser.username }}</p>
             </div>
             <a v-else @click="$router.push({ name: 'edit' })" class="user-profile-username underline lowercase">
@@ -37,15 +39,16 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import { mapGetters }      from 'vuex';
+import { computed, defineComponent, watch, ref } from 'vue';
+import { useRoute, useRouter }                   from 'vue-router';
+import { useStore }                              from 'vuex';
 import {
   IonHeader,
   IonIcon,
   IonToolbar,
   IonButton,
   popoverController,
-}                          from '@ionic/vue';
+}                                                from '@ionic/vue';
 
 import SettingsPopover from '@/components/user/popovers/SettingsPopover';
 
@@ -61,12 +64,19 @@ export default defineComponent({
     IonToolbar,
     IonButton,
   },
-  computed: {
-    ...mapGetters('auth', ['authUser']),
-  },
   emits: ['searchFilterChanged'],
   setup(props, { emit }) {
+    /* Global properties */
+    const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
+    //Authenticated user
+    const authUser = computed(() => {
+      return store.getters['auth/authUser'];
+    });
+
     /* Component properties */
+    const avatarDisplay = ref(null);
 
     /* Event handlers */
     const searchInputChanged = (e) => {
@@ -85,8 +95,20 @@ export default defineComponent({
       await popover.present();
     };
 
+    /* Watchers */
+    watch(route, () => {
+      if(route.query.refreshAvatar) {
+        avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
+        router.replace();
+      }
+    });
+
     return {
+      /* Global properties */
+      authUser,
+
       /* Component properties */
+      avatarDisplay,
 
       /* Event handlers */
       searchInputChanged,
