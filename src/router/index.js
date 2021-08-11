@@ -10,7 +10,7 @@ import staff                   from "@/middleware/staff";
 import redirectIfStaff         from '@/middleware/redirectIfStaff';
 
 /* Staff imports views */
-import Staff                   from '@/views/staff/Staff';
+import StaffLayout             from '@/views/staff/layouts/StaffLayout';
 
 /* Layouts */
 import UserLayout              from '@/views/user/layouts/UserLayout';
@@ -24,19 +24,25 @@ const routes = [
         path: "/login",
         name: "login",
         meta: { middleware: [redirectIfAuthenticated] },
-        component: () => import(/* webpackChunkName: "Login" */ "../views/auth/Login"),
+        component: () => import(/* webpackChunkName: "Login" */ "@/views/auth/Login"),
     },
     {
         path: "/test",
         name: "test",
-        component: () => import(/* webpackChunkName: "Test" */ "../views/Test"),
+        component: () => import(/* webpackChunkName: "Test" */ "@/views/Test"),
     },
     {
         path: "/register",
         name: "register",
         meta: { middleware: [redirectIfAuthenticated] },
         component: () =>
-            import(/* webpackChunkName: "Register" */ "../views/auth/Register"),
+            import(/* webpackChunkName: "Register" */ "@/views/auth/Register"),
+    },
+    {
+        path: "/onboadring",
+        name: "onboarding",
+        meta: { middleware: [auth, redirectIfStaff] },
+        component: () => import(/* webpackChunkName: "Onboarding" */ "@/views/user/Onboarding"),
     },
     // {
     //     /* Responsible for showing verification notice view */
@@ -71,55 +77,52 @@ const routes = [
         ============================================= */
 
         path: '/',
-        meta: { middleware: [redirectIfStaff] },
         component: UserLayout,
         children: [
             {
                 path: "/",
+                meta: { middleware: [redirectIfStaff] },
                 redirect: "/home",
             },
             {
                 path: "/home",
                 name: "home",
-                component: () => import(/* webpackChunkName: "Home" */ "../views/user/Home"),
+                meta: { middleware: [redirectIfStaff] },
+                component: () => import(/* webpackChunkName: "Home" */ "@/views/user/Home"),
             },
             {
                 path: "/cafes/:id",
                 name: "cafe",
+                meta: { middleware: [redirectIfStaff] },
                 component: () =>
-                    import(/* webpackChunkName: "Cafe" */ "../views/user/Cafe"),
+                    import(/* webpackChunkName: "Cafe" */ "@/views/user/Cafe"),
             },
             {
                 path: "/search",
                 name: "search",
-                component: () => import(/* webpackChunkName: "Search" */ "../views/user/Search"),
+                meta: { middleware: [redirectIfStaff] },
+                component: () => import(/* webpackChunkName: "Search" */ "@/views/user/Search"),
                 props: true,
             },
             {
                 path: "/dashboard",
                 name: "dashboard",
-                meta: { middleware: [auth] },
-                component: () => import(/* webpackChunkName: "Dashboard" */ "../views/user/Dashboard"),
+                meta: { middleware: [auth, redirectIfStaff] },
+                component: () => import(/* webpackChunkName: "Dashboard" */ "@/views/user/Dashboard"),
             },
             {
                 path: "/settings",
                 name: "settings",
-                meta: { middleware: [auth] },
-                component: () => import(/* webpackChunkName: "Settings" */ "../views/user/Settings"),
+                meta: { middleware: [auth, redirectIfStaff] },
+                component: () => import(/* webpackChunkName: "Settings" */ "@/views/user/Settings"),
             },
             {
                 path: "/edit",
                 name: "edit",
-                meta: { middleware: [auth] },
-                component: () => import(/* webpackChunkName: "Edit" */ "../views/user/Edit"),
+                meta: { middleware: [auth, redirectIfStaff] },
+                component: () => import(/* webpackChunkName: "Edit" */ "@/views/user/Edit"),
             },
         ],
-    },
-    {
-        path: "/onboadring",
-        name: "onboarding",
-        meta: { middleware: [redirectIfStaff, auth] },
-        component: () => import(/* webpackChunkName: "Onboarding" */ "../views/user/Onboarding"),
     },
     /* =============================================
         End routes protected from staff
@@ -130,20 +133,25 @@ const routes = [
     ============================================= */
     {
         path: "/staff",
-        component: Staff,
+        component: StaffLayout,
         meta: { middleware: [auth, staff] },
         children: [
             {
-                path: "/tables",
-                name: "staff.tables",
+                path: "/",
                 component: () =>
-                    import(/* webpackChunkName: "TableStaff" */ "../views/staff/Tables"),
+                    import(/* webpackChunkName: "Test" */ "@/views/Test"),
             },
             {
                 path: "/home",
                 name: "staff.home",
+                component: () => import(/* webpackChunkName: "HomeStaff" */ "@/views/staff/Home"),
+
+            },
+            {
+                path: "/tables",
+                name: "staff.tables",
                 component: () =>
-                    import(/* webpackChunkName: "HomeStaff" */ "../views/staff/Home"),
+                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Tables"),
             },
         ],
     },

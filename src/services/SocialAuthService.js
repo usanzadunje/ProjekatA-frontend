@@ -15,10 +15,10 @@ export default {
 const useGoogle = async() => {
     const googleUser = await GoogleAuth.signIn();
     return {
-        fname: googleUser.givenName,
-        lname: googleUser.familyName,
+        fname: googleUser.givenName ?? '',
+        lname: googleUser.familyName ?? '',
         email: googleUser.email,
-        avatar: googleUser.imageUrl,
+        avatar: googleUser.imageUrl ?? '',
         provider_id: googleUser.id,
     };
 };
@@ -28,8 +28,8 @@ const useFacebook = async() => {
     const facebookUser = await FacebookLogin.getProfile({ fields: ['email', 'name'] });
 
     return {
-        fname: facebookUser.name.split(' ')[0],
-        lname: facebookUser.name.split(' ')[1],
+        fname: facebookUser.name.split(' ')[0] ?? '',
+        lname: facebookUser.name.split(' ')[1] ?? '',
         email: facebookUser.email,
         avatar: null,
         provider_id: facebookUser.id,

@@ -19,10 +19,11 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent }                         from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 
 import RegisterForm from "@/components/auth/RegisterForm";
+
 
 export default defineComponent({
   name: "Register",
@@ -32,6 +33,9 @@ export default defineComponent({
     IonContent,
   },
   setup() {
+    /* Global properties */
+
+    /* Composables */
 
     return {};
   },

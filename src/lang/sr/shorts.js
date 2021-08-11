@@ -74,5 +74,13 @@ export default {
     "done": "Gotovo",
     "unknown": "Neznanac",
     "or": "ili",
+    "me": "Ja",
+    "currentPosition": "Vasa trenutna lokacija.",
+    "takePhoto": "Napravite Fotografiju",
+    "chooseGallery": "Izaberite Iz Galerije",
+    "selectSource": "Izaberite izvor fotografije",
+    "choose": "Izaberi",
+    "select": "Izaberi fotografiju",
+    "open": "Otvori",
 };
 

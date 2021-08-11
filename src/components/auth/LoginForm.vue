@@ -158,7 +158,8 @@ export default defineComponent({
         const response = await AuthService.login(user);
         await set(`projekata_token`, response.data.token);
         await store.dispatch("auth/getAuthUser");
-        const homeRoute = store.getters["auth/isStaff"] ? { name: 'staff.home' } : { name: 'home' };
+        await store.dispatch("auth/setSettings");
+        const homeRoute = response.data.staff ? { name: 'staff.home' } : { name: 'home' };
         user.login = '';
         user.password = '';
         await router.replace(homeRoute);

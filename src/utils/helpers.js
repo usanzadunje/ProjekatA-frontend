@@ -1,12 +1,18 @@
 import router from "@/router";
 
+import { i18n } from '@/i18n';
+
 // Returning array of errors from backend
 export function getError(error) {
-    const errorMessage = { apiError: ["API Error, please try again."] };
+    const errorMessage = { apiError: [i18n.global.t('generalAlertError')] };
 
     if(error.response.status === 404) {
         if(router.currentRoute.name !== "notFound")
             router.push({ path: "/404" });
+    }
+
+    if(error.response.status === 429) {
+        return { tooManyRequests: [i18n.global.t('tooManyRequests')] }
     }
 
     if(error.response.data && error.response.data.errors) {

@@ -48,7 +48,7 @@ import {
   IonModal,
   onIonViewWillEnter,
   onIonViewDidEnter,
-  onIonViewWillLeave,
+  // onIonViewWillLeave,
 }
                                 from '@ionic/vue';
 
@@ -102,11 +102,12 @@ export default defineComponent({
     onIonViewDidEnter(() => {
       openModal(!!route.query.openModal);
     });
-    onIonViewWillLeave(() => {
-      // Before leaving page remove search input value and clear search string
-      document.querySelector('ion-searchbar div input').value = null;
-      cafeSearchString.value = '';
-    });
+    //Uncomment this if it is better to clear input every time after user leaves search page.
+    // onIonViewWillLeave(() => {
+    //   // Before leaving page remove search input value and clear search string
+    //   document.querySelector('ion-searchbar div input').value = null;
+    //   cafeSearchString.value = '';
+    // });
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
@@ -116,7 +117,7 @@ export default defineComponent({
       sortBy.value = sortValue;
     };
     const pullAnimation = async(event) => {
-      if(infiniteScrollLoading.value){
+      if(infiniteScrollLoading.value) {
         return;
       }
       let currentScrollDirectionDown = event.detail.currentY > scrollTopOffset.value;

@@ -12,4 +12,6 @@ export default {
     "dataFetchingError": "There was problem while fetching data. Please try again.",
     "generalAlertError": "Unexpected error has occurred. Please try again",
     "warningGoogleMapsError": "We couldn't load map for you.",
+    "tooManyRequests": "Too much requests in short period of time. Slow down.",
+    "forceLogout": "There was an error but we forced logout.",
 };

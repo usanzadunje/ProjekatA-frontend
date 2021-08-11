@@ -26,6 +26,10 @@ export function usePhotos() {
                 resultType: CameraResultType.DataUrl,
                 source: sourceType,
                 quality: 50,
+                promptLabelHeader: t('selectPhoto'),
+                promptLabelCancel: t('cancel'),
+                promptLabelPhoto: t('choose'),
+                promptLabelPicture: t('open'),
             });
 
             photo.value = image.dataUrl;
@@ -36,14 +40,14 @@ export function usePhotos() {
     const selectImageSource = async() => {
         const buttons = [
             {
-                text: 'Take Photo',
+                text: t('takePhoto'),
                 icon: camera,
                 handler: () => {
                     getBase64Image();
                 },
             },
             {
-                text: 'Choose From Gallery',
+                text: t('chooseGallery'),
                 icon: image,
                 handler: () => {
                     getBase64Image(CameraSource.Photos);
@@ -53,7 +57,7 @@ export function usePhotos() {
 
         try {
             const actionSheet = await actionSheetController.create({
-                header: 'Select image source',
+                header: t('selectSource'),
                 buttons,
             });
 

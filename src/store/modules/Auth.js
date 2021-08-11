@@ -20,34 +20,43 @@ export const mutations = {
 
 export const actions = {
     //Logging out user and redirecting to login page
-    logout({ commit }) {
+    async logout({ commit }) {
         const { set } = useStorage();
-        return AuthService.logout()
-                          .then(async() => {
-                              commit("SET_USER", null);
-                              await set('projekata_token', null);
-                              await router.replace({ name: 'login' });
-                              document.body.classList.toggle('dark', false);
-                          });
+        try {
+            await AuthService.logout();
+        }catch(error) {
+            alert(i18n.global.t('forceLogout'));
+        }finally {
+            commit("SET_USER", null);
+            await set('projekata_token', null);
+            i18n.global.locale.value = 'sr';
+            await router.replace({ name: 'login' });
+            document.body.classList.toggle('dark', false);
+        }
     },
     // Getting authenticated user info and saving it to store
-    async getAuthUser({ commit, state }) {
-        const { get } = useStorage();
+    async getAuthUser({ commit }) {
         try {
             const response = await AuthService.getAuthUser();
             commit("SET_USER", response.data);
-            get(`isDarkModeOn.${state.user.id}`)
-                .then((response) => {
-                    document.body.classList.toggle('dark', !!response);
-                })
-                .catch(() => {
-                    document.body.classList.toggle('dark', false);
-                });
             return true;
         }catch(error) {
-            document.body.classList.toggle('dark', false);
             commit("SET_USER", null);
             return false;
+        }
+    },
+    async setSettings({ state }) {
+        const { get } = useStorage();
+        try {
+            const storedLocale = await get(`localization.${state.user.id}`);
+            const storedDarkMode = await get(`isDarkModeOn.${state.user.id}`);
+
+            document.body.classList.toggle('dark', !!storedDarkMode);
+            i18n.global.locale.value = storedLocale.value ?? 'sr';
+
+        }catch(error) {
+            document.body.classList.toggle('dark', false);
+            i18n.global.locale.value = 'sr';
         }
     },
 };
@@ -82,6 +91,6 @@ export const getters = {
     // },
     // Checking if auth user is staff member
     isStaff: (state) => {
-        return !!state.user.cafe_id;
+        return !!state.user?.cafe_id;
     },
 };

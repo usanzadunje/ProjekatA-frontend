@@ -106,8 +106,8 @@ export default defineComponent({
         await CapacitorGoogleMaps.addMarker({
           latitude: store.getters['global/position'].latitude,
           longitude: store.getters['global/position'].longitude,
-          title: 'Your postion',
-          snippet: 'This is your current position',
+          title: t('me'),
+          snippet: t('currentPosition'),
           opacity: 2.5,
         });
 

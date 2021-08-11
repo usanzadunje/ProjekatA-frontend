@@ -74,4 +74,13 @@ export default {
     "done": "Done",
     "unknown": "Unknown",
     "or": "or",
+    "me": "Me",
+    "currentPosition": "Your current location",
+    "takePhoto": "Take Photo",
+    "chooseGallery": "Choose From Gallery",
+    "selectSource": "Select image source",
+    "choose": "Choose",
+    "select": "Select image",
+    "open": "Open",
+
 };

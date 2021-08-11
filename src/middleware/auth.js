@@ -3,9 +3,9 @@
 export default async function auth({ next, store }) {
     const loginRoute = { name: "login" };
 
-    if(await store.dispatch("auth/getAuthUser")) {
+    if(store.getters["auth/loggedIn"]) {
         next();
     }else {
-        next(loginRoute)
+        next(loginRoute);
     }
 }

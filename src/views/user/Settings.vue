@@ -100,8 +100,8 @@ import {
 
 import AuthService from '@/services/AuthService';
 
-import { useStorage } from '@/services/StorageService';
-import { useFCM } from '@/composables/useFCM';
+import { useStorage }            from '@/services/StorageService';
+import { useFCM }                from '@/composables/useFCM';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
@@ -192,16 +192,26 @@ export default defineComponent({
       areNotificationsOn.value = e.target.checked;
     };
     const logout = async() => {
-      const loading = await loadingController
-          .create({
-            spinner: 'crescent',
-            cssClass: 'custom-loading',
-            message: t('loggingOut'),
-            mode: 'ios',
-          });
-      await loading.present();
-      await store.dispatch("auth/logout");
-      loading.dismiss();
+      let loading = null;
+      try {
+        loading = await loadingController
+            .create({
+              spinner: 'crescent',
+              cssClass: 'custom-loading',
+              message: t('loggingOut'),
+              mode: 'ios',
+            });
+        await loading.present();
+        await store.dispatch("auth/logout");
+      }catch(error) {
+        showErrorToast(
+            null,
+            {
+              generalError: t('generalAlertError'),
+            });
+      }finally {
+        loading?.dismiss();
+      }
     };
     const chooseLanguage = async() => {
       const picker = await pickerController.create({

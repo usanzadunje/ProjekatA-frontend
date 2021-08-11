@@ -15,8 +15,8 @@
         >
         </ion-refresher-content>
       </ion-refresher>
-      <FilterCategoryHeading class="mb-2" 
-:title="$t('closest')"/>
+      <FilterCategoryHeading class="mb-2"
+                             :title="$t('closest')"/>
       <ion-slides v-show="!showSkeleton" :options="slideOpts">
         <ion-slide>
           <HomeSlidingCafeCards
@@ -237,7 +237,7 @@ export default defineComponent({
         cafes.currentlyAvailable = response[1].data;
         cafes.haveFood = response[2].data;
       }catch(error) {
-        alert(JSON.stringify(error))
+        alert(error);
         showErrorToast(
             null,
             {

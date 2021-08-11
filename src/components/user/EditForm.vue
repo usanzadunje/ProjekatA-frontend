@@ -314,9 +314,19 @@ export default defineComponent({
 
 
     /* Event handlers */
+    const clearPasswordInputs = () => {
+      delete user.old_password;
+      delete user.password;
+      delete user.password_confirmation;
+    };
+
+    /* Event handlers */
     const update = async() => {
       if(user.bday) {
         user.bday = user.bday.slice(0, 10);
+      }
+      if((!user.old_password && !user.password) || !showPasswordEdit.value) {
+        clearPasswordInputs();
       }
       loading.value = true;
       Keyboard.hide();
@@ -365,9 +375,7 @@ export default defineComponent({
         showOldPassword.value = false;
         showPassword.value = false;
         showPasswordConfirm.value = false;
-        delete user.old_password;
-        delete user.password;
-        delete user.password_confirmation;
+        clearPasswordInputs();
 
         delete user.avatar;
         avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();

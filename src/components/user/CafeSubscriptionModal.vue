@@ -30,7 +30,7 @@
             :disabled="indefiniteTimerActive || isUserSubscribed"
         ></ion-range>
         <ion-label class="ml-1 margin-left-1 submodal-alert-time">
-          {{ !isNaN(notificationTime) ? notificationTime + 'min' : '∞' }}
+          {{ !indefiniteTimerActive ? notificationTime + 'min' : '∞' }}
         </ion-label>
       </ion-item>
       <div class="mt-2 mb-3 flex justify-around">
@@ -121,12 +121,14 @@ export default defineComponent({
     /* Methods */
     const { get, set } = useStorage();
     const subscribe = async(cafeId) => {
+      const notifyIn = indefiniteTimerActive.value ? '' : notificationTime.value;
       try {
-        await CafeService.subscribe(cafeId, notificationTime.value);
+        await CafeService.subscribe(cafeId, notifyIn);
         isUserSubscribed.value = true;
         emit('userToggledSubscription');
         await showSuccessToast(t('successSubscribe'));
       }catch(error) {
+        alert(JSON.stringify(error));
         showErrorToast(
             null,
             {
@@ -188,7 +190,7 @@ export default defineComponent({
       const pushNotificationPermission = await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`) ?? false;
 
       if(indefiniteTimerActive.value) {
-        notificationTime.value = null;
+        notificationTime.value = 5;
       }
 
       if(isUserSubscribed.value) {
@@ -239,6 +241,10 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+ion-content {
+  --background: var(--secondary-paint) !important;
+}
+
 ion-item {
   --background: var(--secondary-paint);
 }

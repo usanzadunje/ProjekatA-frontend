@@ -11,18 +11,18 @@ export const apiClient = axios.create({
     Add a request interceptor to add authentication token on each request
 */
 apiClient.interceptors.request.use(async function(config) {
-    try{
+    try {
         const { get } = useStorage();
         const token = await get('projekata_token');
         const locale = await get(`localization.${store.getters['auth/authUser'].id}`);
-
+        
         if(!token) {
             delete config.headers.authorization;
         }else {
             config.headers.authorization = `Bearer ${token}`;
         }
         config.headers['X-Localization'] = locale ? locale.value : 'sr';
-    } catch(error) {
+    }catch(error) {
         delete config.headers.authorization;
         config.headers['X-Localization'] = 'sr';
     }

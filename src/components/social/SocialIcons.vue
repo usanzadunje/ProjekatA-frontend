@@ -19,6 +19,7 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter }            from 'vue-router';
 import { useStore }             from 'vuex';
+import { useI18n }              from 'vue-i18n';
 import { IonIcon }              from '@ionic/vue';
 
 import AuthService       from '@/services/AuthService';
@@ -47,6 +48,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const { set } = useStorage();
+    const { t } = useI18n();
 
     /* Component properties */
     let errorNames = ref({});
@@ -61,13 +63,14 @@ export default defineComponent({
       try {
         const payload = await SocialAuthService.getUserFromProvider(driver);
         payload.device_name = deviceInfo.name || deviceInfo.model;
-
         const response = await AuthService.authenticateSocial(payload);
-        await set(`projekata_token`, response.data);
+        await set(`projekata_token`, response.data.token);
 
         await store.dispatch("auth/getAuthUser");
-        showSuccessToast('Success logged in!');
-        await router.push({ name: 'home' });
+        await store.dispatch("auth/setSettings");
+
+        await router.replace({ name: 'home' });
+        showSuccessToast(t('successLogin'));
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);
