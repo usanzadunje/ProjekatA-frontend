@@ -108,7 +108,8 @@ import {
   flash,
   chevronForward,
   rocket,
-} from 'ionicons/icons';
+}                                  from 'ionicons/icons';
+import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
 
 export default defineComponent({
   name: 'Settings',
@@ -160,8 +161,17 @@ export default defineComponent({
     const toggleDarkMode = async(e) => {
       if(!e.target.checked) {
         await set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, false);
+
+        Keyboard.setStyle({
+          style: KeyboardStyle.Light,
+        });
+
       }else {
         await set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, true);
+
+        Keyboard.setStyle({
+          style: KeyboardStyle.Dark,
+        });
       }
       isDarkModeOn.value = e.target.checked;
       document.body.classList.toggle('dark', e.target.checked);

@@ -138,6 +138,7 @@ const routes = [
         children: [
             {
                 path: "/",
+                name: "tist",
                 component: () =>
                     import(/* webpackChunkName: "Test" */ "@/views/Test"),
             },

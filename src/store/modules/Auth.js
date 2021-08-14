@@ -1,6 +1,7 @@
-import router from "@/router";
-
-import { i18n } from "@/i18n";
+import router                      from "@/router";
+import { Capacitor }               from "@capacitor/core";
+import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
+import { i18n }                    from "@/i18n";
 
 import AuthService    from "@/services/AuthService";
 import { useStorage } from '@/services/StorageService';
@@ -53,6 +54,18 @@ export const actions = {
 
             document.body.classList.toggle('dark', !!storedDarkMode);
             i18n.global.locale.value = storedLocale.value ?? 'sr';
+
+            if(Capacitor.isNativePlatform()) {
+                if(storedDarkMode === true) {
+                    await Keyboard.setStyle({
+                        style: KeyboardStyle.Dark,
+                    });
+                }else {
+                    await Keyboard.setStyle({
+                        style: KeyboardStyle.Light,
+                    });
+                }
+            }
 
         }catch(error) {
             document.body.classList.toggle('dark', false);

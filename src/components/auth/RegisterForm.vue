@@ -165,12 +165,10 @@ export default defineComponent({
       try {
         const response = await AuthService.register(newUser);
         await set(`projekata_token`, response.data.token);
+        await store.dispatch("auth/getAuthUser");
+        await store.dispatch("auth/setSettings");
         newUser = {};
         await router.replace({ name: 'onboarding' });
-        set(`localization.${store.getters['auth/authUser'].id}`, {
-          text: 'SRB',
-          value: 'sr',
-        });
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);

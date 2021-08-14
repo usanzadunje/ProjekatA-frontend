@@ -2,6 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true" :scroll-events="true">
       <SwiperTest></SwiperTest>
+      123
     </ion-content>
   </ion-page>
 </template>
