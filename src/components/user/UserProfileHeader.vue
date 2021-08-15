@@ -16,17 +16,17 @@
           <div>
             <img
                 ref="avatarDisplay"
-                :src="authUser.avatar"
-                :alt="`Profile picture of user ${authUser.fname} ${authUser.lname}`"
+                :src="authUser?.avatar"
+                :alt="`Profile picture of user ${authUser?.fname} ${authUser?.lname}`"
                 class="user-profile-picture"
             >
           </div>
           <div class="ml-3 mt-3 user-profile-user-name">
-            <div v-if="authUser.username || authUser.fname || authUser.lname">
-              <h2 v-if="authUser.fname || authUser.lname" class="user-profile-user-name">
-                {{ `${authUser.fname ?? ''} ${authUser.lname ?? ''}` }}
+            <div v-if="authUser?.username || authUser?.fname || authUser?.lname">
+              <h2 v-if="authUser?.fname || authUser?.lname" class="user-profile-user-name">
+                {{ `${authUser?.fname ?? ''} ${authUser?.lname ?? ''}` }}
               </h2>
-              <p v-if="authUser.username" class="user-profile-username">{{ authUser.username }}</p>
+              <p v-if="authUser?.username" class="user-profile-username">{{ authUser?.username }}</p>
             </div>
             <a v-else @click="$router.push({ name: 'edit' })" class="user-profile-username underline lowercase">
               {{ $t('noSettingsText') }}

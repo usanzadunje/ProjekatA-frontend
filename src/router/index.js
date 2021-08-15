@@ -78,48 +78,45 @@ const routes = [
 
         path: '/',
         component: UserLayout,
+        meta: { middleware: [redirectIfStaff] },
+        redirect: "/home",
         children: [
             {
-                path: "/",
-                meta: { middleware: [redirectIfStaff] },
-                redirect: "/home",
-            },
-            {
-                path: "/home",
+                path: "home",
                 name: "home",
-                meta: { middleware: [redirectIfStaff] },
+                meta: { middleware: [] },
                 component: () => import(/* webpackChunkName: "Home" */ "@/views/user/Home"),
             },
             {
-                path: "/cafes/:id",
+                path: "cafes/:id",
                 name: "cafe",
-                meta: { middleware: [redirectIfStaff] },
+                meta: { middleware: [] },
                 component: () =>
                     import(/* webpackChunkName: "Cafe" */ "@/views/user/Cafe"),
             },
             {
-                path: "/search",
+                path: "search",
                 name: "search",
-                meta: { middleware: [redirectIfStaff] },
+                meta: { middleware: [] },
                 component: () => import(/* webpackChunkName: "Search" */ "@/views/user/Search"),
                 props: true,
             },
             {
-                path: "/dashboard",
+                path: "dashboard",
                 name: "dashboard",
-                meta: { middleware: [auth, redirectIfStaff] },
+                meta: { middleware: [auth] },
                 component: () => import(/* webpackChunkName: "Dashboard" */ "@/views/user/Dashboard"),
             },
             {
-                path: "/settings",
+                path: "settings",
                 name: "settings",
-                meta: { middleware: [auth, redirectIfStaff] },
+                meta: { middleware: [auth] },
                 component: () => import(/* webpackChunkName: "Settings" */ "@/views/user/Settings"),
             },
             {
-                path: "/edit",
+                path: "edit",
                 name: "edit",
-                meta: { middleware: [auth, redirectIfStaff] },
+                meta: { middleware: [auth] },
                 component: () => import(/* webpackChunkName: "Edit" */ "@/views/user/Edit"),
             },
         ],
@@ -131,26 +128,30 @@ const routes = [
     /* =============================================
         Start routes protected from end-user
     ============================================= */
+
     {
         path: "/staff",
         component: StaffLayout,
         meta: { middleware: [auth, staff] },
+        redirect: "/staff/dashboard",
         children: [
             {
-                path: "/",
-                name: "tist",
-                component: () =>
-                    import(/* webpackChunkName: "Test" */ "@/views/Test"),
+                path: "test",
+                name: "staff.test",
+                meta: { middleware: [] },
+                component: () => import(/* webpackChunkName: "Test" */ "@/views/Test"),
             },
             {
-                path: "/home",
-                name: "staff.home",
-                component: () => import(/* webpackChunkName: "HomeStaff" */ "@/views/staff/Home"),
+                path: "dashboard",
+                name: "staff.dashboard",
+                meta: { middleware: [] },
+                component: () => import(/* webpackChunkName: "HomeStaff" */ "@/views/staff/Dashboard"),
 
             },
             {
-                path: "/tables",
+                path: "tables",
                 name: "staff.tables",
+                meta: { middleware: [] },
                 component: () =>
                     import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Tables"),
             },
@@ -169,11 +170,11 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "NotFound" */ "../views/errors/404"),
     },
-    {
-        /* Responsible for handling routes that do not exist */
-        path: "/:catchAll(.*)",
-        redirect: { name: 'notFound' },
-    },
+    // {
+    //     /* Responsible for handling routes that do not exist */
+    //     path: "/:catchAll(.*)",
+    //     redirect: { name: 'notFound' },
+    // },
     /* =============================================
         End error routes
     ============================================= */
@@ -192,8 +193,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const middleware = to.meta.middleware;
-    const context = { to, from, next, store };
+    let middleware = to.meta?.middleware;
+    if(to.matched?.length > 1) {
+        middleware = [
+            ...middleware,
+            ...to.matched[0]?.meta?.middleware,
+        ];
+    }
+    const context = { to, from, next, store, router };
 
     if(!middleware) {
         return next();

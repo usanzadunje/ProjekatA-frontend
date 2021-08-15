@@ -47,7 +47,7 @@ export const actions = {
         }
     },
     async setSettings({ state }) {
-        const { get } = useStorage();
+        const { get, set } = useStorage();
         try {
             const storedLocale = await get(`localization.${state.user.id}`);
             const storedDarkMode = await get(`isDarkModeOn.${state.user.id}`);
@@ -57,17 +57,22 @@ export const actions = {
 
             if(Capacitor.isNativePlatform()) {
                 if(storedDarkMode === true) {
-                    await Keyboard.setStyle({
+                    Keyboard.setStyle({
                         style: KeyboardStyle.Dark,
                     });
                 }else {
-                    await Keyboard.setStyle({
+                    Keyboard.setStyle({
                         style: KeyboardStyle.Light,
                     });
                 }
             }
 
         }catch(error) {
+            await set(`localization.${state.user?.id}`, {
+                text: 'SRB',
+                value: 'sr',
+            });
+            await set(`isDarkModeOn.${state.user?.id}`, false);
             document.body.classList.toggle('dark', false);
             i18n.global.locale.value = 'sr';
         }
@@ -77,7 +82,7 @@ export const actions = {
 export const getters = {
     // Auth user info
     authUser: (state) => {
-        return state.user ?? {};
+        return state.user;
     },
     displayName: (state) => {
         let displayName;

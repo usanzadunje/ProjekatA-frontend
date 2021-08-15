@@ -14,8 +14,9 @@ apiClient.interceptors.request.use(async function(config) {
     try {
         const { get } = useStorage();
         const token = await get('projekata_token');
-        const locale = await get(`localization.${store.getters['auth/authUser'].id}`);
-        
+
+        const locale = await get(`localization.${store.getters['auth/authUser']?.id}`);
+
         if(!token) {
             delete config.headers.authorization;
         }else {

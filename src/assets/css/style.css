@@ -830,10 +830,19 @@ ion-toggle {
     START IMAGES STYLES
  */
 .background-image-container {
-    width: 100%;
+    width: 100vw;
     height: 100vh;
 }
 
 /*
     END IMAGES STYLES
+ */
+
+/*
+    START MENU STYLES
+ */
+
+
+/*
+    END MENU STYLES
  */

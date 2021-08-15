@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <div id="login" class="flex flex-col justify-between background-image-container bg">
+      <div id="login" class="flex flex-col justify-between background-image-container">
         <div class="mt-10 w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>
@@ -67,9 +67,8 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-div.bg {
-  background: #FFF url('https://resize.rs/storage/img/auth/login-background.png') no-repeat center top fixed;
-  background-size: cover;
-
+ion-content {
+  --background: #FFF url('https://resize.rs/storage/img/auth/login-background.png') no-repeat center top;
+  background-size: cover !important;
 }
 </style>

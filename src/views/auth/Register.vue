@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="flex flex-col justify-between background-image-container bg">
+      <div class="flex flex-col justify-between background-image-container">
         <div class="mt-10 w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { defineComponent }                         from 'vue';
+import { defineComponent }     from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 
 import RegisterForm from "@/components/auth/RegisterForm";
@@ -46,8 +46,8 @@ ion-content {
   --background: #FFF;
 }
 
-div.bg {
-  background: #FFF url('https://resize.rs/storage/img/auth/registration-background.png') no-repeat center top fixed;
-  background-size: cover;
+ion-content {
+  --background: #FFF url('https://resize.rs/storage/img/auth/registration-background.png') no-repeat center top;
+  background-size: cover !important;
 }
 </style>

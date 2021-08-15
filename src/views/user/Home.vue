@@ -174,27 +174,29 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     // Because getting lat and lng takes long tame wait for it to happen and then hit API with correct lat and lng values
-    const unsubscribeWatcher = store.subscribe((mutation) => {
-      if(mutation.type === 'global/SET_POSITION') {
-        try {
-          const response = CafeService.getCafeCardsChunkInfo(
-              0, 4,
-              '', 'distance', true,
-              store.getters['global/position'].latitude,
-              store.getters['global/position'].longitude,
-          );
-          cafes.closestToUser = response.data;
+    const unwatch = store.watch(
+        (state, getters) => getters['global/position'],
+        async() => {
+          try {
+            const response = await CafeService.getCafeCardsChunkInfo(
+                0, 4,
+                '', 'distance', true,
+                store.getters['global/position'].latitude,
+                store.getters['global/position'].longitude,
+            );
 
-          unsubscribeWatcher();
-        }catch(error) {
-          showErrorToast(
-              null,
-              {
-                pushNotificationPermission: t('dataFetchingError'),
-              });
-        }
-      }
-    });
+            cafes.closestToUser = response.data;
+
+            unwatch();
+          }catch(error) {
+            showErrorToast(
+                null,
+                {
+                  pushNotificationPermission: t('dataFetchingError'),
+                });
+          }
+        },
+    );
 
     //Before fetching cafes by distance get location and then pass it to query string in API call to backend
     onMounted(async() => {
@@ -237,7 +239,6 @@ export default defineComponent({
         cafes.currentlyAvailable = response[1].data;
         cafes.haveFood = response[2].data;
       }catch(error) {
-        alert(error);
         showErrorToast(
             null,
             {

@@ -1,6 +1,6 @@
-export default function redirectIfAuthenticated({ from, next, store }) {
+export default async function redirectIfAuthenticated({ from, next, store, router }) {
     if(store.getters["auth/loggedIn"]) {
-        next(from);
+        router.replace(from);
     }else {
         next();
     }

@@ -26,12 +26,12 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     onMounted(async() => {
-      await store.dispatch("auth/getAuthUser");
-
       await store.dispatch("auth/setSettings");
 
-      await checkForLocationPermission();
-      await tryGettingLocation();
+      if(!store.getters["auth/isStaff"]) {
+        await checkForLocationPermission();
+        await tryGettingLocation();
+      }
 
     });
 

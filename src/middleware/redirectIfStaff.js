@@ -3,11 +3,9 @@
     for end-user(routes that are not for staff users) and redirect accordingly
 */
 
-export default function redirectIfStaff({ next, store }) {
-    const homeStaffRoute = { name: 'staff.home' };
-
+export default async function redirectIfStaff({ next, store, router }) {
     if(store.getters["auth/isStaff"]) {
-        next(homeStaffRoute);
+        router.replace({ name: 'staff.dashboard' });
     }else {
         next();
     }

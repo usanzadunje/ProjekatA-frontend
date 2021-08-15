@@ -11,7 +11,7 @@
         {{ table.serial_number }}
         <ion-button size="small" color="primary" @click="toggle(table.id)">Toggle</ion-button>
       </div>
-      <ion-button color="warning" routerLink="/staff/home">Home</ion-button>
+      <ion-button color="warning" routerLink="/staff/dashboard">Home</ion-button>
     </ion-content>
   </ion-page>
 </template>

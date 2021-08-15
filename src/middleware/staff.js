@@ -1,9 +1,7 @@
-export default function staff({ next, store }) {
-    const homeRoute = { name: "home" };
-
-    if(store.getters["auth/isStaff"]) {
-        next();
+export default async function staff({ next, store, router }) {
+    if(!store.getters["auth/isStaff"]) {
+        router.replace({ name: "home" });
     }else {
-        next(homeRoute);
+        next();
     }
 }

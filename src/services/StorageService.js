@@ -20,9 +20,14 @@ export function useStorage() {
         return storage?.get(key);
     };
 
+    const remove = async(key) => {
+        await storage?.remove(key);
+    };
+
 
     return {
         set,
         get,
+        remove,
     };
 }
