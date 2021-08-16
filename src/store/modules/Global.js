@@ -14,7 +14,7 @@ export const actions = {};
 
 export const getters = {
     position: (state) => {
-        return state.position ?? {
+        return state.position || {
             latitude: 0,
             longitude: 0,
         };

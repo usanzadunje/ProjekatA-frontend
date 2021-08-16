@@ -23,8 +23,9 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { useRouter }        from 'vue-router';
+import { useRouter }       from 'vue-router';
 import { useStore }        from 'vuex';
+import { useI18n }         from 'vue-i18n';
 import {
   IonContent,
   IonIcon,
@@ -32,10 +33,7 @@ import {
   popoverController,
 }                          from '@ionic/vue';
 
-import { useI18n } from 'vue-i18n';
-
 import { personOutline, settingsOutline } from 'ionicons/icons';
-
 
 export default defineComponent({
   name: 'Popover',
@@ -61,13 +59,13 @@ export default defineComponent({
           });
       await loading.present();
       await store.dispatch("auth/logout");
-      loading.dismiss();
+      await loading.dismiss();
 
       await popoverController.dismiss();
     };
 
     const navigateTo = async(pageName) => {
-      await router.push({ name: pageName })
+      await router.push({ name: pageName });
 
       await popoverController.dismiss();
     };

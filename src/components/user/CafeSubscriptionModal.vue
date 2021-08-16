@@ -72,7 +72,7 @@ import {
   alertController,
 }                                                 from '@ionic/vue';
 
-import { useStorage } from '@/services/StorageService';
+import { StorageService } from '@/services/StorageService';
 import CafeService    from '@/services/CafeService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
@@ -107,8 +107,8 @@ export default defineComponent({
     const { t } = useI18n();
 
     /* Component properties */
-    let notificationTime = ref(15);
-    let indefiniteTimerActive = ref(false);
+    const notificationTime = ref(15);
+    const indefiniteTimerActive = ref(false);
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
     const content = ref(null);
@@ -117,9 +117,9 @@ export default defineComponent({
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { initPush } = useFCM();
+    const { get, set } = StorageService();
 
     /* Methods */
-    const { get, set } = useStorage();
     const subscribe = async(cafeId) => {
       const notifyIn = indefiniteTimerActive.value ? '' : notificationTime.value;
       try {
@@ -128,7 +128,6 @@ export default defineComponent({
         emit('userToggledSubscription');
         await showSuccessToast(t('successSubscribe'));
       }catch(error) {
-        alert(JSON.stringify(error));
         showErrorToast(
             null,
             {
@@ -175,7 +174,7 @@ export default defineComponent({
                });
     onMounted(() => {
       setTimeout(() => {
-        const height = content.value?.getBoundingClientRect()?.height ?? 320;
+        const height = content.value?.getBoundingClientRect()?.height || 320;
         document.documentElement.style.setProperty('--sub-modal-height', height + 'px');
       }, 400);
     });
@@ -187,7 +186,7 @@ export default defineComponent({
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
     const toggleSubscription = async(cafeId) => {
       isSubButtonDisabled.value = true;
-      const pushNotificationPermission = await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`) ?? false;
+      const pushNotificationPermission = await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`) || false;
 
       if(indefiniteTimerActive.value) {
         notificationTime.value = 5;

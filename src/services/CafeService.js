@@ -46,7 +46,7 @@ export default {
     },
     // Subscribing user to specific cafe
     subscribe(cafeId, notificationTime = null) {
-        return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime ?? ''}`);
+        return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime || ''}`);
     },
     // Unsubscribing user to specific cafe
     unsubscribe(cafeId) {

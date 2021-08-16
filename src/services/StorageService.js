@@ -2,7 +2,7 @@ import { i18n } from '@/i18n';
 
 import { Storage } from '@ionic/storage';
 
-export function useStorage() {
+export function StorageService() {
 
     const storage = new Storage();
 

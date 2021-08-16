@@ -1,5 +1,5 @@
 import axios          from "axios";
-import { useStorage } from '@/services/StorageService';
+import { StorageService } from '@/services/StorageService';
 import store          from '@/store';
 
 // Creating axios instance for routes that are api protected
@@ -12,7 +12,7 @@ export const apiClient = axios.create({
 */
 apiClient.interceptors.request.use(async function(config) {
     try {
-        const { get } = useStorage();
+        const { get } = StorageService();
         const token = await get('projekata_token');
 
         const locale = await get(`localization.${store.getters['auth/authUser']?.id}`);

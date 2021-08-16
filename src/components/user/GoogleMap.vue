@@ -15,11 +15,11 @@
 
 <script>
 import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
-import { useStore }              from 'vuex';
-import { useI18n }               from 'vue-i18n';
+import { useStore }                                     from 'vuex';
+import { useI18n }                                      from 'vue-i18n';
 import { loadingController }                            from '@ionic/vue';
 
-import CafeService               from '@/services/CafeService';
+import CafeService from '@/services/CafeService';
 
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useToastNotifications } from '@/composables/useToastNotifications';
@@ -42,9 +42,9 @@ export default defineComponent({
 
     /* Component properties */
     let mapContainerBoundingRect = null;
-    let distance = ref(0);
-    let map = ref(null);
-    let content = ref(null);
+    const distance = ref(0);
+    const map = ref(null);
+    const content = ref(null);
 
     /* Composables */
     const { tryGettingLocation } = useGeolocation();
@@ -67,7 +67,6 @@ export default defineComponent({
       await loading.present();
       await sleep(400);
 
-
       mapContainerBoundingRect = map.value?.getBoundingClientRect();
 
       try {
@@ -76,8 +75,8 @@ export default defineComponent({
           height: mapContainerBoundingRect.height - 4,
           x: mapContainerBoundingRect.x + 2,
           y: mapContainerBoundingRect.y + 2,
-          latitude: Number(props.cafe.latitude) ?? 43.317862492567,
-          longitude: Number(props.cafe.longitude) ?? 21.895785976058143,
+          latitude: Number(props.cafe.latitude) || 43.317862492567,
+          longitude: Number(props.cafe.longitude) || 21.895785976058143,
           zoom: 16,
           liteMode: true,
         });
@@ -87,18 +86,18 @@ export default defineComponent({
             {
               pushNotificationPermission: t('warningGoogleMapsError'),
             });
-        loading.dismiss();
+        await loading.dismiss();
       }
 
-      const height = content.value?.getBoundingClientRect().height ?? 460;
+      const height = content.value?.getBoundingClientRect().height || 460;
       document.documentElement.style.setProperty('--map-modal-height', height + 'px');
 
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
         distance.value = Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude));
 
         await CapacitorGoogleMaps.addMarker({
-          latitude: Number(props.cafe.latitude) ?? 43.317862492567,
-          longitude: Number(props.cafe.longitude) ?? 21.895785976058143,
+          latitude: Number(props.cafe.latitude) || 43.317862492567,
+          longitude: Number(props.cafe.longitude) || 21.895785976058143,
           title: props.cafe.name,
           snippet: props.cafe.address + " ," + props.cafe.city,
         });
@@ -116,7 +115,7 @@ export default defineComponent({
         });
       });
 
-      loading.dismiss();
+      await loading.dismiss();
     });
     onUnmounted(() => {
       CapacitorGoogleMaps.close();

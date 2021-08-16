@@ -5,7 +5,7 @@
         <div class="flex justify-between mt-3 md margin-top-reset">
           <ion-buttons slot="start">
             <ion-button
-                :routerLink="`${$route.query.redirect ?? '/home'}`">
+                :routerLink="`${$route.query.redirect || '/home'}`">
               <ion-icon slot="icon-only" :icon="arrowBackOutline" class="text-gray-400"></ion-icon>
             </ion-button>
           </ion-buttons>

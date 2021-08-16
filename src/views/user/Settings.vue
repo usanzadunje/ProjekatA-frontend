@@ -1,4 +1,4 @@
-<template>
+const<template>
   <ion-page>
     <ion-content>
       <ion-item class="no-border mt-3">
@@ -49,7 +49,7 @@
           <p class="settings-item-text">{{ $t('language') }}</p>
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border mr-1">
             <ion-button fill="clear" class="settings-fade-text">
-              {{ language ?? 'SRB' }}
+              {{ language || 'SRB' }}
             </ion-button>
           </ion-item>
         </ion-item>
@@ -100,7 +100,7 @@ import {
 
 import AuthService from '@/services/AuthService';
 
-import { useStorage }            from '@/services/StorageService';
+import { StorageService }            from '@/services/StorageService';
 import { useFCM }                from '@/composables/useFCM';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -127,12 +127,12 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
-    let isDarkModeOn = ref(false);
-    let areNotificationsOn = ref(false);
-    let language = ref('SRB');
+    const isDarkModeOn = ref(false);
+    const areNotificationsOn = ref(false);
+    const language = ref('SRB');
 
     /* Methods */
-    const { set, get } = useStorage();
+    const { set, get } = StorageService();
     const { t, locale } = useI18n({ useScope: 'global' });
     const { initPush } = useFCM();
     const { showErrorToast } = useToastNotifications();
@@ -145,7 +145,7 @@ export default defineComponent({
       try {
         areNotificationsOn.value = !!await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`);
         isDarkModeOn.value = !!await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`);
-        const storedLang = await get(`localization.${store.getters['auth/authUser'].id}`) ?? {
+        const storedLang = await get(`localization.${store.getters['auth/authUser'].id}`) || {
           text: 'SRB',
           value: 'sr',
         };

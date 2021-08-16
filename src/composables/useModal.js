@@ -21,14 +21,6 @@ export function useModal() {
         modal.style.height = 0;
     };
 
-    // const openModal = (state, isMapModal = false) => {
-    //     if(isMapModal) {
-    //         isMapModalOpen.value = state;
-    //     }else {
-    //         isModalOpen.value = state;
-    //     }
-    // };
-
 
     return {
         /* Component properties  */

@@ -24,7 +24,7 @@
           <div class="ml-3 mt-3 user-profile-user-name">
             <div v-if="authUser?.username || authUser?.fname || authUser?.lname">
               <h2 v-if="authUser?.fname || authUser?.lname" class="user-profile-user-name">
-                {{ `${authUser?.fname ?? ''} ${authUser?.lname ?? ''}` }}
+                {{ `${authUser?.fname || ''} ${authUser?.lname || ''}` }}
               </h2>
               <p v-if="authUser?.username" class="user-profile-username">{{ authUser?.username }}</p>
             </div>

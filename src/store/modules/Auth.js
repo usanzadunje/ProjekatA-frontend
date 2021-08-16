@@ -3,26 +3,29 @@ import { Capacitor }               from "@capacitor/core";
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
 import { i18n }                    from "@/i18n";
 
-import AuthService    from "@/services/AuthService";
-import { useStorage } from '@/services/StorageService';
+import AuthService        from "@/services/AuthService";
+import { StorageService } from '@/services/StorageService';
 
 export const namespaced = true;
 
 export const state = {
     user: null,
+    token: null,
 };
 
 export const mutations = {
     SET_USER(state, user) {
         state.user = user;
     },
-
+    SET_TOKEN(state, token) {
+        state.token = token;
+    },
 };
 
 export const actions = {
     //Logging out user and redirecting to login page
     async logout({ commit }) {
-        const { set } = useStorage();
+        const { set } = StorageService();
         try {
             await AuthService.logout();
         }catch(error) {
@@ -46,14 +49,25 @@ export const actions = {
             return false;
         }
     },
+    async setToken({ commit }, token) {
+        const { set } = StorageService();
+        try {
+            await set('projekata_token', token);
+            commit("SET_TOKEN", token);
+            return true;
+        }catch(error) {
+            commit("SET_TOKEN", null);
+            return false;
+        }
+    },
     async setSettings({ state }) {
-        const { get, set } = useStorage();
+        const { get, set } = StorageService();
         try {
             const storedLocale = await get(`localization.${state.user.id}`);
             const storedDarkMode = await get(`isDarkModeOn.${state.user.id}`);
 
             document.body.classList.toggle('dark', !!storedDarkMode);
-            i18n.global.locale.value = storedLocale.value ?? 'sr';
+            i18n.global.locale.value = storedLocale.value || 'sr';
 
             if(Capacitor.isNativePlatform()) {
                 if(storedDarkMode === true) {
@@ -91,7 +105,7 @@ export const getters = {
         }else if(state.user?.fname) {
             displayName = state.user.fname;
         }else {
-            displayName = state.user?.lname ?? state.user?.username;
+            displayName = state.user?.lname || state.user?.username;
         }
         return displayName || i18n.global.t('unknown');
     },

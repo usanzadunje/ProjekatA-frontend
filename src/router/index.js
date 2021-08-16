@@ -170,11 +170,11 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "NotFound" */ "../views/errors/404"),
     },
-    // {
-    //     /* Responsible for handling routes that do not exist */
-    //     path: "/:catchAll(.*)",
-    //     redirect: { name: 'notFound' },
-    // },
+    {
+        /* Responsible for handling routes that do not exist */
+        path: "/:catchAll(.*)",
+        redirect: { name: 'notFound' },
+    },
     /* =============================================
         End error routes
     ============================================= */

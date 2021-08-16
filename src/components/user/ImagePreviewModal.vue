@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   IonContent,
   IonItem,
@@ -45,7 +45,7 @@ import {
   remove,
 } from 'ionicons/icons';
 
-export default {
+export default defineComponent({
   name: 'ImagePreviewModal',
   components: {
     IonContent,
@@ -107,7 +107,7 @@ export default {
       remove,
     };
   },
-};
+});
 </script>
 
 <style scoped>

@@ -58,7 +58,7 @@ export function useToastNotifications() {
 
     //Generating toast error notifications
     const showErrorToast = async(backendErrors, errorMessage = null) => {
-        errors.value = errorMessage ?? getError(backendErrors);
+        errors.value = errorMessage || getError(backendErrors);
         for(let i = 0; i < errorKeys.value.length; i++) {
             if(getErrorMessage(errorKeys.value[i]).length > 1 && typeof getErrorMessage(errorKeys.value[i]) === 'object') {
                 for(let j = 0; j < getErrorMessage(errorKeys.value[i]).length; j++) {

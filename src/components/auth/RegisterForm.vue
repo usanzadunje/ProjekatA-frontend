@@ -91,12 +91,13 @@
 <script>
 import { defineComponent, onMounted, reactive, ref }         from 'vue';
 import { useRouter }                                         from 'vue-router';
+import { useStore }                                          from 'vuex';
 import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
 
 import SocialIcons from '@/components/social/SocialIcons';
 
 import AuthService    from "@/services/AuthService";
-import { useStorage } from '@/services/StorageService';
+import { StorageService } from '@/services/StorageService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -111,8 +112,7 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-}                   from 'ionicons/icons';
-import { useStore } from 'vuex';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "RegisterForm",
@@ -128,13 +128,12 @@ export default defineComponent({
     /* Global properties and methods */
     const router = useRouter();
     const store = useStore();
-    const { set } = useStorage();
 
     /* Component properties */
-    let newUser = reactive({});
-    let showPassword = ref(false);
-    let showPasswordConfirm = ref(false);
-    let errorNames = ref({});
+    const newUser = reactive({});
+    const showPassword = ref(false);
+    const showPasswordConfirm = ref(false);
+    const errorNames = ref({});
     const passwordInput = ref(null);
     const passwordConfirmInput = ref(null);
     const loading = ref(false);
@@ -147,6 +146,7 @@ export default defineComponent({
 
     /* Composables */
     const { showErrorToast } = useToastNotifications();
+    const { set } = StorageService();
 
     /* Event handlers */
     let register = async() => {
@@ -167,7 +167,7 @@ export default defineComponent({
         await set(`projekata_token`, response.data.token);
         await store.dispatch("auth/getAuthUser");
         await store.dispatch("auth/setSettings");
-        newUser = {};
+        Object.assign(newUser, {});
         await router.replace({ name: 'onboarding' });
       }catch(errors) {
         errorNames.value = getError(errors);

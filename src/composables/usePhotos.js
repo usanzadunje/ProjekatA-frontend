@@ -11,6 +11,7 @@ import { camera, image } from 'ionicons/icons';
 export function usePhotos() {
     /* Component properties */
     const photo = ref('');
+
     /* Composables */
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();

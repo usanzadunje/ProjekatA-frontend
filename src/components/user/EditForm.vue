@@ -250,7 +250,7 @@ import {
 } from 'ionicons/icons';
 
 export default defineComponent({
-  name: "LoginForm",
+  name: "EditForm",
   components: {
     IonItem,
     IonInput,
@@ -279,11 +279,11 @@ export default defineComponent({
     });
 
     /* Component properties */
-    let user = reactive({});
-    let showOldPassword = ref(false);
-    let showPassword = ref(false);
-    let showPasswordConfirm = ref(false);
-    let errorNames = ref({});
+    const user = reactive({});
+    const showOldPassword = ref(false);
+    const showPassword = ref(false);
+    const showPasswordConfirm = ref(false);
+    const errorNames = ref({});
     const fnameInput = ref(null);
     const lnameInput = ref(null);
     const usernameInput = ref(null);
@@ -296,7 +296,7 @@ export default defineComponent({
     const loading = ref(false);
     const showPasswordEdit = ref(false);
     const { clearInputs } = toRefs(props);
-    const avatar = ref(authUser.value.avatar);
+    const avatar = ref(null);
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -306,6 +306,7 @@ export default defineComponent({
       user.email = authUser.value.email;
       user.bday = authUser.value.bday;
       user.phone = authUser.value.phone;
+      avatar.value = authUser.value.avatar;
     });
 
     /* Composables */
@@ -334,6 +335,7 @@ export default defineComponent({
       try {
         await AuthService.updateUser(user);
         await store.dispatch("auth/getAuthUser");
+        avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
         showSuccessToast(t('successUpdate'));
         const query = user.avatar ? { refreshAvatar: 'true' } : null;
         await router.push({ name: 'dashboard', query });
@@ -378,7 +380,6 @@ export default defineComponent({
         clearPasswordInputs();
 
         delete user.avatar;
-        avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
       }
     });
     watch(photo, () => {

@@ -46,9 +46,9 @@
             v-model="user.remember"
             mode="md"
         ></ion-checkbox>
-        <ion-text class="ml-2 fixed-utility-text" style="width: 65px">Zapamti me</ion-text>
+        <ion-text class="ml-2 fixed-utility-text">Zapamti me</ion-text>
       </div>
-      <div class="fixed-utility-text" style="width: 110px">
+      <div class="fixed-utility-text">
         <a href="/forgot-password">Zaboravljena lozinka?</a>
       </div>
     </div>
@@ -99,7 +99,7 @@ import SocialIcons from '@/components/social/SocialIcons';
 import AuthService from "@/services/AuthService";
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useStorage }            from '@/services/StorageService';
+import { StorageService }            from '@/services/StorageService';
 
 import { getError, sleep } from "@/utils/helpers";
 
@@ -130,13 +130,13 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const { t } = useI18n();
-    const { set } = useStorage();
+    const { set } = StorageService();
 
 
     /* Component properties */
-    let user = reactive({});
-    let showPassword = ref(false);
-    let errorNames = ref({});
+    const user = reactive({});
+    const showPassword = ref(false);
+    const errorNames = ref({});
     const passwordInput = ref(null);
     const emailInput = ref(null);
     const loading = ref(false);

@@ -148,7 +148,7 @@ export default defineComponent({
     }
     onMounted(() => {
       setTimeout(() => {
-        const height = document.getElementById('short-modal').getBoundingClientRect()?.height ?? 420;
+        const height = document.getElementById('short-modal').getBoundingClientRect()?.height || 420;
         document.documentElement.style.setProperty('--short-modal-height', height + 'px');
       }, 400);
     });

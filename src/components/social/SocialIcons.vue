@@ -1,14 +1,14 @@
 <template>
-  <div class="flex justify-around px-6">
+  <div class="flex justify-around items-center px-6">
     <div
         @click="login('facebook')"
-        class="bg-gray-100 rounded-full text-center social-circle-size"
+        class="flex justify-center items-center bg-gray-100 rounded-full social-circle-size"
     >
       <ion-icon :icon="logoFacebook" class="text-blue-400"></ion-icon>
     </div>
     <div
         @click="login('google')"
-        class="bg-gray-100 rounded-full text-center social-circle-size"
+        class="flex justify-center items-center bg-gray-100 rounded-full social-circle-size"
     >
       <ion-icon :icon="logoGoogle"></ion-icon>
     </div>
@@ -24,7 +24,7 @@ import { IonIcon }              from '@ionic/vue';
 
 import AuthService       from '@/services/AuthService';
 import SocialAuthService from '@/services/SocialAuthService';
-import { useStorage }    from '@/services/StorageService';
+import { StorageService }    from '@/services/StorageService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -47,14 +47,14 @@ export default defineComponent({
     /* Global properties and methods */
     const router = useRouter();
     const store = useStore();
-    const { set } = useStorage();
     const { t } = useI18n();
 
     /* Component properties */
-    let errorNames = ref({});
+    const errorNames = ref({});
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { set } = StorageService();
 
     /* Event handlers */
     const login = async(driver) => {
