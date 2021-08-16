@@ -220,7 +220,7 @@ export default defineComponent({
               generalError: t('generalAlertError'),
             });
       }finally {
-        loading?.dismiss();
+        await loading?.dismiss();
       }
     };
     const chooseLanguage = async() => {
