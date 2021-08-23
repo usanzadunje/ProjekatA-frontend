@@ -140,7 +140,7 @@ export default defineComponent({
     if(store.getters['auth/loggedIn']) {
       CafeService.isUserSubscribed(cafe.value.id)
                  .then((response) => {
-                   isUserSubscribed.value = !!response.data;
+                   isUserSubscribed.value = !!response.data.subscribed;
                  })
                  .catch(() => {
                    isUserSubscribed.value = false;

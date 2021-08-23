@@ -72,8 +72,7 @@ import {
   alertController,
 }                                                 from '@ionic/vue';
 
-import { StorageService } from '@/services/StorageService';
-import CafeService    from '@/services/CafeService';
+import CafeService        from '@/services/CafeService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useFCM }                from '@/composables/useFCM';
@@ -117,7 +116,6 @@ export default defineComponent({
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { initPush } = useFCM();
-    const { get, set } = StorageService();
 
     /* Methods */
     const subscribe = async(cafeId) => {
@@ -151,7 +149,7 @@ export default defineComponent({
                 handler: async() => {
                   await initPush();
                   await subscribe(cafeId);
-                  set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
+                  await store.dispatch('user/setNotifications', true);
                 },
               },
             ],
@@ -163,7 +161,7 @@ export default defineComponent({
     //When user lands on page check if he is already subscribed to cafe
     CafeService.isUserSubscribed(cafe.value.id)
                .then((response) => {
-                 isUserSubscribed.value = !!response.data;
+                 isUserSubscribed.value = !!response.data.subscribed;
                })
                .catch(() => {
                  showErrorToast(
@@ -186,7 +184,6 @@ export default defineComponent({
     /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
     const toggleSubscription = async(cafeId) => {
       isSubButtonDisabled.value = true;
-      const pushNotificationPermission = await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`) || false;
 
       if(indefiniteTimerActive.value) {
         notificationTime.value = 5;
@@ -207,7 +204,7 @@ export default defineComponent({
               });
         }
       }else {
-        if(!pushNotificationPermission) {
+        if(!store.getters['auth/notifications']) {
           await showAlert(cafeId);
           isSubButtonDisabled.value = false;
           return;

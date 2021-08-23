@@ -22,9 +22,8 @@ import { useStore }             from 'vuex';
 import { useI18n }              from 'vue-i18n';
 import { IonIcon }              from '@ionic/vue';
 
-import AuthService       from '@/services/AuthService';
-import SocialAuthService from '@/services/SocialAuthService';
-import { StorageService }    from '@/services/StorageService';
+import AuthService        from '@/services/AuthService';
+import SocialAuthService  from '@/services/SocialAuthService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -54,7 +53,6 @@ export default defineComponent({
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
-    const { set } = StorageService();
 
     /* Event handlers */
     const login = async(driver) => {
@@ -64,10 +62,10 @@ export default defineComponent({
         const payload = await SocialAuthService.getUserFromProvider(driver);
         payload.device_name = deviceInfo.name || deviceInfo.model;
         const response = await AuthService.authenticateSocial(payload);
-        await set(`projekata_token`, response.data.token);
 
+        await store.dispatch("auth/setToken", response.data.token);
         await store.dispatch("auth/getAuthUser");
-        await store.dispatch("auth/setSettings");
+        await store.dispatch("user/getSettings");
 
         await router.replace({ name: 'home' });
         showSuccessToast(t('successLogin'));

@@ -97,7 +97,6 @@ import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
 import SocialIcons from '@/components/social/SocialIcons';
 
 import AuthService    from "@/services/AuthService";
-import { StorageService } from '@/services/StorageService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -146,7 +145,6 @@ export default defineComponent({
 
     /* Composables */
     const { showErrorToast } = useToastNotifications();
-    const { set } = StorageService();
 
     /* Event handlers */
     let register = async() => {
@@ -164,9 +162,9 @@ export default defineComponent({
           });
       try {
         const response = await AuthService.register(newUser);
-        await set(`projekata_token`, response.data.token);
+        await store.dispatch("auth/setToken", response.data.token);
         await store.dispatch("auth/getAuthUser");
-        await store.dispatch("auth/setSettings");
+        await store.dispatch("user/getSettings");
         Object.assign(newUser, {});
         await router.replace({ name: 'onboarding' });
       }catch(errors) {

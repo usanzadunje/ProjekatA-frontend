@@ -42,7 +42,7 @@
 
           <CafeInfoBody :cafe="cafe"/>
 
-          <div>
+          <div class="mb-2">
             <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
             <AccordionList
                 class="accordion-list-border-top"
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <div class="mt-10">
+        <div>
           <ion-button
               class="uppercase button-subscribe-wide"
               expand="block"
@@ -189,7 +189,7 @@ export default defineComponent({
         cafe.value = response.data;
         if(loggedIn.value) {
           const subscriptionResponse = await CafeService.isUserSubscribed(route.params.id);
-          isUserSubscribed.value = !!subscriptionResponse.data;
+          isUserSubscribed.value = !!subscriptionResponse.data.subscribed;
         }
       }catch(error) {
         showErrorToast(

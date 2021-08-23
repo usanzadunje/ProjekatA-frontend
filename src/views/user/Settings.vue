@@ -1,4 +1,5 @@
-const<template>
+const
+<template>
   <ion-page>
     <ion-content>
       <ion-item class="no-border mt-3">
@@ -49,7 +50,7 @@ const<template>
           <p class="settings-item-text">{{ $t('language') }}</p>
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border mr-1">
             <ion-button fill="clear" class="settings-fade-text">
-              {{ language || 'SRB' }}
+              {{ localization.text || 'SRB' }}
             </ion-button>
           </ion-item>
         </ion-item>
@@ -82,10 +83,10 @@ const<template>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { useStore }             from 'vuex';
-import { useI18n }              from 'vue-i18n';
-import { getLanguages }         from '@/lang';
+import { defineComponent, computed } from 'vue';
+import { useStore }                  from 'vuex';
+import { useI18n }                   from 'vue-i18n';
+import { getLanguages }              from '@/lang';
 import {
   IonContent,
   IonPage,
@@ -95,12 +96,11 @@ import {
   IonToggle,
   IonButton,
   pickerController,
-  onIonViewWillEnter, loadingController,
-}                               from '@ionic/vue';
+  loadingController,
+}                                    from '@ionic/vue';
 
 import AuthService from '@/services/AuthService';
 
-import { StorageService }            from '@/services/StorageService';
 import { useFCM }                from '@/composables/useFCM';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -127,47 +127,26 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
-    const isDarkModeOn = ref(false);
-    const areNotificationsOn = ref(false);
-    const language = ref('SRB');
+    const isDarkModeOn = computed(() => store.getters['user/darkMode']);
+    const areNotificationsOn = computed(() => store.getters['user/notifications']);
+    const localization = computed(() => store.getters['user/localization']);
 
     /* Methods */
-    const { set, get } = StorageService();
     const { t, locale } = useI18n({ useScope: 'global' });
     const { initPush } = useFCM();
     const { showErrorToast } = useToastNotifications();
 
-
-    /* Lifecycle hooks */
-    //Setting toggle checked attribute to whatever user choose and is persisted in storage
-    //for notifications
-    onIonViewWillEnter(async() => {
-      try {
-        areNotificationsOn.value = !!await get(`areNotificationsOn.${store.getters['auth/authUser'].id}`);
-        isDarkModeOn.value = !!await get(`isDarkModeOn.${store.getters['auth/authUser'].id}`);
-        const storedLang = await get(`localization.${store.getters['auth/authUser'].id}`) || {
-          text: 'SRB',
-          value: 'sr',
-        };
-        language.value = storedLang.text;
-      }catch(e) {
-        areNotificationsOn.value = false;
-        isDarkModeOn.value = false;
-        language.value = 'SRB';
-      }
-    });
-
     /* Event handlers */
     const toggleDarkMode = async(e) => {
       if(!e.target.checked) {
-        await set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, false);
+        await store.dispatch('user/setDarkMode', false);
 
         Keyboard.setStyle({
           style: KeyboardStyle.Light,
         });
 
       }else {
-        await set(`isDarkModeOn.${store.getters['auth/authUser'].id}`, true);
+        await store.dispatch('user/setDarkMode', true);
 
         Keyboard.setStyle({
           style: KeyboardStyle.Dark,
@@ -182,7 +161,7 @@ export default defineComponent({
         try {
           const response = await AuthService.removeFcmToken();
           if(response && response.data) {
-            set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, false);
+            await store.dispatch('user/setNotifications', false);
           }
         }catch(error) {
           showErrorToast(
@@ -192,7 +171,7 @@ export default defineComponent({
               });
         }
       }else {
-        set(`areNotificationsOn.${store.getters['auth/authUser'].id}`, true);
+        await store.dispatch('user/setNotifications', true);
         const noPermission = await initPush();
         if(noPermission) {
           e.target.disabled = true;
@@ -200,6 +179,38 @@ export default defineComponent({
         }
       }
       areNotificationsOn.value = e.target.checked;
+    };
+    const chooseLanguage = async() => {
+      const picker = await pickerController.create({
+        columns: [
+          {
+            name: 'language',
+            options: getLanguages(localization.value),
+          },
+        ],
+        buttons: [
+          {
+            text: t('cancel'),
+            role: "cancel",
+          },
+          {
+            text: t('confirm'),
+            role: "confirm",
+            handler: (value) => {
+              // Direktno se menja locale u i18n
+              locale.value = value.language.value;
+              localization.value = value.language.text;
+              picker.dismiss(value.language, "confirm");
+            },
+          },
+        ],
+      });
+      picker.onDidDismiss().then(async(value) => {
+        //Sacuvas izbor korisnika u storage
+        const localization = value.data;
+        await store.dispatch('user/setLocalization', localization);
+      });
+      await picker.present();
     };
     const logout = async() => {
       let loading = null;
@@ -223,38 +234,6 @@ export default defineComponent({
         await loading?.dismiss();
       }
     };
-    const chooseLanguage = async() => {
-      const picker = await pickerController.create({
-        columns: [
-          {
-            name: 'language',
-            options: getLanguages(language.value),
-          },
-        ],
-        buttons: [
-          {
-            text: t('cancel'),
-            role: "cancel",
-          },
-          {
-            text: t('confirm'),
-            role: "confirm",
-            handler: (value) => {
-              // Direktno se menja locale u i18n
-              locale.value = value.language.value;
-              language.value = value.language.text;
-              picker.dismiss(value.language, "confirm");
-            },
-          },
-        ],
-      });
-      picker.onDidDismiss().then((value) => {
-        //Sacuvas izbor korisnika u storage
-        const localization = value.data;
-        set(`localization.${store.getters['auth/authUser'].id}`, localization);
-      });
-      await picker.present();
-    };
     const showPrivacy = () => {
       alert('Privacy');
     };
@@ -269,7 +248,7 @@ export default defineComponent({
       /* Component properties */
       isDarkModeOn,
       areNotificationsOn,
-      language,
+      localization,
 
       /* Event handlers */
       toggleDarkMode,

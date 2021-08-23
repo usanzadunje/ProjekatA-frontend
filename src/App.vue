@@ -26,7 +26,9 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     onMounted(async() => {
-      await store.dispatch("auth/setSettings");
+      await store.dispatch("auth/getToken");
+
+      await store.dispatch("user/getSettings");
 
       if(!store.getters["auth/isStaff"]) {
         await checkForLocationPermission();

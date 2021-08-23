@@ -99,7 +99,6 @@ import SocialIcons from '@/components/social/SocialIcons';
 import AuthService from "@/services/AuthService";
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
-import { StorageService }            from '@/services/StorageService';
 
 import { getError, sleep } from "@/utils/helpers";
 
@@ -130,8 +129,6 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const { t } = useI18n();
-    const { set } = StorageService();
-
 
     /* Component properties */
     const user = reactive({});
@@ -156,9 +153,9 @@ export default defineComponent({
       Keyboard.hide();
       try {
         const response = await AuthService.login(user);
-        await set(`projekata_token`, response.data.token);
+        await store.dispatch("auth/setToken", response.data.token);
         await store.dispatch("auth/getAuthUser");
-        await store.dispatch("auth/setSettings");
+        await store.dispatch("user/getSettings");
         const homeRoute = response.data?.staff ? { name: 'staff.dashboard' } : { name: 'home' };
         user.login = '';
         user.password = '';

@@ -1,6 +1,5 @@
-import axios          from "axios";
-import { StorageService } from '@/services/StorageService';
-import store          from '@/store';
+import axios from "axios";
+import store from '@/store';
 
 // Creating axios instance for routes that are api protected
 export const apiClient = axios.create({
@@ -11,22 +10,18 @@ export const apiClient = axios.create({
     Add a request interceptor to add authentication token on each request
 */
 apiClient.interceptors.request.use(async function(config) {
-    try {
-        const { get } = StorageService();
-        const token = await get('projekata_token');
+    let token = store.getters['auth/token'];
+    const localization = store.getters['user/localization'];
 
-        const locale = await get(`localization.${store.getters['auth/authUser']?.id}`);
-
-        if(!token) {
-            delete config.headers.authorization;
-        }else {
-            config.headers.authorization = `Bearer ${token}`;
-        }
-        config.headers['X-Localization'] = locale ? locale.value : 'sr';
-    }catch(error) {
-        delete config.headers.authorization;
-        config.headers['X-Localization'] = 'sr';
+    if(!token) {
+        token = await store.dispatch('auth/getToken');
     }
+
+    if(token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    config.headers['X-Localization'] = localization.value;
+
     return config;
 }, function(error) {
     // Do something with request error
