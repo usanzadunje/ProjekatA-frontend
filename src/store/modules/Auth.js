@@ -8,6 +8,7 @@ export const namespaced = true;
 
 export const state = {
     user: null,
+    role: null,
     token: null,
 };
 
@@ -17,6 +18,9 @@ export const mutations = {
     },
     SET_TOKEN(state, token) {
         state.token = token;
+    },
+    SET_ROLE(state, role) {
+        state.role = role;
     },
 };
 
@@ -29,6 +33,9 @@ export const actions = {
         }finally {
             commit("SET_USER", null);
             commit("SET_TOKEN", null);
+            commit('user/SET_DARKMODE', null, { root: true })
+            commit('user/SET_LOCALIZATION', null, { root: true })
+            commit('user/SET_NOTIFICATIONS', null, { root: true })
             await router.replace({ name: 'login' });
             i18n.global.locale.value = 'sr';
             document.body.classList.toggle('dark', false);
@@ -89,6 +96,9 @@ export const getters = {
         return displayName || i18n.global.t('unknown');
     },
     isStaff: (state) => {
-        return !!state.user?.cafe_id;
+        return state.role === 2;
+    },
+    isOwner: (state) => {
+        return state.role === 1;
     },
 };

@@ -1,10 +1,11 @@
 <template>
   <ion-page>
-    <ion-split-pane content-id="main">
+    <ion-split-pane content-id="main" @click="backdropClicked">
       <ion-menu
           ref="menu"
           content-id="main"
-          @ionDidClose="menuClosed"
+          type="overlay"
+          @ionDidClose="openMenu(false)"
       >
         <div class="flex flex-col">
           <div class="bg-red-600 w-full p-2">
@@ -45,12 +46,12 @@
             </div>
             <div
                 class="flex flex-row flex-1 items-center"
-                :class="[activeMenuItem === 'profile' ? 'border-b-2 border-red-600 text-red-600' : 'text-gray-800']"
+                :class="[activeMenuItem === 'profile' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
                 @click="menuItemClicked('profile')"
             >
               <ion-icon
                   slot="icon-only"
-                  :icon="settingsOutline"
+                  :icon="personOutline"
                   class="text-2xl mr-2"
               ></ion-icon>
               <span
@@ -59,6 +60,7 @@
                 </span>
             </div>
             <div
+                v-if="isOwner"
                 class="flex flex-row flex-1 items-center"
                 :class="[activeMenuItem === 'settings' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
                 @click="menuItemClicked('settings')"
@@ -98,17 +100,17 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
-import { useStore }                                         from 'vuex';
-import { useRouter }                                        from 'vue-router';
-import { useI18n }                                          from 'vue-i18n';
+import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useStore }                                                   from 'vuex';
+import { useRouter }                                                  from 'vue-router';
+import { useI18n }                                                    from 'vue-i18n';
 import {
   IonPage,
   IonIcon,
   IonRouterOutlet,
   IonSplitPane,
   IonMenu, loadingController,
-}                                                           from '@ionic/vue';
+}                                                                     from '@ionic/vue';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -132,6 +134,7 @@ export default defineComponent({
     /* Component properties */
     const menu = ref(null);
     const activeMenuItem = ref('dashboard');
+    const isOwner = computed(() => store.getters['auth/isOwner']);
 
 
     /* Composables */
@@ -140,20 +143,26 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     onMounted(() => {
-      store.commit('staff/SET_MENU_VISIBILITY', false);
+      openMenu(false);
     });
     onBeforeUnmount(() => {
       unwatch();
     });
 
     /* Event handlers */
+    const openMenu = (state) => {
+      store.commit('staff/SET_MENU_VISIBILITY', state);
+    };
+    /* Event handlers */
     const menuItemClicked = async(menuItemName) => {
       activeMenuItem.value = menuItemName;
-      store.commit('staff/SET_MENU_VISIBILITY', false);
       await router.push({ name: `staff.${menuItemName}` });
     };
-    const menuClosed = async() => {
-      store.commit('staff/SET_MENU_VISIBILITY', false);
+    const backdropClicked = async() => {
+      const isMenuOpen = await menu.value?.$el.isOpen();
+      if(isMenuOpen) {
+        openMenu(false);
+      }
     };
     const logout = async() => {
       let loading = null;
@@ -194,10 +203,12 @@ export default defineComponent({
       /* Component properties */
       menu,
       activeMenuItem,
+      isOwner,
 
       /* Event handlers */
       menuItemClicked,
-      menuClosed,
+      openMenu,
+      backdropClicked,
       logout,
 
       /* Icons from */

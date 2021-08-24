@@ -6,8 +6,9 @@ import store                   from '@/store/index';
 import middlewarePipeline      from "./middlewarePipeline";
 import auth                    from "@/middleware/auth";
 import redirectIfAuthenticated from "@/middleware/redirectIfAuthenticated";
-import staff                   from "@/middleware/staff";
-import redirectIfStaff         from '@/middleware/redirectIfStaff';
+import placeMembers            from "@/middleware/placeMembers";
+import user                    from '@/middleware/user';
+import owner                   from '@/middleware/owner';
 
 /* Staff imports views */
 import StaffLayout             from '@/views/staff/layouts/StaffLayout';
@@ -41,7 +42,7 @@ const routes = [
     {
         path: "/onboadring",
         name: "onboarding",
-        meta: { middleware: [auth, redirectIfStaff] },
+        meta: { middleware: [auth, user] },
         component: () => import(/* webpackChunkName: "Onboarding" */ "@/views/user/Onboarding"),
     },
     // {
@@ -78,7 +79,7 @@ const routes = [
 
         path: '/',
         component: UserLayout,
-        meta: { middleware: [redirectIfStaff] },
+        meta: { middleware: [user] },
         redirect: "/home",
         children: [
             {
@@ -132,26 +133,33 @@ const routes = [
     {
         path: "/staff",
         component: StaffLayout,
-        meta: { middleware: [auth, staff] },
+        meta: { middleware: [auth, placeMembers] },
         redirect: "/staff/dashboard",
         children: [
-            {
-                path: "test",
-                name: "staff.test",
-                meta: { middleware: [] },
-                component: () => import(/* webpackChunkName: "Test" */ "@/views/Test"),
-            },
             {
                 path: "dashboard",
                 name: "staff.dashboard",
                 meta: { middleware: [] },
                 component: () => import(/* webpackChunkName: "HomeStaff" */ "@/views/staff/Dashboard"),
-
             },
             {
                 path: "tables",
                 name: "staff.tables",
                 meta: { middleware: [] },
+                component: () =>
+                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Tables"),
+            },
+            {
+                path: "profile",
+                name: "staff.profile",
+                meta: { middleware: [] },
+                component: () =>
+                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Tables"),
+            },
+            {
+                path: "/owner/settings",
+                name: "owner.settings",
+                meta: { middleware: [owner] },
                 component: () =>
                     import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Tables"),
             },

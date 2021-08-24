@@ -23,11 +23,11 @@ export const mutations = {
 };
 
 export const actions = {
-    async getSettings({ state, commit, rootGetters }) {
+    async getSettings({ state, commit, dispatch, rootGetters }) {
         if(!rootGetters['auth/loggedIn']) {
             return;
         }
-        const { get, set } = StorageService();
+        const { get } = StorageService();
         try {
             const storedLocalization = await get(`localization.${rootGetters['auth/authUser'].id}`);
             const storedDarkMode = await get(`isDarkModeOn.${rootGetters['auth/authUser'].id}`);
@@ -63,13 +63,9 @@ export const actions = {
             document.body.classList.toggle('dark', false);
             i18n.global.locale.value = 'sr';
 
-            await set(`localization.${rootGetters['auth/authUser']?.id}`, localization);
-            await set(`isDarkModeOn.${rootGetters['auth/authUser']?.id}`, darkMode);
-            await set(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`, notifications);
-
-            commit("SET_DARKMODE", darkMode);
-            commit("SET_LOCALIZATION", localization);
-            commit("SET_NOTIFICATIONS", notifications);
+            dispatch('setDarkMode', darkMode)
+            dispatch('setNotifications', notifications)
+            dispatch('setLocalization', localization)
         }
     },
     async setDarkMode({ commit, rootGetters }, value) {

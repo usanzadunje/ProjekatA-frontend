@@ -153,10 +153,11 @@ export default defineComponent({
       Keyboard.hide();
       try {
         const response = await AuthService.login(user);
-        await store.dispatch("auth/setToken", response.data.token);
+        await store.dispatch("auth/setToken", response.data?.token);
         await store.dispatch("auth/getAuthUser");
         await store.dispatch("user/getSettings");
-        const homeRoute = response.data?.staff ? { name: 'staff.dashboard' } : { name: 'home' };
+        await store.commit("auth/SET_ROLE", response.data?.role);
+        const homeRoute = response.data?.role ? { name: 'staff.dashboard' } : { name: 'home' };
         user.login = '';
         user.password = '';
         await router.replace(homeRoute);

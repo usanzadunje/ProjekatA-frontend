@@ -1,10 +1,6 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Tables</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <StaffHeader @click="this.$store.commit('staff/TOGGLE_MENU_VISIBILITY')"/>
 
     <ion-content :fullscreen="true" class="ion-padding">
       <div v-for="table in state.tables" :key="table.id">
@@ -17,22 +13,22 @@
 </template>
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonContent, IonTitle, IonButton } from '@ionic/vue';
-import TableService                                                        from '@/services/TableService';
-import { reactive }                                                        from 'vue';
-import { useStore }                                                        from 'vuex';
+import { IonPage, IonContent, IonButton } from '@ionic/vue';
+import TableService                       from '@/services/TableService';
+import { reactive }                       from 'vue';
+import { useStore }                       from 'vuex';
+
+import StaffHeader from '@/components/staff/StaffHeader';
 
 export default {
   components: {
     IonPage,
-    IonHeader,
-    IonToolbar,
     IonContent,
-    IonTitle,
     IonButton,
+    StaffHeader,
   },
   setup() {
-    const store = useStore()
+    const store = useStore();
     const state = reactive({ tables: [] });
 
     /* Changing tables availability */
