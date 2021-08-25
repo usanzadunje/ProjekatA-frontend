@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-start items-center py-2 ion-item-no-padding-x mt-2 ">
     <ion-icon :icon="pieChart" class="mr-2 text-yellow-400" style="font-size: 25px"></ion-icon>
-    <span class="modal-cafe-text-medium lowercase">{{ cafe.taken_capacity }} - {{ $t('free') }}</span>
+    <span class="modal-cafe-text-medium lowercase">{{ cafe.availability_ratio }} - {{ $t('free') }}</span>
   </div>
   <hr class="card-horizontal-ruler mt-1">
   <div class="flex justify-between items-center">

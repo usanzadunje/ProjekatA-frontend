@@ -82,5 +82,8 @@ export default {
     "choose": "Izaberi",
     "select": "Izaberi fotografiju",
     "open": "Otvori",
+    "in": "u",
+    "release": "Oslobodi",
+    "occupy": "Zauzmi",
 };
 

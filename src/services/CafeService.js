@@ -37,11 +37,6 @@ export default {
         // Only getting
         return API.apiClient.get(
             `/cafes/${id}`,
-            {
-                params: {
-                    getAllColumns: true,
-                },
-            },
         );
     },
     // Subscribing user to specific cafe

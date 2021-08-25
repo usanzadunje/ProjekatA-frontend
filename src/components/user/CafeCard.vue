@@ -16,7 +16,7 @@
       <div class="flex">
         <div class="flex">
           <ion-icon :icon="pieChart" class="text-yellow-400"></ion-icon>
-          <span class="cafe-card-fade-text ml-1">{{ cafe.taken_capacity }}</span>
+          <span class="cafe-card-fade-text ml-1">{{ cafe.availability_ratio }}</span>
         </div>
         <div class="flex ml-2">
           <ion-icon :icon="locationOutline" class="primary-icon-color"></ion-icon>

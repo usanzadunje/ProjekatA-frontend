@@ -846,3 +846,22 @@ ion-toggle {
 /*
     END MENU STYLES
  */
+
+/*
+    START STAFF COMPONENTS STYLES
+*/
+
+    /*
+        START GLOBAL STYLES
+    */
+    .staff-container {
+        padding: 1rem;
+    }
+
+    /*
+        END GLOBAL STYLES
+    */
+
+/*
+    END STAFF COMPONENTS  STYLES
+*/

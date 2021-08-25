@@ -26,6 +26,7 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     onMounted(async() => {
+      await store.dispatch("auth/getAuthUser");
       await store.dispatch("auth/getToken");
 
       await store.dispatch("user/getSettings");

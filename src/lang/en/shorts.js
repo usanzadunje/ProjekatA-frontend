@@ -82,5 +82,8 @@ export default {
     "choose": "Choose",
     "select": "Select image",
     "open": "Open",
+    "in": "in",
+    "release": "Release",
+    "occupy": "Occupy",
 
 };

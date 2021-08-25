@@ -1,14 +1,21 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-header>
       <StaffHeader @click="this.$store.commit('staff/TOGGLE_MENU_VISIBILITY')"/>
+    </ion-header>
+    <ion-content :fullscreen="true">
+      CONTENT
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { ref }                 from 'vue';
-import { IonPage, IonContent } from '@ionic/vue';
+import { ref } from 'vue';
+import {
+  IonPage,
+  IonContent,
+  IonHeader,
+}              from '@ionic/vue';
 
 import StaffHeader from '@/components/staff/StaffHeader';
 
@@ -17,6 +24,7 @@ export default {
   components: {
     IonPage,
     IonContent,
+    IonHeader,
     StaffHeader,
   },
   setup() {

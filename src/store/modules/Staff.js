@@ -17,5 +17,4 @@ export const getters = {
     isMenuVisible: (state) => {
         return state.isMenuVisible;
     },
-
 };
