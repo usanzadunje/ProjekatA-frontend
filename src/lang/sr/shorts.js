@@ -9,6 +9,7 @@ export default {
     "remember": "Zapamti me",
     "forget": "Zaboravljena lozinka?",
     "login": "Prijavi se",
+    "logout": "Odjavi se",
     "successLogin": "Uspesno ste se ulogovali!",
     "successUpdate": "Uspesno ste izmenili podatke!",
     "register": "Registruj se",

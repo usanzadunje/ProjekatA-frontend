@@ -75,7 +75,7 @@ const
           </ion-button>
         </ion-item>
         <ion-button class="mt-5 uppercase logout-button" fill="clear" expand="block" @click="logout">
-          Logout
+          {{ $t('logout') }}
         </ion-button>
       </div>
     </ion-content>

@@ -9,6 +9,7 @@ export default {
     "remember": "Remember me",
     "forget": "Forgot password?",
     "login": "Login",
+    "logout": "Logout",
     "successLogin": "Successfully logged in!",
     "successUpdate": "Successfully updated profile information!",
     "register": "Register",

@@ -16,7 +16,7 @@
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-black"
         @click="logout"
     >
-      <span class="text-sm ml-3">Logout</span>
+      <span class="text-sm ml-3">{{ $t('logout') }}</span>
     </div>
   </ion-content>
 </template>
