@@ -1,5 +1,5 @@
 <template>
-  <ion-content>
+  <ion-content scrollY="false">
     <div ref="content" class="absolute bottom-0 w-full ion-padding">
       <ion-item>
         <h1 class="submodal-heading">{{ $t('notifications') }}</h1>
@@ -72,7 +72,7 @@ import {
   alertController,
 }                                                 from '@ionic/vue';
 
-import CafeService        from '@/services/CafeService';
+import CafeService from '@/services/CafeService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useFCM }                from '@/composables/useFCM';
@@ -204,7 +204,7 @@ export default defineComponent({
               });
         }
       }else {
-        if(!store.getters['auth/notifications']) {
+        if(!store.getters['user/notifications']) {
           await showAlert(cafeId);
           isSubButtonDisabled.value = false;
           return;

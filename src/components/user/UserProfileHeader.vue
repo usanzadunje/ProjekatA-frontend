@@ -47,14 +47,14 @@ import {
   IonIcon,
   IonToolbar,
   IonButton,
-  popoverController,
 }                                                from '@ionic/vue';
 
 import SettingsPopover from '@/components/user/popovers/SettingsPopover';
 
 import {
   settingsOutline,
-} from 'ionicons/icons';
+}                     from 'ionicons/icons';
+import { usePopover } from '@/composables/usePopover';
 
 export default defineComponent({
   name: 'UserProfileHeader',
@@ -76,6 +76,8 @@ export default defineComponent({
     });
 
     /* Component properties */
+    const { openPopover } = usePopover();
+    /* Component properties */
     const avatarDisplay = ref(null);
 
     /* Event handlers */
@@ -83,16 +85,7 @@ export default defineComponent({
       emit('searchFilterChanged', e.target.value);
     };
     const openSettingsPopover = async(event) => {
-      const popover = await popoverController
-          .create({
-            component: SettingsPopover,
-            cssClass: 'custom-popover',
-            event: event,
-            translucent: true,
-            showBackdrop: false,
-            mode: 'ios',
-          });
-      await popover.present();
+      await openPopover(SettingsPopover, event, 'settings-popover');
     };
 
     /* Watchers */

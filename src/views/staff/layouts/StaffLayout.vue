@@ -1,234 +1,61 @@
 <template>
   <ion-page>
-    <ion-split-pane content-id="main" @click="backdropClicked">
-      <ion-menu
-          ref="menu"
-          content-id="main"
-          type="overlay"
-          @ionDidClose="openMenu(false)"
-      >
-        <div class="flex flex-col">
-          <div class="bg-red-600 w-full p-2">
-            ADMIN PANEL
-          </div>
-          <div class="flex flex-col py-0 pl-2 pr-4 text-center">
-            <div
-                class="flex flex-row flex-1 items-center"
-                :class="[activeMenuItem === 'dashboard' ? 'border-b-2 border-yellow-600 text-yellow-600' : 'text-gray-800']"
-                @click="menuItemClicked('dashboard')"
-            >
-              <ion-icon
-                  slot="icon-only"
-                  :icon="settingsOutline"
-                  class="text-2xl mr-2"
-              ></ion-icon>
-              <span
-                  class="pb-1 text-xl"
-              >
-                  Dashboard
-                </span>
-            </div>
-            <div
-                class="flex flex-row flex-1 items-center"
-                :class="[activeMenuItem === 'tables' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-800']"
-                @click="menuItemClicked('tables')"
-            >
-              <ion-icon
-                  slot="icon-only"
-                  :icon="settingsOutline"
-                  class="text-2xl mr-2"
-              ></ion-icon>
-              <span
-                  class="pb-1 text-xl"
-              >
-                  Tables
-                </span>
-            </div>
-            <div
-                class="flex flex-row flex-1 items-center"
-                :class="[activeMenuItem === 'profile' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
-                @click="menuItemClicked('profile')"
-            >
-              <ion-icon
-                  slot="icon-only"
-                  :icon="personOutline"
-                  class="text-2xl mr-2"
-              ></ion-icon>
-              <span
-                  class="pb-1 text-xl md:text-base">
-                  Profile
-                </span>
-            </div>
-            <div
-                v-if="isOwner"
-                class="flex flex-row flex-1 items-center"
-                :class="[activeMenuItem === 'settings' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
-                @click="menuItemClicked('settings')"
-            >
-              <ion-icon
-                  slot="icon-only"
-                  :icon="settingsOutline"
-                  class="text-2xl mr-2"
-              ></ion-icon>
-              <span
-                  class="pb-1 text-xl md:text-base">
-                  Settings
-                </span>
-            </div>
-            <div
-                class="flex flex-row flex-1 items-center"
-                @click="logout"
-            >
-              <ion-icon
-                  slot="icon-only"
-                  :icon="settingsOutline"
-                  class="text-2xl mr-2"
-              ></ion-icon>
-              <span
-                  class="pb-1 text-xl md:text-base">
-                  LOGOUT
-                </span>
-            </div>
-          </div>
-        </div>
-      </ion-menu>
+    <ion-header class="ion-no-border">
+      <StaffHeader/>
+    </ion-header>
 
-      <ion-router-outlet id="main"></ion-router-outlet>
+    <AdminMenu/>
 
-    </ion-split-pane>
+    <ion-router-outlet id="admin-outlet" class="mt-12">
+
+    </ion-router-outlet>
+
   </ion-page>
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { useStore }                                                   from 'vuex';
-import { useRouter }                                                  from 'vue-router';
-import { useI18n }                                                    from 'vue-i18n';
+import { defineComponent } from 'vue';
 import {
   IonPage,
-  IonIcon,
   IonRouterOutlet,
-  IonSplitPane,
-  IonMenu, loadingController,
-}                                                                     from '@ionic/vue';
+  IonHeader,
+}                          from '@ionic/vue';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-
-import { carSportOutline, homeOutline, personOutline, searchOutline, settingsOutline } from 'ionicons/icons';
-
+import StaffHeader from '@/components/staff/StaffHeader';
+import AdminMenu   from '@/components/staff/AdminMenu';
 
 export default defineComponent({
   name: 'StaffLayout',
   components: {
     IonPage,
-    IonIcon,
     IonRouterOutlet,
-    IonSplitPane,
-    IonMenu,
+    IonHeader,
+    StaffHeader,
+    AdminMenu,
   },
   setup() {
     /* Global properties */
-    const router = useRouter();
-    const store = useStore();
 
     /* Component properties */
-    const menu = ref(null);
-    const activeMenuItem = ref('dashboard');
-    const isOwner = computed(() => store.getters['auth/isOwner']);
-
 
     /* Composables */
-    const { t } = useI18n();
-    const { showErrorToast } = useToastNotifications();
 
     /* Lifecycle hooks */
-    onMounted(() => {
-      openMenu(false);
-    });
-    onBeforeUnmount(() => {
-      unwatch();
-    });
+
 
     /* Event handlers */
-    const openMenu = (state) => {
-      store.commit('staff/SET_MENU_VISIBILITY', state);
-    };
-    /* Event handlers */
-    const menuItemClicked = async(menuItemName) => {
-      activeMenuItem.value = menuItemName;
-      await router.push({ name: `staff.${menuItemName}` });
-    };
-    const backdropClicked = async() => {
-      const isMenuOpen = await menu.value?.$el.isOpen();
-      if(isMenuOpen) {
-        openMenu(false);
-      }
-    };
-    const logout = async() => {
-      let loading = null;
-      try {
-        loading = await loadingController
-            .create({
-              spinner: 'crescent',
-              cssClass: 'custom-loading',
-              message: t('loggingOut'),
-              mode: 'ios',
-            });
-        await loading.present();
-        await store.dispatch("auth/logout");
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              generalError: t('generalAlertError'),
-            });
-      }finally {
-        loading?.dismiss();
-      }
-    };
-
-    /* Watchers */
-    const unwatch = store.watch(
-        (state, getters) => getters['staff/isMenuVisible'],
-        async(newValue) => {
-          if(newValue) {
-            await menu.value?.$el.open();
-          }else {
-            await menu.value?.$el.close();
-          }
-        },
-    );
 
     return {
       /* Component properties */
-      menu,
-      activeMenuItem,
-      isOwner,
 
       /* Event handlers */
-      menuItemClicked,
-      openMenu,
-      backdropClicked,
-      logout,
 
       /* Icons from */
-      homeOutline,
-      searchOutline,
-      personOutline,
-      settingsOutline,
-      carSportOutline,
+
     };
   },
 });
 </script>
 <style scoped>
-ion-menu {
-  min-width: 170px !important;
-  max-width: 170px !important;
-  width: 170px !important;
-}
 
-ion-menu::part(backdrop) {
-  background: red !important;
-}
 </style>

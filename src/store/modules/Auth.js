@@ -1,5 +1,6 @@
-import router   from "@/router";
-import { i18n } from "@/i18n";
+import router                from "@/router";
+import { i18n }              from "@/i18n";
+import { loadingController } from '@ionic/vue';
 
 import AuthService        from "@/services/AuthService";
 import { StorageService } from '@/services/StorageService';
@@ -26,17 +27,28 @@ export const mutations = {
 
 export const actions = {
     async logout({ commit }) {
+        let loading = null;
         try {
+            loading = await loadingController
+                .create({
+                    spinner: 'crescent',
+                    cssClass: 'custom-loading',
+                    message: i18n.global.t('loggingOut'),
+                    mode: 'ios',
+                });
+            await loading.present();
             await AuthService.logout();
         }catch(error) {
             alert(i18n.global.t('forceLogout'));
         }finally {
             commit("SET_USER", null);
+            commit("SET_ROLE", null);
             commit("SET_TOKEN", null);
-            commit('user/SET_DARKMODE', null, { root: true })
-            commit('user/SET_LOCALIZATION', null, { root: true })
-            commit('user/SET_NOTIFICATIONS', null, { root: true })
+            commit('user/SET_DARKMODE', null, { root: true });
+            commit('user/SET_LOCALIZATION', null, { root: true });
+            commit('user/SET_NOTIFICATIONS', null, { root: true });
             await router.replace({ name: 'login' });
+            await loading?.dismiss();
             i18n.global.locale.value = 'sr';
             document.body.classList.toggle('dark', false);
         }
@@ -96,9 +108,9 @@ export const getters = {
         return displayName || i18n.global.t('unknown');
     },
     isStaff: (state) => {
-        return state.role === 2;
+        return state.user?.id === 1 || state.role === 2;
     },
     isOwner: (state) => {
-        return state.role === 1;
+        return state.user?.id === 1 || state.role === 1;
     },
 };

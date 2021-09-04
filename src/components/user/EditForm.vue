@@ -203,7 +203,7 @@
       <ion-button
           :disabled="loading"
           fill="clear"
-          routerLink="/dashboard"
+          @click="$router.back()"
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"

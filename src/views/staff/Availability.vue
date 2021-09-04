@@ -1,9 +1,5 @@
 <template>
   <ion-page>
-    <ion-header>
-      <StaffHeader @click="this.$store.commit('staff/TOGGLE_MENU_VISIBILITY');getPlaceAvailability()"/>
-    </ion-header>
-
     <ion-content :fullscreen="true">
 
       <ion-refresher pull-min="60" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
@@ -16,7 +12,7 @@
       </ion-refresher>
 
       <div class="staff-container">
-        <h1 class="text-center uppercase text-xl">{{ $t('currently') }} {{ $t('in') }} {{ place?.name }}</h1>
+        <h1 class="text-center uppercase secondary-heading">{{ $t('currently') }} {{ $t('in') }} {{ place?.name }}</h1>
 
         <h1 class="text-center uppercase main-heading mt-10">{{ availabilityRatio }}</h1>
 
@@ -54,11 +50,9 @@ import {
   IonIcon,
   IonRefresher,
   IonRefresherContent,
-  IonHeader,
   onIonViewWillEnter,
 }                        from '@ionic/vue';
 
-import StaffHeader from '@/components/staff/StaffHeader';
 
 import StaffService from '@/services/StaffService';
 import CafeService  from '@/services/CafeService';
@@ -71,6 +65,7 @@ import {
 } from 'ionicons/icons';
 
 export default {
+  name: "Availability",
   components: {
     IonPage,
     IonContent,
@@ -78,8 +73,6 @@ export default {
     IonIcon,
     IonRefresher,
     IonRefresherContent,
-    IonHeader,
-    StaffHeader,
   },
   setup() {
     /* Component properties */
@@ -183,3 +176,8 @@ export default {
 
 };
 </script>
+<style scoped>
+ion-content {
+  --background: var(--show-paint);
+}
+</style>

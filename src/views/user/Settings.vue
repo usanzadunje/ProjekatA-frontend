@@ -74,7 +74,12 @@ const
             <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
           </ion-button>
         </ion-item>
-        <ion-button class="mt-5 uppercase logout-button" fill="clear" expand="block" @click="logout">
+        <ion-button
+            class="mt-5 uppercase logout-button"
+            fill="clear"
+            expand="block"
+            @click="this.$store.dispatch('auth/logout');
+        ">
           {{ $t('logout') }}
         </ion-button>
       </div>
@@ -96,7 +101,6 @@ import {
   IonToggle,
   IonButton,
   pickerController,
-  loadingController,
 }                                    from '@ionic/vue';
 
 import AuthService from '@/services/AuthService';
@@ -212,28 +216,6 @@ export default defineComponent({
       });
       await picker.present();
     };
-    const logout = async() => {
-      let loading = null;
-      try {
-        loading = await loadingController
-            .create({
-              spinner: 'crescent',
-              cssClass: 'custom-loading',
-              message: t('loggingOut'),
-              mode: 'ios',
-            });
-        await loading.present();
-        await store.dispatch("auth/logout");
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              generalError: t('generalAlertError'),
-            });
-      }finally {
-        await loading?.dismiss();
-      }
-    };
     const showPrivacy = () => {
       alert('Privacy');
     };
@@ -253,7 +235,6 @@ export default defineComponent({
       /* Event handlers */
       toggleDarkMode,
       toggleNotifications,
-      logout,
       chooseLanguage,
       showPrivacy,
       showSupportAuthors,

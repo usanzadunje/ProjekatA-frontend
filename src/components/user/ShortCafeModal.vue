@@ -1,5 +1,5 @@
 <template>
-  <ion-content>
+  <ion-content scrollY="false">
     <div id="short-modal" class="absolute bottom-0 w-full ion-padding">
       <ion-item class="ion-item-no-padding-x">
         <ion-thumbnail slot="start">

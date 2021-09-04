@@ -1,17 +1,8 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <h1 class="main-heading text-center">CONTENT</h1>
       <p class="secondary-heading">
-        Staff<br><br>
-        Odma da mu tu prikaze i mogucnost da menja oslobodjenost stola <br>
-        Chartovi <br><br>
-
-
-        Owner<br><br>
-        Chartovi o zauzetosti stola<br>
-        Informacije  o zaposlenim ko radi i slicno<br>
-        Mogucnost da menja sto
+        Informacije vlasnikovom objektu
       </p>
     </ion-content>
   </ion-page>

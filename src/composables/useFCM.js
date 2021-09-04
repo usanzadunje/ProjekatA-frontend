@@ -1,6 +1,6 @@
 import { useRouter } from 'vue-router';
 import { Capacitor } from '@capacitor/core';
-import { useI18n } from 'vue-i18n';
+import { useI18n }   from 'vue-i18n';
 
 import AuthService from '@/services/AuthService';
 

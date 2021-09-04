@@ -1,5 +1,5 @@
 <template>
-  <div ref="content" class="absolute bottom-0 w-full ion-padding">
+  <div ref="content" class="absolute bottom-0 w-full ion-padding" scrollY="false">
     <div class="ml-4 mt-8 text-center">
       <h1 class="main-toolbar-heading text-xl">{{ cafe.name }}</h1>
     </div>

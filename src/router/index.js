@@ -143,25 +143,32 @@ const routes = [
                 component: () => import(/* webpackChunkName: "HomeStaff" */ "@/views/staff/Dashboard"),
             },
             {
-                path: "tables",
-                name: "staff.tables",
+                path: "availability",
+                name: "staff.availability",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Tables"),
+                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Availability"),
             },
             {
-                path: "profile",
-                name: "staff.profile",
+                path: "settings",
+                name: "staff.settings",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Tables"),
+                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Settings"),
             },
             {
-                path: "/owner/settings",
-                name: "owner.settings",
+                path: "/owner/staff",
+                name: "owner.staff",
                 meta: { middleware: [owner] },
                 component: () =>
-                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Tables"),
+                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/owner/Staff"),
+            },
+            {
+                path: "/owner/place",
+                name: "owner.place",
+                meta: { middleware: [owner] },
+                component: () =>
+                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/owner/Place"),
             },
         ],
     },

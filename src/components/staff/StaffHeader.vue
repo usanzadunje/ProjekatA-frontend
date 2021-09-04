@@ -1,36 +1,118 @@
 <template>
-  <div class="bg-red-600 w-full h-11"
-  >
-    ADMIN BAR
+  <div class="sticky top-0 z-40">
+    <div class="w-full h-12 bg-gray-100 flex items-center justify-between">
+      <ion-button fill="clear" @click="toggleMenu">
+        <ion-icon :icon="filterOutline" class="text-2xl text-black"></ion-icon>
+      </ion-button>
+
+      <div class="flex items-center">
+        <ion-toggle
+            :checked="isDarkModeOn"
+            @ionChange="toggleDarkMode($event)"
+            mode="md"
+        ></ion-toggle>
+        <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'Dark' : 'Light' }}</ion-label>
+      </div>
+
+      <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
+        <ion-avatar>
+          <img :src="this.$store.getters['auth/authUser']?.avatar" alt="Profile picture">
+        </ion-avatar>
+        <ion-label>{{ this.$store.getters['auth/displayName'] }}</ion-label>
+      </ion-chip>
+    </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import {}                  from '@ionic/vue';
+import { computed, defineComponent } from 'vue';
+import { useStore }                  from 'vuex';
+import {
+  IonButton,
+  IonIcon,
+  IonChip,
+  IonAvatar,
+  IonLabel,
+  IonToggle,
+}                                    from '@ionic/vue';
+
+import SettingsPopover from '@/components/staff/popovers/SettingsPopover';
+
+import { useMenu }    from '@/composables/useMenu';
+import { usePopover } from '@/composables/usePopover';
+
+import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
+
+import {
+  filterOutline,
+} from 'ionicons/icons';
+
 
 export default defineComponent({
   name: 'StaffHeader',
-  components: {},
+  components: {
+    IonButton,
+    IonIcon,
+    IonChip,
+    IonAvatar,
+    IonLabel,
+    IonToggle,
+
+  },
   props: {},
   setup() {
+    /* Global properties */
+    const store = useStore();
+
     /* Component properties */
+    const isDarkModeOn = computed(() => store.getters['user/darkMode']);
+
+    /* Composables */
+    const { toggleMenu } = useMenu();
+    const { openPopover } = usePopover();
 
     /* Event handlers */
-    // const searchInputChanged = (e) => {
-    // };
+    const openSettingsPopover = (event) => {
+      openPopover(SettingsPopover, event);
+    };
+    const toggleDarkMode = async(e) => {
+      if(!e.target.checked) {
+        await store.dispatch('user/setDarkMode', false);
+
+        Keyboard.setStyle({
+          style: KeyboardStyle.Light,
+        });
+
+      }else {
+        await store.dispatch('user/setDarkMode', true);
+
+        Keyboard.setStyle({
+          style: KeyboardStyle.Dark,
+        });
+      }
+      isDarkModeOn.value = e.target.checked;
+      document.body.classList.toggle('dark', e.target.checked);
+    };
 
 
     return {
       /* Component properties */
+      isDarkModeOn,
 
       /* Event handlers */
+      toggleMenu,
+      openSettingsPopover,
+      toggleDarkMode,
 
-      /* Icons from */
+      /* Icons */
+      filterOutline,
     };
   },
 });
+
 </script>
 <style scoped>
-
+ion-toggle {
+  --background-checked: #1F1C2B;
+}
 </style>

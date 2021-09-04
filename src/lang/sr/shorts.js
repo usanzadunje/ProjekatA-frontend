@@ -24,6 +24,7 @@ export default {
     "popular": "Popularno",
     "closest": "Najbliži vama",
     "available": "Slobodni",
+    "availability": "Dostupnost",
     "drink": "Piće | Pića",
     "menu": "Meni",
     "more": "Pogledaj više",
@@ -86,5 +87,8 @@ export default {
     "in": "u",
     "release": "Oslobodi",
     "occupy": "Zauzmi",
+    "staff.dashboard": "Pregled",
+    "owner.place": "Vas objekat",
+    "owner.staff": "Vase osoblje",
 };
 

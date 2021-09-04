@@ -121,7 +121,8 @@ ion-modal ion-item {
     bottom: 0 !important;
 }
 
-.custom-popover {
+.settings-popover {
+    --max-width: 170px;
 }
 
 .undo-toast {
@@ -851,16 +852,16 @@ ion-toggle {
     START STAFF COMPONENTS STYLES
 */
 
-    /*
-        START GLOBAL STYLES
-    */
-    .staff-container {
-        padding: 1rem;
-    }
+/*
+    START GLOBAL STYLES
+*/
+.staff-container {
+    padding: 1rem;
+}
 
-    /*
-        END GLOBAL STYLES
-    */
+/*
+    END GLOBAL STYLES
+*/
 
 /*
     END STAFF COMPONENTS  STYLES

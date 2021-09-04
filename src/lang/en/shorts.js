@@ -24,6 +24,7 @@ export default {
     "popular": "Popular",
     "closest": "Closest",
     "available": "Available",
+    "availability": "Availability",
     "drink": "Drink | Drinks",
     "menu": "Menu",
     "more": "More",
@@ -86,5 +87,8 @@ export default {
     "in": "in",
     "release": "Release",
     "occupy": "Occupy",
+    "staff.dashboard": "Dashboard",
+    "owner.place": "Your place",
+    "owner.staff": "Your staff",
 
 };

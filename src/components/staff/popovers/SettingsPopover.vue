@@ -1,13 +1,14 @@
 <template>
   <ion-content class="ion-no-padding bg-red-600" :scrollY="false">
     <div class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-         @click="navigateTo('edit')">
-      <ion-icon slot="start" :icon="personOutline" class="text-black"></ion-icon>
+         @click="navigateTo('staff.profile')">
+      <ion-icon slot="start" :icon="settingsOutline" class="text-black"></ion-icon>
       <span class="text-sm ml-3">{{ $t('profile') }}</span>
     </div>
 
-    <div class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-         @click="navigateTo('settings')">
+    <div v-if="this.$store.getters['auth/isOwner']"
+         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
+         @click="navigateTo('owner.settings')">
       <ion-icon slot="start" :icon="settingsOutline" class="text-black"></ion-icon>
       <span class="text-sm ml-3">{{ $t('settings') }}</span>
     </div>

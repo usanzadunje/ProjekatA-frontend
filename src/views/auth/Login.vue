@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content scrollY="false">
       <div id="login" class="flex flex-col justify-between background-image-container">
         <div class="mt-10 w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
@@ -44,9 +44,9 @@ export default defineComponent({
     /* Composables */
 
     /* Lifecycle hooks */
-    useBackButton(10, (processNextHandler) => {
+    useBackButton(10, async(processNextHandler) => {
       if(route.name === 'login') {
-        router.push({ name: 'home' });
+        await router.push({ name: 'home' });
       }else {
         processNextHandler();
       }
@@ -67,8 +67,8 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-content {
-  --background: #FFF url('https://resize.rs/storage/img/auth/login-background.png') no-repeat center top;
-  background-size: cover !important;
+#login {
+  background: #FFF url('https://resize.rs/storage/img/auth/login-background.png') center top no-repeat scroll;
+  background-size: cover;
 }
 </style>

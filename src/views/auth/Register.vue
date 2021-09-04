@@ -1,7 +1,7 @@
 <template>
   <ion-page>
-    <ion-content>
-      <div class="flex flex-col justify-between background-image-container">
+    <ion-content scrollY="false">
+      <div id="register" class="flex flex-col justify-between background-image-container">
         <div class="mt-10 w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>
@@ -46,8 +46,8 @@ ion-content {
   --background: #FFF;
 }
 
-ion-content {
-  --background: #FFF url('https://resize.rs/storage/img/auth/registration-background.png') no-repeat center top;
-  background-size: cover !important;
+#register {
+  background: #FFF url('https://resize.rs/storage/img/auth/registration-background.png') center top no-repeat scroll;
+  background-size: cover;
 }
 </style>

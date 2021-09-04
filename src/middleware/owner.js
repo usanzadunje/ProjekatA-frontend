@@ -1,5 +1,5 @@
 export default async function staff({ next, store, router }) {
-    if(store.getters["auth/isOwner"] || store.getters["auth/authUser"].id === 1) {
+    if(store.getters["auth/isOwner"]) {
         next();
     }else if(store.getters["auth/isStaff"]) {
         router.replace({ name: "staff.dashboard" });
