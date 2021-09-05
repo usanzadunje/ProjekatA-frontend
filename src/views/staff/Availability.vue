@@ -16,104 +16,54 @@
 
         <h1 class="text-center uppercase main-heading mt-10">{{ availabilityRatio }}</h1>
 
-        <div class="flex justify-between mt-10">
-          <ion-button
-              @click="toggle(true)"
-              :disabled="isPlaceEmpty"
-              class="w-full h-32"
-          >
-            {{ $t('release') }}
-            <ion-icon :icon="addOutline" class="text-2xl text-white-400"></ion-icon>
-          </ion-button>
-          <ion-button
-              @click="toggle(false)"
-              :disabled="isPlaceFull"
-              class="w-full h-32"
-          >
-            {{ $t('occupy') }}
-            <ion-icon :icon="removeOutline" class="text-2xl text-white-400"></ion-icon>
-          </ion-button>
-        </div>
+        <AvailabilityToggleButtons/>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import { useStore }      from 'vuex';
-import { useI18n }       from 'vue-i18n';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { useI18n }  from 'vue-i18n';
 import {
   IonPage,
   IonContent,
-  IonButton,
-  IonIcon,
   IonRefresher,
   IonRefresherContent,
-  onIonViewWillEnter,
-}                        from '@ionic/vue';
+}                   from '@ionic/vue';
 
 
 import StaffService from '@/services/StaffService';
-import CafeService  from '@/services/CafeService';
+
+import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import {
-  addOutline,
-  removeOutline,
-} from 'ionicons/icons';
 
 export default {
   name: "Availability",
   components: {
     IonPage,
     IonContent,
-    IonButton,
-    IonIcon,
     IonRefresher,
     IonRefresherContent,
+    AvailabilityToggleButtons,
   },
   setup() {
     /* Component properties */
     const store = useStore();
-    const availabilityRatio = ref('0/0');
-    const place = ref(null);
 
     /* Computed properties */
-    const isPlaceFull = computed(() => {
-      const ratio = availabilityRatio.value.split('/');
-
-      //Returned value compares number of tables that are empty to
-      //number of tables that are taken and if they are even it
-      //returns true indicating place is full with space.
-      return ratio[0] === ratio[1];
-    });
-    const isPlaceEmpty = computed(() => {
-      const ratio = availabilityRatio.value.split('/');
-
-      return ratio[0] === '0';
-    });
+    const place = computed(() => store.getters['staff/place']);
+    const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
 
     /* Composables */
-    const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
+    const { showErrorToast } = useToastNotifications();
 
 
     /* Event handlers */
-    const toggle = async(available) => {
-      try {
-        const response = await StaffService.toggleAvailability(available);
-
-        availabilityRatio.value = response.data?.availability_ratio;
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              toggleAvailabilityError: t('dataFetchingError'),
-            });
-      }
-    };
     const refresh = async(event) => {
       await getPlaceAvailability();
 
@@ -125,7 +75,7 @@ export default {
       try {
         const response = await StaffService.tableAvailability();
 
-        availabilityRatio.value = response.data?.availability_ratio;
+        store.commit('staff/SET_AVAILABILITY_RATIO', response.data?.availibility_ratio);
       }catch(e) {
         showErrorToast(
             null,
@@ -134,43 +84,21 @@ export default {
             });
       }
     };
-    const getPlace = async() => {
-      try {
-        const response = await CafeService.show(store.getters['auth/authUser'].cafe);
 
-        place.value = response.data;
-        availabilityRatio.value = response.data?.availability_ratio;
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              toggleAvailabilityError: t('dataFetchingError'),
-            });
-      }
-    };
 
     /* Lifecycle hooks */
-    getPlace();
-    onIonViewWillEnter(async() => {
-      await getPlaceAvailability();
-    });
 
 
     return {
       /* Component properties */
       place,
       availabilityRatio,
-      isPlaceFull,
-      isPlaceEmpty,
 
       /* Event handlers */
-      toggle,
       getPlaceAvailability,
       refresh,
 
       /* Icons */
-      addOutline,
-      removeOutline,
     };
   },
 

@@ -168,10 +168,8 @@ ion-menu::part(container) {
   margin-top: 3rem;
   height: calc(100% - 3rem);
   background: #F3F4F6 !important;
-  border-bottom-right-radius: 35px !important;
-  border-top-right-radius: 35px !important;
-  /*border: 1px solid !important;*/
-  /*box-shadow: 5px 5px #888888;*/
+  /*border-bottom-right-radius: 35px !important;*/
+  /*border-top-right-radius: 35px !important;*/
   box-shadow: none;
 }
 

@@ -31,23 +31,25 @@
 </template>
 
 <script>
-import { defineComponent }     from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { mapGetters }          from 'vuex';
+import { defineComponent, onMounted } from 'vue';
+import { useRoute, useRouter }        from 'vue-router';
+import { mapGetters }                 from 'vuex';
 import {
   IonIcon,
   IonPage,
   IonTabBar,
   IonTabButton,
   IonTabs,
-}                              from '@ionic/vue';
+}                                     from '@ionic/vue';
+
+import { useGeolocation } from '@/composables/useGeolocation';
 
 import {
   homeOutline,
   searchOutline,
   personOutline,
   settingsOutline,
-} from 'ionicons/icons';
+}                         from 'ionicons/icons';
 
 export default defineComponent({
   name: 'UserLayout',
@@ -65,6 +67,15 @@ export default defineComponent({
     /* Global properties */
     const route = useRoute();
     const router = useRouter();
+
+    /* Composables */
+    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+
+    /* Lifecycle hooks */
+    onMounted(async() => {
+      await checkForLocationPermission();
+      await tryGettingLocation();
+    });
 
     /* Event handlers */
     const clearRedirectQuery = () => {

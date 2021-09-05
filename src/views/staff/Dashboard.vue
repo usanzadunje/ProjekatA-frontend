@@ -1,40 +1,44 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <h1 class="main-heading text-center">CONTENT</h1>
-      <p class="secondary-heading">
-        Staff<br><br>
-        Odma da mu tu prikaze i mogucnost da menja oslobodjenost stola <br>
-        Chartovi <br><br>
+      <h1 class="text-center uppercase main-heading mt-10">{{ availabilityRatio }}</h1>
 
-
-        Owner<br><br>
-        Chartovi o zauzetosti stola<br>
-        Informacije  o zaposlenim ko radi i slicno<br>
-        Mogucnost da menja sto
-      </p>
+      <AvailabilityToggleButtons/>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useStore }                  from 'vuex';
 import {
   IonPage,
   IonContent,
-}                          from '@ionic/vue';
+}                                    from '@ionic/vue';
+
+import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
 
 export default defineComponent({
   name: "Dashboard",
   components: {
     IonPage,
     IonContent,
+    AvailabilityToggleButtons,
   },
   setup() {
+    /* Component properties */
+    const store = useStore();
+
     /* Composables */
+
+    /* Computed properties */
+    const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
 
 
     return {
+      /* Computed properties */
+      availabilityRatio,
+
       /* Event handlers */
     };
   },
