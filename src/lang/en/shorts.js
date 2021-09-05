@@ -87,6 +87,8 @@ export default {
     "in": "in",
     "release": "Release",
     "occupy": "Occupy",
+    "staff.empty": "Empty",
+    "staff.taken": "Taken",
     "staff.dashboard": "Dashboard",
     "owner.place": "Your place",
     "owner.staff": "Your staff",

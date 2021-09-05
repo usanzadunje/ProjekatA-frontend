@@ -28,7 +28,7 @@ export default createStore({
                 'user',
                 'global',
                 'permission',
-                'staff.place',
+                'staff',
             ],
         }),
     ],

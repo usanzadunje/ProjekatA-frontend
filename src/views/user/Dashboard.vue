@@ -293,7 +293,7 @@ ion-item-options {
 
 ion-item-option {
   --border-style: none;
-  --background: #E01B43;
+  --background: #e01b43;
   border-top-right-radius: 15px !important;
   border-bottom-right-radius: 15px !important;
 }

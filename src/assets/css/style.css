@@ -195,6 +195,11 @@ ion-toggle {
     width: 15px;
 }
 
+.btn-bg-danger {
+    --background: #e01b43;
+    --background-activated: #d90e34;
+}
+
 /*
     START Android specific styles
 */

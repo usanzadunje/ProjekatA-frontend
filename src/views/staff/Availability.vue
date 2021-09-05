@@ -25,7 +25,6 @@
 <script>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { useI18n }  from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -33,12 +32,9 @@ import {
   IonRefresherContent,
 }                   from '@ionic/vue';
 
-
-import StaffService from '@/services/StaffService';
-
 import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { usePlaceManipulation }  from '@/composables/usePlaceManipulation';
 
 
 export default {
@@ -59,9 +55,7 @@ export default {
     const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
 
     /* Composables */
-    const { t } = useI18n();
-    const { showErrorToast } = useToastNotifications();
-
+    const { getPlaceAvailability } = usePlaceManipulation();
 
     /* Event handlers */
     const refresh = async(event) => {
@@ -71,20 +65,6 @@ export default {
     };
 
     /* Methods */
-    const getPlaceAvailability = async() => {
-      try {
-        const response = await StaffService.tableAvailability();
-
-        store.commit('staff/SET_AVAILABILITY_RATIO', response.data?.availibility_ratio);
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              toggleAvailabilityError: t('dataFetchingError'),
-            });
-      }
-    };
-
 
     /* Lifecycle hooks */
 

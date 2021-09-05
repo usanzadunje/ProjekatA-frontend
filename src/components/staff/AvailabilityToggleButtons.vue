@@ -11,7 +11,7 @@
     <ion-button
         @click="toggle(false)"
         :disabled="isPlaceFull"
-        class="w-full h-32"
+        class="w-full h-32 btn-bg-danger"
     >
       {{ $t('occupy') }}
       <ion-icon :icon="removeOutline" class="text-2xl text-white-400"></ion-icon>
@@ -22,15 +22,12 @@
 <script>
 import { computed, defineComponent } from 'vue';
 import { useStore }                  from 'vuex';
-import { useI18n }                   from 'vue-i18n';
 import {
   IonButton,
   IonIcon,
 }                                    from '@ionic/vue';
 
-import StaffService from '@/services/StaffService';
-
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 
 import {
   removeOutline,
@@ -67,23 +64,7 @@ export default defineComponent({
 
 
     /* Composables */
-    const { showErrorToast } = useToastNotifications();
-    const { t } = useI18n();
-
-    /* Event handlers */
-    const toggle = async(available) => {
-      try {
-        const response = await StaffService.toggleAvailability(available);
-
-        store.commit('staff/SET_AVAILABILITY_RATIO', response.data?.availability_ratio);
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              toggleAvailabilityError: t('dataFetchingError'),
-            });
-      }
-    };
+    const { toggle } = usePlaceManipulation();
 
 
     return {

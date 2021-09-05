@@ -36,6 +36,8 @@
     "@ionic/vue-router": "^5.7.0",
     "axios": "^0.21.1",
     "capacitor": "^0.5.5",
+    "chart.js": "^3.5.1",
+    "chartjs-plugin-datalabels": "^2.0.0",
     "cordova-plugin-android-permissions": "^1.1.2",
     "cordova-plugin-request-location-accuracy": "^2.3.0",
     "core-js": "^3.17.2",

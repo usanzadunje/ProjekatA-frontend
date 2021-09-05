@@ -87,6 +87,8 @@ export default {
     "in": "u",
     "release": "Oslobodi",
     "occupy": "Zauzmi",
+    "staff.empty": "Slobodni",
+    "staff.taken": "Zauzeti",
     "staff.dashboard": "Pregled",
     "owner.place": "Vas objekat",
     "owner.staff": "Vase osoblje",

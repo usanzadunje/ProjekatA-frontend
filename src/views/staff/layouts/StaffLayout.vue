@@ -14,14 +14,14 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from 'vue';
-import { useStore }                   from 'vuex';
-import { useI18n }                    from 'vue-i18n';
+import { defineComponent } from 'vue';
+import { useStore }        from 'vuex';
+import { useI18n }         from 'vue-i18n';
 import {
   IonPage,
   IonRouterOutlet,
   IonHeader,
-}                                     from '@ionic/vue';
+}                          from '@ionic/vue';
 
 import StaffHeader from '@/components/staff/StaffHeader';
 import AdminMenu   from '@/components/staff/AdminMenu';
@@ -48,7 +48,7 @@ export default defineComponent({
     const { t } = useI18n();
 
     /* Lifecycle hooks */
-    onMounted(async() => {
+    (async() => {
       try {
         const response = await CafeService.show(store.getters['auth/authUser'].cafe);
 
@@ -61,7 +61,7 @@ export default defineComponent({
               toggleAvailabilityError: t('dataFetchingError'),
             });
       }
-    });
+    })();
 
 
     /* Event handlers */
