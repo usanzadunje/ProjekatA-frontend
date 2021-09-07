@@ -92,5 +92,7 @@ export default {
     "staff.dashboard": "Pregled",
     "owner.place": "Vas objekat",
     "owner.staff": "Vase osoblje",
+    "staff": "Zaposleni",
+
 };
 

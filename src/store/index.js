@@ -5,6 +5,7 @@ import * as user       from "@/store/modules/User";
 import * as permission from "@/store/modules/Permission";
 import * as global     from "@/store/modules/Global";
 import * as staff      from "@/store/modules/Staff";
+import * as owner      from "@/store/modules/Owner";
 
 import createPersistedState from "vuex-persistedstate";
 
@@ -17,6 +18,7 @@ export default createStore({
         permission,
         global,
         staff,
+        owner,
     },
 
     plugins: [
@@ -29,6 +31,7 @@ export default createStore({
                 'global',
                 'permission',
                 'staff',
+                "owner",
             ],
         }),
     ],

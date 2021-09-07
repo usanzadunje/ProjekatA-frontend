@@ -92,5 +92,6 @@ export default {
     "staff.dashboard": "Dashboard",
     "owner.place": "Your place",
     "owner.staff": "Your staff",
+    "staff": "Staff",
 
 };

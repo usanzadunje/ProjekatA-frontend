@@ -35,7 +35,7 @@ import {
   onIonViewWillLeave,
 }                               from '@ionic/vue';
 
-import EditForm from '@/components/user/EditForm';
+import EditForm from '@/components/auth/EditForm';
 
 import { arrowBackOutline, chevronBackOutline } from 'ionicons/icons';
 

@@ -97,14 +97,14 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from 'vue';
-import { useRouter }                      from 'vue-router';
-import { useStore }                       from 'vuex';
+import { computed, defineComponent } from 'vue';
+import { useRouter, useRoute }       from 'vue-router';
+import { useStore }                  from 'vuex';
 import {
   IonMenu,
   IonIcon,
 
-}                                         from '@ionic/vue';
+}                                    from '@ionic/vue';
 
 
 import {
@@ -127,17 +127,19 @@ export default defineComponent({
   setup() {
     /* Global properties */
     const router = useRouter();
+    const route = useRoute();
     const store = useStore();
 
     /* Component properties */
-    const activeMenuItem = ref('dashboard');
+    const activeMenuItem = computed(() => {
+      return route.name.split('.')[1];
+    });
     const isOwner = computed(() => store.getters['auth/isOwner']);
 
     /* Composables */
 
     /* Event handlers */
     const menuItemClicked = async(menuItemName) => {
-      activeMenuItem.value = menuItemName.split('.')[1];
       await router.push({ name: menuItemName });
     };
 

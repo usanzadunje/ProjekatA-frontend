@@ -26,8 +26,11 @@ import {
 import StaffHeader from '@/components/staff/StaffHeader';
 import AdminMenu   from '@/components/staff/AdminMenu';
 
+import CafeService  from '@/services/CafeService';
+import OwnerService from '@/services/OwnerService';
+
 import { useToastNotifications } from '@/composables/useToastNotifications';
-import CafeService               from '@/services/CafeService';
+
 
 export default defineComponent({
   name: 'StaffLayout',
@@ -50,10 +53,16 @@ export default defineComponent({
     /* Lifecycle hooks */
     (async() => {
       try {
-        const response = await CafeService.show(store.getters['auth/authUser'].cafe);
+        const cafeResponse = await CafeService.show(store.getters['auth/authUser'].cafe);
 
-        store.commit('staff/SET_PLACE_INFO', response.data);
-        store.commit('staff/SET_AVAILABILITY_RATIO', response.data?.availability_ratio ?? '0/0');
+        store.commit('staff/SET_PLACE_INFO', cafeResponse.data);
+        store.commit('staff/SET_AVAILABILITY_RATIO', cafeResponse.data?.availability_ratio ?? '0/0');
+
+        if(store.getters['auth/isOwner']) {
+          const staffResponse = await OwnerService.allStaff();
+
+          store.commit('owner/SET_STAFF_MEMBERS', staffResponse.data);
+        }
       }catch(e) {
         showErrorToast(
             null,

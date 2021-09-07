@@ -140,35 +140,35 @@ const routes = [
                 path: "dashboard",
                 name: "staff.dashboard",
                 meta: { middleware: [] },
-                component: () => import(/* webpackChunkName: "HomeStaff" */ "@/views/staff/Dashboard"),
+                component: () => import(/* webpackChunkName: "StaffDashboard" */ "@/views/staff/Dashboard"),
             },
             {
                 path: "availability",
                 name: "staff.availability",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Availability"),
+                    import(/* webpackChunkName: "StaffAvailability" */ "@/views/staff/Availability"),
             },
             {
                 path: "settings",
                 name: "staff.settings",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/Settings"),
+                    import(/* webpackChunkName: "StaffSettings" */ "@/views/staff/Settings"),
             },
             {
                 path: "/owner/staff",
                 name: "owner.staff",
                 meta: { middleware: [owner] },
                 component: () =>
-                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/owner/Staff"),
+                    import(/* webpackChunkName: "OwnerStaffInfo" */ "@/views/staff/owner/StaffInfo"),
             },
             {
                 path: "/owner/place",
                 name: "owner.place",
                 meta: { middleware: [owner] },
                 component: () =>
-                    import(/* webpackChunkName: "TableStaff" */ "@/views/staff/owner/Place"),
+                    import(/* webpackChunkName: "OwnerPlaceInfo" */ "@/views/staff/owner/PlaceInfo"),
             },
         ],
     },

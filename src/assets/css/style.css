@@ -200,6 +200,19 @@ ion-toggle {
     --background-activated: #d90e34;
 }
 
+.text-blue {
+    color: #1b6de0;
+}
+
+.text-danger {
+    color: #e01b43;
+}
+
+my-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /*
     START Android specific styles
 */

@@ -338,7 +338,9 @@ export default defineComponent({
         avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
         showSuccessToast(t('successUpdate'));
         const query = user.avatar ? { refreshAvatar: 'true' } : null;
-        await router.push({ name: 'dashboard', query });
+        if(!store.getters['auth/isStaff'] && !store.getters['auth/isOwner']) {
+          await router.push({ name: 'dashboard', query });
+        }
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);

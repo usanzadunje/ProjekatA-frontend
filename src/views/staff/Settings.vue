@@ -1,31 +1,49 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <p class="secondary-heading">
-        Informacije o sopstvenom profilu
-      </p>
+      <div class="staff-container">
+        <EditForm :clearInputs="clearInputs"/>
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   IonPage,
   IonContent,
-}                          from '@ionic/vue';
+  onIonViewWillEnter,
+  onIonViewWillLeave,
+}                               from '@ionic/vue';
+
+import EditForm from '@/components/auth/EditForm';
+
 
 export default defineComponent({
   name: "Settings",
   components: {
     IonPage,
     IonContent,
+    EditForm,
   },
   setup() {
-    /* Composables */
+    /* Component properties */
+    const clearInputs = ref(false);
 
+    /* Lifecycle hooks */
+    onIonViewWillEnter(() => {
+      clearInputs.value = false;
+
+    });
+    onIonViewWillLeave(() => {
+      clearInputs.value = true;
+    });
 
     return {
+      /* Component properties */
+      clearInputs,
+
       /* Event handlers */
     };
   },
