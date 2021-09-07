@@ -4,12 +4,14 @@
       <div class="staff-container">
         <h1 class="secondary-heading text-center uppercase">{{ $t('owner.staff') }}</h1>
 
+        <h1 class="secondary-heading text-center uppercase">//opcija da doda novog zaposlenog</h1>
+
         <div
             v-for="member in staff"
             :key="member.username"
             class="mt-4 relative"
         >
-          <div class="absolute top-1 right-7 z-40">
+          <div class="absolute top-1 right-9 z-40">
             <div id="editSection" class="flex items-center justify-center mx-auto w-16">
               <ion-icon :icon="create" class="text-2xl text-blue" slot="icon-only"
                         @click="editMember(member, $event)"></ion-icon>

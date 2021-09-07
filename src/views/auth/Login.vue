@@ -8,7 +8,7 @@
         </div>
         <div class="w-full mb-4">
           <h2 class="text-center secondary-heading">{{ $t('login') }}</h2>
-          <LoginForm class="mt-8"></LoginForm>
+          <LoginForm class="mt-8 h-full"></LoginForm>
         </div>
       </div>
     </ion-content>

@@ -1,9 +1,11 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <p class="secondary-heading">
-        Informacije vlasnikovom objektu
-      </p>
+      <div class="staff-container">
+        <h1 class="secondary-heading text-center uppercase">{{ $t('owner.place') }}</h1>
+
+        <EditPlaceForm class="mt-10"/>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -15,11 +17,14 @@ import {
   IonContent,
 }                          from '@ionic/vue';
 
+import EditPlaceForm from '@/components/owner/EditPlaceForm';
+
 export default defineComponent({
   name: "Dashboard",
   components: {
     IonPage,
     IonContent,
+    EditPlaceForm,
   },
   setup() {
     /* Composables */

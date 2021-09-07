@@ -16,6 +16,7 @@ ion-input {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     font-size: 0.8rem !important;
+    color: var(--primary-heading) !important;
 }
 
 ion-searchbar {
@@ -75,6 +76,11 @@ ion-spinner {
 
 ion-item {
     --transition: none !important;
+    --background: var(--input-bg);
+}
+
+ion-datetime {
+    color: var(--primary-heading) !important;
 }
 
 ion-modal {
@@ -208,9 +214,13 @@ ion-toggle {
     color: #e01b43;
 }
 
-my-auto {
+.my-auto {
     margin-left: auto;
     margin-right: auto;
+}
+
+.bg-transparent {
+    --background: transparent !important;
 }
 
 /*
@@ -438,9 +448,6 @@ my-auto {
 }
 
 /* Input styles */
-.auth-input-background {
-    --background: var(--secondary-button);
-}
 
 .error-border {
     border: 2px solid red !important;

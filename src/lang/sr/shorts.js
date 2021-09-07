@@ -93,6 +93,9 @@ export default {
     "owner.place": "Vas objekat",
     "owner.staff": "Vase osoblje",
     "staff": "Zaposleni",
-
+    "name": "Naziv",
+    "city": "Grad",
+    "address": "Adresa",
+    "place.email": "E-mail adresa",
 };
 

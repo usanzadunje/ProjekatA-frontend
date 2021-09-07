@@ -93,5 +93,8 @@ export default {
     "owner.place": "Your place",
     "owner.staff": "Your staff",
     "staff": "Staff",
-
+    "name": "Name",
+    "city": "City",
+    "address": "Address",
+    "place.email": "E-mail address",
 };

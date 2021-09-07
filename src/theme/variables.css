@@ -88,6 +88,8 @@ http://ionicframework.com/docs/theming/ */
 
     --secondary-button: #F6F7FB;
 
+    --input-bg: #F6F7FB;
+
     --primary-paint: #F6F7FB;
 
     --secondary-paint: #FFFFFF;
@@ -297,6 +299,8 @@ body.dark {
     --primary-paint: #1F1C2B;
 
     --secondary-paint: #272736;
+
+    --input-bg: #272736;
 
     --show-paint: #1F1C2B;
 

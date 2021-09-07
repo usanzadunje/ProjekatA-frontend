@@ -2,7 +2,7 @@
   <div class="px-8">
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
     >
       <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
@@ -20,7 +20,7 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
@@ -43,7 +43,7 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>

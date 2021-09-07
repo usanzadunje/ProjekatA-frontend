@@ -1,5 +1,5 @@
 <template>
-  <div id="custom" class="px-8 mt-5">
+  <div class="px-8 mt-5">
     <div
         class="flex justify-center mb-2"
     >
@@ -18,7 +18,7 @@
     </div>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 auth-input-background"
+        class="flex rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('fname') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
@@ -35,7 +35,7 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('lname') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
@@ -52,7 +52,7 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('username') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
@@ -68,7 +68,7 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
@@ -84,10 +84,10 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('bday') }"
     >
-      <ion-label class="text-gray-400">{{ $t('birthday') }}</ion-label>
+      <ion-label id="changePasswordLabel">{{ $t('birthday') }}</ion-label>
       <ion-datetime
           v-model="user.bday"
           :doneText="$t('done')"
@@ -99,7 +99,7 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
     >
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
@@ -113,7 +113,7 @@
           required
       ></ion-input>
     </ion-item>
-    <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2">
+    <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
       <ion-label class="settings-fade-text">{{ $t('passwordChange') }}</ion-label>
       <ion-toggle
           :checked="showPasswordEdit"
@@ -431,5 +431,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-
+#changePasswordLabel {
+  color: var(--primary-heading) !important;
+}
 </style>
