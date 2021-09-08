@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 mt-5">
+  <div class="px-10 mt-5">
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11"
@@ -109,9 +109,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted, computed } from 'vue';
-import { useStore }                                            from 'vuex';
-import { useI18n }                                             from 'vue-i18n';
+import { defineComponent, ref, reactive, onMounted, computed, watch, toRefs } from 'vue';
+import { useStore }                                                           from 'vuex';
+import { useI18n }                                                            from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -119,9 +119,7 @@ import {
   IonButton,
   IonSpinner,
 }
-                                                               from "@ionic/vue";
-
-import OwnerService from '@/services/OwnerService';
+                                                                              from "@ionic/vue";
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -146,7 +144,13 @@ export default defineComponent({
     IonButton,
     IonSpinner,
   },
-  setup() {
+  props: {
+    resetInputs: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props) {
     /* Global properties and methods */
     const store = useStore();
     const { t } = useI18n();
@@ -163,30 +167,33 @@ export default defineComponent({
     const emailInput = ref(null);
     const phoneInput = ref(null);
     const loading = ref(false);
+    const { resetInputs } = toRefs(props);
+
 
     /* Lifecycle hooks */
     onMounted(async() => {
-      console.log(placeInfo);
-      place.name = placeInfo.value.name;
-      place.city = placeInfo.value.city;
-      place.address = placeInfo.value.address;
-      place.email = placeInfo.value.email;
-      place.phone = placeInfo.value.phone;
+      resetInput();
     });
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
 
 
-    /* Event handlers */
+    /* Methods */
+    const resetInput = () => {
+      place.name = placeInfo.value.name;
+      place.city = placeInfo.value.city;
+      place.address = placeInfo.value.address;
+      place.email = placeInfo.value.email;
+      place.phone = placeInfo.value.phone;
+    };
 
     /* Event handlers */
     const update = async() => {
       loading.value = true;
       Keyboard.hide();
       try {
-        await OwnerService.updatePlace(place);
-        await store.dispatch("staff/updatePlaceInfo");
+        await store.dispatch("staff/updatePlaceInfo", place);
         showSuccessToast(t('successUpdate'));
       }catch(errors) {
         errorNames.value = getError(errors);
@@ -197,6 +204,13 @@ export default defineComponent({
         loading.value = false;
       }
     };
+
+    /* Watchers */
+    watch(resetInputs, () => {
+      if(resetInputs.value) {
+        resetInput();
+      }
+    });
 
 
     return {

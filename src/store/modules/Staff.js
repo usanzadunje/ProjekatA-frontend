@@ -1,4 +1,5 @@
-import CafeService from '@/services/CafeService';
+import CafeService  from '@/services/CafeService';
+import OwnerService from '@/services/OwnerService';
 
 export const namespaced = true;
 
@@ -17,13 +18,16 @@ export const mutations = {
 };
 
 export const actions = {
-    async updatePlaceInfo({ commit, rootGetters }) {
-        try {
-            const response = await CafeService.show(rootGetters['auth/authUser'].cafe);
-            commit("SET_PLACE_INFO", response.data);
-        }catch(error) {
-            console.log(error);
-        }
+    async getPlaceInfo({ commit, rootGetters }) {
+        const response = await CafeService.show(rootGetters['auth/authUser'].cafe);
+        commit('SET_PLACE_INFO', response.data);
+        commit('SET_AVAILABILITY_RATIO', response.data?.availability_ratio ?? '0/0');
+    },
+
+    async updatePlaceInfo({ commit }, place) {
+        await OwnerService.updatePlace(place);
+
+        commit('SET_PLACE_INFO', place);
     },
 };
 

@@ -4,14 +4,12 @@
 
       <ion-refresher pull-min="60" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
-            :pulling-text="$t('refresherPulling')"
             refreshing-spinner="crescent"
-            :refreshing-text="$t('refresherText')"
         >
         </ion-refresher-content>
       </ion-refresher>
 
-      <div class="staff-container">
+      <div class="wrap">
         <h1 class="text-center uppercase secondary-heading">{{ $t('currently') }} {{ $t('in') }} {{ place?.name }}</h1>
 
         <h1 class="text-center uppercase main-heading mt-10">{{ availabilityRatio }}</h1>
@@ -87,5 +85,6 @@ export default {
 <style scoped>
 ion-content {
   --background: var(--show-paint);
+  background: var(--show-paint);
 }
 </style>

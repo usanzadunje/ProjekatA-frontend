@@ -1,13 +1,5 @@
 <template>
   <div>
-    <ion-refresher pull-max="0" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
-      <ion-refresher-content
-          :pulling-text="$t('refresherPulling')"
-          refreshing-spinner="crescent"
-          :refreshing-text="$t('refresherText')"
-      >
-      </ion-refresher-content>
-    </ion-refresher>
     <FilterCategoryHeading :title="$t('searchResults')" class="mb-2"/>
     <div v-if="!showSkeleton">
       <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
@@ -46,8 +38,6 @@ import { useI18n }                                        from 'vue-i18n';
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonRefresher,
-  IonRefresherContent,
 }                                                         from '@ionic/vue';
 
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
@@ -64,8 +54,7 @@ export default defineComponent({
   components: {
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-    IonRefresher,
-    IonRefresherContent,
+
     FilterCategoryHeading,
     CafeCard,
     SkeletonCafeCard,
@@ -78,6 +67,9 @@ export default defineComponent({
     sortBy: {
       type: String,
       default: '',
+    },
+    refresher: {
+      type: Object,
     },
   },
   emits: ['scrollToTop', 'openCafeModal', 'infiniteScrollToggle'],
@@ -142,12 +134,11 @@ export default defineComponent({
         await checkForLocationPermission();
       }
       await tryGettingLocation();
-      // Only after both cafe arrays have been updated then complete refresher
-      // Fetching 4 cafes in each category with new live data
 
       document.querySelector('#header').classList.remove('hide-header');
 
       await getCafes();
+
       event.target.complete();
     };
 
@@ -184,7 +175,11 @@ export default defineComponent({
       getCafes();
       emit('scrollToTop');
     });
-
+    watch(props.refresher, async() => {
+      if(props.refresher.isActive) {
+        await refresh(props.refresher.event);
+      }
+    });
 
     return {
       /* Component properties */
@@ -193,8 +188,7 @@ export default defineComponent({
       showSkeleton,
 
       /* Event handlers */
-      loadMoreCafes,
-      refresh,
+      loadMoreCafes, refresh,
 
       /* Icons */
 

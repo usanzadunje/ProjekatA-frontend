@@ -16,7 +16,9 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <EditForm :clearInputs="clearInputs"/>
+      <div class="wrap">
+        <EditForm :clearInputs="clearInputs"/>
+      </div>
     </ion-content>
   </ion-page>
 </template>

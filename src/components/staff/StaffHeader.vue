@@ -79,18 +79,17 @@ export default defineComponent({
       if(!e.target.checked) {
         await store.dispatch('user/setDarkMode', false);
 
-        Keyboard.setStyle({
+        Keyboard?.setStyle({
           style: KeyboardStyle.Light,
         });
 
       }else {
         await store.dispatch('user/setDarkMode', true);
 
-        Keyboard.setStyle({
+        Keyboard?.setStyle({
           style: KeyboardStyle.Dark,
         });
       }
-      isDarkModeOn.value = e.target.checked;
       document.body.classList.toggle('dark', e.target.checked);
     };
 

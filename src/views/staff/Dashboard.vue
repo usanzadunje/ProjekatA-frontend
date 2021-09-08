@@ -3,13 +3,11 @@
     <ion-content :fullscreen="true">
       <ion-refresher pull-min="60" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
-            :pulling-text="$t('refresherPulling')"
             refreshing-spinner="crescent"
-            :refreshing-text="$t('refresherText')"
         >
         </ion-refresher-content>
       </ion-refresher>
-      <div class="staff-container">
+      <div class="wrap">
         <h1 class="text-center uppercase secondary-heading">Current availability situation in your place</h1>
 
         <div
@@ -88,5 +86,6 @@ export default defineComponent({
 <style scoped>
 ion-content {
   --background: var(--show-paint);
+  background: var(--show-paint);
 }
 </style>

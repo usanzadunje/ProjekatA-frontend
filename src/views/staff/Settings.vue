@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <div class="staff-container">
+      <div class="wrap">
         <EditForm :clearInputs="clearInputs"/>
       </div>
     </ion-content>

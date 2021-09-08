@@ -47,6 +47,14 @@ export default defineComponent({
 
         chart.update();
       }
+      if(mutation.type === 'user/SET_DARKMODE') {
+        if(mutation.payload) {
+          chart.options.plugins.legend.labels.color = '#F0F0F2';
+        }else {
+          chart.options.plugins.legend.labels.color = '#232B38';
+        }
+        chart.update();
+      }
     });
 
     /* Lifecycle hooks */
@@ -76,9 +84,6 @@ export default defineComponent({
             legend: {
               display: true,
               position: 'right',
-              labels: {
-                color: '#000',
-              },
             },
             datalabels: {
               display: true,

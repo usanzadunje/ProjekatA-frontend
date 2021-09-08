@@ -1,21 +1,21 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <div class="staff-container">
+      <div class="wrap">
         <h1 class="secondary-heading text-center uppercase">{{ $t('owner.place') }}</h1>
 
-        <EditPlaceForm class="mt-10"/>
+        <EditPlaceForm class="mt-10" :resetInputs="resetInputs"/>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   IonPage,
-  IonContent,
-}                          from '@ionic/vue';
+  IonContent, onIonViewWillLeave,
+}                               from '@ionic/vue';
 
 import EditPlaceForm from '@/components/owner/EditPlaceForm';
 
@@ -27,10 +27,18 @@ export default defineComponent({
     EditPlaceForm,
   },
   setup() {
-    /* Composables */
+    /* Component properties */
+    const resetInputs = ref(false);
 
+    /* Lifecycle hooks */
+    onIonViewWillLeave(() => {
+      resetInputs.value = true;
+    });
 
     return {
+      /* Component properties */
+      resetInputs,
+
       /* Event handlers */
     };
   },

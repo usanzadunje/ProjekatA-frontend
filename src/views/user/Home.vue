@@ -7,11 +7,9 @@
     />
 
     <ion-content class="ion-padding">
-      <ion-refresher pull-min="45" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+      <ion-refresher pull-min="50" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
-            :pulling-text="$t('refresherPulling')"
             refreshing-spinner="crescent"
-            :refreshing-text="$t('refresherText')"
         >
         </ion-refresher-content>
       </ion-refresher>

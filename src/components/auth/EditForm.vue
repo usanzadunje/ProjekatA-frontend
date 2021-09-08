@@ -87,7 +87,7 @@
         class="flex rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('bday') }"
     >
-      <ion-label id="changePasswordLabel">{{ $t('birthday') }}</ion-label>
+      <ion-label class="settings-fade-text">{{ $t('birthday') }}</ion-label>
       <ion-datetime
           v-model="user.bday"
           :doneText="$t('done')"
@@ -431,7 +431,5 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-#changePasswordLabel {
-  color: var(--primary-heading) !important;
-}
+
 </style>

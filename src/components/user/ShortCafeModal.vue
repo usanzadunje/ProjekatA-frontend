@@ -1,19 +1,17 @@
 <template>
   <ion-content scrollY="false">
     <div id="short-modal" class="absolute bottom-0 w-full ion-padding">
-      <ion-item class="ion-item-no-padding-x">
-        <ion-thumbnail slot="start">
-          <img
-              :src="`${backendStorageURL}/cafe/1_2cafe.png`"
-              alt="Logo of {{ cafe.name }}"
-              class="modal-thumbnail"
-          >
-        </ion-thumbnail>
-        <div>
+      <div class="ion-item-no-padding-x flex items-center">
+        <img
+            :src="`${backendStorageURL}/cafe/1_2cafe.png`"
+            alt="Logo of {{ cafe.name }}"
+            class="modal-thumbnail radius-11px"
+        >
+        <div class="ml-4">
           <h1 class="modal-cafe-name-text">{{ cafe.name }}</h1>
           <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
         </div>
-      </ion-item>
+      </div>
 
       <CafeInfoBody :cafe="cafe"/>
       <ion-item class="mt-6 ion-no-padding">
@@ -72,7 +70,6 @@ import { useStore }                                            from 'vuex';
 import { Capacitor }                                           from '@capacitor/core';
 import {
   IonContent,
-  IonThumbnail,
   IonItem,
   IonIcon,
   IonButton,
@@ -100,7 +97,6 @@ export default defineComponent({
   name: 'ShortCafeModal',
   components: {
     IonContent,
-    IonThumbnail,
     IonItem,
     IonIcon,
     IonButton,

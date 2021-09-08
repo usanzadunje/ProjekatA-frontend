@@ -14,12 +14,19 @@
     </div>
 
     <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation($event)" class="ion-padding">
+      <ion-refresher pull-max="60" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+        <ion-refresher-content
+            refreshing-spinner="crescent"
+        >
+        </ion-refresher-content>
+      </ion-refresher>
       <InfiniteScroll
           :cafeSearchString="cafeSearchString"
           :sortBy="sortBy"
           @scrollToTop="scrollToTop"
           @openCafeModal="openModal(true, $event)"
           @infiniteScrollToggle="infiniteScrollLoading = !infiniteScrollLoading"
+          :refresher="refresher"
       />
 
       <ion-modal
@@ -48,6 +55,8 @@ import {
   IonModal,
   onIonViewWillEnter,
   onIonViewDidEnter,
+  IonRefresher,
+  IonRefresherContent,
   // onIonViewWillLeave,
 }
                                 from '@ionic/vue';
@@ -68,6 +77,8 @@ export default defineComponent({
     IonContent,
     IonPage,
     IonModal,
+    IonRefresher,
+    IonRefresherContent,
     UserHeader,
     SlidingFilter,
     InfiniteScroll,
@@ -85,6 +96,10 @@ export default defineComponent({
     const scrollTopOffset = ref(0);
     const prevScrollDirectionDown = ref(false);
     const infiniteScrollLoading = ref(false);
+    const refresher = ref({
+      isActive: false,
+      event: null,
+    });
 
     /* Composables */
     const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
@@ -141,6 +156,10 @@ export default defineComponent({
       scrollTopOffset.value = event.detail.currentY;
       prevScrollDirectionDown.value = currentScrollDirectionDown;
     };
+    const refresh = async(event) => {
+      refresher.value.isActive = true;
+      refresher.value.event = event;
+    };
 
     /* Methods */
     // When search term is changed infinity scroll component changes data and
@@ -157,6 +176,7 @@ export default defineComponent({
       isModalOpen,
       modalCafe,
       infiniteScrollLoading,
+      refresher,
 
       /* Event handlers */
       searchFilterChanged,
@@ -164,6 +184,7 @@ export default defineComponent({
       pullAnimation,
       openModal,
       hideModal,
+      refresh,
 
       /* Methods */
       scrollToTop,

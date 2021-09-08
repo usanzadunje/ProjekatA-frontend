@@ -26,9 +26,6 @@ import {
 import StaffHeader from '@/components/staff/StaffHeader';
 import AdminMenu   from '@/components/staff/AdminMenu';
 
-import CafeService  from '@/services/CafeService';
-import OwnerService from '@/services/OwnerService';
-
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 
@@ -53,15 +50,10 @@ export default defineComponent({
     /* Lifecycle hooks */
     (async() => {
       try {
-        const cafeResponse = await CafeService.show(store.getters['auth/authUser'].cafe);
-
-        store.commit('staff/SET_PLACE_INFO', cafeResponse.data);
-        store.commit('staff/SET_AVAILABILITY_RATIO', cafeResponse.data?.availability_ratio ?? '0/0');
+        await store.dispatch('staff/getPlaceInfo');
 
         if(store.getters['auth/isOwner']) {
-          const staffResponse = await OwnerService.allStaff();
-
-          store.commit('owner/SET_STAFF_MEMBERS', staffResponse.data);
+          await store.dispatch('owner/getStaffInfo');
         }
       }catch(e) {
         showErrorToast(

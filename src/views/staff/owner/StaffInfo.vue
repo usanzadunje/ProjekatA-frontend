@@ -1,7 +1,13 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <div class="staff-container">
+      <ion-refresher pull-min="60" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+        <ion-refresher-content
+            refreshing-spinner="crescent"
+        >
+        </ion-refresher-content>
+      </ion-refresher>
+      <div class="wrap">
         <h1 class="secondary-heading text-center uppercase">{{ $t('owner.staff') }}</h1>
 
         <h1 class="secondary-heading text-center uppercase">//opcija da doda novog zaposlenog</h1>
@@ -16,7 +22,7 @@
               <ion-icon :icon="create" class="text-2xl text-blue" slot="icon-only"
                         @click="editMember(member, $event)"></ion-icon>
               <ion-icon :icon="removeCircle" class="text-2xl text-danger ml-2" slot="icon-only"
-                        @click="removeMember(member, $event)"></ion-icon>
+                        @click="deleteMember(member.id, $event)"></ion-icon>
             </div>
           </div>
           <ion-card
@@ -51,6 +57,7 @@
 <script>
 import { defineComponent, computed } from 'vue';
 import { useStore }                  from 'vuex';
+import { useI18n }                   from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -58,7 +65,11 @@ import {
   IonCardHeader,
   IonThumbnail,
   IonIcon,
+  IonRefresher,
+  IonRefresherContent,
 }                                    from '@ionic/vue';
+
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
   removeCircle,
@@ -74,6 +85,8 @@ export default defineComponent({
     IonCardHeader,
     IonThumbnail,
     IonIcon,
+    IonRefresher,
+    IonRefresherContent,
   },
   setup() {
     /* Global properties */
@@ -83,6 +96,8 @@ export default defineComponent({
     const staff = computed(() => store.getters['owner/staff']);
 
     /* Composables */
+    const { showErrorToast } = useToastNotifications();
+    const { t } = useI18n();
 
     /* Lifecycle hooks */
 
@@ -92,10 +107,31 @@ export default defineComponent({
 
       console.log(member);
     };
-    const removeMember = (member, event = null) => {
+    const deleteMember = async(memberId, event = null) => {
       event?.stopPropagation();
 
-      console.log('del', member);
+      try {
+        await store.dispatch('owner/deleteStaff', memberId);
+      }catch(errors) {
+        showErrorToast(
+            null,
+            {
+              pushNotificationPermission: t('generalAlertError'),
+            });
+      }
+    };
+    const refresh = async(event) => {
+      try {
+        await store.dispatch('owner/getStaffInfo');
+      }catch(error) {
+        showErrorToast(
+            null,
+            {
+              pushNotificationPermission: t('dataFetchingError'),
+            });
+      }finally {
+        event.target.complete();
+      }
     };
 
     return {
@@ -104,7 +140,8 @@ export default defineComponent({
 
       /* Event handlers */
       editMember,
-      removeMember,
+      deleteMember,
+      refresh,
 
       /* Icons */
       removeCircle,
@@ -117,6 +154,7 @@ export default defineComponent({
 <style scoped>
 ion-content {
   --background: var(--show-paint);
+  background: var(--show-paint);
 }
 
 ion-card {
