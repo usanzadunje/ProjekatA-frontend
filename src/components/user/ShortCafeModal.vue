@@ -1,86 +1,78 @@
 <template>
-  <ion-content scrollY="false">
-    <div id="short-modal" class="absolute bottom-0 w-full ion-padding">
-      <div class="ion-item-no-padding-x flex items-center">
-        <img
-            :src="`${backendStorageURL}/cafe/1_2cafe.png`"
-            alt="Logo of {{ cafe.name }}"
-            class="modal-thumbnail radius-11px"
-        >
-        <div class="ml-4">
-          <h1 class="modal-cafe-name-text">{{ cafe.name }}</h1>
-          <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
-        </div>
-      </div>
-
-      <CafeInfoBody :cafe="cafe"/>
-      <ion-item class="mt-6 ion-no-padding">
-        <ion-slides v-update-swiper :options="slideOpts">
-          <ion-slide v-for="i in [1,2,3]" :key="i">
-            <img
-                :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
-                alt=""
-                @click="openPreview(`${backendStorageURL}/cafe/2_${i}cafe.png`)"
-            >
-          </ion-slide>
-        </ion-slides>
-      </ion-item>
-
-      <div class="mt-5 mb-3 flex justify-around">
-        <ion-button
-            class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
-            :routerLink="`/cafes/${cafe.id}?redirect=${$route.path + '?openModal=true'}`"
-            @click="$emit('dismissShortCafeModal')"
-        >
-          {{ $t('more') }}
-        </ion-button>
-        <ion-button
-            class="flex-shrink uppercase button-subscribe modal-button-border"
-            @click="openModal(true);$emit('subModalOpened');"
-            :disabled="isSubDisabled"
-        >
-          <ion-icon slot="start"
-                    :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-          {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
-        </ion-button>
+  <div class="px-4 pt-4">
+    <div class="ion-item-no-padding-x flex items-center">
+      <img
+          :src="`${backendStorageURL}/cafe/1_2cafe.png`"
+          alt="Logo of {{ cafe.name }}"
+          class="modal-thumbnail radius-11px"
+      >
+      <div class="ml-4">
+        <h1 class="modal-cafe-name-text">{{ cafe.name }}</h1>
+        <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
       </div>
     </div>
-    <ion-modal
-        :is-open="isModalOpen"
-        css-class="custom-sub-modal"
-        @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
-        :backdrop-dismiss="true"
-        :swipe-to-close="true"
-    >
-      <CafeSubscriptionModal
-          :cafe="{'id': cafe.id, 'name': cafe.name}"
-          :isUserSubscribed="isUserSubscribed"
-          @dismissSubscriptionModal="openModal(false);"
-          @userToggledSubscription="isUserSubscribed = !isUserSubscribed"
-          @userUnsubscribed="$emit('userUnsubscribed')"
-      />
-    </ion-modal>
-  </ion-content>
+
+    <CafeInfoBody :cafe="cafe"/>
+    <div class="mt-6 ion-no-padding">
+      <ion-slides v-update-swiper :options="slideOpts">
+        <ion-slide v-for="i in [1,2,3]" :key="i">
+          <img
+              :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
+              alt=""
+              @click="openPreview(`${backendStorageURL}/cafe/2_${i}cafe.png`)"
+          >
+        </ion-slide>
+      </ion-slides>
+    </div>
+
+    <div class="mt-5 mb-3 flex justify-around">
+      <ion-button
+          class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
+          :routerLink="`/cafes/${cafe.id}?redirect=${$route.path + '?openModal=true'}`"
+          @click="$emit('dismissShortCafeModal')"
+      >
+        {{ $t('more') }}
+      </ion-button>
+      <ion-button
+          class="flex-shrink uppercase button-subscribe modal-button-border"
+          @click="openModal(true);$emit('subModalOpened');"
+          :disabled="isSubDisabled"
+      >
+        <ion-icon slot="start"
+                  :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+        {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
+      </ion-button>
+    </div>
+  </div>
+  <Modal
+      :is-open="isModalOpen"
+      css-class="custom-map-modal"
+      @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
+  >
+    <CafeSubscriptionModal
+        :cafe="{'id': cafe.id, 'name': cafe.name}"
+        @dismissSubscriptionModal="openModal(false);"
+        @userToggledSubscription="$emit('userToggledSubscription')"
+    />
+  </Modal>
 </template>
 
 <script>
-import { defineComponent, ref, toRef, onMounted, onUnmounted } from 'vue';
-import { useRoute, useRouter }                                 from 'vue-router';
-import { useStore }                                            from 'vuex';
-import { Capacitor }                                           from '@capacitor/core';
+import { defineComponent, ref, toRef, onUnmounted } from 'vue';
+import { useRoute, useRouter }                      from 'vue-router';
+import { useStore }                                 from 'vuex';
+import { Capacitor }                                from '@capacitor/core';
 import {
-  IonContent,
-  IonItem,
   IonIcon,
   IonButton,
   IonSlides,
   IonSlide,
-  IonModal,
   modalController,
-}                                                              from '@ionic/vue';
+}                                                   from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
+import Modal                 from '@/components/Modal';
 import ImagePreviewModal     from '@/components/user/ImagePreviewModal';
 
 import CafeService from '@/services/CafeService';
@@ -96,13 +88,11 @@ import {
 export default defineComponent({
   name: 'ShortCafeModal',
   components: {
-    IonContent,
-    IonItem,
     IonIcon,
     IonButton,
     IonSlides,
     IonSlide,
-    IonModal,
+    Modal,
     CafeSubscriptionModal,
     CafeInfoBody,
   },
@@ -112,7 +102,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissShortCafeModal', 'subModalOpened', 'userUnsubscribed'],
+  emits: ['dismissShortCafeModal', 'subModalOpened', 'userToggledSubscription'],
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
@@ -121,7 +111,8 @@ export default defineComponent({
 
     /* Component properties */
     const slideOpts = {
-      slidesPerView: 2.2,
+      slidesPerView: 2.5,
+      spaceBetween: 10,
     };
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
@@ -131,7 +122,7 @@ export default defineComponent({
     const { isModalOpen, openModal } = useModal();
 
     /* Lifecycle hooks */
-    isSubDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
+    isSubDisabled.value = Capacitor.getPlatform() === 'wseb' || !store.getters['auth/loggedIn'];
     /* Checking if user is subscribed to this cafe */
     if(store.getters['auth/loggedIn']) {
       CafeService.isUserSubscribed(cafe.value.id)
@@ -142,12 +133,6 @@ export default defineComponent({
                    isUserSubscribed.value = false;
                  });
     }
-    onMounted(() => {
-      setTimeout(() => {
-        const height = document.getElementById('short-modal').getBoundingClientRect()?.height || 420;
-        document.documentElement.style.setProperty('--short-modal-height', height + 'px');
-      }, 400);
-    });
 
     onUnmounted(() => {
       if(route.query.openModal) {
@@ -189,4 +174,5 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+
 </style>

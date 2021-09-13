@@ -30,15 +30,13 @@
       </div>
     </div>
     <hr class="card-horizontal-ruler mt-3.5">
-    <ion-modal
+    <Modal
         :is-open="isModalOpen"
-        css-class="custom-map-modal"
+        css-class="custom-sub-modal"
         @didDismiss="openModal(false);"
-        :backdrop-dismiss="true"
-        :swipe-to-close="true"
     >
       <GoogleMap :cafe="cafe"/>
-    </ion-modal>
+    </Modal>
   </div>
 </template>
 
@@ -48,9 +46,9 @@ import { defineComponent } from 'vue';
 import {
   IonIcon,
   IonButton,
-  IonModal,
 } from '@ionic/vue';
 
+import Modal     from '@/components/Modal';
 import GoogleMap from '@/components/user/GoogleMap';
 
 import { useModal } from '@/composables/useModal';
@@ -70,7 +68,7 @@ export default defineComponent({
   components: {
     IonIcon,
     IonButton,
-    IonModal,
+    Modal,
     GoogleMap,
   },
   props: {

@@ -22,36 +22,15 @@ export function useFCM() {
     const initPush = async() => {
         if(Capacitor.getPlatform() !== 'web') {
             await registerPush();
-        }else {
-            showErrorToast(
-                null,
-                {
-                    pushNotificationPermission: t('warningWebNotification'),
-                });
-            return true;
         }
     };
     const registerPush = async() => {
         /* If permission is not granted asks for permission, after granted it registers Push Notifications */
         try {
-            const permission = await PushNotifications.requestPermissions();
-            if(permission.receive === 'granted') {
-                await PushNotifications.register();
-            }else {
-                showErrorToast(
-                    null,
-                    {
-                        pushNotificationPermission: t('warningNoNotificationPermission'),
-                    });
-            }
+            await PushNotifications.requestPermissions();
         }catch(error) {
-            showErrorToast(
-                null,
-                {
-                    pushNotificationPermission: t('generalAlertError'),
-                });
+            showErrorToast(error);
         }
-
 
         /* Event listeners */
         PushNotifications.addListener(
@@ -63,12 +42,8 @@ export function useFCM() {
                 /* Saving token from FCM into user table */
                 try {
                     await AuthService.setFcmToken(payload);
-                }catch(e) {
-                    showErrorToast(
-                        null,
-                        {
-                            pushNotificationPermission: t('generalAlertError'),
-                        });
+                }catch(error) {
+                    showErrorToast(error);
                 }
             },
         );
@@ -110,10 +85,35 @@ export function useFCM() {
             },
         );
     };
+    const registerToken = async() => {
+        if(Capacitor.getPlatform() === 'web') {
+            showErrorToast(
+                null,
+                {
+                    pushNotificationPermission: t('warningWebNotification'),
+                });
+            return true;
+        }
+        try {
+            const permission = await PushNotifications.requestPermissions();
+            if(permission.receive === 'granted') {
+                await PushNotifications.register();
+            }else {
+                showErrorToast(
+                    null,
+                    {
+                        pushNotificationPermission: t('warningNoNotificationPermission'),
+                    });
+            }
+        }catch(error) {
+            showErrorToast(error);
+        }
+    };
 
     return {
         /* Methods */
         initPush,
         registerPush,
+        registerToken,
     };
 }

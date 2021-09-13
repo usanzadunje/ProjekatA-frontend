@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content scrollY="false">
+    <ion-content>
       <div id="login" class="flex flex-col justify-between background-image-container">
         <div class="mt-10 w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
@@ -8,7 +8,7 @@
         </div>
         <div class="w-full mb-4">
           <h2 class="text-center secondary-heading">{{ $t('login') }}</h2>
-          <LoginForm class="mt-8 h-full"></LoginForm>
+          <LoginForm class="mt-8"></LoginForm>
         </div>
       </div>
     </ion-content>
@@ -70,5 +70,6 @@ export default defineComponent({
 #login {
   background: #FFF url('https://resize.rs/storage/img/auth/login-background.png') center top no-repeat scroll;
   background-size: cover;
+  height: 100%;
 }
 </style>

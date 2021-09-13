@@ -72,19 +72,17 @@
           </ion-button>
         </div>
       </div>
-      <ion-modal
+      <Modal
           :is-open="isModalOpen"
           css-class="custom-sub-modal"
-          @didDismiss="openModal(false)"
-          :backdrop-dismiss="true"
-          :swipe-to-close="true"
+          @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
       >
         <CafeSubscriptionModal
             :cafe="{'id': cafe.id, 'name': cafe.name}"
-            @dismissSubscriptionModal="openModal(false)"
+            @dismissSubscriptionModal="openModal(false);"
             @userToggledSubscription="isUserSubscribed = !isUserSubscribed"
         />
-      </ion-modal>
+      </Modal>
     </ion-content>
   </ion-page>
 </template>
@@ -103,7 +101,6 @@ import {
   IonContent,
   IonIcon,
   IonButton,
-  IonModal,
   modalController,
   onIonViewWillEnter,
   onIonViewWillLeave,
@@ -112,6 +109,7 @@ import {
 import CafeInfoBody          from '@/components/user/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import AccordionList         from '@/components/user/AccordionList';
+import Modal                 from '@/components/Modal';
 import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
 import ImagePreviewModal     from '@/components/user/ImagePreviewModal';
 
@@ -140,10 +138,10 @@ export default defineComponent({
     IonContent,
     IonIcon,
     IonButton,
-    IonModal,
     CafeInfoBody,
     FilterCategoryHeading,
     AccordionList,
+    Modal,
     CafeSubscriptionModal,
   },
   setup() {

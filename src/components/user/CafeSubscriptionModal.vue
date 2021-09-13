@@ -1,68 +1,64 @@
 <template>
-  <ion-content scrollY="false">
-    <div ref="content" class="absolute bottom-0 w-full ion-padding">
-      <ion-item>
-        <h1 class="submodal-heading">{{ $t('notifications') }}</h1>
-      </ion-item>
-      <ion-item>
-        <p class="submodal-paragraph">
-          {{ $t('notificationModal1') }}
-          <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
-          {{ $t('notificationModal2') }}
-        </p>
-      </ion-item>
-      <ion-item class="ion-no-padding mt-4">
-        <ion-toggle
-            class="pl-4"
-            @ionChange="indefiniteTimerToggle($event)"
-            mode="md"
-            :disabled="isUserSubscribed"
-        ></ion-toggle>
-        <ion-label class="margin-left-1 submodal-fade-text">{{ $t('undefined') }}</ion-label>
-      </ion-item>
-      <ion-item class="ion-no-padding">
-        <ion-range
-            min="5"
-            max="60"
-            step="5"
-            color="primary"
-            v-model="notificationTime"
-            :disabled="indefiniteTimerActive || isUserSubscribed"
-        ></ion-range>
-        <ion-label class="ml-1 margin-left-1 submodal-alert-time">
-          {{ !indefiniteTimerActive ? notificationTime + 'min' : '∞' }}
-        </ion-label>
-      </ion-item>
-      <div class="mt-2 mb-3 flex justify-around">
-        <ion-button
-            class="mr-2.5 uppercase button-cancel modal-button-border"
-            @click="$emit('dismissSubscriptionModal')"
-        >
-          {{ $t('cancel') }}
-        </ion-button>
-        <ion-button
-            class="uppercase button-confirm modal-button-border"
-            @click="toggleSubscription(cafe.id)"
-            :disabled="isSubButtonDisabled"
-        >
-          <ion-icon
-              slot="start"
-              :icon="isUserSubscribed ? notifications : notificationsOutline"
-          ></ion-icon>
-          {{ isUserSubscribed ? $t('remove') : $t('confirm') }}
-        </ion-button>
-      </div>
+  <div class="px-4 pt-4">
+    <ion-item>
+      <h1 class="submodal-heading">{{ $t('notifications') }}</h1>
+    </ion-item>
+    <ion-item>
+      <p class="submodal-paragraph">
+        {{ $t('notificationModal1') }}
+        <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
+        {{ $t('notificationModal2') }}
+      </p>
+    </ion-item>
+    <ion-item class="ion-no-padding mt-4">
+      <ion-toggle
+          class="pl-4"
+          @ionChange="indefiniteTimerToggle($event)"
+          mode="md"
+          :disabled="isUserSubscribed"
+      ></ion-toggle>
+      <ion-label class="margin-left-1 submodal-fade-text">{{ $t('undefined') }}</ion-label>
+    </ion-item>
+    <ion-item class="ion-no-padding">
+      <ion-range
+          min="5"
+          max="60"
+          step="5"
+          color="primary"
+          v-model="notificationTime"
+          :disabled="indefiniteTimerActive || isUserSubscribed"
+      ></ion-range>
+      <ion-label class="ml-1 margin-left-1 submodal-alert-time">
+        {{ !indefiniteTimerActive ? notificationTime + 'min' : '∞' }}
+      </ion-label>
+    </ion-item>
+    <div class="mt-2 mb-3 flex justify-around">
+      <ion-button
+          class="mr-2.5 uppercase button-cancel modal-button-border"
+          @click="$emit('dismissSubscriptionModal')"
+      >
+        {{ $t('cancel') }}
+      </ion-button>
+      <ion-button
+          class="uppercase button-confirm modal-button-border"
+          @click="toggleSubscription(cafe.id)"
+          :disabled="isSubButtonDisabled"
+      >
+        <ion-icon
+            slot="start"
+            :icon="isUserSubscribed ? notifications : notificationsOutline"
+        ></ion-icon>
+        {{ isUserSubscribed ? $t('remove') : $t('confirm') }}
+      </ion-button>
     </div>
-
-  </ion-content>
+  </div>
 </template>
 
 <script>
-import { defineComponent, ref, toRef, onMounted } from 'vue';
-import { useStore }                               from 'vuex';
-import { useI18n }                                from 'vue-i18n';
+import { defineComponent, ref, toRef } from 'vue';
+import { useStore }                    from 'vuex';
+import { useI18n }                     from 'vue-i18n';
 import {
-  IonContent,
   IonItem,
   IonIcon,
   IonButton,
@@ -70,7 +66,7 @@ import {
   IonRange,
   IonLabel,
   alertController,
-}                                                 from '@ionic/vue';
+}                                      from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
 
@@ -85,7 +81,6 @@ import {
 export default defineComponent({
   name: 'CafeSubscriptionModal',
   components: {
-    IonContent,
     IonItem,
     IonIcon,
     IonButton,
@@ -99,7 +94,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissSubscriptionModal', 'userToggledSubscription', 'userUnsubscribed'],
+  emits: ['dismissSubscriptionModal', 'userToggledSubscription'],
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
@@ -110,12 +105,11 @@ export default defineComponent({
     const indefiniteTimerActive = ref(false);
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
-    const content = ref(null);
     const isSubButtonDisabled = ref(false);
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
-    const { initPush } = useFCM();
+    const { registerToken } = useFCM();
 
     /* Methods */
     const subscribe = async(cafeId) => {
@@ -147,7 +141,7 @@ export default defineComponent({
               {
                 text: t('yes'),
                 handler: async() => {
-                  await initPush();
+                  await registerToken();
                   await subscribe(cafeId);
                   await store.dispatch('user/setNotifications', true);
                 },
@@ -170,12 +164,6 @@ export default defineComponent({
                        generalError: t('generalAlertError'),
                      });
                });
-    onMounted(() => {
-      setTimeout(() => {
-        const height = content.value?.getBoundingClientRect()?.height || 320;
-        document.documentElement.style.setProperty('--sub-modal-height', height + 'px');
-      }, 400);
-    });
 
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {
@@ -194,7 +182,6 @@ export default defineComponent({
           await CafeService.unsubscribe(cafeId);
           isUserSubscribed.value = false;
           emit('userToggledSubscription');
-          emit('userUnsubscribed');
           await showSuccessToast(t('successUnsubscribe'));
         }catch(error) {
           showErrorToast(
@@ -220,7 +207,6 @@ export default defineComponent({
       notificationTime,
       indefiniteTimerActive,
       isUserSubscribed,
-      content,
       isSubButtonDisabled,
 
       /* Event handlers */
@@ -237,10 +223,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-content {
-  --background: var(--secondary-paint) !important;
-}
-
 ion-item {
   --background: var(--secondary-paint);
 }

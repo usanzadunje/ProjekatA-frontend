@@ -1,17 +1,20 @@
 <template>
   <ion-page>
-    <UserProfileHeader/>
 
-    <ion-content class="ion-padding no-padding-top">
-      <ion-refresher pull-min="60" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+    <ion-content>
+      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
         >
         </ion-refresher-content>
       </ion-refresher>
+
+      <UserProfileHeader/>
+
+
       <SlidingFilter @sortHasChanged="sortHasChanged" class="mt-2"/>
 
-      <div class="mt-3">
+      <div class="px-4 pb-4 mt-3">
         <FilterCategoryHeading title="Kafici koje pratim" class="mb-2"/>
 
         <div v-if="!showSkeleton">
@@ -43,21 +46,18 @@
         </div>
       </div>
 
-      <ion-modal
+      <Modal
           :is-open="isModalOpen"
           css-class="custom-modal"
           @didDismiss="openModal(false);"
-          :backdrop-dismiss="true"
-          :swipe-to-close="true"
       >
         <ShortCafeModal
             :cafe="modalCafe"
             @dismissShortCafeModal="openModal(false)"
-            @subModalOpened="hideModal"
-            @userUnsubscribed="getSubscriptions"
+            @subModalOpened="hideModal('custom-modal')"
+            @userToggledSubscription="getSubscriptions"
         />
-      </ion-modal>
-
+      </Modal>
     </ion-content>
   </ion-page>
 </template>
@@ -76,7 +76,6 @@ import {
   IonItemOption,
   IonIcon,
   alertController,
-  IonModal,
   IonRefresher,
   IonRefresherContent,
   onIonViewDidEnter,
@@ -86,6 +85,7 @@ import UserProfileHeader     from '@/components/user/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import CafeCard              from '@/components/user/CafeCard';
+import Modal                 from '@/components/Modal';
 import ShortCafeModal        from '@/components/user/ShortCafeModal';
 import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
@@ -112,13 +112,13 @@ export default defineComponent({
     IonItemOptions,
     IonItemOption,
     IonIcon,
-    IonModal,
     IonRefresher,
     IonRefresherContent,
     UserProfileHeader,
     SlidingFilter,
     FilterCategoryHeading,
     CafeCard,
+    Modal,
     ShortCafeModal,
     SkeletonCafeCard,
   },

@@ -1,96 +1,99 @@
 <template>
   <ion-page>
-    <UserHeader
-        :mainHeading="$t('findAvailablePlace')"
-        :notificationIcon="notificationsOutline"
-        @searchEnterPressed="switchToSearch"
-    />
-
-    <ion-content class="ion-padding">
-      <ion-refresher pull-min="50" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+    <ion-content>
+      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
         >
         </ion-refresher-content>
       </ion-refresher>
-      <FilterCategoryHeading class="mb-2"
-                             :title="$t('closest')"/>
-      <ion-slides v-show="!showSkeleton" :options="slideOpts">
-        <ion-slide>
-          <HomeSlidingCafeCards
-              :cafes="cafes.closestToUser?.slice(0, 2)"
-              @openCafeModal="openModal(true, $event)"
-              class="pr-3"
-          />
-        </ion-slide>
-        <ion-slide>
-          <HomeSlidingCafeCards
-              :cafes="cafes.closestToUser?.slice(2, 4)"
-              @openCafeModal="openModal(true, $event)"
-              class="pr-3"
-          />
-        </ion-slide>
-      </ion-slides>
 
-      <div v-if="showSkeleton">
-        <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
-        <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
+      <UserHeader
+          :mainHeading="$t('findAvailablePlace')"
+          :notificationIcon="notificationsOutline"
+          @searchEnterPressed="switchToSearch"
+      />
+
+
+      <div class="ion-padding">
+        <FilterCategoryHeading class="mb-2"
+                               :title="$t('closest')"/>
+        <ion-slides v-show="!showSkeleton" :options="slideOpts">
+          <ion-slide>
+            <HomeSlidingCafeCards
+                :cafes="cafes.closestToUser?.slice(0, 2)"
+                @openCafeModal="openModal(true, $event)"
+                class="pr-3"
+            />
+          </ion-slide>
+          <ion-slide>
+            <HomeSlidingCafeCards
+                :cafes="cafes.closestToUser?.slice(2, 4)"
+                @openCafeModal="openModal(true, $event)"
+                class="pr-3"
+            />
+          </ion-slide>
+        </ion-slides>
+
+        <div v-if="showSkeleton">
+          <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
+          <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
+        </div>
+
+        <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
+        <ion-slides v-show="!showSkeleton" :options="slideOpts">
+          <ion-slide>
+            <HomeSlidingCafeCards
+                :cafes="cafes.currentlyAvailable?.slice(0, 2)"
+                @openCafeModal="openModal(true, $event)"
+                class="pr-3"
+            />
+          </ion-slide>
+          <ion-slide>
+            <HomeSlidingCafeCards
+                :cafes="cafes.currentlyAvailable?.slice(2, 4)"
+                @openCafeModal="openModal(true, $event)"
+                class="pr-3"
+            />
+          </ion-slide>
+        </ion-slides>
+
+        <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
+        <ion-slides v-show="!showSkeleton" :options="slideOpts">
+          <ion-slide>
+            <HomeSlidingCafeCards
+                :cafes="cafes.haveFood?.slice(0, 2)"
+                @openCafeModal="openModal(true, $event)"
+                class="pr-3"
+            />
+          </ion-slide>
+          <ion-slide>
+            <HomeSlidingCafeCards
+                :cafes="cafes.haveFood?.slice(2, 4)"
+                @openCafeModal="openModal(true, $event)"
+                class="pr-3"
+            />
+          </ion-slide>
+        </ion-slides>
+
+        <div v-if="showSkeleton">
+          <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
+          <SkeletonCafeCard></SkeletonCafeCard>
+        </div>
       </div>
 
-      <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
-      <ion-slides v-show="!showSkeleton" :options="slideOpts">
-        <ion-slide>
-          <HomeSlidingCafeCards
-              :cafes="cafes.currentlyAvailable?.slice(0, 2)"
-              @openCafeModal="openModal(true, $event)"
-              class="pr-3"
-          />
-        </ion-slide>
-        <ion-slide>
-          <HomeSlidingCafeCards
-              :cafes="cafes.currentlyAvailable?.slice(2, 4)"
-              @openCafeModal="openModal(true, $event)"
-              class="pr-3"
-          />
-        </ion-slide>
-      </ion-slides>
 
-      <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
-      <ion-slides v-show="!showSkeleton" :options="slideOpts">
-        <ion-slide>
-          <HomeSlidingCafeCards
-              :cafes="cafes.haveFood?.slice(0, 2)"
-              @openCafeModal="openModal(true, $event)"
-              class="pr-3"
-          />
-        </ion-slide>
-        <ion-slide>
-          <HomeSlidingCafeCards
-              :cafes="cafes.haveFood?.slice(2, 4)"
-              @openCafeModal="openModal(true, $event)"
-              class="pr-3"
-          />
-        </ion-slide>
-      </ion-slides>
-
-      <div v-if="showSkeleton">
-        <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
-        <SkeletonCafeCard></SkeletonCafeCard>
-      </div>
-
-      <ion-modal
+      <Modal
           :is-open="isModalOpen"
           css-class="custom-modal"
           @didDismiss="openModal(false);"
-          :backdrop-dismiss="true"
-          :swipe-to-close="true"
       >
         <ShortCafeModal
             :cafe="modalCafe"
             @dismissShortCafeModal="openModal(false)"
-            @subModalOpened="hideModal"
+            @subModalOpened="hideModal('custom-modal')"
         />
-      </ion-modal>
+      </Modal>
     </ion-content>
   </ion-page>
 </template>
@@ -103,7 +106,6 @@ import { useI18n }                                   from 'vue-i18n';
 import {
   IonContent,
   IonPage,
-  IonModal,
   IonSlides,
   IonSlide,
   IonRefresher,
@@ -116,6 +118,7 @@ import CafeService from '@/services/CafeService';
 import UserHeader            from '@/components/user/UserHeader';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import HomeSlidingCafeCards  from '@/components/user/HomeSlidingCafeCards';
+import Modal                 from '@/components/Modal';
 import ShortCafeModal        from '@/components/user/ShortCafeModal';
 import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
 
@@ -130,7 +133,6 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    IonModal,
     IonSlides,
     IonSlide,
     IonRefresher,
@@ -138,6 +140,7 @@ export default defineComponent({
     UserHeader,
     FilterCategoryHeading,
     HomeSlidingCafeCards,
+    Modal,
     ShortCafeModal,
     SkeletonCafeCard,
   },

@@ -17,8 +17,9 @@ const
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
             <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'ON' : 'OFF' }}</ion-label>
             <ion-toggle
+                :disabled="isDarkModeDisabled"
                 :checked="isDarkModeOn"
-                @ionChange="toggleDarkMode($event)"
+                @click="toggleDarkMode($event)"
                 mode="md"
             ></ion-toggle>
           </ion-item>
@@ -40,8 +41,9 @@ const
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
             <ion-label class="settings-fade-text">{{ areNotificationsOn ? 'ON' : 'OFF' }}</ion-label>
             <ion-toggle
+                :disabled="areNotificationsDisabled"
                 :checked="areNotificationsOn"
-                @ionChange="toggleNotifications($event)"
+                @click="toggleNotifications($event)"
                 mode="md"
             ></ion-toggle>
           </ion-item>
@@ -88,32 +90,20 @@ const
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
-import { useStore }                  from 'vuex';
-import { useI18n }                   from 'vue-i18n';
-import { getLanguages }              from '@/lang';
-import {
-  IonContent,
-  IonPage,
-  IonItem,
-  IonIcon,
-  IonLabel,
-  IonToggle,
-  IonButton,
-  pickerController,
-}                                    from '@ionic/vue';
+import { computed, defineComponent, ref }                                                          from 'vue';
+import { useStore }                                                                                from 'vuex';
+import { useI18n }                                                                                 from 'vue-i18n';
+import { getLanguages }                                                                            from '@/lang';
+import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonPage, IonToggle, pickerController } from '@ionic/vue';
 
 import AuthService from '@/services/AuthService';
 
 import { useFCM }                from '@/composables/useFCM';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import {
-  flash,
-  chevronForward,
-  rocket,
-}                                  from 'ionicons/icons';
-import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
+import { chevronForward, flash, rocket } from 'ionicons/icons';
+import { Keyboard, KeyboardStyle }       from '@capacitor/keyboard';
+import { Capacitor }                     from '@capacitor/core';
 
 export default defineComponent({
   name: 'Settings',
@@ -134,55 +124,58 @@ export default defineComponent({
     const isDarkModeOn = computed(() => store.getters['user/darkMode']);
     const areNotificationsOn = computed(() => store.getters['user/notifications']);
     const localization = computed(() => store.getters['user/localization']);
+    const isDarkModeDisabled = ref(false);
+    const areNotificationsDisabled = ref(false);
+
+    if(Capacitor.getPlatform() === 'web') {
+      areNotificationsDisabled.value = true;
+    }
 
     /* Methods */
     const { t, locale } = useI18n({ useScope: 'global' });
-    const { initPush } = useFCM();
+    const { registerToken } = useFCM();
     const { showErrorToast } = useToastNotifications();
 
     /* Event handlers */
     const toggleDarkMode = async(e) => {
-      if(!e.target.checked) {
-        await store.dispatch('user/setDarkMode', false);
+      isDarkModeDisabled.value = true;
+      try {
+        if(e.target.checked) {
+          await store.dispatch('user/setDarkMode', false);
 
-        Keyboard.setStyle({
-          style: KeyboardStyle.Light,
-        });
+          Keyboard.setStyle({
+            style: KeyboardStyle.Light,
+          });
+        }else {
+          await store.dispatch('user/setDarkMode', true);
 
-      }else {
-        await store.dispatch('user/setDarkMode', true);
-
-        Keyboard.setStyle({
-          style: KeyboardStyle.Dark,
-        });
+          Keyboard.setStyle({
+            style: KeyboardStyle.Dark,
+          });
+        }
+      }catch(error) {
+        showErrorToast(error);
+      }finally {
+        document.body.classList.toggle('dark', e.target.checked);
+        isDarkModeDisabled.value = false;
       }
-      isDarkModeOn.value = e.target.checked;
-      document.body.classList.toggle('dark', e.target.checked);
     };
     const toggleNotifications = async(e) => {
-      if(!e.target.checked) {
-        /* Remove FCM token thus disabling notifications */
-        try {
-          const response = await AuthService.removeFcmToken();
-          if(response && response.data) {
-            await store.dispatch('user/setNotifications', false);
-          }
-        }catch(error) {
-          showErrorToast(
-              null,
-              {
-                pushNotificationPermission: t('generalAlertError'),
-              });
+      try {
+        if(e.target.checked) {
+          /* Remove FCM token thus disabling notifications */
+          await store.dispatch('user/setNotifications', false);
+          await AuthService.removeFcmToken();
+        }else {
+          await store.dispatch('user/setNotifications', true);
+
+          await registerToken();
         }
-      }else {
-        await store.dispatch('user/setNotifications', true);
-        const noPermission = await initPush();
-        if(noPermission) {
-          e.target.disabled = true;
-          e.target.checked = false;
-        }
+      }catch(error) {
+        showErrorToast(error);
+      }finally {
+        areNotificationsDisabled.value = false;
       }
-      areNotificationsOn.value = e.target.checked;
     };
     const chooseLanguage = async() => {
       const picker = await pickerController.create({
@@ -231,6 +224,8 @@ export default defineComponent({
       isDarkModeOn,
       areNotificationsOn,
       localization,
+      isDarkModeDisabled,
+      areNotificationsDisabled,
 
       /* Event handlers */
       toggleDarkMode,

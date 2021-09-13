@@ -1,0 +1,69 @@
+<template>
+  <ion-modal
+      :css-class="[cssClass, 'auto-height']"
+      :is-open="isOpen"
+      @willPresent="initialize"
+      @didPresent="$emit('onDidPresent')"
+      @didDismiss="$emit('onDidDismiss')"
+      :backdrop-dismiss="true"
+      :swipe-to-close="true"
+  >
+    <div class="inner-content">
+      <slot/>
+    </div>
+  </ion-modal>
+</template>
+
+<script>
+import { defineComponent } from 'vue';
+import { IonModal }        from '@ionic/vue';
+
+export default defineComponent({
+  name: 'Modal',
+  components: {
+    IonModal,
+  },
+  emits: ['onDidPresent', 'onDidDismiss'],
+  props: {
+    cssClass: {
+      type: String,
+      required: false,
+      default: 'custom-modal',
+    },
+    isOpen: {
+      type: Boolean,
+      required: true,
+    },
+    height: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    width: {
+      type: String,
+      required: false,
+      default: '100%',
+    },
+  },
+  setup(props) {
+    const initialize = () => {
+      const modalRef = document.querySelector(`ion-modal.${props.cssClass}`);
+
+      if(props.height) {
+        modalRef.style.setProperty('--height', props.height);
+      }
+
+      if(props.width) {
+        modalRef.style.setProperty('--width', props.width);
+      }
+    };
+
+    return {
+      initialize,
+    };
+  },
+});
+</script>
+<style>
+
+</style>

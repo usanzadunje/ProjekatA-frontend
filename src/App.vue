@@ -6,8 +6,10 @@
 
 <script>
 import { defineComponent, onMounted } from 'vue';
-import store                          from '@/store';
+import { useStore }                   from 'vuex';
 import { IonApp, IonRouterOutlet }    from '@ionic/vue';
+
+import { useFCM } from '@/composables/useFCM';
 
 export default defineComponent({
   name: 'App',
@@ -17,14 +19,18 @@ export default defineComponent({
   },
   setup() {
     /* Global properties */
+    const store = useStore();
     /* Methods */
 
+    /* Composables */
+    const { initPush } = useFCM();
 
     /* Lifecycle hooks */
     onMounted(async() => {
       await store.dispatch("auth/getAuthUser");
       await store.dispatch("auth/getToken");
       await store.dispatch("user/getSettings");
+      await initPush();
     });
 
     return {};

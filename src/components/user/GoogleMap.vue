@@ -1,14 +1,14 @@
 <template>
-  <div ref="content" class="absolute bottom-0 w-full ion-padding" scrollY="false">
-    <div class="ml-4 mt-8 text-center">
+  <div class="ion-padding">
+    <div class="text-center">
       <h1 class="main-toolbar-heading text-xl">{{ cafe.name }}</h1>
     </div>
 
     <div ref="map" id="map" class="mx-4 my-2">
     </div>
 
-    <div class="ml-4 mt-6 text-center">
-      <h1 class="main-toolbar-heading text-xl">Distance : {{ distance }}m</h1>
+    <div class="mt-6 text-center">
+      <h1 class="main-toolbar-heading text-xl">Distance : {{ distance }}</h1>
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default defineComponent({
 
     /* Component properties */
     let mapContainerBoundingRect = null;
-    const distance = ref(0);
+    const distance = ref('N/A');
     const map = ref(null);
     const content = ref(null);
 
@@ -89,11 +89,8 @@ export default defineComponent({
         await loading.dismiss();
       }
 
-      const height = content.value?.getBoundingClientRect().height || 460;
-      document.documentElement.style.setProperty('--map-modal-height', height + 'px');
-
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
-        distance.value = Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude));
+        distance.value = `${Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude))}m`;
 
         await CapacitorGoogleMaps.addMarker({
           latitude: Number(props.cafe.latitude) || 43.317862492567,

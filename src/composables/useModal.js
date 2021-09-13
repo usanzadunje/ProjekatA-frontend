@@ -15,8 +15,8 @@ export function useModal() {
         }
         isModalOpen.value = state;
     };
-    const hideModal = () => {
-        const modal = document.querySelector('.custom-modal > .modal-wrapper');
+    const hideModal = (cssClass) => {
+        const modal = document.querySelector(`.${cssClass} > .modal-wrapper`);
 
         modal.style.height = 0;
     };

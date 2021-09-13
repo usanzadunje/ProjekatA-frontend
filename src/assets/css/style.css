@@ -99,21 +99,24 @@ ion-modal ion-item {
     --border-style: none;
 }
 
+.auto-height {
+    --height: auto;
+}
+
+.auto-height .ion-page {
+    position: relative;
+    display: block;
+    contain: content;
+}
+
+.auto-height .ion-page .inner-content {
+    max-height: 80vh;
+    overflow: auto;
+}
+
 .custom-modal {
-    visibility: visible;
-    --height: var(--short-modal-height);
     --border-radius: 20px 20px 0 0;
-}
-
-.custom-sub-modal {
-    --height: var(--sub-modal-height);
-    --border-radius: 20px 20px 0 0;
-}
-
-.custom-map-modal {
-    --height: var(--map-modal-height);
     --background: var(--secondary-paint) !important;
-    --border-radius: 20px 20px 0 0;
 }
 
 .custom-modal .modal-wrapper {
@@ -121,15 +124,26 @@ ion-modal ion-item {
     bottom: 0 !important;
 }
 
+.custom-sub-modal {
+    --border-radius: 20px 20px 0 0;
+    --background: var(--secondary-paint) !important;
+}
+
 .custom-sub-modal .modal-wrapper {
     position: absolute !important;
     bottom: 0 !important;
+}
+
+.custom-map-modal {
+    --border-radius: 20px 20px 0 0;
+    --background: var(--secondary-paint) !important;
 }
 
 .custom-map-modal .modal-wrapper {
     position: absolute !important;
     bottom: 0 !important;
 }
+
 
 .settings-popover {
     --max-width: 170px;
@@ -230,6 +244,7 @@ ion-toggle {
 .radius-11px {
     border-radius: 11px !important;
 }
+
 
 /*
     START Android specific styles

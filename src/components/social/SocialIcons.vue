@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { useRouter }            from 'vue-router';
-import { useStore }             from 'vuex';
-import { useI18n }              from 'vue-i18n';
-import { IonIcon }              from '@ionic/vue';
+import { defineComponent, ref, onMounted } from 'vue';
+import { useRouter }                       from 'vue-router';
+import { useStore }                        from 'vuex';
+import { useI18n }                         from 'vue-i18n';
+import { IonIcon }                         from '@ionic/vue';
 
-import AuthService        from '@/services/AuthService';
-import SocialAuthService  from '@/services/SocialAuthService';
+import AuthService       from '@/services/AuthService';
+import SocialAuthService from '@/services/SocialAuthService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -39,9 +39,6 @@ export default defineComponent({
   components: {
     IonIcon,
   },
-  mounted() {
-    GoogleAuth.init();
-  },
   setup() {
     /* Global properties and methods */
     const router = useRouter();
@@ -51,6 +48,10 @@ export default defineComponent({
     /* Component properties */
     const errorNames = ref({});
 
+    /* Composables */
+    onMounted(async() => {
+      GoogleAuth.init();
+    });
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
 

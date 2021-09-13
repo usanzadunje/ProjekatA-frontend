@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content scrollY="false">
+    <ion-content>
       <div id="register" class="flex flex-col justify-between background-image-container">
         <div class="mt-10 w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>

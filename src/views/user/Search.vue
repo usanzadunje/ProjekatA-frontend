@@ -1,47 +1,51 @@
 <template>
   <ion-page>
-    <div
-        id="header"
-    >
-      <UserHeader
-          :mainHeading="$t('search')"
-          :notificationIcon="notificationsOffOutline"
-          :searchTerm="cafeSearchString"
-          @searchFilterChanged="searchFilterChanged"
-      >
-        <SlidingFilter :hasTitle="true" @sortHasChanged="sortHasChanged"/>
-      </UserHeader>
-    </div>
 
-    <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation($event)" class="ion-padding">
-      <ion-refresher pull-max="60" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+
+    <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation($event)">
+      <ion-refresher pull-max="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
         >
         </ion-refresher-content>
       </ion-refresher>
-      <InfiniteScroll
-          :cafeSearchString="cafeSearchString"
-          :sortBy="sortBy"
-          @scrollToTop="scrollToTop"
-          @openCafeModal="openModal(true, $event)"
-          @infiniteScrollToggle="infiniteScrollLoading = !infiniteScrollLoading"
-          :refresher="refresher"
-      />
 
-      <ion-modal
+      <div
+          id="header"
+      >
+        <UserHeader
+            :mainHeading="$t('search')"
+            :notificationIcon="notificationsOffOutline"
+            :searchTerm="cafeSearchString"
+            @searchFilterChanged="searchFilterChanged"
+        >
+          <SlidingFilter :hasTitle="true" @sortHasChanged="sortHasChanged"/>
+        </UserHeader>
+      </div>
+
+
+      <div class="ion-padding">
+        <InfiniteScroll
+            :cafeSearchString="cafeSearchString"
+            :sortBy="sortBy"
+            @scrollToTop="scrollToTop"
+            @openCafeModal="openModal(true, $event)"
+            @infiniteScrollToggle="infiniteScrollLoading = !infiniteScrollLoading"
+            :refresher="refresher"
+        />
+      </div>
+
+      <Modal
           :is-open="isModalOpen"
           css-class="custom-modal"
           @didDismiss="openModal(false);"
-          :backdrop-dismiss="true"
-          :swipe-to-close="true"
       >
         <ShortCafeModal
             :cafe="modalCafe"
             @dismissShortCafeModal="openModal(false)"
-            @subModalOpened="hideModal"
+            @subModalOpened="hideModal('custom-modal')"
         />
-      </ion-modal>
+      </Modal>
     </ion-content>
   </ion-page>
 </template>
@@ -52,7 +56,6 @@ import { useRoute, useRouter }  from 'vue-router';
 import {
   IonContent,
   IonPage,
-  IonModal,
   onIonViewWillEnter,
   onIonViewDidEnter,
   IonRefresher,
@@ -64,6 +67,7 @@ import {
 import UserHeader     from '@/components/user/UserHeader';
 import SlidingFilter  from '@/components/user/SlidingFilter';
 import InfiniteScroll from '@/components/InfiniteScroll';
+import Modal          from '@/components/Modal';
 import ShortCafeModal from '@/components/user/ShortCafeModal';
 
 import { useModal } from '@/composables/useModal';
@@ -76,12 +80,12 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    IonModal,
     IonRefresher,
     IonRefresherContent,
     UserHeader,
     SlidingFilter,
     InfiniteScroll,
+    Modal,
     ShortCafeModal,
   },
   setup() {
