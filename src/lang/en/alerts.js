@@ -5,6 +5,8 @@ export default {
     "alertNotificationsOffMessage": "Let us turn them ON for you or manually change in your settings.",
     "alertUnsubscribeHeader": "Unsubscribing from cafe",
     "alertUnsubscribeMessage": "Are you sure you want to delete this place from subscription list?",
+    "staff.alertRemoveStaffHeader": "Removing staff member",
+    "staff.removeStaffMessage": "Are you sure you want to remove {staff} from your staff members?",
     "warningWebNotification": "You cannot register for push notifications on web.",
     "warningNoNotificationPermission": "No permission for push notifications granted.",
     "geoLocationUnexpected": "There is problem with your GPS.",

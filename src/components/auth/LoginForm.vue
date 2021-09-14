@@ -3,7 +3,7 @@
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('login') }"
     >
       <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
@@ -22,7 +22,7 @@
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('login') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
@@ -96,8 +96,6 @@ import {
 
 import SocialIcons from '@/components/social/SocialIcons';
 
-import AuthService from "@/services/AuthService";
-
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import { getError, sleep } from "@/utils/helpers";
@@ -152,25 +150,22 @@ export default defineComponent({
       loading.value = true;
       Keyboard.hide();
       try {
-        const response = await AuthService.login(user);
-        await store.dispatch("auth/setToken", response.data?.token);
-        await store.dispatch("auth/getAuthUser");
-        await store.dispatch("user/getSettings");
-        await store.commit("auth/SET_ROLE", response.data?.role);
-        const homeRoute = response.data?.role ? { name: 'staff.dashboard' } : { name: 'home' };
+        const role = await store.dispatch("auth/login", user);
+
+        const homeRoute = role ? { name: 'staff.dashboard' } : { name: 'home' };
+        await router.replace(homeRoute);
+
+        showSuccessToast(t('successLogin'));
+        loading.value = false;
         user.login = '';
         user.password = '';
-        await router.replace(homeRoute);
-        showSuccessToast(t('successLogin'));
       }catch(errors) {
         errorNames.value = getError(errors);
+        loading.value = false;
         await showErrorToast(errors);
         await sleep(Object.keys(errorNames.value).length * 900);
         errorNames.value = {};
-      }finally {
-        loading.value = false;
       }
-
     };
     const togglePasswordShow = () => {
       showPassword.value = !showPassword.value;

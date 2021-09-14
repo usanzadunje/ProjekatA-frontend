@@ -26,7 +26,32 @@ export const mutations = {
 };
 
 export const actions = {
-    async logout({ commit }) {
+    async login({ commit, dispatch }, user) {
+        const response = await AuthService.login(user);
+
+        await dispatch("setToken", response.data?.token);
+        await dispatch("getAuthUser");
+        dispatch("user/getSettings", null, { root: true });
+        commit("SET_ROLE", response.data?.role);
+
+        return response.data?.role;
+    },
+    async register({ commit, dispatch }, user) {
+        const response = await AuthService.register(user);
+
+        await dispatch("setToken", response.data?.token);
+        await dispatch("getAuthUser");
+        dispatch("user/getSettings", null, { root: true });
+        commit("SET_ROLE", null);
+
+        return response.data?.role;
+    },
+    async updateAuthUser({ dispatch }, user) {
+        await AuthService.updateUser(user);
+
+        dispatch("getAuthUser");
+    },
+    async logout({ commit, dispatch }) {
         let loading = null;
         try {
             loading = await loadingController
@@ -41,9 +66,9 @@ export const actions = {
         }catch(error) {
             alert(i18n.global.t('forceLogout'));
         }finally {
+            await dispatch("setToken", null);
             commit("SET_USER", null);
             commit("SET_ROLE", null);
-            commit("SET_TOKEN", null);
             commit('user/SET_DARKMODE', null, { root: true });
             commit('user/SET_LOCALIZATION', null, { root: true });
             commit('user/SET_NOTIFICATIONS', null, { root: true });
@@ -64,14 +89,12 @@ export const actions = {
             return false;
         }
     },
-    async getToken({ commit }) {
+    async getToken() {
         const { get } = StorageService();
         try {
-            const token = await get('projekata_token');
-            commit("SET_TOKEN", token);
-            return token;
+            return await get('projekata_token');
+
         }catch(error) {
-            commit("SET_TOKEN", null);
             return null;
         }
     },

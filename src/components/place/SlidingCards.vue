@@ -13,7 +13,7 @@
 <script>
 import { defineComponent } from 'vue';
 
-import CafeCard from '@/components/user/CafeCard';
+import CafeCard from '@/components/place/CafeCard';
 
 export default defineComponent({
   name: "HomeSlidingCafeCards",

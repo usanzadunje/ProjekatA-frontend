@@ -10,7 +10,13 @@
       <div class="wrap">
         <h1 class="secondary-heading text-center uppercase">{{ $t('owner.staff') }}</h1>
 
-        <h1 class="secondary-heading text-center uppercase">//opcija da doda novog zaposlenog</h1>
+        <ion-button
+            expand="block"
+            class="auth-button-size auth-button-border-radius uppercase button-text-white my-8 mx-auto w-5/6"
+            @click="createMember"
+        >
+          {{ $t('owner.createStaff') }}
+        </ion-button>
 
         <div
             v-for="member in staff"
@@ -22,7 +28,7 @@
               <ion-icon :icon="create" class="text-2xl text-blue" slot="icon-only"
                         @click="editMember(member, $event)"></ion-icon>
               <ion-icon :icon="removeCircle" class="text-2xl text-danger ml-2" slot="icon-only"
-                        @click="deleteMember(member.id, $event)"></ion-icon>
+                        @click="deleteMember(member, $event)"></ion-icon>
             </div>
           </div>
           <ion-card
@@ -50,6 +56,18 @@
           </ion-card>
         </div>
       </div>
+      <Modal
+          :is-open="isModalOpen"
+          css-class="custom-edit-staff-modal"
+          @didDismiss="openModal(false);"
+          :swipeToClose="false"
+          width="90%"
+      >
+        <CreateEditStaffModal
+            :staff="modalData"
+            @dismiss="openModal(false)"
+        />
+      </Modal>
     </ion-content>
   </ion-page>
 </template>
@@ -67,14 +85,21 @@ import {
   IonIcon,
   IonRefresher,
   IonRefresherContent,
+  IonButton,
+  alertController,
 }                                    from '@ionic/vue';
+
+import Modal                from '@/components/Modal';
+import CreateEditStaffModal from '@/components/staff/modals/CreateEditStaffModal';
+
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
   removeCircle,
   create,
-} from 'ionicons/icons';
+}                   from 'ionicons/icons';
+import { useModal } from '@/composables/useModal';
 
 export default defineComponent({
   name: "StaffInfo",
@@ -87,6 +112,9 @@ export default defineComponent({
     IonIcon,
     IonRefresher,
     IonRefresherContent,
+    IonButton,
+    Modal,
+    CreateEditStaffModal,
   },
   setup() {
     /* Global properties */
@@ -98,27 +126,48 @@ export default defineComponent({
     /* Composables */
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
+    const { isModalOpen, modalData, openModal } = useModal();
 
     /* Lifecycle hooks */
 
     /* Event handlers */
-    const editMember = (member, event = null) => {
-      event?.stopPropagation();
-
-      console.log(member);
+    const createMember = async() => {
+      openModal(true, null);
     };
-    const deleteMember = async(memberId, event = null) => {
+    const editMember = async(member, event = null) => {
       event?.stopPropagation();
 
-      try {
-        await store.dispatch('owner/deleteStaff', memberId);
-      }catch(errors) {
-        showErrorToast(
-            null,
-            {
-              pushNotificationPermission: t('generalAlertError'),
-            });
-      }
+      openModal(true, member);
+    };
+    const deleteMember = async(member, event = null) => {
+      event?.stopPropagation();
+      const alert = await alertController
+          .create({
+            header: t('staff.alertRemoveStaffHeader'),
+            message: t('staff.removeStaffMessage', { staff: `${member.fname} ${member.lname}` }),
+            mode: 'ios',
+            buttons: [
+              {
+                text: t('disagree'),
+                role: 'cancel',
+              },
+              {
+                text: t('agree'),
+                handler: async() => {
+                  try {
+                    await store.dispatch('owner/deleteStaff', member.id);
+                  }catch(errors) {
+                    showErrorToast(
+                        null,
+                        {
+                          pushNotificationPermission: t('generalAlertError'),
+                        });
+                  }
+                },
+              },
+            ],
+          });
+      await alert.present();
     };
     const refresh = async(event) => {
       try {
@@ -137,11 +186,15 @@ export default defineComponent({
     return {
       /* Component properties */
       staff,
+      isModalOpen,
+      modalData,
 
       /* Event handlers */
+      createMember,
       editMember,
       deleteMember,
       refresh,
+      openModal,
 
       /* Icons */
       removeCircle,
@@ -178,6 +231,6 @@ h3 {
 }
 
 #editSection {
-  background: var(--staff-card-background);
+  background: transparent;
 }
 </style>

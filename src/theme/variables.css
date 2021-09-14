@@ -90,9 +90,13 @@ http://ionicframework.com/docs/theming/ */
 
     --input-bg: #F6F7FB;
 
+    --dark-input-bg: #F6F7FB;
+
     --primary-paint: #F6F7FB;
 
     --secondary-paint: #FFFFFF;
+
+    --staff-modal-paint: #FFFFFF;
 
     --show-paint: #fff;
 
@@ -105,6 +109,8 @@ http://ionicframework.com/docs/theming/ */
     --primary-border: #F3F3F3;
 
     --search-color: #000000;
+
+    --header-border-color: rgba(35, 43, 56, 0.25);
 
     --short-modal-height: 420px;
     --sub-modal-height: 320px;
@@ -300,7 +306,11 @@ body.dark {
 
     --secondary-paint: #272736;
 
+    --staff-modal-paint: #1F1C2B;
+
     --input-bg: #272736;
+
+    --dark-input-bg: #1F1C2B;
 
     --show-paint: #1F1C2B;
 
@@ -319,6 +329,9 @@ body.dark {
     --primary-border: #272736;
 
     --search-color: #FFFFFF;
+
+    --header-border-color: rgba(240, 240, 242, 0.25);
+
 
     /**
       START CUSTOM DARK MODE COLOR SCHEME

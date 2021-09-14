@@ -1,22 +1,30 @@
 <template>
   <ion-content class="ion-no-padding bg-red-600" :scrollY="false">
-    <div class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-         @click="navigateTo('staff.profile')">
-      <ion-icon slot="start" :icon="settingsOutline" class="text-black"></ion-icon>
-      <span class="text-sm ml-3">{{ $t('profile') }}</span>
+    <div v-if="this.$store.getters['auth/isOwner']"
+         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
+         @click="navigateTo('owner.place')">
+      <ion-icon slot="start" :icon="homeOutline" class="text-black"></ion-icon>
+      <span class="text-sm ml-3">{{ $t('owner.place') }}</span>
     </div>
 
     <div v-if="this.$store.getters['auth/isOwner']"
          class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-         @click="navigateTo('owner.settings')">
-      <ion-icon slot="start" :icon="settingsOutline" class="text-black"></ion-icon>
-      <span class="text-sm ml-3">{{ $t('settings') }}</span>
+         @click="navigateTo('owner.staff')">
+      <ion-icon slot="start" :icon="peopleOutline" class="text-black"></ion-icon>
+      <span class="text-sm ml-3">{{ $t('owner.staff') }}</span>
+    </div>
+
+    <div class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
+         @click="navigateTo('staff.settings')">
+      <ion-icon slot="start" :icon="personOutline" class="text-black"></ion-icon>
+      <span class="text-sm ml-3">{{ $t('profile') }}</span>
     </div>
 
     <div
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-black"
         @click="logout"
     >
+      <ion-icon slot="start" :icon="logOutOutline" class="text-black"></ion-icon>
       <span class="text-sm ml-3">{{ $t('logout') }}</span>
     </div>
   </ion-content>
@@ -32,7 +40,12 @@ import {
   popoverController,
 }                          from '@ionic/vue';
 
-import { personOutline, settingsOutline } from 'ionicons/icons';
+import {
+  personOutline,
+  peopleOutline,
+  homeOutline,
+  logOutOutline,
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: 'SettingsPopover',
@@ -66,7 +79,9 @@ export default defineComponent({
 
       /* Icons */
       personOutline,
-      settingsOutline,
+      peopleOutline,
+      homeOutline,
+      logOutOutline,
     };
   },
 });

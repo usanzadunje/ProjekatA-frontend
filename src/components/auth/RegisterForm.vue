@@ -96,8 +96,6 @@ import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
 
 import SocialIcons from '@/components/social/SocialIcons';
 
-import AuthService    from "@/services/AuthService";
-
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import { getError, sleep } from "@/utils/helpers";
@@ -147,33 +145,22 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
 
     /* Event handlers */
-    let register = async() => {
+    const register = async() => {
       loading.value = true;
       Keyboard.hide();
-      Object.assign(
-          newUser,
-          newUser,
-          {
-            fname: null,
-            lname: null,
-            bday: null,
-            phone: null,
-            username: null,
-          });
       try {
-        const response = await AuthService.register(newUser);
-        await store.dispatch("auth/setToken", response.data.token);
-        await store.dispatch("auth/getAuthUser");
-        await store.dispatch("user/getSettings");
-        Object.assign(newUser, {});
+        await store.dispatch("auth/register", newUser);
+
         await router.replace({ name: 'onboarding' });
+
+        loading.value = false;
+        Object.assign(newUser, {});
       }catch(errors) {
         errorNames.value = getError(errors);
+        loading.value = false;
         await showErrorToast(errors);
         await sleep(Object.keys(errorNames.value).length * 900);
         errorNames.value = {};
-      }finally {
-        loading.value = false;
       }
     };
     let togglePasswordShow = (passwordConfirm = false) => {

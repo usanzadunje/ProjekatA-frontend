@@ -20,14 +20,14 @@
                                :title="$t('closest')"/>
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
           <ion-slide>
-            <HomeSlidingCafeCards
+            <SlidingCards
                 :cafes="cafes.closestToUser?.slice(0, 2)"
                 @openCafeModal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
-            <HomeSlidingCafeCards
+            <SlidingCards
                 :cafes="cafes.closestToUser?.slice(2, 4)"
                 @openCafeModal="openModal(true, $event)"
                 class="pr-3"
@@ -43,14 +43,14 @@
         <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
           <ion-slide>
-            <HomeSlidingCafeCards
+            <SlidingCards
                 :cafes="cafes.currentlyAvailable?.slice(0, 2)"
                 @openCafeModal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
-            <HomeSlidingCafeCards
+            <SlidingCards
                 :cafes="cafes.currentlyAvailable?.slice(2, 4)"
                 @openCafeModal="openModal(true, $event)"
                 class="pr-3"
@@ -61,14 +61,14 @@
         <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
           <ion-slide>
-            <HomeSlidingCafeCards
+            <SlidingCards
                 :cafes="cafes.haveFood?.slice(0, 2)"
                 @openCafeModal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
-            <HomeSlidingCafeCards
+            <SlidingCards
                 :cafes="cafes.haveFood?.slice(2, 4)"
                 @openCafeModal="openModal(true, $event)"
                 class="pr-3"
@@ -89,7 +89,7 @@
           @didDismiss="openModal(false);"
       >
         <ShortCafeModal
-            :cafe="modalCafe"
+            :cafe="modalData"
             @dismissShortCafeModal="openModal(false)"
             @subModalOpened="hideModal('custom-modal')"
         />
@@ -115,12 +115,12 @@ import {
 
 import CafeService from '@/services/CafeService';
 
-import UserHeader            from '@/components/user/UserHeader';
+import UserHeader            from '@/components/user/headers/UserHeader';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import HomeSlidingCafeCards  from '@/components/user/HomeSlidingCafeCards';
+import SlidingCards          from '@/components/place/SlidingCards';
+import SkeletonCafeCard      from '@/components/place/SkeletonCafeCard';
 import Modal                 from '@/components/Modal';
-import ShortCafeModal        from '@/components/user/ShortCafeModal';
-import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
+import ShortCafeModal        from '@/components/user/modals/ShortCafeModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
@@ -139,7 +139,7 @@ export default defineComponent({
     IonRefresherContent,
     UserHeader,
     FilterCategoryHeading,
-    HomeSlidingCafeCards,
+    SlidingCards,
     Modal,
     ShortCafeModal,
     SkeletonCafeCard,
@@ -171,7 +171,7 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
-    const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
+    const { isModalOpen, modalData, openModal, hideModal } = useModal();
 
     /* Lifecycle hooks */
     // Because getting lat and lng takes long tame wait for it to happen and then hit API with correct lat and lng values
@@ -202,8 +202,6 @@ export default defineComponent({
     //Before fetching cafes by distance get location and then pass it to query string in API call to backend
     onMounted(async() => {
       await getFilteredCafes();
-      openModal(true, cafes.closestToUser[0]);
-      openModal(false);
       showSkeleton.value = false;
     });
     onIonViewDidEnter(() => {
@@ -268,7 +266,7 @@ export default defineComponent({
       slideOpts,
       cafes,
       isModalOpen,
-      modalCafe,
+      modalData,
       showSkeleton,
 
       /* Event handlers */

@@ -39,7 +39,10 @@
           :disabled="isSubDisabled"
       >
         <ion-icon slot="start"
-                  :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+                  :icon="isUserSubscribed ? notifications : notificationsOutline"
+        >
+
+        </ion-icon>
         {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
       </ion-button>
     </div>
@@ -70,10 +73,10 @@ import {
   modalController,
 }                                                   from '@ionic/vue';
 
-import CafeInfoBody          from '@/components/user/CafeInfoBody';
-import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
+import CafeInfoBody          from '@/components/place/CafeInfoBody';
 import Modal                 from '@/components/Modal';
-import ImagePreviewModal     from '@/components/user/ImagePreviewModal';
+import CafeSubscriptionModal from '@/components/user/modals/CafeSubscriptionModal';
+import ImagePreviewModal     from '@/components/user/modals/ImagePreviewModal';
 
 import CafeService from '@/services/CafeService';
 
@@ -122,7 +125,7 @@ export default defineComponent({
     const { isModalOpen, openModal } = useModal();
 
     /* Lifecycle hooks */
-    isSubDisabled.value = Capacitor.getPlatform() === 'wseb' || !store.getters['auth/loggedIn'];
+    isSubDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
     /* Checking if user is subscribed to this cafe */
     if(store.getters['auth/loggedIn']) {
       CafeService.isUserSubscribed(cafe.value.id)

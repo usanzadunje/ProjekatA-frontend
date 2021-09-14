@@ -17,7 +17,7 @@ import {
   IonContent, onIonViewWillLeave,
 }                               from '@ionic/vue';
 
-import EditPlaceForm from '@/components/owner/EditPlaceForm';
+import EditPlaceForm from '@/components/owner/forms/EditPlaceForm';
 
 export default defineComponent({
   name: "Dashboard",

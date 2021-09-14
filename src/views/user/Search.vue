@@ -41,7 +41,7 @@
           @didDismiss="openModal(false);"
       >
         <ShortCafeModal
-            :cafe="modalCafe"
+            :cafe="modalData"
             @dismissShortCafeModal="openModal(false)"
             @subModalOpened="hideModal('custom-modal')"
         />
@@ -64,11 +64,11 @@ import {
 }
                                 from '@ionic/vue';
 
-import UserHeader     from '@/components/user/UserHeader';
+import UserHeader     from '@/components/user/headers/UserHeader';
 import SlidingFilter  from '@/components/user/SlidingFilter';
-import InfiniteScroll from '@/components/InfiniteScroll';
+import InfiniteScroll from '@/components/place/InfiniteScroll';
 import Modal          from '@/components/Modal';
-import ShortCafeModal from '@/components/user/ShortCafeModal';
+import ShortCafeModal from '@/components/user/modals/ShortCafeModal';
 
 import { useModal } from '@/composables/useModal';
 
@@ -106,7 +106,7 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
+    const { isModalOpen, modalData, openModal, hideModal } = useModal();
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
@@ -178,7 +178,7 @@ export default defineComponent({
       sortBy,
       content,
       isModalOpen,
-      modalCafe,
+      modalData,
       infiniteScrollLoading,
       refresher,
 

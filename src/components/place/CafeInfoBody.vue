@@ -49,7 +49,7 @@ import {
 } from '@ionic/vue';
 
 import Modal     from '@/components/Modal';
-import GoogleMap from '@/components/user/GoogleMap';
+import GoogleMap from '@/components/user/modals/GoogleMap';
 
 import { useModal } from '@/composables/useModal';
 

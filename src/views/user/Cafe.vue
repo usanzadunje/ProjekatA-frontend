@@ -106,12 +106,12 @@ import {
   onIonViewWillLeave,
 }                                                           from '@ionic/vue';
 
-import CafeInfoBody          from '@/components/user/CafeInfoBody';
+import CafeInfoBody          from '@/components/place/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import AccordionList         from '@/components/user/AccordionList';
 import Modal                 from '@/components/Modal';
-import CafeSubscriptionModal from '@/components/user/CafeSubscriptionModal';
-import ImagePreviewModal     from '@/components/user/ImagePreviewModal';
+import CafeSubscriptionModal from '@/components/user/modals/CafeSubscriptionModal';
+import ImagePreviewModal     from '@/components/user/modals/ImagePreviewModal';
 
 import CafeService from '@/services/CafeService';
 

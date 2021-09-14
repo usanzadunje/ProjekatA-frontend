@@ -5,13 +5,13 @@ export function useModal() {
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
     // Cafe which information is sent to modal
-    const modalCafe = ref({});
+    const modalData = ref({});
 
 
     /* Methods */
-    const openModal = (state, cafe = null) => {
-        if(cafe) {
-            modalCafe.value = cafe;
+    const openModal = (state, data = null) => {
+        if(data) {
+            modalData.value = data;
         }
         isModalOpen.value = state;
     };
@@ -25,7 +25,7 @@ export function useModal() {
     return {
         /* Component properties  */
         isModalOpen,
-        modalCafe,
+        modalData,
 
         /* Methods */
         openModal,

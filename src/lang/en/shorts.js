@@ -72,6 +72,7 @@ export default {
     "birthday": "Birthday",
     "phone": "Phone",
     "update": "Update",
+    "create": "Create",
     "selectDate": "Select date",
     "done": "Done",
     "unknown": "Unknown",
@@ -97,4 +98,8 @@ export default {
     "city": "City",
     "address": "Address",
     "place.email": "E-mail address",
+    "editing": "Editing",
+    "owner.updatedStaff": "Successfully updated staff member information!",
+    "owner.createStaff": "Create new staff member",
+    "owner.createdStaff": "Successfully created new staff member!",
 };

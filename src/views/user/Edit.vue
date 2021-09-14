@@ -15,8 +15,8 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
-      <div class="wrap">
+    <ion-content>
+      <div class="px-4 pt-4">
         <EditForm :clearInputs="clearInputs"/>
       </div>
     </ion-content>
@@ -85,7 +85,7 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-toolbar {
-  --border-style: none !important;
+  --border-color: var(--header-border-color);
   --background: var(--show-paint);
   border-bottom-left-radius: unset !important;
   border-bottom-right-radius: unset !important;
@@ -98,4 +98,5 @@ ion-content {
 ion-title {
   --color: var(--primary-heading)
 }
+
 </style>

@@ -52,7 +52,7 @@
           @didDismiss="openModal(false);"
       >
         <ShortCafeModal
-            :cafe="modalCafe"
+            :cafe="modalData"
             @dismissShortCafeModal="openModal(false)"
             @subModalOpened="hideModal('custom-modal')"
             @userToggledSubscription="getSubscriptions"
@@ -81,13 +81,13 @@ import {
   onIonViewDidEnter,
 }                                          from '@ionic/vue';
 
-import UserProfileHeader     from '@/components/user/UserProfileHeader';
+import UserProfileHeader     from '@/components/user/headers/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import CafeCard              from '@/components/user/CafeCard';
-import Modal                 from '@/components/Modal';
-import ShortCafeModal        from '@/components/user/ShortCafeModal';
-import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
+import CafeCard         from '@/components/place/CafeCard';
+import SkeletonCafeCard from '@/components/place/SkeletonCafeCard';
+import Modal            from '@/components/Modal';
+import ShortCafeModal from '@/components/user/modals/ShortCafeModal';
 
 import CafeService from '@/services/CafeService';
 
@@ -140,7 +140,7 @@ export default defineComponent({
     /* Composables */
     const { showUndoToast, showSuccessToast, showErrorToast } = useToastNotifications();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
-    const { isModalOpen, modalCafe, openModal, hideModal } = useModal();
+    const { isModalOpen, modalData, openModal, hideModal } = useModal();
 
     /* Lifecycle hooks */
     //Setting options for slider inside SlideFilter component
@@ -253,7 +253,7 @@ export default defineComponent({
       cafesUserSubscribedTo,
       sortBy,
       isModalOpen,
-      modalCafe,
+      modalData,
       showSkeleton,
 
       /* Event handlers */

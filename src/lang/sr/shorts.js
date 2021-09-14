@@ -72,6 +72,7 @@ export default {
     "birthday": "Rodjendan",
     "phone": "Telefon",
     "update": "Izmeni",
+    "create": "Kreiraj",
     "selectDate": "Izaberite datum",
     "done": "Gotovo",
     "unknown": "Neznanac",
@@ -97,5 +98,9 @@ export default {
     "city": "Grad",
     "address": "Adresa",
     "place.email": "E-mail adresa",
+    "editing": "Izmene za",
+    "owner.updatedStaff": "Uspesno ste izmenili podatke zaposlenog!",
+    "owner.createStaff": "Kreirajte novog zaposlenog",
+    "owner.createdStaff": "Uspesno ste kreirali novog zaposlenog!",
 };
 

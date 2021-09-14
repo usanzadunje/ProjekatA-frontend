@@ -6,7 +6,7 @@
       @didPresent="$emit('onDidPresent')"
       @didDismiss="$emit('onDidDismiss')"
       :backdrop-dismiss="true"
-      :swipe-to-close="true"
+      :swipe-to-close="swipeToClose"
   >
     <div class="inner-content">
       <slot/>
@@ -43,6 +43,11 @@ export default defineComponent({
       type: String,
       required: false,
       default: '100%',
+    },
+    swipeToClose: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
   },
   setup(props) {

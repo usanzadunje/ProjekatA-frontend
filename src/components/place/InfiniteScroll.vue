@@ -41,8 +41,8 @@ import {
 }                                                         from '@ionic/vue';
 
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import CafeCard              from '@/components/user/CafeCard';
-import SkeletonCafeCard      from '@/components/user/SkeletonCafeCard';
+import CafeCard              from '@/components/place/CafeCard';
+import SkeletonCafeCard      from '@/components/place/SkeletonCafeCard';
 
 import CafeService from '@/services/CafeService';
 
@@ -54,7 +54,6 @@ export default defineComponent({
   components: {
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-
     FilterCategoryHeading,
     CafeCard,
     SkeletonCafeCard,

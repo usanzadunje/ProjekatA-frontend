@@ -210,7 +210,7 @@ export default defineComponent({
       await picker.present();
     };
     const showPrivacy = () => {
-      alert('Privacy');
+      // alert('Privacy');
     };
     const showSupportAuthors = () => {
       alert('Support authors');

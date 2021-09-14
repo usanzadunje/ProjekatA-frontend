@@ -1,7 +1,7 @@
 <template>
-  <div class="px-8 mt-5">
+  <div class="px-8">
     <div
-        class="flex justify-center mb-2"
+        class="flex justify-center mb-6"
     >
       <ion-thumbnail
           class="user-profile-picture-edit"
@@ -90,7 +90,7 @@
       <ion-label class="settings-fade-text">{{ $t('birthday') }}</ion-label>
       <ion-datetime
           v-model="user.bday"
-          :doneText="$t('done')"
+          :doneText="$t('choose')"
           :cancelText="$t('cancel')"
           display-format="DD MMM YYYY"
           value="1997-07-21"
@@ -229,10 +229,7 @@ import {
   IonLabel,
   IonToggle,
   IonThumbnail,
-}
-                                                                              from "@ionic/vue";
-
-import AuthService from "@/services/AuthService";
+}                                                                             from "@ionic/vue";
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { usePhotos }             from '@/composables/usePhotos';
@@ -314,7 +311,7 @@ export default defineComponent({
     const { photo, selectImageSource } = usePhotos();
 
 
-    /* Event handlers */
+    /* Methods */
     const clearPasswordInputs = () => {
       delete user.old_password;
       delete user.password;
@@ -331,10 +328,9 @@ export default defineComponent({
       }
       loading.value = true;
       Keyboard.hide();
-      // Napraviti update metoduy u service
       try {
-        await AuthService.updateUser(user);
-        await store.dispatch("auth/getAuthUser");
+        await store.dispatch("auth/updateAuthUser", user);
+
         avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
         showSuccessToast(t('successUpdate'));
         const query = user.avatar ? { refreshAvatar: 'true' } : null;

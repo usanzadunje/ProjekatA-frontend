@@ -25,6 +25,16 @@ export const actions = {
             commit("SET_STAFF_MEMBERS", []);
         }
     },
+    async createStaff({ dispatch }, user) {
+        await OwnerService.createStaff(user);
+
+        dispatch("getStaffInfo");
+    },
+    async updateStaff({ dispatch }, { staffId, user }) {
+        await OwnerService.updateStaff(staffId, user);
+
+        dispatch("getStaffInfo");
+    },
     async deleteStaff({ commit }, staffId) {
         await OwnerService.deleteStaff(staffId);
         commit('REMOVE_STAFF_MEMBER', staffId);

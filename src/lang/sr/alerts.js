@@ -5,6 +5,8 @@ export default {
     "alertNotificationsOffMessage": "Dozvolite nam da ih ukljucimo ili ih sami promenite u podesavanjima.",
     "alertUnsubscribeHeader": "Odjavljujete se iz objekta.",
     "alertUnsubscribeMessage": "Da li ste sigurni da zelite da uklonite objekat iz liste pretplacenih??",
+    "staff.alertRemoveStaffHeader": "Uklanjate zaposlenog",
+    "staff.removeStaffMessage": "Da li ste sigurni da zelite da uklonite {staff} iz liste zaposlenih?",
     "warningWebNotification": "Ne mozete registrovati push notifikacije na web-u.",
     "warningNoNotificationPermission": "Nije odobreno koriscenje push notifikacija.",
     "geoLocationUnexpected": "Postoji problem sa vasim GPS-om, funcije geo lokacije mozda nece raditi.",

@@ -13,9 +13,10 @@
     </div>
 
     <div
-        class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-black"
+        class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-gray-300"
         @click="logout"
     >
+      <ion-icon slot="start" :icon="logOutOutline" class="text-black"></ion-icon>
       <span class="text-sm ml-3">{{ $t('logout') }}</span>
     </div>
   </ion-content>
@@ -31,7 +32,7 @@ import {
   popoverController,
 }                          from '@ionic/vue';
 
-import { personOutline, settingsOutline } from 'ionicons/icons';
+import { personOutline, settingsOutline, logOutOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'SettingsPopover',
@@ -66,6 +67,7 @@ export default defineComponent({
       /* Icons */
       personOutline,
       settingsOutline,
+      logOutOutline,
     };
   },
 });

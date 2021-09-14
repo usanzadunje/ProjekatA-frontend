@@ -10,12 +10,9 @@ import placeMembers            from "@/middleware/placeMembers";
 import user                    from '@/middleware/user';
 import owner                   from '@/middleware/owner';
 
-/* Staff imports views */
-import StaffLayout             from '@/views/staff/layouts/StaffLayout';
-
 /* Layouts */
 import UserLayout              from '@/views/user/layouts/UserLayout';
-
+import StaffLayout             from '@/views/staff/layouts/StaffLayout';
 
 const routes = [
     /* =============================================
@@ -93,7 +90,7 @@ const routes = [
                 name: "cafe",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "Cafe" */ "@/views/user/Cafe"),
+                    import(/* webpackChunkName: "Place" */ "@/views/user/Cafe"),
             },
             {
                 path: "search",
@@ -143,18 +140,11 @@ const routes = [
                 component: () => import(/* webpackChunkName: "StaffDashboard" */ "@/views/staff/Dashboard"),
             },
             {
-                path: "availability",
-                name: "staff.availability",
-                meta: { middleware: [] },
-                component: () =>
-                    import(/* webpackChunkName: "StaffAvailability" */ "@/views/staff/Availability"),
-            },
-            {
                 path: "settings",
                 name: "staff.settings",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "StaffSettings" */ "@/views/staff/Settings"),
+                    import(/* webpackChunkName: "StaffEdit" */ "@/views/staff/Edit"),
             },
             {
                 path: "/owner/staff",
@@ -227,19 +217,6 @@ router.beforeEach((to, from, next) => {
     });
 });
 
-
-// App.addListener('appUrlOpen', function (data) {
-//     // Example url: https://beerswift.app/tabs/tabs2
-//     // slug = /tabs/tabs2
-//     const slug = data.url.split('.app').pop();
-//
-//     // We only push to the route if there is a slug present
-//     if (slug) {
-//         router.push({
-//             path: slug,
-//         });
-//     }
-// });
 
 
 export default router;

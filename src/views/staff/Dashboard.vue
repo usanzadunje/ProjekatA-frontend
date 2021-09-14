@@ -35,9 +35,10 @@ import {
   IonRefresherContent,
 }                                    from '@ionic/vue';
 
-import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
 import PlaceAvailabilityChart    from '@/components/staff/charts/PlaceAvailabilityChart';
-import { usePlaceManipulation }  from '@/composables/usePlaceManipulation';
+import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
+
+import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 
 export default defineComponent({
   name: "Dashboard",
@@ -46,8 +47,8 @@ export default defineComponent({
     IonContent,
     IonRefresher,
     IonRefresherContent,
-    PlaceAvailabilityChart,
     AvailabilityToggleButtons,
+    PlaceAvailabilityChart,
   },
   setup() {
     /* Component properties */

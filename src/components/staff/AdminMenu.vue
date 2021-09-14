@@ -20,36 +20,6 @@
             </span>
       </div>
       <div
-          class="flex flex-row flex-1 items-center mt-2.5"
-          :class="[activeMenuItem === 'availability' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-800']"
-          @click="menuItemClicked('staff.availability')"
-      >
-        <ion-icon
-            slot="icon-only"
-            :icon="toggleOutline"
-            class="text-2xl mr-2"
-        ></ion-icon>
-        <span
-            class="pb-1 text-xl"
-        >
-              {{ $t('availability') }}
-            </span>
-      </div>
-      <div
-          class="flex flex-row flex-1 items-center mt-2.5"
-          :class="[activeMenuItem === 'settings' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
-          @click="menuItemClicked('staff.settings')"
-      >
-        <ion-icon
-            slot="icon-only"
-            :icon="personOutline"
-            class="text-2xl mr-2"
-        ></ion-icon>
-        <span class="pb-1 text-xl">
-              {{ $t('settings') }}
-            </span>
-      </div>
-      <div
           v-if="isOwner"
           class="flex flex-row flex-1 items-center mt-2.5"
           :class="[activeMenuItem === 'place' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
@@ -77,6 +47,20 @@
         ></ion-icon>
         <span class="pb-1 text-xl">
               {{ $t('owner.staff') }}
+            </span>
+      </div>
+      <div
+          class="flex flex-row flex-1 items-center mt-2.5"
+          :class="[activeMenuItem === 'settings' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
+          @click="menuItemClicked('staff.settings')"
+      >
+        <ion-icon
+            slot="icon-only"
+            :icon="personOutline"
+            class="text-2xl mr-2"
+        ></ion-icon>
+        <span class="pb-1 text-xl">
+              {{ $t('profile') }}
             </span>
       </div>
       <div
