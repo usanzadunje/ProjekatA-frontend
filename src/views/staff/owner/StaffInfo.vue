@@ -132,7 +132,9 @@ export default defineComponent({
 
     /* Event handlers */
     const createMember = async() => {
-      openModal(true, null);
+      modalData.value = null;
+
+      openModal(true);
     };
     const editMember = async(member, event = null) => {
       event?.stopPropagation();
