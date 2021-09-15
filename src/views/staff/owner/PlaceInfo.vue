@@ -4,7 +4,7 @@
       <div class="wrap">
         <h1 class="secondary-heading text-center uppercase">{{ $t('owner.place') }}</h1>
 
-        <EditPlaceForm class="mt-10" :resetInputs="resetInputs"/>
+        <EditPlaceForm class="mt-10" :reset-inputs="resetInputs"/>
       </div>
     </ion-content>
   </ion-page>

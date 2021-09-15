@@ -102,4 +102,6 @@ export default {
     "owner.updatedStaff": "Successfully updated staff member information!",
     "owner.createStaff": "Create new staff member",
     "owner.createdStaff": "Successfully created new staff member!",
+    "active": "Active",
+    "inactive": "Inactive",
 };

@@ -14,23 +14,23 @@
           id="header"
       >
         <UserHeader
-            :mainHeading="$t('search')"
-            :notificationIcon="notificationsOffOutline"
-            :searchTerm="cafeSearchString"
-            @searchFilterChanged="searchFilterChanged"
+            :main-heading="$t('search')"
+            :notification-icon="notificationsOffOutline"
+            :search-term="cafeSearchString"
+            @search-filter-changed="searchFilterChanged"
         >
-          <SlidingFilter :hasTitle="true" @sortHasChanged="sortHasChanged"/>
+          <SlidingFilter :has-title="true" @sort-has-changed="sortHasChanged"/>
         </UserHeader>
       </div>
 
 
       <div class="ion-padding">
         <InfiniteScroll
-            :cafeSearchString="cafeSearchString"
-            :sortBy="sortBy"
-            @scrollToTop="scrollToTop"
-            @openCafeModal="openModal(true, $event)"
-            @infiniteScrollToggle="infiniteScrollLoading = !infiniteScrollLoading"
+            :cafe-search-string="cafeSearchString"
+            :sort-by="sortBy"
+            @scroll-to-top="scrollToTop"
+            @open-cafe-modal="openModal(true, $event)"
+            @infinite-scroll-toggle="infiniteScrollLoading = !infiniteScrollLoading"
             :refresher="refresher"
         />
       </div>
@@ -42,8 +42,8 @@
       >
         <ShortCafeModal
             :cafe="modalData"
-            @dismissShortCafeModal="openModal(false)"
-            @subModalOpened="hideModal('custom-modal')"
+            @dismiss-short-cafe-modal="openModal(false)"
+            @sub-modal-opened="hideModal('custom-modal')"
         />
       </Modal>
     </ion-content>

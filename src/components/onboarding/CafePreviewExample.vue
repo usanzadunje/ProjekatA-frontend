@@ -34,6 +34,7 @@ export default defineComponent({
     IonButton,
     IonIcon,
   },
+  emits: ['nextSlide'],
   setup() {
     return {
       /* Icons */

@@ -4,77 +4,81 @@
       content-id="admin-outlet"
       swipe-gesture="true"
   >
-    <div class="flex flex-col py-0 pl-2 pr-4 text-center">
-      <div
-          class="flex flex-row flex-1 items-center mt-2.5"
-          :class="[activeMenuItem === 'dashboard' ? 'border-b-2 border-yellow-600 text-yellow-600' : 'text-gray-800']"
-          @click="menuItemClicked('staff.dashboard')"
-      >
-        <ion-icon
-            slot="icon-only"
-            :icon="statsChartOutline"
-            class="text-2xl mr-2"
-        ></ion-icon>
-        <span class="pb-1 text-xl">
+    <div class="pb-2 pl-2 pr-4 h-full flex flex-col justify-between">
+      <div>
+        <div
+            class="flex flex-row flex-1 items-center mt-4"
+            :class="[activeMenuItem === 'dashboard' ? 'border-b-2 border-yellow-600 text-yellow-600' : 'text-gray-800']"
+            @click="menuItemClicked('staff.dashboard')"
+        >
+          <ion-icon
+              slot="icon-only"
+              :icon="statsChartOutline"
+              class="text-2xl mr-2"
+          ></ion-icon>
+          <span class="pb-1 text-xl">
               {{ $t('staff.dashboard') }}
             </span>
-      </div>
-      <div
-          v-if="isOwner"
-          class="flex flex-row flex-1 items-center mt-2.5"
-          :class="[activeMenuItem === 'place' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
-          @click="menuItemClicked('owner.place')"
-      >
-        <ion-icon
-            slot="icon-only"
-            :icon="homeOutline"
-            class="text-2xl mr-2"
-        ></ion-icon>
-        <span class="pb-1 text-xl">
+        </div>
+        <div
+            v-if="isOwner"
+            class="flex flex-row flex-1 items-center mt-4"
+            :class="[activeMenuItem === 'place' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
+            @click="menuItemClicked('owner.place')"
+        >
+          <ion-icon
+              slot="icon-only"
+              :icon="homeOutline"
+              class="text-2xl mr-2"
+          ></ion-icon>
+          <span class="pb-1 text-xl">
               {{ $t('owner.place') }}
             </span>
-      </div>
-      <div
-          v-if="isOwner"
-          class="flex flex-row flex-1 items-center mt-2.5"
-          :class="[activeMenuItem === 'staff' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
-          @click="menuItemClicked('owner.staff')"
-      >
-        <ion-icon
-            slot="icon-only"
-            :icon="peopleOutline"
-            class="text-2xl mr-2"
-        ></ion-icon>
-        <span class="pb-1 text-xl">
+        </div>
+        <div
+            v-if="isOwner"
+            class="flex flex-row flex-1 items-center mt-4"
+            :class="[activeMenuItem === 'staff' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
+            @click="menuItemClicked('owner.staff')"
+        >
+          <ion-icon
+              slot="icon-only"
+              :icon="peopleOutline"
+              class="text-2xl mr-2"
+          ></ion-icon>
+          <span class="pb-1 text-xl">
               {{ $t('owner.staff') }}
             </span>
-      </div>
-      <div
-          class="flex flex-row flex-1 items-center mt-2.5"
-          :class="[activeMenuItem === 'settings' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
-          @click="menuItemClicked('staff.settings')"
-      >
-        <ion-icon
-            slot="icon-only"
-            :icon="personOutline"
-            class="text-2xl mr-2"
-        ></ion-icon>
-        <span class="pb-1 text-xl">
+        </div>
+        <div
+            class="flex flex-row flex-1 items-center mt-4"
+            :class="[activeMenuItem === 'settings' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
+            @click="menuItemClicked('staff.settings')"
+        >
+          <ion-icon
+              slot="icon-only"
+              :icon="personOutline"
+              class="text-2xl mr-2"
+          ></ion-icon>
+          <span class="pb-1 text-xl">
               {{ $t('profile') }}
             </span>
+        </div>
       </div>
-      <div
-          class="flex flex-row flex-1 items-center mt-2.5"
-          @click="this.$store.dispatch('auth/logout')"
-      >
-        <ion-icon
-            slot="icon-only"
-            :icon="logOutOutline"
-            class="text-2xl mr-2"
-        ></ion-icon>
-        <span class="pb-1 text-xl">
+      <div class="">
+        <div
+            class="flex flex-row flex-1 items-center mt-4"
+            @click="this.$store.dispatch('auth/logout')"
+        >
+          <ion-icon
+              slot="icon-only"
+              :icon="logOutOutline"
+              class="text-2xl mr-2"
+          ></ion-icon>
+          <span class="pb-1 text-xl">
               {{ $t('logout') }}
             </span>
+        </div>
       </div>
     </div>
   </ion-menu>

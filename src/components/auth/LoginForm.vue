@@ -22,7 +22,7 @@
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('login') }"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('login') || errorNames.hasOwnProperty('password') }"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
@@ -40,18 +40,18 @@
                 class="text-xl text-gray-500"
       ></ion-icon>
     </ion-item>
-    <div class="relative flex justify-between items-center mt-3.5 px-4 utility-text">
-      <div class="flex items-center">
-        <ion-checkbox
-            v-model="user.remember"
-            mode="md"
-        ></ion-checkbox>
-        <ion-text class="ml-2 fixed-utility-text">Zapamti me</ion-text>
-      </div>
-      <div class="fixed-utility-text">
-        <a href="/forgot-password">Zaboravljena lozinka?</a>
-      </div>
-    </div>
+    <!--    <div class="relative flex justify-between items-center mt-3.5 px-4 utility-text">-->
+    <!--      <div class="flex items-center">-->
+    <!--        <ion-checkbox-->
+    <!--            v-model="user.remember"-->
+    <!--            mode="md"-->
+    <!--        ></ion-checkbox>-->
+    <!--        <ion-text class="ml-2 fixed-utility-text">Zapamti me</ion-text>-->
+    <!--      </div>-->
+    <!--      <div class="fixed-utility-text">-->
+    <!--        <a href="/forgot-password">Zaboravljena lozinka?</a>-->
+    <!--      </div>-->
+    <!--    </div>-->
     <SocialIcons class="mt-7"/>
     <div class="mt-6">
       <ion-button
@@ -87,9 +87,9 @@ import {
   IonItem,
   IonInput,
   IonIcon,
-  IonText,
+  // IonText,
   IonButton,
-  IonCheckbox,
+  // IonCheckbox,
   IonSpinner,
 }
                                                      from "@ionic/vue";
@@ -116,9 +116,9 @@ export default defineComponent({
     IonItem,
     IonInput,
     IonIcon,
-    IonText,
+    // IonText,
     IonButton,
-    IonCheckbox,
+    // IonCheckbox,
     IonSpinner,
     SocialIcons,
   },

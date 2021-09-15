@@ -9,7 +9,6 @@
 
 <script>
 import { defineComponent } from 'vue';
-import {}                  from '@ionic/vue';
 
 import CreateEditStaff from '@/components/staff/forms/CreateEditStaff';
 

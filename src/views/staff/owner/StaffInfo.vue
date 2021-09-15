@@ -20,7 +20,7 @@
 
         <div
             v-for="member in staff"
-            :key="member.username"
+            :key="member.id"
             class="mt-4 relative"
         >
           <div class="absolute top-1 right-9 z-40">
@@ -31,29 +31,11 @@
                         @click="deleteMember(member, $event)"></ion-icon>
             </div>
           </div>
-          <ion-card
-              class="mb-6 mt-0 mx-auto w-5/6"
-              button="true"
-              @click="editMember(member)"
-          >
-            <ion-card-header>
-              <div class="flex items-center justify-around">
-                <ion-thumbnail
-                    class="user-profile-picture-edit"
-                >
-                  <img
-                      class="user-profile-picture-edit"
-                      alt="avatar"
-                      :src="member.avatar"
-                  >
-                </ion-thumbnail>
-                <div class="ml-2">
-                  <h3 class="main-heading-smaller">{{ $t('staff') }}</h3>
-                  <h2 class="secondary-heading">{{ `${member.lname} ${member.fname}` }}</h2>
-                </div>
-              </div>
-            </ion-card-header>
-          </ion-card>
+          <StaffCard
+              :member="member"
+              @edit-member="editMember(member)"
+              :button="true"
+          />
         </div>
       </div>
       <Modal
@@ -79,16 +61,14 @@ import { useI18n }                   from 'vue-i18n';
 import {
   IonPage,
   IonContent,
-  IonCard,
-  IonCardHeader,
-  IonThumbnail,
-  IonIcon,
   IonRefresher,
   IonRefresherContent,
   IonButton,
+  IonIcon,
   alertController,
 }                                    from '@ionic/vue';
 
+import StaffCard            from '@/components/staff/cards/StaffCard';
 import Modal                from '@/components/Modal';
 import CreateEditStaffModal from '@/components/staff/modals/CreateEditStaffModal';
 
@@ -106,13 +86,11 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
-    IonCard,
-    IonCardHeader,
-    IonThumbnail,
-    IonIcon,
     IonRefresher,
     IonRefresherContent,
     IonButton,
+    IonIcon,
+    StaffCard,
     Modal,
     CreateEditStaffModal,
   },
@@ -143,6 +121,7 @@ export default defineComponent({
     };
     const deleteMember = async(member, event = null) => {
       event?.stopPropagation();
+
       const alert = await alertController
           .create({
             header: t('staff.alertRemoveStaffHeader'),
@@ -210,26 +189,6 @@ export default defineComponent({
 ion-content {
   --background: var(--show-paint);
   background: var(--show-paint);
-}
-
-ion-card {
-  box-shadow: #000 0 2px 4px;
-  --background: var(--staff-card-background);
-}
-
-ion-card-subtitle {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  color: var(--primary-text);
-  font-size: 12px;
-}
-
-ion-col {
-  --ion-grid-column-padding: 0;
-}
-
-h3 {
-  letter-spacing: 0 !important;
 }
 
 #editSection {

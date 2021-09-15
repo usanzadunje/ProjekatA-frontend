@@ -17,7 +17,7 @@
 
     <ion-content>
       <div class="px-4 pt-4">
-        <EditForm :clearInputs="clearInputs"/>
+        <EditForm :clear-inputs="clearInputs"/>
       </div>
     </ion-content>
   </ion-page>

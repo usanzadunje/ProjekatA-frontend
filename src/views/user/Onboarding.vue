@@ -3,13 +3,13 @@
     <ion-content>
       <ion-slides :options="slideOpts" ref="slides">
         <ion-slide>
-          <RegistrationSuccess @nextSlide="slideNext"/>
+          <RegistrationSuccess @next-slide="slideNext"/>
         </ion-slide>
         <ion-slide>
-          <SearchingExample @nextSlide="slideNext"/>
+          <SearchingExample @next-slide="slideNext"/>
         </ion-slide>
         <ion-slide>
-          <CafePreviewExample @nextSlide="slideNext"/>
+          <CafePreviewExample @next-slide="slideNext"/>
         </ion-slide>
         <ion-slide>
           <ActivatingNotificationExample/>

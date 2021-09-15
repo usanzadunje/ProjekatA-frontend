@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <div class="wrap">
-        <EditForm :clearInputs="clearInputs"/>
+        <EditForm :clear-inputs="clearInputs"/>
       </div>
     </ion-content>
   </ion-page>

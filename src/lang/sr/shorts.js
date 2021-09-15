@@ -102,5 +102,7 @@ export default {
     "owner.updatedStaff": "Uspesno ste izmenili podatke zaposlenog!",
     "owner.createStaff": "Kreirajte novog zaposlenog",
     "owner.createdStaff": "Uspesno ste kreirali novog zaposlenog!",
+    "active": "Aktivan",
+    "inactive": "Neaktivan",
 };
 

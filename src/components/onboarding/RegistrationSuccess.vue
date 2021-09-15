@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent }    from 'vue';
 import { IonButton, IonIcon } from '@ionic/vue';
 
 import { arrowForward } from 'ionicons/icons';
@@ -33,6 +33,7 @@ export default defineComponent({
     IonButton,
     IonIcon,
   },
+  emits: ['nextSlide'],
   setup() {
     return {
       /* Icons */

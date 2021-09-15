@@ -1,11 +1,13 @@
 import CafeService  from '@/services/CafeService';
 import OwnerService from '@/services/OwnerService';
+import StaffService from '@/services/StaffService';
 
 export const namespaced = true;
 
 export const state = {
     place: null,
     availabilityRatio: '0/0',
+    active: false,
 };
 
 export const mutations = {
@@ -14,6 +16,9 @@ export const mutations = {
     },
     SET_AVAILABILITY_RATIO(state, value) {
         state.availabilityRatio = value;
+    },
+    SET_ACTIVITY(state, value) {
+        state.active = value;
     },
 };
 
@@ -29,6 +34,14 @@ export const actions = {
 
         commit('SET_PLACE_INFO', place);
     },
+
+    async toggleActivity({ commit }, value) {
+        const payload = {
+            active: value,
+        };
+        await StaffService.toggleActivity(payload);
+        commit('SET_ACTIVITY', value);
+    },
 };
 
 export const getters = {
@@ -37,5 +50,8 @@ export const getters = {
     },
     availabilityRatio: (state) => {
         return state.availabilityRatio;
+    },
+    active: (state) => {
+        return state.active;
     },
 };

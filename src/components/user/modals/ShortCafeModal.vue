@@ -54,8 +54,8 @@
   >
     <CafeSubscriptionModal
         :cafe="{'id': cafe.id, 'name': cafe.name}"
-        @dismissSubscriptionModal="openModal(false);"
-        @userToggledSubscription="$emit('userToggledSubscription')"
+        @dismiss-subscription-modal="openModal(false);"
+        @user-toggled-subscription="$emit('userToggledSubscription')"
     />
   </Modal>
 </template>

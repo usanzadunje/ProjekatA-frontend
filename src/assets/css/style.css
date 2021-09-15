@@ -258,6 +258,9 @@ ion-toggle {
     border-radius: 11px !important;
 }
 
+ion-toggle.dark-toggle-checked {
+    --background-checked: #1F1C2B;
+}
 
 /*
     START Android specific styles

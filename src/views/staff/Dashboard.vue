@@ -16,9 +16,19 @@
           justify-start md:justify-around
           `"
         >
+          <div
+              v-if="this.$store.getters['auth/isOwner']"
+              class="mt-10"
+          >
+            <h1 class="text-center uppercase secondary-heading">Currently active staff</h1>
+
+            <ActiveStaffMembers/>
+          </div>
+
           <AvailabilityToggleButtons class="md:self-center md:w-1/2"/>
 
           <PlaceAvailabilityChart/>
+
         </div>
       </div>
     </ion-content>
@@ -35,6 +45,7 @@ import {
   IonRefresherContent,
 }                                    from '@ionic/vue';
 
+import ActiveStaffMembers        from '@/components/staff/ActiveStaffMembers';
 import PlaceAvailabilityChart    from '@/components/staff/charts/PlaceAvailabilityChart';
 import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
 
@@ -47,6 +58,7 @@ export default defineComponent({
     IonContent,
     IonRefresher,
     IonRefresherContent,
+    ActiveStaffMembers,
     AvailabilityToggleButtons,
     PlaceAvailabilityChart,
   },
@@ -65,6 +77,10 @@ export default defineComponent({
     /* Event handlers */
     const refresh = async(event) => {
       await getPlaceAvailability();
+
+      if(isOwner.value) {
+        await store.dispatch('owner/getStaffInfo');
+      }
 
       event.target.complete();
     };

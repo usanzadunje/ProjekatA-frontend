@@ -9,9 +9,9 @@
       </ion-refresher>
 
       <UserHeader
-          :mainHeading="$t('findAvailablePlace')"
-          :notificationIcon="notificationsOutline"
-          @searchEnterPressed="switchToSearch"
+          :main-heading="$t('findAvailablePlace')"
+          :notification-icon="notificationsOutline"
+          @search-enter-pressed="switchToSearch"
       />
 
 
@@ -22,14 +22,14 @@
           <ion-slide>
             <SlidingCards
                 :cafes="cafes.closestToUser?.slice(0, 2)"
-                @openCafeModal="openModal(true, $event)"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
                 :cafes="cafes.closestToUser?.slice(2, 4)"
-                @openCafeModal="openModal(true, $event)"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
@@ -45,14 +45,14 @@
           <ion-slide>
             <SlidingCards
                 :cafes="cafes.currentlyAvailable?.slice(0, 2)"
-                @openCafeModal="openModal(true, $event)"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
                 :cafes="cafes.currentlyAvailable?.slice(2, 4)"
-                @openCafeModal="openModal(true, $event)"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
@@ -63,14 +63,14 @@
           <ion-slide>
             <SlidingCards
                 :cafes="cafes.haveFood?.slice(0, 2)"
-                @openCafeModal="openModal(true, $event)"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
                 :cafes="cafes.haveFood?.slice(2, 4)"
-                @openCafeModal="openModal(true, $event)"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
@@ -90,8 +90,8 @@
       >
         <ShortCafeModal
             :cafe="modalData"
-            @dismissShortCafeModal="openModal(false)"
-            @subModalOpened="hideModal('custom-modal')"
+            @dismiss-short-cafe-modal="openModal(false)"
+            @sub-modal-opened="hideModal('custom-modal')"
         />
       </Modal>
     </ion-content>

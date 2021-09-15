@@ -7,6 +7,7 @@
 
       <div class="flex items-center">
         <ion-toggle
+            class="dark-toggle-checked"
             :checked="isDarkModeOn"
             @ionChange="toggleDarkMode($event)"
             mode="md"
@@ -111,7 +112,4 @@ export default defineComponent({
 
 </script>
 <style scoped>
-ion-toggle {
-  --background-checked: #1F1C2B;
-}
 </style>

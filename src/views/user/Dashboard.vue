@@ -12,10 +12,10 @@
       <UserProfileHeader/>
 
 
-      <SlidingFilter @sortHasChanged="sortHasChanged" class="mt-2"/>
+      <SlidingFilter @sort-has-changed="sortHasChanged" class="mt-2"/>
 
       <div class="px-4 pb-4 mt-3">
-        <FilterCategoryHeading title="Kafici koje pratim" class="mb-2"/>
+        <FilterCategoryHeading :title="$t('subscribedPlaces')" class="mb-2"/>
 
         <div v-if="!showSkeleton">
           <ion-item-sliding v-for="cafe in cafesUserSubscribedTo" :key="cafe.id" class="ion-no-padding mb-5">
@@ -53,9 +53,9 @@
       >
         <ShortCafeModal
             :cafe="modalData"
-            @dismissShortCafeModal="openModal(false)"
-            @subModalOpened="hideModal('custom-modal')"
-            @userToggledSubscription="getSubscriptions"
+            @dismiss-short-cafe-modal="openModal(false)"
+            @sub-modal-opened="hideModal('custom-modal')"
+            @user-toggled-subscription="getSubscriptions"
         />
       </Modal>
     </ion-content>
@@ -65,7 +65,7 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import { useRoute }                        from 'vue-router';
-import { mapGetters, useStore }            from 'vuex';
+import { useStore }                        from 'vuex';
 import { useI18n }                         from 'vue-i18n';
 import {
   IonContent,
@@ -84,10 +84,10 @@ import {
 import UserProfileHeader     from '@/components/user/headers/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import CafeCard         from '@/components/place/CafeCard';
-import SkeletonCafeCard from '@/components/place/SkeletonCafeCard';
-import Modal            from '@/components/Modal';
-import ShortCafeModal from '@/components/user/modals/ShortCafeModal';
+import CafeCard              from '@/components/place/CafeCard';
+import SkeletonCafeCard      from '@/components/place/SkeletonCafeCard';
+import Modal                 from '@/components/Modal';
+import ShortCafeModal        from '@/components/user/modals/ShortCafeModal';
 
 import CafeService from '@/services/CafeService';
 
@@ -121,9 +121,6 @@ export default defineComponent({
     Modal,
     ShortCafeModal,
     SkeletonCafeCard,
-  },
-  computed: {
-    ...mapGetters('auth', ['authUser']),
   },
   setup() {
     /* Global properties */
@@ -300,7 +297,4 @@ ion-item-option:active {
   --background: #E01B43;
 }
 
-/*ion-content {*/
-/*  --padding-top: 0;*/
-/*}*/
 </style>
