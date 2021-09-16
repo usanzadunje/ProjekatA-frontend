@@ -36,7 +36,7 @@
       <ion-button
           class="flex-shrink uppercase button-subscribe modal-button-border"
           @click="openModal(true);$emit('subModalOpened');"
-          :disabled="isSubDisabled"
+          :disabled="isSubButtonDisabled"
       >
         <ion-icon slot="start"
                   :icon="isUserSubscribed ? notifications : notificationsOutline"
@@ -119,13 +119,13 @@ export default defineComponent({
     };
     const isUserSubscribed = ref(false);
     const cafe = toRef(props, 'cafe');
-    const isSubDisabled = ref(true);
+    const isSubButtonDisabled = ref(true);
 
     /* Composables */
     const { isModalOpen, openModal } = useModal();
 
     /* Lifecycle hooks */
-    isSubDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
+    isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
     /* Checking if user is subscribed to this cafe */
     if(store.getters['auth/loggedIn']) {
       CafeService.isUserSubscribed(cafe.value.id)
@@ -159,7 +159,7 @@ export default defineComponent({
     return {
       /* Component properties */
       slideOpts,
-      isSubDisabled,
+      isSubButtonDisabled,
       isModalOpen,
       isUserSubscribed,
 

@@ -174,7 +174,7 @@ export default defineComponent({
       isSubButtonDisabled.value = true;
 
       if(indefiniteTimerActive.value) {
-        notificationTime.value = 5;
+        notificationTime.value = 15;
       }
 
       if(isUserSubscribed.value) {

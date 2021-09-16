@@ -19,7 +19,14 @@
 
         <div v-if="!showSkeleton">
           <ion-item-sliding v-for="cafe in cafesUserSubscribedTo" :key="cafe.id" class="ion-no-padding mb-5">
-            <ion-item class="ion-no-padding ion-no-margin">
+            <ion-item class="ion-no-padding ion-no-margin relative">
+              <Timer
+                  id="timer"
+                  :start="cafe.subscription_expires_in"
+                  :key="cafe.subscription_expires_in"
+                  class="absolute top-2 right-4 text-sm"
+                  @subscription-expired="subscriptionExpired(cafe.id)"
+              />
               <CafeCard
                   class="w-full"
                   :cafe="cafe"
@@ -84,6 +91,7 @@ import {
 import UserProfileHeader     from '@/components/user/headers/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
+import Timer                 from '@/components/Timer';
 import CafeCard              from '@/components/place/CafeCard';
 import SkeletonCafeCard      from '@/components/place/SkeletonCafeCard';
 import Modal                 from '@/components/Modal';
@@ -117,6 +125,7 @@ export default defineComponent({
     UserProfileHeader,
     SlidingFilter,
     FilterCategoryHeading,
+    Timer,
     CafeCard,
     Modal,
     ShortCafeModal,
@@ -203,7 +212,7 @@ export default defineComponent({
                 text: t('agree'),
                 handler: () => {
                   unsubscribe(cafeId);
-                  showSuccessToast(t('successSubscribe'));
+                  showSuccessToast(t('successUnsubscribe'));
                 },
               },
             ],
@@ -243,7 +252,9 @@ export default defineComponent({
         }
       });
     };
-
+    const subscriptionExpired = (placeId) => {
+      cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter(place => place.id !== placeId);
+    };
 
     return {
       /* Component properties */
@@ -261,6 +272,7 @@ export default defineComponent({
       hideModal,
       refresh,
       unsubscribeSwiping,
+      subscriptionExpired,
 
       /* Icons */
       trashOutline,
@@ -297,4 +309,7 @@ ion-item-option:active {
   --background: #E01B43;
 }
 
+#timer {
+  color: var(--primary-heading);
+}
 </style>

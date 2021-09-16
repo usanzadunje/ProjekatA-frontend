@@ -34,9 +34,6 @@ export default defineComponent({
       return store.getters['owner/staff'].filter(staff => staff.active);
     });
 
-    console.log(activeStaff);
-
-
     return {
       activeStaff,
     };

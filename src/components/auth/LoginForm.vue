@@ -22,7 +22,7 @@
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('login') || errorNames.hasOwnProperty('password') }"
+        :class="errorNames.hasOwnProperty('login') || errorNames.hasOwnProperty('password') ? 'error-border' : ''"
     >
       <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input

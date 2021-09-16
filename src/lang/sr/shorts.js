@@ -104,5 +104,6 @@ export default {
     "owner.createdStaff": "Uspesno ste kreirali novog zaposlenog!",
     "active": "Aktivan",
     "inactive": "Neaktivan",
+    "timeLeft": "{time} minut | {time} minuta",
 };
 

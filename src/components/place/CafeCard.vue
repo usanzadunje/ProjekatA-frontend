@@ -1,12 +1,12 @@
 <template>
   <div class="background-white cafe-card-border-radius">
-    <div class="p-4 flex items-center">
+    <div class="p-4 flex justify-start items-center">
       <img
           :src="`${backendStorageURL}/cafe/1_2cafe.png`"
           alt=""
           class="cafe-card-image"
       >
-      <div class="ml-3.5">
+      <div class="ml-3.5 flex flex-col items-start">
         <h2 class="cafe-card-name">{{ cafe.name }}</h2>
         <p class="cafe-card-fade-text">Kafic, hrana, basta ...</p>
       </div>

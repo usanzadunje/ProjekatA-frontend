@@ -104,4 +104,5 @@ export default {
     "owner.createdStaff": "Successfully created new staff member!",
     "active": "Active",
     "inactive": "Inactive",
+    "timeLeft": "{time} minute | {time} minutes",
 };
