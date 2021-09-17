@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
-import { useStore }                                     from 'vuex';
-import { useI18n }                                      from 'vue-i18n';
-import { loadingController }                            from '@ionic/vue';
+import { defineComponent, onMounted, onBeforeUnmount, ref } from 'vue';
+import { useStore }                                         from 'vuex';
+import { useI18n }                                          from 'vue-i18n';
+import { loadingController }                                from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
 
@@ -114,7 +114,7 @@ export default defineComponent({
 
       await loading.dismiss();
     });
-    onUnmounted(() => {
+    onBeforeUnmount(() => {
       CapacitorGoogleMaps.close();
     });
 

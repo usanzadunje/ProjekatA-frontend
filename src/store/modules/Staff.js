@@ -35,6 +35,12 @@ export const actions = {
         commit('SET_PLACE_INFO', place);
     },
 
+    async updatePlaceAvailability({ commit }) {
+        const response = await StaffService.tableAvailability();
+
+        commit('SET_AVAILABILITY_RATIO', response.data?.availability_ratio ?? '0/0');
+    },
+
     async toggleActivity({ commit }, value) {
         const payload = {
             active: value,

@@ -24,7 +24,7 @@
                   id="timer"
                   :start="cafe.subscription_expires_in"
                   :key="cafe.subscription_expires_in"
-                  class="absolute top-2 right-4 text-sm"
+                  class="absolute top-2 right-4 text-sm font-bold"
                   @subscription-expired="subscriptionExpired(cafe.id)"
               />
               <CafeCard

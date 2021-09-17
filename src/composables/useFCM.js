@@ -1,6 +1,7 @@
-import { useRouter } from 'vue-router';
-import { Capacitor } from '@capacitor/core';
+// import { useRouter } from 'vue-router';
 import { useI18n }   from 'vue-i18n';
+import { useStore }  from 'vuex';
+import { Capacitor } from '@capacitor/core';
 
 import AuthService from '@/services/AuthService';
 
@@ -12,8 +13,11 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 
 export function useFCM() {
     /* Global properties */
-    const router = useRouter();
+    // const router = useRouter();
+    const store = useStore();
     const { t } = useI18n();
+
+    /* Component properties */
 
     /* Methods */
     const { showErrorToast } = useToastNotifications();
@@ -60,7 +64,17 @@ export function useFCM() {
         PushNotifications.addListener(
             'pushNotificationReceived',
             async(notification) => {
-                alert(JSON.stringify(notification));
+                if(
+                    notification.title === 'Changed' &&
+                    (store.getters['auth/isStaff'] || store.getters['auth/isOwner'])
+                ) {
+                    await store.dispatch('staff/updatePlaceAvailability');
+                }
+                await LocalNotifications.schedule({
+                    title: notification.title,
+                    body: notification.body,
+                });
+                alert('received');
             },
         );
         PushNotifications.addListener(
@@ -79,9 +93,7 @@ export function useFCM() {
         LocalNotifications.addListener(
             'localNotificationActionPerformed',
             () => {
-                router.push({
-                    name: 'cafes',
-                });
+                alert('Action performed');
             },
         );
     };
@@ -110,7 +122,10 @@ export function useFCM() {
         }
     };
 
+
     return {
+        /* Component properties */
+
         /* Methods */
         initPush,
         registerPush,

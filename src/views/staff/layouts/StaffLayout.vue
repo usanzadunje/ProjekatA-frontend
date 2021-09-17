@@ -27,6 +27,7 @@ import StaffHeader from '@/components/staff/StaffHeader';
 import AdminMenu   from '@/components/staff/AdminMenu';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useFCM }                from '@/composables/useFCM';
 
 
 export default defineComponent({
@@ -46,6 +47,7 @@ export default defineComponent({
     /* Composables */
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
+    const { registerToken } = useFCM();
 
     /* Lifecycle hooks */
     (async() => {
@@ -55,6 +57,8 @@ export default defineComponent({
         if(store.getters['auth/isOwner']) {
           await store.dispatch('owner/getStaffInfo');
         }
+
+        await registerToken();
       }catch(e) {
         showErrorToast(
             null,

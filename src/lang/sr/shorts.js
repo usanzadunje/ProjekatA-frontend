@@ -51,7 +51,7 @@ export default {
     "refresherText": "Učitava se...",
     "filter": "Filter | Filteri",
     "searchResults": "Rezultati pretrage",
-    "undefined": "Neodređeno",
+    "indefinitely": "Neodređeno",
     "setUsername": "Podesi korisnicko ime",
     "subscribedPlaces": "Mesta koja pratim",
     "findAvailablePlace": "Pronađi slobodno mesto",

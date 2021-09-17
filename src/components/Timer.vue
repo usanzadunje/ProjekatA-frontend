@@ -1,6 +1,7 @@
 <template>
   <div>
-    <span>{{ $t('timeLeft', { time: timeLeft }, timeLeft) }}</span>
+    <span v-if="timeLeft === -1" class="lowercase">{{ $t('indefinitely') }}</span>
+    <span v-else>{{ $t('timeLeft', { time: timeLeft }, timeLeft) }}</span>
   </div>
 </template>
 <script>
@@ -18,7 +19,7 @@ export default defineComponent({
   },
   emits: ['subscriptionExpired'],
   setup(props, { emit }) {
-    let timeLeft = ref(props.start);
+    let timeLeft = ref(props.start === 0 ? -1 : props.start + 1);
 
     watch(timeLeft, () => {
       if(timeLeft.value > 0) {

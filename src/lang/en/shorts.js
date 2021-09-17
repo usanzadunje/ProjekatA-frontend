@@ -51,7 +51,7 @@ export default {
     "refresherText": "Refreshing...",
     "filter": "Filter | Filters",
     "searchResults": "Search results",
-    "undefined": "Undefined",
+    "indefinitely": "Indefinitely",
     "setUsername": "Set username",
     "subscribedPlaces": "Places i am subscribed to",
     "findAvailablePlace": "Find available place",

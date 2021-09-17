@@ -69,7 +69,6 @@ export default defineComponent({
     /* Composables */
     const { getPlaceAvailability } = usePlaceManipulation();
 
-
     /* Computed properties */
     const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
     const isOwner = computed(() => store.getters['auth/isOwner']);

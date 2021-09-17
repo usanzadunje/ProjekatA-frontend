@@ -17,7 +17,7 @@
           mode="md"
           :disabled="isUserSubscribed"
       ></ion-toggle>
-      <ion-label class="margin-left-1 submodal-fade-text">{{ $t('undefined') }}</ion-label>
+      <ion-label class="margin-left-1 submodal-fade-text">{{ $t('indefinitely') }}</ion-label>
     </ion-item>
     <ion-item class="ion-no-padding">
       <ion-range
