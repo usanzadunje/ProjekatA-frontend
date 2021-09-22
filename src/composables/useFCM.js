@@ -1,4 +1,4 @@
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useI18n }   from 'vue-i18n';
 import { useStore }  from 'vuex';
 import { Capacitor } from '@capacitor/core';
@@ -7,20 +7,20 @@ import AuthService from '@/services/AuthService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import { PushNotifications }  from '@capacitor/push-notifications';
-import { LocalNotifications } from '@capacitor/local-notifications';
+import { PushNotifications } from '@capacitor/push-notifications';
 
+import { Haptics } from '@capacitor/haptics';
 
 export function useFCM() {
     /* Global properties */
-    // const router = useRouter();
+    const router = useRouter();
     const store = useStore();
     const { t } = useI18n();
 
     /* Component properties */
 
     /* Methods */
-    const { showErrorToast } = useToastNotifications();
+    const { showSuccessToast, showErrorToast } = useToastNotifications();
 
     /* Methods */
     const initPush = async() => {
@@ -64,36 +64,19 @@ export function useFCM() {
         PushNotifications.addListener(
             'pushNotificationReceived',
             async(notification) => {
-                if(
-                    notification.title === 'Changed' &&
-                    (store.getters['auth/isStaff'] || store.getters['auth/isOwner'])
-                ) {
-                    await store.dispatch('staff/updatePlaceAvailability');
+                if(Object.keys(notification.data).length === 0 || notification.data.type === 'notification') {
+                    await handleNotification(notification);
+                }else {
+                    await handleDataNotification(notification);
                 }
-                await LocalNotifications.schedule({
-                    title: notification.title,
-                    body: notification.body,
-                });
-                alert('received');
             },
         );
         PushNotifications.addListener(
             'pushNotificationActionPerformed',
-            (notification) => {
-                alert(notification);
-                // let data = notification.notification.data;
-                // router.push({
-                //     name: 'cafe',
-                //     params: {
-                //         id: data.cafe_id
-                //     }
-                // });
-            },
-        );
-        LocalNotifications.addListener(
-            'localNotificationActionPerformed',
             () => {
-                alert('Action performed');
+                router.push({
+                    name: 'dashboard',
+                });
             },
         );
     };
@@ -121,7 +104,18 @@ export function useFCM() {
             showErrorToast(error);
         }
     };
-
+    const handleNotification = async(notification) => {
+        await Haptics.vibrate({ duration: 250 });
+        showSuccessToast(t('freeSpotNotification', { place: notification.data?.place_name }));
+    };
+    const handleDataNotification = async(notification) => {
+        if(
+            notification.data.type === 'availabilityChanged' &&
+            (store.getters['auth/isStaff'] || store.getters['auth/isOwner'])
+        ) {
+            await store.dispatch('staff/updatePlaceAvailability');
+        }
+    };
 
     return {
         /* Component properties */

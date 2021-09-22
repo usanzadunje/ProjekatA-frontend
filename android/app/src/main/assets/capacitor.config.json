@@ -15,11 +15,6 @@
 				"alert"
 			]
 		},
-		"LocalNotifications": {
-			"smallIcon": "ic_table_chart",
-			"iconColor": "#9E0300",
-			"sound": "sound.wav"
-		},
 		"GoogleAuth": {
 			"scopes": [
 				"profile",

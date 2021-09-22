@@ -29,6 +29,8 @@ import AdminMenu   from '@/components/staff/AdminMenu';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useFCM }                from '@/composables/useFCM';
 
+import { Capacitor }             from '@capacitor/core';
+
 
 export default defineComponent({
   name: 'StaffLayout',
@@ -57,8 +59,9 @@ export default defineComponent({
         if(store.getters['auth/isOwner']) {
           await store.dispatch('owner/getStaffInfo');
         }
-
-        await registerToken();
+        if(Capacitor.isNativePlatform()) {
+          await registerToken();
+        }
       }catch(e) {
         showErrorToast(
             null,

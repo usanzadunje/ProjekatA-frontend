@@ -12,4 +12,5 @@ export default {
     "notificationModal1": "Obavesti me ukoliko se oslobodi sto u objektu ",
     "notificationModal2": " u narednih : ",
     "showPlace": "Kafić, hrana, basta. Nastavi dalje kako bi video šta vam naša aplikacija nudi.",
+    "freeSpotNotification": "Doslo je do oslobadjanja mesta u {place}.",
 };

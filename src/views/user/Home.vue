@@ -14,10 +14,8 @@
           @search-enter-pressed="switchToSearch"
       />
 
-
       <div class="ion-padding">
-        <FilterCategoryHeading class="mb-2"
-                               :title="$t('closest')"/>
+        <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
           <ion-slide>
             <SlidingCards

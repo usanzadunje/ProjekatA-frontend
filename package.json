@@ -1,5 +1,5 @@
 {
-  "name": "ProjekatA",
+  "name": "projekata",
   "version": "0.0.1",
   "private": true,
   "description": "Always see where is free to sit.",
@@ -24,7 +24,6 @@
     "@capacitor/haptics": "^1.0.3",
     "@capacitor/ios": "3.2.2",
     "@capacitor/keyboard": "^1.0.3",
-    "@capacitor/local-notifications": "^1.0.5",
     "@capacitor/push-notifications": "^1.0.4",
     "@capacitor/status-bar": "^1.0.3",
     "@codetrix-studio/capacitor-google-auth": "^3.0.2",
@@ -42,12 +41,13 @@
     "cordova-plugin-request-location-accuracy": "^2.3.0",
     "core-js": "^3.17.2",
     "ionicons": "^5.5.3",
-    "sass-loader": "^11.0.1",
+    "sass-loader": "^10.1.1",
     "vue": "^3.2.8",
     "vue-i18n": "^9.1.0",
     "vue-router": "^4.0.11",
     "vuex": "^4.0.2",
-    "vuex-persistedstate": "^4.0.0"
+    "vuex-persistedstate": "^4.0.0",
+    "webpack": "^4.45.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^3.2.2",

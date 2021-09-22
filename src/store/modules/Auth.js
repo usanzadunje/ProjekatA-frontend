@@ -51,7 +51,7 @@ export const actions = {
 
         dispatch("getAuthUser");
     },
-    async logout({ commit, dispatch }) {
+    async logout({ commit, getters, dispatch }) {
         let loading = null;
         try {
             loading = await loadingController
@@ -62,6 +62,12 @@ export const actions = {
                     mode: 'ios',
                 });
             await loading.present();
+
+            if(getters.isOwner || getters.isStaff) {
+                await dispatch('staff/toggleActivity', false, { root: true });
+                await AuthService.removeFcmToken();
+            }
+
             await AuthService.logout();
         }catch(error) {
             alert(i18n.global.t('forceLogout'));
