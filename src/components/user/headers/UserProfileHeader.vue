@@ -16,7 +16,7 @@
           <div>
             <img
                 ref="avatarDisplay"
-                :src="authUser?.avatar"
+                :src="authUser?.avatar + '?' + new Date().getTime()"
                 :alt="`Profile picture of user ${authUser?.fname} ${authUser?.lname}`"
                 class="user-profile-picture"
             >
@@ -39,15 +39,14 @@
 </template>
 
 <script>
-import { computed, defineComponent, watch, ref } from 'vue';
-import { useRoute, useRouter }                   from 'vue-router';
-import { useStore }                              from 'vuex';
+import { computed, defineComponent } from 'vue';
+import { useStore }                  from 'vuex';
 import {
   IonHeader,
   IonIcon,
   IonToolbar,
   IonButton,
-}                                                from '@ionic/vue';
+}                                    from '@ionic/vue';
 
 import SettingsPopover from '@/components/user/popovers/SettingsPopover';
 
@@ -68,9 +67,7 @@ export default defineComponent({
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
-    const route = useRoute();
-    const router = useRouter();
-    //Authenticated user
+    //Authenticated users
     const authUser = computed(() => {
       return store.getters['auth/authUser'];
     });
@@ -78,7 +75,6 @@ export default defineComponent({
     /* Component properties */
     const { openPopover } = usePopover();
     /* Component properties */
-    const avatarDisplay = ref(null);
 
     /* Event handlers */
     const searchInputChanged = (e) => {
@@ -88,20 +84,12 @@ export default defineComponent({
       await openPopover(SettingsPopover, event, 'settings-popover');
     };
 
-    /* Watchers */
-    watch(route, () => {
-      if(route.query.refreshAvatar) {
-        avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
-        router.replace();
-      }
-    });
 
     return {
       /* Global properties */
       authUser,
 
       /* Component properties */
-      avatarDisplay,
 
       /* Event handlers */
       searchInputChanged,

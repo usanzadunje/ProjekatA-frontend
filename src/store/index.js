@@ -25,8 +25,7 @@ export default createStore({
         createPersistedState({
             storage: window.localStorage,
             paths: [
-                'auth.user',
-                'auth.role',
+                'auth',
                 'user',
                 'global',
                 'permission',

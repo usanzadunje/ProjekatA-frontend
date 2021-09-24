@@ -1,8 +1,8 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <div class="wrap h-full">
-        <EditForm :clear-inputs="clearInputs"/>
+      <div class="px-4">
+        <EditPlaceForm :reset-inputs="resetInputs"/>
       </div>
     </ion-content>
   </ion-page>
@@ -12,37 +12,30 @@
 import { defineComponent, ref } from 'vue';
 import {
   IonPage,
-  IonContent,
-  onIonViewWillEnter,
-  onIonViewWillLeave,
+  IonContent, onIonViewWillLeave,
 }                               from '@ionic/vue';
 
-import EditForm from '@/components/auth/EditForm';
-
+import EditPlaceForm from '@/components/owner/forms/EditPlaceForm';
 
 export default defineComponent({
-  name: "Edit",
+  name: "PlaceInfo",
   components: {
     IonPage,
     IonContent,
-    EditForm,
+    EditPlaceForm,
   },
   setup() {
     /* Component properties */
-    const clearInputs = ref(false);
+    const resetInputs = ref(false);
 
     /* Lifecycle hooks */
-    onIonViewWillEnter(() => {
-      clearInputs.value = false;
-
-    });
     onIonViewWillLeave(() => {
-      clearInputs.value = true;
+      resetInputs.value = true;
     });
 
     return {
       /* Component properties */
-      clearInputs,
+      resetInputs,
 
       /* Event handlers */
     };
@@ -54,4 +47,5 @@ export default defineComponent({
 ion-content {
   --background: var(--show-paint);
 }
+
 </style>

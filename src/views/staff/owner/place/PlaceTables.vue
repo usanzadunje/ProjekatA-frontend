@@ -1,10 +1,8 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
-      <div class="wrap">
-        <h1 class="secondary-heading text-center uppercase">{{ $t('owner.place') }}</h1>
-
-        <EditPlaceForm class="mt-10" :reset-inputs="resetInputs"/>
+    <ion-content :fullscreen="true" scrollY="false">
+      <div class="px-4">
+        <h1>PLACE TABLES</h1>
       </div>
     </ion-content>
   </ion-page>
@@ -17,14 +15,11 @@ import {
   IonContent, onIonViewWillLeave,
 }                               from '@ionic/vue';
 
-import EditPlaceForm from '@/components/owner/forms/EditPlaceForm';
-
 export default defineComponent({
-  name: "Dashboard",
+  name: "PlaceTables",
   components: {
     IonPage,
     IonContent,
-    EditPlaceForm,
   },
   setup() {
     /* Component properties */

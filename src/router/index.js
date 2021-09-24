@@ -13,6 +13,7 @@ import owner                   from '@/middleware/owner';
 /* Layouts */
 import UserLayout              from '@/views/user/layouts/UserLayout';
 import StaffLayout             from '@/views/staff/layouts/StaffLayout';
+import OwnerPlaceLayout        from '@/views/staff/layouts/OwnerPlaceLayout';
 
 const routes = [
     /* =============================================
@@ -124,7 +125,7 @@ const routes = [
     ============================================= */
 
     /* =============================================
-        Start routes protected from end-user
+        Start routes protected from end-users
     ============================================= */
 
     {
@@ -155,15 +156,32 @@ const routes = [
             },
             {
                 path: "/owner/place",
+                component: OwnerPlaceLayout,
                 name: "owner.place",
                 meta: { middleware: [owner] },
-                component: () =>
-                    import(/* webpackChunkName: "OwnerPlaceInfo" */ "@/views/staff/owner/PlaceInfo"),
+                redirect: '/owner/place/info',
+                children: [
+                    {
+                        path: "info",
+                        name: "owner.place.info",
+                        component: () => import(/* webpackChunkName: "PlaceInfo" */ "@/views/staff/owner/place/PlaceInfo"),
+                    },
+                    {
+                        path: "tables",
+                        name: "owner.place.tables",
+                        component: () => import(/* webpackChunkName: "PlaceTables" */ "@/views/staff/owner/place/PlaceTables"),
+                    },
+                    {
+                        path: "menu",
+                        name: "owner.place.menu",
+                        component: () => import(/* webpackChunkName: "PlaceMenu" */ "@/views/staff/owner/place/PlaceMenu"),
+                    },
+                ],
             },
         ],
     },
     /* =============================================
-        End routes protected from end-user
+        End routes protected from end-users
     ============================================= */
 
     /* =============================================
@@ -216,7 +234,6 @@ router.beforeEach((to, from, next) => {
         next: middlewarePipeline(context, middleware, 1),
     });
 });
-
 
 
 export default router;

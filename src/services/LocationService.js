@@ -45,7 +45,7 @@ const LocationService = {
                                               }
                                           },
                                           () => {
-                                              // Show alert if user click on 'No Thanks'
+                                              // Show alert if users click on 'No Thanks'
                                               alert('Location features might not work correctly.')
                                           },
                                       );

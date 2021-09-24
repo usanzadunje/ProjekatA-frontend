@@ -138,7 +138,7 @@ export default defineComponent({
     const route = useRoute();
 
     /* Component properties */
-    // Cafes user is subscribed to
+    // Cafes users is subscribed to
     const cafesUserSubscribedTo = ref([]);
     const sortBy = ref('distance');
     const showSkeleton = ref(true);
@@ -156,7 +156,7 @@ export default defineComponent({
     });
     onIonViewDidEnter(async() => {
       openModal(!!route.query.openModal);
-      // Everytime user comes to the page give him view of fresh cafes he has subscribed to
+      // Everytime users comes to the page give him view of fresh cafes he has subscribed to
       await getSubscriptions();
       showSkeleton.value = false;
     });

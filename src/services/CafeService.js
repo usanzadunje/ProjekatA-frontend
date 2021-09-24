@@ -39,19 +39,19 @@ export default {
             `/cafes/${id}`,
         );
     },
-    // Subscribing user to specific cafe
+    // Subscribing users to specific cafe
     subscribe(cafeId, notificationTime = null) {
         return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime || ''}`);
     },
-    // Unsubscribing user to specific cafe
+    // Unsubscribing users to specific cafe
     unsubscribe(cafeId) {
         return API.apiClient.post(`/user/unsubscribe/cafe/${cafeId}`);
     },
-    // Checking whether user is subscribed to specific cafe
+    // Checking whether users is subscribed to specific cafe
     isUserSubscribed(cafeId) {
         return API.apiClient.post(`/user/subscribed/cafe/${cafeId}`);
     },
-    // Listing all cafes user is subscribed to
+    // Listing all cafes users is subscribed to
     getAllCafesUserSubscribedTo(sortBy = 'default', latitude = 0, longitude = 0) {
         return API.apiClient.get(
             `/user/cafes/subscriptions`,

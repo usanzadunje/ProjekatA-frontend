@@ -27,6 +27,7 @@ export function usePhotos() {
                 resultType: CameraResultType.DataUrl,
                 source: sourceType,
                 quality: 50,
+                saveToGallery: true,
                 promptLabelHeader: t('selectPhoto'),
                 promptLabelCancel: t('cancel'),
                 promptLabelPhoto: t('choose'),

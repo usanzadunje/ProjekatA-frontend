@@ -43,7 +43,7 @@ export function useFCM() {
                 const payload = {
                     fcm_token: token.value,
                 };
-                /* Saving token from FCM into user table */
+                /* Saving token from FCM into users table */
                 try {
                     await AuthService.setFcmToken(payload);
                 }catch(error) {

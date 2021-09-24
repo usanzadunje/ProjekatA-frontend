@@ -1,8 +1,8 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
-      <div class="wrap h-full">
-        <EditForm :clear-inputs="clearInputs"/>
+    <ion-content :fullscreen="true" scrollY="false">
+      <div class="px-4">
+        <h1>PLACE menu</h1>
       </div>
     </ion-content>
   </ion-page>
@@ -12,37 +12,27 @@
 import { defineComponent, ref } from 'vue';
 import {
   IonPage,
-  IonContent,
-  onIonViewWillEnter,
-  onIonViewWillLeave,
+  IonContent, onIonViewWillLeave,
 }                               from '@ionic/vue';
 
-import EditForm from '@/components/auth/EditForm';
-
-
 export default defineComponent({
-  name: "Edit",
+  name: "PlaceMenu",
   components: {
     IonPage,
     IonContent,
-    EditForm,
   },
   setup() {
     /* Component properties */
-    const clearInputs = ref(false);
+    const resetInputs = ref(false);
 
     /* Lifecycle hooks */
-    onIonViewWillEnter(() => {
-      clearInputs.value = false;
-
-    });
     onIonViewWillLeave(() => {
-      clearInputs.value = true;
+      resetInputs.value = true;
     });
 
     return {
       /* Component properties */
-      clearInputs,
+      resetInputs,
 
       /* Event handlers */
     };

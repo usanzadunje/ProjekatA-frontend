@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from 'vue';
-import { useStore }                   from 'vuex';
-import { IonApp, IonRouterOutlet }    from '@ionic/vue';
+import { defineComponent }         from 'vue';
+import { useStore }                from 'vuex';
+import { IonApp, IonRouterOutlet } from '@ionic/vue';
 
 import { useFCM } from '@/composables/useFCM';
 
@@ -26,12 +26,11 @@ export default defineComponent({
     const { initPush } = useFCM();
 
     /* Lifecycle hooks */
-    onMounted(async() => {
+    (async() => {
       await store.dispatch("auth/getAuthUser");
-      await store.dispatch("auth/getToken");
       await store.dispatch("user/getSettings");
       await initPush();
-    });
+    })();
 
     return {};
   },

@@ -1,192 +1,194 @@
 <template>
-  <div class="px-8">
-    <div
-        class="flex justify-center mb-6"
-    >
-      <ion-thumbnail
-          class="user-profile-picture-edit"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('avatar') }"
-          @click="selectImageSource"
+  <div class="px-8 h-full flex flex-col justify-between">
+    <div>
+      <div
+          class="flex justify-center mb-6"
       >
-        <img
-            ref="avatarDisplay"
+        <ion-thumbnail
             class="user-profile-picture-edit"
-            alt="avatar"
-            :src="avatar"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('avatar') }"
+            @click="selectImageSource"
         >
-      </ion-thumbnail>
-    </div>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('fname') }"
-    >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          v-capitalize
-          v-model.lazy="user.fname"
-          @keyup.enter="lnameInput.$el?.setFocus()"
-          type="text"
-          debounce="600"
-          :placeholder="$t('fname')"
-          :autofocus="true"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('lname') }"
-    >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          v-capitalize
-          ref="lnameInput"
-          v-model="user.lname"
-          @keyup.enter="usernameInput.$el?.setFocus()"
-          type="text"
-          debounce="600"
-          :placeholder="$t('lname')"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('username') }"
-    >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          ref="usernameInput"
-          v-model="user.username"
-          @keyup.enter="emailInput.$el?.setFocus()"
-          type="text"
-          debounce="600"
-          :placeholder="$t('username')"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
-    >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          ref="emailInput"
-          v-model="user.email"
-          @keyup.enter="phoneInput.$el?.setFocus()"
-          type="email"
-          debounce="600"
-          :placeholder="$t('email')"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('bday') }"
-    >
-      <ion-label class="settings-fade-text">{{ $t('birthday') }}</ion-label>
-      <ion-datetime
-          v-model="user.bday"
-          :doneText="$t('choose')"
-          :cancelText="$t('cancel')"
-          display-format="DD MMM YYYY"
-          value="1997-07-21"
-          :placeholder="$t('selectDate')"
-      ></ion-datetime>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
-    >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          ref="phoneInput"
-          v-model="user.phone"
-          @keyup.enter="update"
-          type="tel"
-          debounce="600"
-          :placeholder="$t('phone')"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
-      <ion-label class="settings-fade-text">{{ $t('passwordChange') }}</ion-label>
-      <ion-toggle
-          :checked="showPasswordEdit"
-          @ionChange="togglePasswordShow(0, $event)"
-          mode="md"
-      ></ion-toggle>
-    </ion-item>
-    <div v-show="showPasswordEdit">
+          <img
+              ref="avatarDisplay"
+              class="user-profile-picture-edit"
+              alt="avatar"
+              :src="avatar"
+          >
+        </ion-thumbnail>
+      </div>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+          class="flex rounded-2xl h-11"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('fname') }"
       >
-        <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
         <ion-input
-            v-model="user.old_password"
-            @keyup.enter="passwordInput.$el?.setFocus()"
-            debounce="1"
-            inputmode="password"
-            :type="showOldPassword ? 'text' : 'password'"
-            :placeholder="$t('passwordOld')"
+            v-capitalize
+            v-model.lazy="user.fname"
+            @keyup.enter="lnameInput.$el?.setFocus()"
+            type="text"
+            debounce="600"
+            :placeholder="$t('fname')"
+            :autofocus="true"
             required
         ></ion-input>
-        <ion-icon :icon="showOldPassword ? eyeOutline : eyeOffOutline"
-                  @click="togglePasswordShow(1)"
-                  class="text-xl text-gray-500"
-        >
-
-        </ion-icon>
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('lname') }"
       >
-        <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
         <ion-input
-            ref="passwordInput"
-            v-model="user.password"
-            @keyup.enter="passwordConfirmInput.$el?.setFocus()"
-            debounce="1"
-            inputmode="password"
-            :type="showPassword ? 'text' : 'password'"
-            :placeholder="$t('passwordNew')"
+            v-capitalize
+            ref="lnameInput"
+            v-model="user.lname"
+            @keyup.enter="usernameInput.$el?.setFocus()"
+            type="text"
+            debounce="600"
+            :placeholder="$t('lname')"
             required
         ></ion-input>
-        <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
-                  @click="togglePasswordShow(2)"
-                  class="text-xl text-gray-500"
-        >
-        </ion-icon>
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('username') }"
       >
-        <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
         <ion-input
-            ref="passwordConfirmInput"
-            v-model="user.password_confirmation"
+            ref="usernameInput"
+            v-model="user.username"
+            @keyup.enter="emailInput.$el?.setFocus()"
+            type="text"
+            debounce="600"
+            :placeholder="$t('username')"
+            required
+        ></ion-input>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
+      >
+        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            ref="emailInput"
+            v-model="user.email"
+            @keyup.enter="phoneInput.$el?.setFocus()"
+            type="email"
+            debounce="600"
+            :placeholder="$t('email')"
+            required
+        ></ion-input>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('bday') }"
+      >
+        <ion-label class="settings-fade-text">{{ $t('birthday') }}</ion-label>
+        <ion-datetime
+            v-model="user.bday"
+            :doneText="$t('choose')"
+            :cancelText="$t('cancel')"
+            display-format="DD MMM YYYY"
+            value="1997-07-21"
+            :placeholder="$t('selectDate')"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
+      >
+        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            ref="phoneInput"
+            v-model="user.phone"
             @keyup.enter="update"
-            debounce="1"
-            inputmode="password"
-            :type="showPasswordConfirm ? 'text' : 'password'"
-            :placeholder="$t('passwordConfirm')"
+            type="tel"
+            debounce="600"
+            :placeholder="$t('phone')"
             required
         ></ion-input>
-        <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
-                  @click="togglePasswordShow(3)"
-                  class="text-xl text-gray-500"
-        ></ion-icon>
       </ion-item>
+      <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
+        <ion-label class="settings-fade-text">{{ $t('passwordChange') }}</ion-label>
+        <ion-toggle
+            :checked="showPasswordEdit"
+            @ionChange="togglePasswordShow(0, $event)"
+            mode="md"
+        ></ion-toggle>
+      </ion-item>
+      <div v-show="showPasswordEdit">
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+        >
+          <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-input
+              v-model="user.old_password"
+              @keyup.enter="passwordInput.$el?.setFocus()"
+              debounce="1"
+              inputmode="password"
+              :type="showOldPassword ? 'text' : 'password'"
+              :placeholder="$t('passwordOld')"
+              required
+          ></ion-input>
+          <ion-icon :icon="showOldPassword ? eyeOutline : eyeOffOutline"
+                    @click="togglePasswordShow(1)"
+                    class="text-xl text-gray-500"
+          >
+
+          </ion-icon>
+        </ion-item>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+        >
+          <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-input
+              ref="passwordInput"
+              v-model="user.password"
+              @keyup.enter="passwordConfirmInput.$el?.setFocus()"
+              debounce="1"
+              inputmode="password"
+              :type="showPassword ? 'text' : 'password'"
+              :placeholder="$t('passwordNew')"
+              required
+          ></ion-input>
+          <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
+                    @click="togglePasswordShow(2)"
+                    class="text-xl text-gray-500"
+          >
+          </ion-icon>
+        </ion-item>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
+        >
+          <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-input
+              ref="passwordConfirmInput"
+              v-model="user.password_confirmation"
+              @keyup.enter="update"
+              debounce="1"
+              inputmode="password"
+              :type="showPasswordConfirm ? 'text' : 'password'"
+              :placeholder="$t('passwordConfirm')"
+              required
+          ></ion-input>
+          <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
+                    @click="togglePasswordShow(3)"
+                    class="text-xl text-gray-500"
+          ></ion-icon>
+        </ion-item>
+      </div>
     </div>
 
     <div class="mt-6">
@@ -216,7 +218,6 @@
 
 <script>
 import { defineComponent, ref, reactive, onMounted, toRefs, watch, computed } from 'vue';
-import { useRouter }                                                          from 'vue-router';
 import { useStore }                                                           from 'vuex';
 import { useI18n }                                                            from 'vue-i18n';
 import {
@@ -267,10 +268,9 @@ export default defineComponent({
   },
   setup(props) {
     /* Global properties and methods */
-    const router = useRouter();
     const store = useStore();
     const { t } = useI18n();
-    //Authenticated user
+    //Authenticated users
     const authUser = computed(() => {
       return store.getters['auth/authUser'];
     });
@@ -333,10 +333,6 @@ export default defineComponent({
 
         avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
         showSuccessToast(t('successUpdate'));
-        const query = user.avatar ? { refreshAvatar: 'true' } : null;
-        if(!store.getters['auth/isStaff'] && !store.getters['auth/isOwner']) {
-          await router.push({ name: 'dashboard', query });
-        }
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);

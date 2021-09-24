@@ -35,6 +35,7 @@ export default {
     "confirm": "Confirm",
     "cancel": "Cancel",
     "remove": "Remove",
+    "add": "Add",
     "drinksCard": "Card of drinks",
     "privacy": "Privacy",
     "global": "Global",
@@ -105,4 +106,10 @@ export default {
     "active": "Active",
     "inactive": "Inactive",
     "timeLeft": "{time} minute | {time} minutes",
+    "basic": "Basic info",
+    "tables": "Table setup",
+    "successImageUpload": "Successfully uploaded images!",
+    "owner.noImage": "Please select at least 1 image.",
+    "uploadSelectedImages": "Upload images",
+    "uploading": "Uploading"
 };

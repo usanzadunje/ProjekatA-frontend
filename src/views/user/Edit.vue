@@ -16,7 +16,7 @@
     </ion-header>
 
     <ion-content>
-      <div class="px-4 pt-4">
+      <div class="px-4 pt-4 h-full">
         <EditForm :clear-inputs="clearInputs"/>
       </div>
     </ion-content>

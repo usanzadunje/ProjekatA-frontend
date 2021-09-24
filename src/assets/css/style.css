@@ -262,6 +262,11 @@ ion-toggle.dark-toggle-checked {
     --background-checked: #1F1C2B;
 }
 
+.full-size {
+    width: 100vw;
+    height: 100vh;
+}
+
 /*
     START Android specific styles
 */
@@ -335,23 +340,6 @@ ion-toggle.dark-toggle-checked {
     font-weight: 400;
     font-size: 15px;
     padding: 0 1rem 0 1rem;
-}
-
-/* Text positioning styles */
-.register-success-text-position {
-    top: 40%;
-}
-
-.searching-example-text-position {
-    top: 45%;
-}
-
-.cafe-preview-example-text-position {
-    top: 40%;
-}
-
-.notification-example-text-position {
-    top: 45%;
 }
 
 /*
@@ -894,10 +882,7 @@ ion-toggle.dark-toggle-checked {
 /*
     START IMAGES STYLES
  */
-.background-image-container {
-    width: 100vw;
-    height: 100vh;
-}
+
 
 /*
     END IMAGES STYLES

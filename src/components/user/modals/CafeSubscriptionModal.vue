@@ -152,7 +152,7 @@ export default defineComponent({
     };
 
     /* Lifecycle hooks */
-    //When user lands on page check if he is already subscribed to cafe
+    //When users lands on page check if he is already subscribed to cafe
     CafeService.isUserSubscribed(cafe.value.id)
                .then((response) => {
                  isUserSubscribed.value = !!response.data.subscribed;
@@ -169,7 +169,7 @@ export default defineComponent({
     const indefiniteTimerToggle = (e) => {
       indefiniteTimerActive.value = e.target.checked;
     };
-    /* Adding pair of user/cafe in database corresponding to authenticated user subscribed to certain cafe */
+    /* Adding pair of users/cafe in database corresponding to authenticated users subscribed to certain cafe */
     const toggleSubscription = async(cafeId) => {
       isSubButtonDisabled.value = true;
 

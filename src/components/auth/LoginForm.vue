@@ -43,7 +43,7 @@
     <!--    <div class="relative flex justify-between items-center mt-3.5 px-4 utility-text">-->
     <!--      <div class="flex items-center">-->
     <!--        <ion-checkbox-->
-    <!--            v-model="user.remember"-->
+    <!--            v-model="users.remember"-->
     <!--            mode="md"-->
     <!--        ></ion-checkbox>-->
     <!--        <ion-text class="ml-2 fixed-utility-text">Zapamti me</ion-text>-->
@@ -148,7 +148,7 @@ export default defineComponent({
     /* Event handlers */
     const login = async() => {
       loading.value = true;
-      Keyboard.hide();
+      Keyboard?.hide();
       try {
         const role = await store.dispatch("auth/login", user);
 

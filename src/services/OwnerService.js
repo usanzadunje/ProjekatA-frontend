@@ -16,4 +16,11 @@ export default {
     updatePlace(payload) {
         return API.apiClient.put(`/owner/place-information`, payload);
     },
+    uploadPlaceImages(payload) {
+        return API.apiClient.post(`/owner/place/images-upload`, payload, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    },
 };

@@ -3,16 +3,28 @@
     <ion-content>
       <ion-slides :options="slideOpts" ref="slides">
         <ion-slide>
-          <RegistrationSuccess @next-slide="slideNext"/>
+          <div class="relative">
+            <RegistrationSuccess/>
+            <OnboardingButton @next-slide="slideNext"/>
+          </div>
         </ion-slide>
         <ion-slide>
-          <SearchingExample @next-slide="slideNext"/>
+          <div class="relative">
+            <SearchingExample/>
+            <OnboardingButton @next-slide="slideNext"/>
+          </div>
         </ion-slide>
         <ion-slide>
-          <CafePreviewExample @next-slide="slideNext"/>
+          <div class="relative">
+            <CafePreviewExample/>
+            <OnboardingButton @next-slide="slideNext"/>
+          </div>
         </ion-slide>
         <ion-slide>
-          <ActivatingNotificationExample/>
+          <div class="relative">
+            <ActivatingNotificationExample/>
+            <OnboardingButton @next-slide="$router.replace({ name: 'home' })"/>
+          </div>
         </ion-slide>
       </ion-slides>
     </ion-content>
@@ -23,8 +35,14 @@
 <script>
 import { defineComponent, ref } from 'vue';
 
-import { IonPage, IonContent, IonSlides, IonSlide } from '@ionic/vue';
+import {
+  IonPage,
+  IonContent,
+  IonSlides,
+  IonSlide,
+} from '@ionic/vue';
 
+import OnboardingButton              from '@/components/onboarding/OnboardingButton';
 import RegistrationSuccess           from '@/components/onboarding/RegistrationSuccess';
 import SearchingExample              from '@/components/onboarding/SearchingExample';
 import CafePreviewExample            from '@/components/onboarding/CafePreviewExample';
@@ -37,6 +55,7 @@ export default defineComponent({
     IonSlide,
     IonPage,
     IonContent,
+    OnboardingButton,
     RegistrationSuccess,
     SearchingExample,
     CafePreviewExample,

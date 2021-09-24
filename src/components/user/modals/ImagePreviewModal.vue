@@ -37,12 +37,10 @@ import {
   IonSlides,
   IonSlide,
   modalController,
-}                         from '@ionic/vue';
+}                               from '@ionic/vue';
 
 import {
   close,
-  add,
-  remove,
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -103,8 +101,6 @@ export default defineComponent({
 
       /* Icons */
       close,
-      add,
-      remove,
     };
   },
 });

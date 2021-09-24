@@ -126,7 +126,7 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
-    /* Checking if user is subscribed to this cafe */
+    /* Checking if users is subscribed to this cafe */
     if(store.getters['auth/loggedIn']) {
       CafeService.isUserSubscribed(cafe.value.id)
                  .then((response) => {

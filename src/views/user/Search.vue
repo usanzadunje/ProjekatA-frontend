@@ -121,7 +121,7 @@ export default defineComponent({
     onIonViewDidEnter(() => {
       openModal(!!route.query.openModal);
     });
-    //Uncomment this if it is better to clear input every time after user leaves search page.
+    //Uncomment this if it is better to clear input every time after users leaves search page.
     // onIonViewWillLeave(() => {
     //   // Before leaving page remove search input value and clear search string
     //   document.querySelector('ion-searchbar div input').value = null;
@@ -167,7 +167,7 @@ export default defineComponent({
 
     /* Methods */
     // When search term is changed infinity scroll component changes data and
-    // this function scrolls user back to top to see new filtered data from start
+    // this function scrolls users back to top to see new filtered data from start
     const scrollToTop = () => {
       content.value?.$el.scrollToTop(500);
     };

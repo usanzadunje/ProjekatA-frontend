@@ -24,7 +24,7 @@
             v-if="isOwner"
             class="flex flex-row flex-1 items-center mt-4"
             :class="[activeMenuItem === 'place' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
-            @click="menuItemClicked('owner.place')"
+            @click="menuItemClicked('owner.place.info')"
         >
           <ion-icon
               slot="icon-only"

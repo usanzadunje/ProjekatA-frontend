@@ -1,4 +1,4 @@
-/* Middleware that handles whether user is logged in or not and lets them continue to another route accordingly */
+/* Middleware that handles whether users is logged in or not and lets them continue to another route accordingly */
 
 export default async function auth({ next, store, router }) {
     if(!store.getters["auth/loggedIn"]) {

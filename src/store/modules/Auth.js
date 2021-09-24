@@ -1,6 +1,6 @@
-import router                from "@/router";
-import { i18n }              from "@/i18n";
-import { loadingController } from '@ionic/vue';
+import router                                 from "@/router";
+import { i18n }                               from "@/i18n";
+import { loadingController, toastController } from '@ionic/vue';
 
 import AuthService        from "@/services/AuthService";
 import { StorageService } from '@/services/StorageService';
@@ -26,13 +26,17 @@ export const mutations = {
 };
 
 export const actions = {
-    async login({ commit, dispatch }, user) {
+    async login({ getters, commit, dispatch }, user) {
         const response = await AuthService.login(user);
 
         await dispatch("setToken", response.data?.token);
         await dispatch("getAuthUser");
         dispatch("user/getSettings", null, { root: true });
         commit("SET_ROLE", response.data?.role);
+
+        if(getters.isStaff) {
+            commit('staff/SET_ACTIVITY', true, { root: true });
+        }
 
         return response.data?.role;
     },
@@ -51,7 +55,7 @@ export const actions = {
 
         dispatch("getAuthUser");
     },
-    async logout({ commit, getters, dispatch }) {
+    async logout({ commit, dispatch }) {
         let loading = null;
         try {
             loading = await loadingController
@@ -63,14 +67,17 @@ export const actions = {
                 });
             await loading.present();
 
-            if(getters.isOwner || getters.isStaff) {
-                await dispatch('staff/toggleActivity', false, { root: true });
-                await AuthService.removeFcmToken();
-            }
-
             await AuthService.logout();
         }catch(error) {
-            alert(i18n.global.t('forceLogout'));
+            const toast = await toastController.create({
+                duration: 1500,
+                position: 'top',
+                message: i18n.global.t('forceLogout'),
+                cssClass: 'error-toast',
+                mode: 'ios',
+            });
+
+            await toast.present();
         }finally {
             await dispatch("setToken", null);
             commit("SET_USER", null);
@@ -84,7 +91,7 @@ export const actions = {
             document.body.classList.toggle('dark', false);
         }
     },
-    // Getting authenticated user info and saving it to store
+    // Getting authenticated users info and saving it to store
     async getAuthUser({ commit }) {
         try {
             const response = await AuthService.getAuthUser();
@@ -104,9 +111,10 @@ export const actions = {
             return null;
         }
     },
-    async setToken({ commit }, token) {
+    async setToken({ commit, dispatch }, value) {
         const { set } = StorageService();
         try {
+            const token = value ?? await dispatch('getToken');
             await set('projekata_token', token);
             commit("SET_TOKEN", token);
         }catch(error) {

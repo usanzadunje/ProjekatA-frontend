@@ -1,5 +1,5 @@
 <!--TEST TEMPLATE-->
-<!-- View shown when user has not verified their email address or want to resend it-->
+<!-- View shown when users has not verified their email address or want to resend it-->
 <template>
   <ion-page>
     <ion-header :translucent="true">

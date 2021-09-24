@@ -1,89 +1,99 @@
 <template>
-  <div class="px-10 mt-5">
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
-    >
-      <ion-icon :icon="createOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          v-capitalize
-          v-model.lazy="place.name"
-          @keyup.enter="cityInput.$el?.setFocus()"
-          type="text"
-          debounce="600"
-          :placeholder="$t('name')"
-          :autofocus="true"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('city') }"
-    >
-      <ion-icon :icon="navigateOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          v-capitalize
-          ref="cityInput"
-          v-model="place.city"
-          @keyup.enter="addressInput.$el?.setFocus()"
-          type="text"
-          debounce="600"
-          :placeholder="$t('city')"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('address') }"
-    >
-      <ion-icon :icon="homeOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          ref="addressInput"
-          v-model="place.address"
-          @keyup.enter="emailInput.$el?.setFocus()"
-          type="text"
-          debounce="600"
-          :placeholder="$t('address')"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
-    >
-      <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          ref="emailInput"
-          v-model="place.email"
-          @keyup.enter="phoneInput.$el?.setFocus()"
-          type="email"
-          debounce="600"
-          :placeholder="$t('place.email')"
-          required
-      ></ion-input>
-    </ion-item>
-    <ion-item
-        lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
-    >
-      <ion-icon :icon="callOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-      <ion-input
-          ref="phoneInput"
-          v-model="place.phone"
-          @keyup.enter="update"
-          type="tel"
-          debounce="600"
-          :placeholder="$t('phone')"
-          required
-      ></ion-input>
-    </ion-item>
+  <div class="px-10 pb-2">
+    <div>
+      <div class="mb-6">
+        <img
+            :src="`${backendStorageURL}/cafe/1_1cafe.png`"
+            :alt="`Image of  cafe`"
+            @click="openPreview"
+            class="h-36 w-full"
+        />
+      </div>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
+      >
+        <ion-icon :icon="createOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            v-capitalize
+            v-model.lazy="place.name"
+            @keyup.enter="cityInput.$el?.setFocus()"
+            type="text"
+            debounce="600"
+            :placeholder="$t('name')"
+            :autofocus="true"
+            required
+        ></ion-input>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('city') }"
+      >
+        <ion-icon :icon="navigateOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            v-capitalize
+            ref="cityInput"
+            v-model="place.city"
+            @keyup.enter="addressInput.$el?.setFocus()"
+            type="text"
+            debounce="600"
+            :placeholder="$t('city')"
+            required
+        ></ion-input>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('address') }"
+      >
+        <ion-icon :icon="homeOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            ref="addressInput"
+            v-model="place.address"
+            @keyup.enter="emailInput.$el?.setFocus()"
+            type="text"
+            debounce="600"
+            :placeholder="$t('address')"
+            required
+        ></ion-input>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
+      >
+        <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            ref="emailInput"
+            v-model="place.email"
+            @keyup.enter="phoneInput.$el?.setFocus()"
+            type="email"
+            debounce="600"
+            :placeholder="$t('place.email')"
+            required
+        ></ion-input>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
+      >
+        <ion-icon :icon="callOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-input
+            ref="phoneInput"
+            v-model="place.phone"
+            @keyup.enter="update"
+            type="tel"
+            debounce="600"
+            :placeholder="$t('phone')"
+            required
+        ></ion-input>
+      </ion-item>
+    </div>
 
-    <div class="mt-20">
+    <div class="mt-14">
       <ion-button
           :disabled="loading"
           size="large"
@@ -117,9 +127,11 @@ import {
   IonInput,
   IonIcon,
   IonButton,
-  IonSpinner,
+  IonSpinner, modalController,
 }
                                                                               from "@ionic/vue";
+
+import AddPlaceImagesModal from '@/components/owner/modals/AddPlaceImagesModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -136,7 +148,7 @@ import {
 import { Keyboard } from '@capacitor/keyboard';
 
 export default defineComponent({
-  name: "EditForm",
+  name: "EditPlaceForm",
   components: {
     IonItem,
     IonInput,
@@ -204,6 +216,14 @@ export default defineComponent({
         loading.value = false;
       }
     };
+    const openPreview = async() => {
+      const modal = await modalController
+          .create({
+            component: AddPlaceImagesModal,
+            cssClass: 'custom-gallery-modal',
+          });
+      return modal.present();
+    };
 
     /* Watchers */
     watch(resetInputs, () => {
@@ -227,6 +247,7 @@ export default defineComponent({
 
       /* Event handlers  */
       update,
+      openPreview,
 
       /* Icons */
       createOutline,

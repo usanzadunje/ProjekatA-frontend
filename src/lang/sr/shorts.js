@@ -35,6 +35,7 @@ export default {
     "confirm": "Potvrdi",
     "cancel": "Otkaži",
     "remove": "Ukloni",
+    "add": "Dodaj",
     "drinksCard": "Karta pića",
     "privacy": "Privatnost",
     "global": "Globalna",
@@ -105,5 +106,11 @@ export default {
     "active": "Aktivan",
     "inactive": "Neaktivan",
     "timeLeft": "{time} minut | {time} minuta",
+    "basic": "Osnovno",
+    "tables": "Stolovi",
+    "successImageUpload": "Uspesno ste dodali fotografije!",
+    "owner.noImage": "Izaberite najmanje 1 fotografiju.",
+    "uploadSelectedImages": "Otremi fotografije",
+    "uploading": "Otpremam",
 };
 
