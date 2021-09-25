@@ -7,21 +7,12 @@
     </ion-item>
 
     <ion-slides v-update-swiper :options="slideOpts">
-      <ion-slide v-for="i in imgCount" :key="i">
-        <div v-if="imgCount !== 1" class="swiper-zoom-container">
-          <img
-              :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
-              alt=""
-              @dblclick="zoom(userClickedToZoom)"
-          >
-        </div>
-        <div v-else class="swiper-zoom-container">
-          <img
-              :src="id"
-              alt=""
-              @dblclick="zoom(userClickedToZoom)"
-          >
-        </div>
+      <ion-slide v-for="image in place.images" :key="image.id">
+        <img
+            :src="`${backendStorageURL + image.path}`"
+            alt=""
+            @dblclick="zoom(userClickedToZoom)"
+        >
       </ion-slide>
     </ion-slides>
   </ion-content>
@@ -54,13 +45,9 @@ export default defineComponent({
     IonSlide,
   },
   props: {
-    id: {
-      type: String,
+    place: {
+      type: Object,
       default: null,
-    },
-    imgCount: {
-      type: Number,
-      default: 1,
     },
   },
   setup() {

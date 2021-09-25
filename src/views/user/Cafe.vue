@@ -23,10 +23,11 @@
         <div>
           <div class="relative">
             <img
-                :src="`${backendStorageURL}/cafe/1_1cafe.png`"
-                :alt="`Image of ${cafe.name} cafe`"
-                @click="openPreview('1', 2)"
-                class="banner-image w-full"
+                ref="mainImage"
+                src=""
+                :alt="`Image of ${place.name} place`"
+                @click="openPreview(place)"
+                class="banner-image w-full object-fill"
             />
             <div
                 class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
@@ -36,24 +37,24 @@
           </div>
 
           <div class="mt-4 ion-item-no-padding-x">
-            <h1 class="cafe-show-name">{{ cafe.name }}</h1>
+            <h1 class="cafe-show-name">{{ place.name }}</h1>
             <p class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
           </div>
 
-          <CafeInfoBody :cafe="cafe"/>
+          <CafeInfoBody :place="place"/>
 
           <div class="mb-2">
             <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
             <AccordionList
                 class="accordion-list-border-top"
                 :title="$t('drinksCard')"
-                :items="cafe.offerings?.filter(offer => offer.tag === 'drink')"
+                :items="place.offerings?.filter(offer => offer.tag === 'drink')"
                 :icon="beerOutline"
             />
             <AccordionList
                 class="accordion-list-border-top accordion-list-border-bottom"
                 :title="$t('food')"
-                :items="cafe.offerings?.filter(offer => offer.tag === 'food')"
+                :items="place.offerings?.filter(offer => offer.tag === 'food')"
                 :icon="pizzaOutline"
             />
           </div>
@@ -78,7 +79,7 @@
           @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
       >
         <CafeSubscriptionModal
-            :cafe="{'id': cafe.id, 'name': cafe.name}"
+            :place="{'id': place.id, 'name': place.name}"
             @dismiss-subscription-modal="openModal(false);"
             @user-toggled-subscription="isUserSubscribed = !isUserSubscribed"
         />
@@ -88,11 +89,11 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, watch, onMounted } from 'vue';
-import { useStore }                                         from 'vuex';
-import { useRoute }                                         from 'vue-router';
-import { useI18n }                                          from 'vue-i18n';
-import { Capacitor }                                        from '@capacitor/core';
+import { defineComponent, ref, computed, watch } from 'vue';
+import { useStore }                              from 'vuex';
+import { useRoute }                              from 'vue-router';
+import { useI18n }                               from 'vue-i18n';
+import { Capacitor }                             from '@capacitor/core';
 import {
   IonPage,
   IonHeader,
@@ -104,7 +105,7 @@ import {
   modalController,
   onIonViewWillEnter,
   onIonViewWillLeave,
-}                                                           from '@ionic/vue';
+}                                                from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/place/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
@@ -151,8 +152,9 @@ export default defineComponent({
     const { t } = useI18n();
 
     /* Component properties */
-    const cafe = ref({});
+    const place = ref({});
     const isUserSubscribed = ref(false);
+    const mainImage = ref();
     let searchTab = null;
     const platformIsWeb = Capacitor.getPlatform() === 'web';
 
@@ -163,28 +165,11 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
     const { isModalOpen, openModal } = useModal();
 
-    /* Lifecycle hooks */
-    /* Fetching cafe from backend */
-    onMounted(() => {
-      getCafe();
-    });
-    onIonViewWillEnter(() => {
-      searchTab = document.getElementById('tab-button-search');
-      if(searchTab) {
-        searchTab.style.color = '#207DFF';
-      }
-    });
-    onIonViewWillLeave(() => {
-      if(searchTab) {
-        searchTab.style.color = '';
-      }
-    });
-
     /* Methods */
-    const getCafe = async() => {
+    const getPlace = async() => {
       try {
         const response = await CafeService.show(route.params.id);
-        cafe.value = response.data;
+        place.value = response.data;
         if(loggedIn.value) {
           const subscriptionResponse = await CafeService.isUserSubscribed(route.params.id);
           isUserSubscribed.value = !!subscriptionResponse.data.subscribed;
@@ -198,16 +183,32 @@ export default defineComponent({
       }
     };
 
+    /* Lifecycle hooks */
+    getPlace().then(() => {
+      const mainImg = place.value.images?.find((image) => image.is_main === 1) ?? place.value.images[0];
+      mainImage.value.src = process.env.VUE_APP_STORED_IMAGES_URL + mainImg?.path;
+    });
+    onIonViewWillEnter(() => {
+      searchTab = document.getElementById('tab-button-search');
+      if(searchTab) {
+        searchTab.style.color = '#207DFF';
+      }
+    });
+    onIonViewWillLeave(() => {
+      if(searchTab) {
+        searchTab.style.color = '';
+      }
+    });
+
 
     /* Event handlers */
-    const openPreview = async(id, imgCount) => {
+    const openPreview = async(place) => {
       const modal = await modalController
           .create({
             component: ImagePreviewModal,
             cssClass: 'custom-gallery-modal',
             componentProps: {
-              id,
-              imgCount,
+              place,
             },
           });
       return modal.present();
@@ -215,10 +216,10 @@ export default defineComponent({
 
 
     /* Watchers */
-    // Watching for changes of id parameter in cafe show route and fetching right data
+    // Watching for changes of id parameter in place show route and fetching right data
     watch(route, async() => {
       if(route.name === 'cafe' && route.params.id) {
-        getCafe();
+        await getPlace();
       }
     });
 
@@ -226,7 +227,8 @@ export default defineComponent({
       /* Global properties */
 
       /* Component properties */
-      cafe,
+      place,
+      mainImage,
       isModalOpen,
       isUserSubscribed,
       platformIsWeb,

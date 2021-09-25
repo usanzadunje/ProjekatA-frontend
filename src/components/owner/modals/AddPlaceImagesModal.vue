@@ -25,7 +25,7 @@
           color="light"
           class="text-lg uppercase"
       >
-        {{ loading ? `${$t('uploading')}...` : $t('uploadSelectedImages') }}
+        {{ loading === 1 ? `${$t('uploading')}...` : $t('uploadSelectedImages') }}
       </ion-button>
       <ion-button
           @click="removeImage"
@@ -34,7 +34,7 @@
           class="text-lg uppercase"
           slot="end"
       >
-        {{ $t('remove') }}
+        {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
       </ion-button>
       <ion-button @click="dismiss" fill="clear" color="light" slot="end">
         <ion-icon :icon="close" slot="start"></ion-icon>
@@ -50,7 +50,7 @@
       <ion-slide v-for="image in place.images" :key="image.id">
         <div class="swiper-zoom-container">
           <img
-              :src="`${'http://192.168.1.203:8200/storage/img' + image.path}`"
+              :src="`${backendStorageURL + image.path}`"
               :alt="`Image of place ${place.name}`"
               @dblclick="zoom(userClickedToZoom)"
           >
@@ -108,7 +108,7 @@ export default defineComponent({
     const userClickedToZoom = ref(true);
     const imagesInput = ref();
     const images = ref();
-    const loading = ref(false);
+    const loading = ref(0);
     const place = computed(() => store.getters['staff/place']);
 
     /* Composables */
@@ -136,7 +136,7 @@ export default defineComponent({
       images.value = imagesInput.value.files;
     };
     const uploadImages = async() => {
-      loading.value = true;
+      loading.value = 1;
       if(!images.value) {
         showErrorToast(
             null,
@@ -144,7 +144,7 @@ export default defineComponent({
               noImageSelected: t('owner.noImage'),
             },
         );
-        loading.value = false;
+        loading.value = 0;
         return;
       }
 
@@ -158,19 +158,31 @@ export default defineComponent({
         await OwnerService.uploadPlaceImages(formData);
 
         showSuccessToast(t('successImageUpload'));
-        loading.value = false;
-
-        await store.dispatch('staff/getPlaceInfo');
 
         dismiss();
+
+        await store.dispatch('staff/getPlaceInfo');
       }catch(errors) {
         await showErrorToast(errors);
-        loading.value = false;
+      }finally {
+        loading.value = 0;
       }
     };
     const removeImage = async() => {
-      const imageIndex = await imagePreviewSlider.value?.$el?.getActiveIndex();
-      console.log(place.value.images[imageIndex]);
+      loading.value = -1;
+      try {
+        const imageIndex = await imagePreviewSlider.value?.$el?.getActiveIndex();
+
+        await OwnerService.removePlaceImage(place.value.images[imageIndex].id);
+
+        showSuccessToast(t('successImageRemove'));
+
+        await store.dispatch('staff/getPlaceInfo');
+      }catch(errors) {
+        await showErrorToast(errors);
+      }finally {
+        loading.value = 0;
+      }
     };
 
     return {

@@ -43,11 +43,14 @@ import {
   IonContent,
   IonRefresher,
   IonRefresherContent,
+  onIonViewWillEnter,
 }                                    from '@ionic/vue';
 
 import ActiveStaffMembers        from '@/components/staff/ActiveStaffMembers';
 import PlaceAvailabilityChart    from '@/components/staff/charts/PlaceAvailabilityChart';
 import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
+
+import { Capacitor } from '@capacitor/core';
 
 export default defineComponent({
   name: "Dashboard",
@@ -64,7 +67,12 @@ export default defineComponent({
     /* Component properties */
     const store = useStore();
 
-    /* Composables */
+    /* Lifecycle hooks */
+    onIonViewWillEnter(async() => {
+      if(!Capacitor.isNativePlatform()) {
+        await store.dispatch('staff/updatePlaceAvailability');
+      }
+    });
 
     /* Computed properties */
     const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);

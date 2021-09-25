@@ -1,7 +1,7 @@
 <template>
   <div class="ion-padding">
     <div class="text-center">
-      <h1 class="main-toolbar-heading text-xl">{{ cafe.name }}</h1>
+      <h1 class="main-toolbar-heading text-xl">{{ place.name }}</h1>
     </div>
 
     <div ref="map" id="map" class="mx-4 my-2">
@@ -31,7 +31,7 @@ import { sleep } from '@/utils/helpers';
 export default defineComponent({
   name: "GoogleMap",
   props: {
-    cafe: {
+    place: {
       type: Object,
       default: null,
     },
@@ -75,8 +75,8 @@ export default defineComponent({
           height: mapContainerBoundingRect.height - 4,
           x: mapContainerBoundingRect.x + 2,
           y: mapContainerBoundingRect.y + 2,
-          latitude: Number(props.cafe.latitude) || 43.317862492567,
-          longitude: Number(props.cafe.longitude) || 21.895785976058143,
+          latitude: Number(props.place.latitude) || 43.317862492567,
+          longitude: Number(props.place.longitude) || 21.895785976058143,
           zoom: 16,
           liteMode: true,
         });
@@ -90,13 +90,13 @@ export default defineComponent({
       }
 
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
-        distance.value = `${Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude))}m`;
+        distance.value = `${Math.round(CafeService.getDistance(props.place.latitude, props.place.longitude))}m`;
 
         await CapacitorGoogleMaps.addMarker({
-          latitude: Number(props.cafe.latitude) || 43.317862492567,
-          longitude: Number(props.cafe.longitude) || 21.895785976058143,
-          title: props.cafe.name,
-          snippet: props.cafe.address + " ," + props.cafe.city,
+          latitude: Number(props.place.latitude) || 43.317862492567,
+          longitude: Number(props.place.longitude) || 21.895785976058143,
+          title: props.place.name,
+          snippet: props.place.address + " ," + props.place.city,
         });
 
         await CapacitorGoogleMaps.addMarker({

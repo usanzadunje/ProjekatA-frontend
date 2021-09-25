@@ -48,9 +48,9 @@ export default defineComponent({
 
     /* Event handlers */
     const logout = async() => {
-      await store.dispatch("auth/logout");
-
       await popoverController.dismiss();
+
+      await store.dispatch("auth/logout");
     };
 
     const navigateTo = async(pageName) => {

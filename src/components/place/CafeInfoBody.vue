@@ -2,13 +2,13 @@
   <div>
     <div class="flex justify-start items-center py-2 ion-item-no-padding-x mt-2 ">
       <ion-icon :icon="pieChart" class="mr-2 text-yellow-400" style="font-size: 25px"></ion-icon>
-      <span class="modal-cafe-text-medium lowercase">{{ cafe.availability_ratio }} - {{ $t('free') }}</span>
+      <span class="modal-cafe-text-medium lowercase">{{ place.availability_ratio }} - {{ $t('free') }}</span>
     </div>
     <hr class="card-horizontal-ruler mt-1">
     <div class="flex justify-between items-center">
       <div class="flex items-center">
         <ion-icon :icon="locationOutline" class="flex-shrink-0 mr-2 primary-icon-color text-lg"></ion-icon>
-        <p class="modal-cafe-text-regular flex-shrink">{{ cafe.address }} - {{ cafe.city }}</p>
+        <p class="modal-cafe-text-regular flex-shrink">{{ place.address }} - {{ place.city }}</p>
       </div>
       <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold">
         {{ $t('map') }}
@@ -35,7 +35,7 @@
         css-class="custom-sub-modal"
         @didDismiss="openModal(false);"
     >
-      <GoogleMap :cafe="cafe"/>
+      <GoogleMap :place="place"/>
     </Modal>
   </div>
 </template>
@@ -72,7 +72,7 @@ export default defineComponent({
     GoogleMap,
   },
   props: {
-    cafe: {
+    place: {
       type: Object,
       default: null,
     },

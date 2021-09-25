@@ -6,7 +6,7 @@
     <ion-item>
       <p class="submodal-paragraph">
         {{ $t('notificationModal1') }}
-        <span class="submodal-paragraph-meidum">{{ cafe.name }}</span>
+        <span class="submodal-paragraph-meidum">{{ place.name }}</span>
         {{ $t('notificationModal2') }}
       </p>
     </ion-item>
@@ -41,7 +41,7 @@
       </ion-button>
       <ion-button
           class="uppercase button-confirm modal-button-border"
-          @click="toggleSubscription(cafe.id)"
+          @click="toggleSubscription(place.id)"
           :disabled="isSubButtonDisabled"
       >
         <ion-icon
@@ -89,7 +89,7 @@ export default defineComponent({
     IonLabel,
   },
   props: {
-    cafe: {
+    place: {
       type: Object,
       default: null,
     },
@@ -104,7 +104,7 @@ export default defineComponent({
     const notificationTime = ref(15);
     const indefiniteTimerActive = ref(false);
     const isUserSubscribed = ref(false);
-    const cafe = toRef(props, 'cafe');
+    const place = toRef(props, 'place');
     const isSubButtonDisabled = ref(false);
 
     /* Composables */
@@ -112,10 +112,10 @@ export default defineComponent({
     const { registerToken } = useFCM();
 
     /* Methods */
-    const subscribe = async(cafeId) => {
+    const subscribe = async(placeId) => {
       const notifyIn = indefiniteTimerActive.value ? '' : notificationTime.value;
       try {
-        await CafeService.subscribe(cafeId, notifyIn);
+        await CafeService.subscribe(placeId, notifyIn);
         isUserSubscribed.value = true;
         emit('userToggledSubscription');
         await showSuccessToast(t('successSubscribe'));
@@ -127,7 +127,7 @@ export default defineComponent({
             });
       }
     };
-    const showAlert = async(cafeId) => {
+    const showAlert = async(placeId) => {
       const alert = await alertController
           .create({
             header: t('alertNotificationsOffHeader'),
@@ -142,7 +142,7 @@ export default defineComponent({
                 text: t('yes'),
                 handler: async() => {
                   await registerToken();
-                  await subscribe(cafeId);
+                  await subscribe(placeId);
                   await store.dispatch('user/setNotifications', true);
                 },
               },
@@ -152,8 +152,8 @@ export default defineComponent({
     };
 
     /* Lifecycle hooks */
-    //When users lands on page check if he is already subscribed to cafe
-    CafeService.isUserSubscribed(cafe.value.id)
+    //When users lands on page check if he is already subscribed to place
+    CafeService.isUserSubscribed(place.value.id)
                .then((response) => {
                  isUserSubscribed.value = !!response.data.subscribed;
                })
@@ -169,8 +169,8 @@ export default defineComponent({
     const indefiniteTimerToggle = (e) => {
       indefiniteTimerActive.value = e.target.checked;
     };
-    /* Adding pair of users/cafe in database corresponding to authenticated users subscribed to certain cafe */
-    const toggleSubscription = async(cafeId) => {
+    /* Adding pair of users/place in database corresponding to authenticated users subscribed to certain place */
+    const toggleSubscription = async(placeId) => {
       isSubButtonDisabled.value = true;
 
       if(indefiniteTimerActive.value) {
@@ -179,7 +179,7 @@ export default defineComponent({
 
       if(isUserSubscribed.value) {
         try {
-          await CafeService.unsubscribe(cafeId);
+          await CafeService.unsubscribe(placeId);
           isUserSubscribed.value = false;
           emit('userToggledSubscription');
           await showSuccessToast(t('successUnsubscribe'));
@@ -192,11 +192,11 @@ export default defineComponent({
         }
       }else {
         if(!store.getters['user/notifications']) {
-          await showAlert(cafeId);
+          await showAlert(placeId);
           isSubButtonDisabled.value = false;
           return;
         }
-        await subscribe(cafeId);
+        await subscribe(placeId);
       }
       isSubButtonDisabled.value = false;
     };

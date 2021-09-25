@@ -549,6 +549,7 @@ ion-toggle.dark-toggle-checked {
 .modal-thumbnail {
     height: 57px !important;
     width: 57px !important;
+    object-fit: cover !important;
 }
 
 .ion-item-no-padding-x {

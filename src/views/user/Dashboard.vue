@@ -59,7 +59,7 @@
           @didDismiss="openModal(false);"
       >
         <ShortCafeModal
-            :cafe="modalData"
+            :place="modalData"
             @dismiss-short-cafe-modal="openModal(false)"
             @sub-modal-opened="hideModal('custom-modal')"
             @user-toggled-subscription="getSubscriptions"
@@ -70,10 +70,10 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
-import { useRoute }                        from 'vue-router';
-import { useStore }                        from 'vuex';
-import { useI18n }                         from 'vue-i18n';
+import { defineComponent, ref } from 'vue';
+import { useRoute }             from 'vue-router';
+import { useStore }             from 'vuex';
+import { useI18n }              from 'vue-i18n';
 import {
   IonContent,
   IonPage,
@@ -86,7 +86,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   onIonViewDidEnter,
-}                                          from '@ionic/vue';
+}                               from '@ionic/vue';
 
 import UserProfileHeader     from '@/components/user/headers/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
@@ -149,11 +149,6 @@ export default defineComponent({
     const { isModalOpen, modalData, openModal, hideModal } = useModal();
 
     /* Lifecycle hooks */
-    //Setting options for slider inside SlideFilter component
-    onMounted(async() => {
-      await getSubscriptions();
-      showSkeleton.value = false;
-    });
     onIonViewDidEnter(async() => {
       openModal(!!route.query.openModal);
       // Everytime users comes to the page give him view of fresh cafes he has subscribed to

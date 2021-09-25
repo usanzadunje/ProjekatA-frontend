@@ -2,24 +2,25 @@
   <div class="px-4 pt-4">
     <div class="ion-item-no-padding-x flex items-center">
       <img
-          :src="`${backendStorageURL}/cafe/1_2cafe.png`"
-          alt="Logo of {{ cafe.name }}"
+          :src="mainImagePath"
+          :alt="`Logo of ${place.name}`"
           class="modal-thumbnail radius-11px"
       >
       <div class="ml-4">
-        <h1 class="modal-cafe-name-text">{{ cafe.name }}</h1>
+        <h1 class="modal-cafe-name-text">{{ place.name }}</h1>
         <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
       </div>
     </div>
 
-    <CafeInfoBody :cafe="cafe"/>
+    <CafeInfoBody :place="place"/>
     <div class="mt-6 ion-no-padding">
       <ion-slides v-update-swiper :options="slideOpts">
-        <ion-slide v-for="i in [1,2,3]" :key="i">
+        <ion-slide v-for="image in place.images?.filter(img => img.is_main !== 1)" :key="image?.id">
           <img
-              :src="`${backendStorageURL}/cafe/2_${i}cafe.png`"
-              alt=""
-              @click="openPreview(`${backendStorageURL}/cafe/2_${i}cafe.png`)"
+              :src="`${backendStorageURL + image?.path}`"
+              :alt="`Image of ${place.name}`"
+              @click="openPreview(place)"
+              class="object-cover slider-images"
           >
         </ion-slide>
       </ion-slides>
@@ -28,7 +29,7 @@
     <div class="mt-5 mb-3 flex justify-around">
       <ion-button
           class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
-          :routerLink="`/cafes/${cafe.id}?redirect=${$route.path + '?openModal=true'}`"
+          :routerLink="`/cafes/${place.id}?redirect=${$route.path + '?openModal=true'}`"
           @click="$emit('dismissShortCafeModal')"
       >
         {{ $t('more') }}
@@ -53,7 +54,7 @@
       @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
   >
     <CafeSubscriptionModal
-        :cafe="{'id': cafe.id, 'name': cafe.name}"
+        :cafe="{'id': place.id, 'name': place.name}"
         @dismiss-subscription-modal="openModal(false);"
         @user-toggled-subscription="$emit('userToggledSubscription')"
     />
@@ -100,7 +101,7 @@ export default defineComponent({
     CafeInfoBody,
   },
   props: {
-    cafe: {
+    place: {
       type: Object,
       default: null,
     },
@@ -118,17 +119,19 @@ export default defineComponent({
       spaceBetween: 10,
     };
     const isUserSubscribed = ref(false);
-    const cafe = toRef(props, 'cafe');
+    const place = toRef(props, 'place');
     const isSubButtonDisabled = ref(true);
+    const mainImagePath = ref();
 
     /* Composables */
     const { isModalOpen, openModal } = useModal();
 
     /* Lifecycle hooks */
+    mainImagePath.value = process.env.VUE_APP_STORED_IMAGES_URL + place.value.images?.find((image) => image.is_main === 1)?.path ?? place.value.images[0]?.path;
     isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
-    /* Checking if users is subscribed to this cafe */
+    /* Checking if users is subscribed to this place */
     if(store.getters['auth/loggedIn']) {
-      CafeService.isUserSubscribed(cafe.value.id)
+      CafeService.isUserSubscribed(place.value.id)
                  .then((response) => {
                    isUserSubscribed.value = !!response.data.subscribed;
                  })
@@ -144,13 +147,13 @@ export default defineComponent({
     });
 
     /* Event handlers */
-    const openPreview = async(id) => {
+    const openPreview = async(place) => {
       const modal = await modalController
           .create({
             component: ImagePreviewModal,
             cssClass: 'custom-image-preview-modal',
             componentProps: {
-              id,
+              place,
             },
           });
       return modal.present();
@@ -162,6 +165,7 @@ export default defineComponent({
       isSubButtonDisabled,
       isModalOpen,
       isUserSubscribed,
+      mainImagePath,
 
       /* Computed properties */
 
@@ -177,5 +181,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-
+img.slider-images {
+  max-height: 75px !important;
+}
 </style>

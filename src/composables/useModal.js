@@ -1,4 +1,5 @@
-import { ref } from 'vue';
+import { ref }     from 'vue';
+import CafeService from '@/services/CafeService';
 
 export function useModal() {
     /* Component properties */
@@ -9,9 +10,11 @@ export function useModal() {
 
 
     /* Methods */
-    const openModal = (state, data = null) => {
+    const openModal = async(state, data = null) => {
         if(data) {
             modalData.value = data;
+            const response = await CafeService.images(data.id);
+            modalData.value.images = response.data;
         }
         isModalOpen.value = state;
     };

@@ -41,7 +41,7 @@
           @didDismiss="openModal(false);"
       >
         <ShortCafeModal
-            :cafe="modalData"
+            :place="modalData"
             @dismiss-short-cafe-modal="openModal(false)"
             @sub-modal-opened="hideModal('custom-modal')"
         />

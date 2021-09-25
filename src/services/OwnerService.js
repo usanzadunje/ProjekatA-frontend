@@ -17,10 +17,13 @@ export default {
         return API.apiClient.put(`/owner/place-information`, payload);
     },
     uploadPlaceImages(payload) {
-        return API.apiClient.post(`/owner/place/images-upload`, payload, {
+        return API.apiClient.post(`/owner/place/images/upload`, payload, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
+    },
+    removePlaceImage(id) {
+        return API.apiClient.post(`/owner/place/images/remove/${id}`);
     },
 };
