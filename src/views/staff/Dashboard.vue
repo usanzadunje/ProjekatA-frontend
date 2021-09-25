@@ -49,8 +49,6 @@ import ActiveStaffMembers        from '@/components/staff/ActiveStaffMembers';
 import PlaceAvailabilityChart    from '@/components/staff/charts/PlaceAvailabilityChart';
 import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
 
-import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
-
 export default defineComponent({
   name: "Dashboard",
   components: {
@@ -67,7 +65,6 @@ export default defineComponent({
     const store = useStore();
 
     /* Composables */
-    const { getPlaceAvailability } = usePlaceManipulation();
 
     /* Computed properties */
     const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
@@ -75,7 +72,7 @@ export default defineComponent({
 
     /* Event handlers */
     const refresh = async(event) => {
-      await getPlaceAvailability();
+      await store.dispatch('staff/updatePlaceAvailability');
 
       if(isOwner.value) {
         await store.dispatch('owner/getStaffInfo');

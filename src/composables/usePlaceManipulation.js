@@ -1,3 +1,4 @@
+import { ref }      from 'vue';
 import { useStore } from 'vuex';
 import { useI18n }  from 'vue-i18n';
 
@@ -10,25 +11,16 @@ export function usePlaceManipulation() {
     /* Global properties */
     const store = useStore();
 
+    /* Component properties */
+    const toggling = ref(false);
+
     /* Composables */
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
 
     /* Methods */
-    const getPlaceAvailability = async() => {
-        try {
-            const response = await StaffService.tableAvailability();
-
-            store.commit('staff/SET_AVAILABILITY_RATIO', response.data?.availability_ratio);
-        }catch(e) {
-            showErrorToast(
-                null,
-                {
-                    toggleAvailabilityError: t('dataFetchingError'),
-                });
-        }
-    };
     const toggle = async(available) => {
+        toggling.value = true;
         try {
             const response = await StaffService.toggleAvailability(available);
 
@@ -39,12 +31,16 @@ export function usePlaceManipulation() {
                 {
                     toggleAvailabilityError: t('dataFetchingError'),
                 });
+        }finally {
+            toggling.value = false;
         }
     };
 
     return {
+        /* Component properties */
+        toggling,
+
         /* Methods */
-        getPlaceAvailability,
         toggle,
     };
 }

@@ -31,6 +31,7 @@
               @ionChange="searchInputChanged"
               @keyup.enter="searchEnterPressed($event)"
               enterkeyhint="search"
+              class="no-left-padding"
           ></ion-searchbar>
         </div>
         <slot></slot>

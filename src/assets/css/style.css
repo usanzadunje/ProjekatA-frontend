@@ -308,6 +308,14 @@ ion-toggle.dark-toggle-checked {
     margin-left: 0.75rem;
 }
 
+.ios .no-left-padding {
+    padding-left: 0 !important;
+}
+
+.ios .lang-pl {
+    padding-right: 0.375rem !important;
+}
+
 /*
     END IOS specific styles
 */

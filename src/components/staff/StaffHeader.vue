@@ -94,7 +94,6 @@ export default defineComponent({
           style: KeyboardStyle.Dark,
         });
       }
-      document.body.classList.toggle('dark', e.target.checked);
     };
 
 

@@ -48,13 +48,9 @@ const
             ></ion-toggle>
           </ion-item>
         </ion-item>
-        <ion-item class="ion-item-padding-right" @click="chooseLanguage">
+        <ion-item class="ion-item-padding-right">
           <p class="settings-item-text">{{ $t('language') }}</p>
-          <ion-item slot="end" class="ion-no-padding ion-no-margin no-border mr-1">
-            <ion-button fill="clear" class="settings-fade-text">
-              {{ localization.text || 'SRB' }}
-            </ion-button>
-          </ion-item>
+          <LanguagePicker class="lang-pl"/>
         </ion-item>
       </div>
       <div class="mt-5">
@@ -90,11 +86,11 @@ const
 </template>
 
 <script>
-import { computed, defineComponent, ref }                                                          from 'vue';
-import { useStore }                                                                                from 'vuex';
-import { useI18n }                                                                                 from 'vue-i18n';
-import { getLanguages }                                                                            from '@/lang';
-import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonPage, IonToggle, pickerController } from '@ionic/vue';
+import { computed, defineComponent, ref }                                        from 'vue';
+import { useStore }                                                              from 'vuex';
+import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonPage, IonToggle } from '@ionic/vue';
+
+import LanguagePicker from '@/components/LanguagePicker';
 
 import AuthService from '@/services/AuthService';
 
@@ -115,6 +111,7 @@ export default defineComponent({
     IonLabel,
     IonToggle,
     IonButton,
+    LanguagePicker,
   },
   setup() {
     /* Global properties */
@@ -123,7 +120,6 @@ export default defineComponent({
     /* Component properties */
     const isDarkModeOn = computed(() => store.getters['user/darkMode']);
     const areNotificationsOn = computed(() => store.getters['user/notifications']);
-    const localization = computed(() => store.getters['user/localization']);
     const isDarkModeDisabled = ref(false);
     const areNotificationsDisabled = ref(false);
 
@@ -132,7 +128,6 @@ export default defineComponent({
     }
 
     /* Methods */
-    const { t, locale } = useI18n({ useScope: 'global' });
     const { registerToken } = useFCM();
     const { showErrorToast } = useToastNotifications();
 
@@ -156,7 +151,6 @@ export default defineComponent({
       }catch(error) {
         showErrorToast(error);
       }finally {
-        document.body.classList.toggle('dark', e.target.checked);
         isDarkModeDisabled.value = false;
       }
     };
@@ -177,38 +171,6 @@ export default defineComponent({
         areNotificationsDisabled.value = false;
       }
     };
-    const chooseLanguage = async() => {
-      const picker = await pickerController.create({
-        columns: [
-          {
-            name: 'language',
-            options: getLanguages(localization.value),
-          },
-        ],
-        buttons: [
-          {
-            text: t('cancel'),
-            role: "cancel",
-          },
-          {
-            text: t('confirm'),
-            role: "confirm",
-            handler: (value) => {
-              // Direktno se menja locale u i18n
-              locale.value = value.language.value;
-              localization.value = value.language.text;
-              picker.dismiss(value.language, "confirm");
-            },
-          },
-        ],
-      });
-      picker.onDidDismiss().then(async(value) => {
-        //Sacuvas izbor korisnika u storage
-        const localization = value.data;
-        await store.dispatch('user/setLocalization', localization);
-      });
-      await picker.present();
-    };
     const showPrivacy = () => {
       // alert('Privacy');
     };
@@ -223,14 +185,12 @@ export default defineComponent({
       /* Component properties */
       isDarkModeOn,
       areNotificationsOn,
-      localization,
       isDarkModeDisabled,
       areNotificationsDisabled,
 
       /* Event handlers */
       toggleDarkMode,
       toggleNotifications,
-      chooseLanguage,
       showPrivacy,
       showSupportAuthors,
       redirectToWebsite,

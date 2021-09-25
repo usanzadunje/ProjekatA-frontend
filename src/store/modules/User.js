@@ -26,12 +26,12 @@ export const actions = {
     async getSettings({ commit, rootGetters }) {
         const { get } = StorageService();
 
-        const storedLocalization = await get(`localization.${rootGetters['auth/authUser']?.id}`);
+        const storedLocalization = await get(`localization.${rootGetters['auth/authUser']?.id}`) || { text: "SRB", value: "sr" };
         const storedDarkMode = await get(`isDarkModeOn.${rootGetters['auth/authUser']?.id}`) || false;
         const storedNotifications = await get(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`) || false;
 
         document.body.classList.toggle('dark', storedDarkMode);
-        i18n.global.locale.value = storedLocalization?.value || 'sr';
+        i18n.global.locale.value = storedLocalization?.value;
 
         commit("SET_DARKMODE", storedDarkMode);
         commit("SET_LOCALIZATION", storedLocalization);
@@ -56,6 +56,8 @@ export const actions = {
 
         await set(`isDarkModeOn.${rootGetters['auth/authUser']?.id}`, value);
         commit("SET_DARKMODE", value);
+
+        document.body.classList.toggle('dark', value);
     },
     async setNotifications({ commit, rootGetters }, value) {
         const { set } = StorageService();
@@ -68,6 +70,8 @@ export const actions = {
 
         await set(`localization.${rootGetters['auth/authUser']?.id}`, value);
         commit("SET_LOCALIZATION", value);
+
+        i18n.global.locale.value = value.value
     },
 };
 

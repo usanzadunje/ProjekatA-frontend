@@ -2,18 +2,18 @@
   <div class="flex justify-between mt-10">
     <ion-button
         @click="toggle(true)"
-        :disabled="isPlaceEmpty"
+        :disabled="isPlaceEmpty || toggling"
         class="w-full h-32"
     >
-      {{ $t('release') }}
+      {{ toggling ? $t('toggling') : $t('release') }}
       <ion-icon :icon="addOutline" class="text-2xl text-white-400"></ion-icon>
     </ion-button>
     <ion-button
         @click="toggle(false)"
-        :disabled="isPlaceFull"
+        :disabled="isPlaceFull || toggling"
         class="w-full h-32 btn-bg-danger"
     >
-      {{ $t('occupy') }}
+      {{ toggling ? $t('toggling') : $t('occupy') }}
       <ion-icon :icon="removeOutline" class="text-2xl text-white-400"></ion-icon>
     </ion-button>
   </div>
@@ -64,13 +64,14 @@ export default defineComponent({
 
 
     /* Composables */
-    const { toggle } = usePlaceManipulation();
+    const { toggle, toggling } = usePlaceManipulation();
 
 
     return {
       /* Component properties */
       isPlaceFull,
       isPlaceEmpty,
+      toggling,
 
       /* Event handlers */
       toggle,

@@ -112,5 +112,6 @@ export default {
     "owner.noImage": "Izaberite najmanje 1 fotografiju.",
     "uploadSelectedImages": "Otremi fotografije",
     "uploading": "Otpremam",
+    "toggling": "Menjam...",
 };
 

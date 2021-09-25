@@ -82,11 +82,11 @@ export const actions = {
             await dispatch("setToken", null);
             commit("SET_USER", null);
             commit("SET_ROLE", null);
-            commit('user/SET_DARKMODE', null, { root: true });
-            commit('user/SET_LOCALIZATION', null, { root: true });
-            commit('user/SET_NOTIFICATIONS', null, { root: true });
+            commit('user/SET_DARKMODE', false, { root: true });
+            commit('user/SET_LOCALIZATION', { text: "SRB", value: "sr" }, { root: true });
             await router.replace({ name: 'login' });
             await loading?.dismiss();
+
             i18n.global.locale.value = 'sr';
             document.body.classList.toggle('dark', false);
         }
@@ -111,12 +111,11 @@ export const actions = {
             return null;
         }
     },
-    async setToken({ commit, dispatch }, value) {
+    async setToken({ commit }, value) {
         const { set } = StorageService();
         try {
-            const token = value ?? await dispatch('getToken');
-            await set('projekata_token', token);
-            commit("SET_TOKEN", token);
+            await set('projekata_token', value);
+            commit("SET_TOKEN", value);
         }catch(error) {
             commit("SET_TOKEN", null);
         }

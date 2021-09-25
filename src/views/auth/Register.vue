@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <div id="register" class="flex flex-col justify-between background-image-container">
+      <div id="register" class="flex flex-col justify-between background-image-container h-full">
         <div class="mt-10 w-full">
           <h1 class="text-center uppercase main-heading">Caffe</h1>
           <h1 class="text-center lowercase main-heading-smaller">finder</h1>

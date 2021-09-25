@@ -25,17 +25,10 @@ export function useFCM() {
     /* Methods */
     const initPush = async() => {
         if(Capacitor.getPlatform() !== 'web') {
-            await registerPush();
+            await registerListeners();
         }
     };
-    const registerPush = async() => {
-        /* If permission is not granted asks for permission, after granted it registers Push Notifications */
-        try {
-            await PushNotifications.requestPermissions();
-        }catch(error) {
-            showErrorToast(error);
-        }
-
+    const registerListeners = async() => {
         /* Event listeners */
         PushNotifications.addListener(
             'registration',
@@ -105,15 +98,17 @@ export function useFCM() {
         }
     };
     const handleNotification = async(notification) => {
-        await Haptics.vibrate({ duration: 250 });
-        showSuccessToast(t('freeSpotNotification', { place: notification.data?.place_name }));
+        if(!store.getters['auth/isStaff'] && !store.getters['auth/isOwner']) {
+            await Haptics.vibrate({ duration: 250 });
+            showSuccessToast(t('freeSpotNotification', { place: notification.data?.place_name }));
+        }
     };
     const handleDataNotification = async(notification) => {
         if(
             notification.data.type === 'availabilityChanged' &&
             (store.getters['auth/isStaff'] || store.getters['auth/isOwner'])
         ) {
-            await store.dispatch('staff/updatePlaceAvailability');
+            store.commit('staff/SET_AVAILABILITY_RATIO', notification.data.availability_ratio);
         }
     };
 
@@ -122,7 +117,6 @@ export function useFCM() {
 
         /* Methods */
         initPush,
-        registerPush,
         registerToken,
     };
 }

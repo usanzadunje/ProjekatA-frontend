@@ -111,5 +111,6 @@ export default {
     "successImageUpload": "Successfully uploaded images!",
     "owner.noImage": "Please select at least 1 image.",
     "uploadSelectedImages": "Upload images",
-    "uploading": "Uploading"
+    "uploading": "Uploading",
+    "toggling": "Toggling...",
 };

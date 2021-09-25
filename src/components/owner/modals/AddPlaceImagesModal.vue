@@ -1,5 +1,5 @@
 <template>
-  <ion-content :fullscreen="true">
+  <ion-content :fullscreen="true" scrollY="false">
     <ion-item class="close-fake text-center" lines="none">
       <ion-button
           v-show="!images"
@@ -27,21 +27,30 @@
       >
         {{ loading ? `${$t('uploading')}...` : $t('uploadSelectedImages') }}
       </ion-button>
+      <ion-button
+          @click="removeImage"
+          fill="clear"
+          color="light"
+          class="text-lg uppercase"
+          slot="end"
+      >
+        {{ $t('remove') }}
+      </ion-button>
       <ion-button @click="dismiss" fill="clear" color="light" slot="end">
         <ion-icon :icon="close" slot="start"></ion-icon>
       </ion-button>
     </ion-item>
 
 
-    <ion-slides v-update-swiper :options="slideOpts">
+    <ion-slides
+        ref="imagePreviewSlider"
+        v-update-swiper
+        :options="slideOpts"
+    >
       <ion-slide v-for="image in place.images" :key="image.id">
-        <!--        OVDE NEGDE UBACITI DUGME ZA REMOVE SLIKE I PROSLEDITI ID SLIKE-->
-        <!--    <ion-button fill="clear" color="light" class="text-lg uppercase">-->
-        <!--      {{ $t('remove') }}-->
-        <!--    </ion-button>-->
         <div class="swiper-zoom-container">
           <img
-              :src="`${backendStorageURL + image.path}`"
+              :src="`${'http://192.168.1.203:8200/storage/img' + image.path}`"
               :alt="`Image of place ${place.name}`"
               @dblclick="zoom(userClickedToZoom)"
           >
@@ -159,6 +168,10 @@ export default defineComponent({
         loading.value = false;
       }
     };
+    const removeImage = async() => {
+      const imageIndex = await imagePreviewSlider.value?.$el?.getActiveIndex();
+      console.log(place.value.images[imageIndex]);
+    };
 
     return {
       /* Component properties */
@@ -176,6 +189,7 @@ export default defineComponent({
       selectImages,
       imagesSelected,
       uploadImages,
+      removeImage,
 
       /* Icons */
       close,
