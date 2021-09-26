@@ -18,7 +18,7 @@
       <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
         <ion-avatar>
           <img
-              :src="this.$store.getters['auth/authUser']?.avatar + '?' + new Date().getTime()"
+              :src="this.$store.getters['auth/authUser']?.avatar"
               alt="Profile picture"
           >
         </ion-avatar>

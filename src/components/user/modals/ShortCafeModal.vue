@@ -3,7 +3,7 @@
     <div class="ion-item-no-padding-x flex items-center">
       <img
           :src="mainImagePath"
-          :alt="`Logo of ${place.name}`"
+          :alt="`Logo`"
           class="modal-thumbnail radius-11px"
       >
       <div class="ml-4">
@@ -54,7 +54,7 @@
       @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
   >
     <CafeSubscriptionModal
-        :cafe="{'id': place.id, 'name': place.name}"
+        :place="{'id': place.id, 'name': place.name}"
         @dismiss-subscription-modal="openModal(false);"
         @user-toggled-subscription="$emit('userToggledSubscription')"
     />
@@ -127,7 +127,13 @@ export default defineComponent({
     const { isModalOpen, openModal } = useModal();
 
     /* Lifecycle hooks */
-    mainImagePath.value = process.env.VUE_APP_STORED_IMAGES_URL + place.value.images?.find((image) => image.is_main === 1)?.path ?? place.value.images[0]?.path;
+    if(place.value.images.length > 0) {
+      mainImagePath.value =
+          process.env.VUE_APP_STORED_IMAGES_URL + place.value.images.find(image => image.is_main === 1)?.path ??
+          place.value.images[0]?.path;
+    }else {
+      mainImagePath.value = process.env.VUE_APP_STORED_IMAGES_URL + '/places/default_place_logo.png';
+    }
     isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
     /* Checking if users is subscribed to this place */
     if(store.getters['auth/loggedIn']) {

@@ -27,7 +27,7 @@
                 src=""
                 :alt="`Image of ${place.name} place`"
                 @click="openPreview(place)"
-                class="banner-image w-full object-fill"
+                class="banner-image w-full object-fill img-border-15"
             />
             <div
                 class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
@@ -185,8 +185,14 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     getPlace().then(() => {
-      const mainImg = place.value.images?.find((image) => image.is_main === 1) ?? place.value.images[0];
-      mainImage.value.src = process.env.VUE_APP_STORED_IMAGES_URL + mainImg?.path;
+      let mainImg = '';
+      console.log(place.value.images);
+      if(place.value.images.length > 0) {
+        mainImg = place.value.images?.find((image) => image.is_main === 1)?.path ?? place.value.images[0].path;
+      }else {
+        mainImg = '/places/default_place_cover.png';
+      }
+      mainImage.value.src = process.env.VUE_APP_STORED_IMAGES_URL + mainImg;
     });
     onIonViewWillEnter(() => {
       searchTab = document.getElementById('tab-button-search');

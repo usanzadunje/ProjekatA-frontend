@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <div class="px-4">
+      <div>
         <EditPlaceForm :reset-inputs="resetInputs"/>
       </div>
     </ion-content>

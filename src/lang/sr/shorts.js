@@ -112,7 +112,7 @@ export default {
     "successImageUpload": "Uspesno ste dodali fotografije!",
     "successImageRemove": "Uspesno ste uklonili fotografiju!",
     "owner.noImage": "Izaberite najmanje 1 fotografiju.",
-    "uploadSelectedImages": "Otremi fotografije",
+    "uploadSelectedImages": "Otremi",
     "uploading": "Otpremam",
     "toggling": "Menjam...",
 };

@@ -16,7 +16,7 @@
           <div>
             <img
                 ref="avatarDisplay"
-                :src="authUser?.avatar + '?' + new Date().getTime()"
+                :src="authUser?.avatar"
                 :alt="`Profile picture of user ${authUser?.fname} ${authUser?.lname}`"
                 class="user-profile-picture"
             >

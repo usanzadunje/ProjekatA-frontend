@@ -1,5 +1,11 @@
 <template>
   <ion-content class="ion-no-padding bg-red-600" :scrollY="false">
+    <div class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
+         @click="navigateTo('staff.dashboard')">
+      <ion-icon slot="start" :icon="statsChartOutline" class="text-black"></ion-icon>
+      <span class="text-sm ml-3">{{ $t('staff.dashboard') }}</span>
+    </div>
+
     <div v-if="this.$store.getters['auth/isOwner']"
          class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
          @click="navigateTo('owner.place')">
@@ -58,6 +64,7 @@ import {
 }                                    from '@ionic/vue';
 
 import {
+  statsChartOutline,
   personOutline,
   peopleOutline,
   homeOutline,
@@ -110,6 +117,7 @@ export default defineComponent({
       toggleActivity,
 
       /* Icons */
+      statsChartOutline,
       personOutline,
       peopleOutline,
       homeOutline,

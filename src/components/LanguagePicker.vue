@@ -11,12 +11,18 @@ import { defineComponent, computed } from 'vue';
 import { useStore }                  from 'vuex';
 import { getLanguages }              from '@/lang';
 import { useI18n }                   from 'vue-i18n';
-import { pickerController }          from '@ionic/vue';
+import {
+  IonItem,
+  IonButton,
+  pickerController,
+}                                    from '@ionic/vue';
 
 export default defineComponent({
   name: 'LanguagePicker',
-  components: {},
-
+  components: {
+    IonItem,
+    IonButton,
+  },
   setup() {
     /* Global properties */
     const store = useStore();

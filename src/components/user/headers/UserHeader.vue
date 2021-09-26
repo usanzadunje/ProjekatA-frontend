@@ -100,6 +100,7 @@ ion-button {
   margin: 0 -1rem 0 0 !important;
 }
 
-ion-searchbar {
+ion-toolbar::part(open) {
+  padding: 0 !important;
 }
 </style>

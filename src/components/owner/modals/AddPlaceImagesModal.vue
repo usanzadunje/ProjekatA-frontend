@@ -163,6 +163,8 @@ export default defineComponent({
 
         await store.dispatch('staff/getPlaceInfo');
       }catch(errors) {
+        images.value = null;
+
         await showErrorToast(errors);
       }finally {
         loading.value = 0;

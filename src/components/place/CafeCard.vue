@@ -2,12 +2,12 @@
   <div class="background-white cafe-card-border-radius">
     <div class="p-4 flex justify-start items-center">
       <img
-          :src="`${backendStorageURL}/cafe/1_2cafe.png`"
-          alt=""
+          :src="`${backendStorageURL}${place.images[0]?.path ?? '/places/default_place_logo.png'}`"
+          alt="Logo"
           class="cafe-card-image"
       >
       <div class="ml-3.5 flex flex-col items-start">
-        <h2 class="cafe-card-name">{{ cafe.name }}</h2>
+        <h2 class="cafe-card-name">{{ place.name }}</h2>
         <p class="cafe-card-fade-text">Kafic, hrana, basta ...</p>
       </div>
     </div>
@@ -16,7 +16,7 @@
       <div class="flex">
         <div class="flex">
           <ion-icon :icon="pieChart" class="text-yellow-400"></ion-icon>
-          <span class="cafe-card-fade-text ml-1">{{ cafe.availability_ratio }}</span>
+          <span class="cafe-card-fade-text ml-1">{{ place.availability_ratio }}</span>
         </div>
         <div class="flex ml-2">
           <ion-icon :icon="locationOutline" class="primary-icon-color"></ion-icon>
@@ -52,17 +52,16 @@ export default defineComponent({
     IonIcon,
   },
   props: {
-    cafe: {
+    place: {
       type: Object,
       default: null,
     },
   },
   setup(props) {
     /* Component properties */
-    const distance = computed(() => Math.round(CafeService.getDistance(props.cafe.latitude, props.cafe.longitude)));
+    const distance = computed(() => Math.round(CafeService.getDistance(props.place.latitude, props.place.longitude)));
 
     /* Event handlers */
-
 
     return {
       /* Component Properties */

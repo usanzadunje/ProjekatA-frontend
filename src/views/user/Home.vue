@@ -19,14 +19,14 @@
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
           <ion-slide>
             <SlidingCards
-                :cafes="cafes.closestToUser?.slice(0, 2)"
+                :places="cafes.closestToUser?.slice(0, 2)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
-                :cafes="cafes.closestToUser?.slice(2, 4)"
+                :places="cafes.closestToUser?.slice(2, 4)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
@@ -42,14 +42,14 @@
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
           <ion-slide>
             <SlidingCards
-                :cafes="cafes.currentlyAvailable?.slice(0, 2)"
+                :places="cafes.currentlyAvailable?.slice(0, 2)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
-                :cafes="cafes.currentlyAvailable?.slice(2, 4)"
+                :places="cafes.currentlyAvailable?.slice(2, 4)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
@@ -60,14 +60,14 @@
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
           <ion-slide>
             <SlidingCards
-                :cafes="cafes.haveFood?.slice(0, 2)"
+                :places="cafes.haveFood?.slice(0, 2)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
-                :cafes="cafes.haveFood?.slice(2, 4)"
+                :places="cafes.haveFood?.slice(2, 4)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />

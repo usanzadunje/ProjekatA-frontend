@@ -1,11 +1,11 @@
 <template>
   <div class="w-full">
     <CafeCard
-        v-for="cafe in cafes"
-        :key="cafe.id"
+        v-for="place in places"
+        :key="place.id"
         class="mb-5"
-        :cafe="cafe"
-        @click="$emit('openCafeModal', cafe)"
+        :place="place"
+        @click="$emit('openCafeModal', place)"
     />
   </div>
 </template>
@@ -21,7 +21,7 @@ export default defineComponent({
     CafeCard,
   },
   props: {
-    cafes: {
+    places: {
       type: Object,
       default: null,
     },

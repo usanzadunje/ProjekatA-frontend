@@ -57,7 +57,7 @@ import {
   IonButton,
   IonSlides,
   IonSlide,
-} from '@ionic/vue';
+}                               from '@ionic/vue';
 
 import {
   locationOutline,

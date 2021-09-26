@@ -19,7 +19,10 @@
             :search-term="cafeSearchString"
             @search-filter-changed="searchFilterChanged"
         >
-          <SlidingFilter :has-title="true" @sort-has-changed="sortHasChanged"/>
+          <SlidingFilter
+              :has-title="true"
+              @sort-has-changed="sortHasChanged"
+          />
         </UserHeader>
       </div>
 

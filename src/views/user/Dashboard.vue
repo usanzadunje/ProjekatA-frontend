@@ -29,7 +29,7 @@
               />
               <CafeCard
                   class="w-full"
-                  :cafe="cafe"
+                  :place="cafe"
                   @click="openModal(true, cafe)"
               />
             </ion-item>

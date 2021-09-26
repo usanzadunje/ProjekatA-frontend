@@ -4,7 +4,7 @@
     <div v-if="!showSkeleton">
       <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
         <CafeCard
-            :cafe="cafe"
+            :place="cafe"
             @click="$emit('openCafeModal', cafe)"
         />
       </div>

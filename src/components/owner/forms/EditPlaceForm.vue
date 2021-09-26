@@ -1,12 +1,13 @@
 <template>
-  <div class="px-10 pb-2">
+  <div class="px-8 pb-2">
     <div>
       <div class="mb-6">
         <img
-            :src="`${backendStorageURL}/cafe/1_1cafe.png`"
+            id="mainImage"
+            :src="mainImagePath"
             :alt="`Image of  cafe`"
             @click="openPreview"
-            class="h-36 w-full"
+            class="h-36 w-full img-border-15"
         />
       </div>
       <ion-item
@@ -167,6 +168,7 @@ export default defineComponent({
     const store = useStore();
     const { t } = useI18n();
 
+    /* Computed properties */
     const placeInfo = computed(() => {
       return store.getters['staff/place'];
     });
@@ -180,9 +182,16 @@ export default defineComponent({
     const phoneInput = ref(null);
     const loading = ref(false);
     const { resetInputs } = toRefs(props);
-
+    const mainImagePath = ref();
 
     /* Lifecycle hooks */
+    if(placeInfo.value.images.length > 0) {
+      mainImagePath.value =
+          process.env.VUE_APP_STORED_IMAGES_URL + placeInfo.value.images.find(image => image.is_main === 1)?.path ??
+          placeInfo.value.images[0]?.path;
+    }else {
+      mainImagePath.value = process.env.VUE_APP_STORED_IMAGES_URL + '/places/default_place_logo.png';
+    }
     onMounted(async() => {
       resetInput();
     });
@@ -244,6 +253,7 @@ export default defineComponent({
       phoneInput,
       emailInput,
       loading,
+      mainImagePath,
 
       /* Event handlers  */
       update,
@@ -260,5 +270,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+#mainImage {
 
+}
 </style>

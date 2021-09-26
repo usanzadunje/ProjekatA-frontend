@@ -72,7 +72,7 @@
           class="flex rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
       >
-        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
         <ion-input
             ref="emailInput"
             v-model="user.email"
@@ -103,7 +103,7 @@
           class="flex rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
       >
-        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon :icon="callOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
         <ion-input
             ref="phoneInput"
             v-model="user.phone"
@@ -245,6 +245,7 @@ import {
   eyeOutline,
   eyeOffOutline,
   personOutline,
+  callOutline,
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -331,7 +332,6 @@ export default defineComponent({
       try {
         await store.dispatch("auth/updateAuthUser", user);
 
-        avatarDisplay.value.src = authUser.value.avatar + '?' + new Date().getTime();
         showSuccessToast(t('successUpdate'));
       }catch(errors) {
         errorNames.value = getError(errors);
@@ -418,6 +418,7 @@ export default defineComponent({
       lockOpenOutline,
       eyeOutline,
       eyeOffOutline,
+      callOutline,
     };
   },
 });
