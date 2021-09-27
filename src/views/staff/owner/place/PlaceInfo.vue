@@ -12,7 +12,9 @@
 import { defineComponent, ref } from 'vue';
 import {
   IonPage,
-  IonContent, onIonViewWillLeave,
+  IonContent,
+  onIonViewWillLeave,
+  onIonViewWillEnter,
 }                               from '@ionic/vue';
 
 import EditPlaceForm from '@/components/owner/forms/EditPlaceForm';
@@ -29,9 +31,14 @@ export default defineComponent({
     const resetInputs = ref(false);
 
     /* Lifecycle hooks */
+    onIonViewWillEnter(() => {
+      resetInputs.value = false;
+
+    });
     onIonViewWillLeave(() => {
       resetInputs.value = true;
     });
+
 
     return {
       /* Component properties */

@@ -19,7 +19,6 @@ import {
 
 import EditForm from '@/components/auth/EditForm';
 
-
 export default defineComponent({
   name: "Edit",
   components: {

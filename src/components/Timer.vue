@@ -19,7 +19,7 @@ export default defineComponent({
   },
   emits: ['subscriptionExpired'],
   setup(props, { emit }) {
-    let timeLeft = ref(props.start === 0 ? -1 : props.start + 1);
+    let timeLeft = ref(props.start ?? -1);
 
     watch(timeLeft, () => {
       if(timeLeft.value > 0) {

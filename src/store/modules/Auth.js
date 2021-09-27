@@ -17,6 +17,11 @@ export const mutations = {
     SET_USER(state, user) {
         state.user = user;
     },
+    UPDATE_USER(state, user) {
+        Object.keys(user).forEach(key => {
+            state.user[key] = user[key];
+        });
+    },
     SET_TOKEN(state, token) {
         state.token = token;
     },
@@ -50,10 +55,10 @@ export const actions = {
 
         return response.data?.role;
     },
-    async updateAuthUser({ dispatch }, user) {
+    async updateAuthUser({ commit }, user) {
         await AuthService.updateUser(user);
 
-        dispatch("getAuthUser");
+        commit("UPDATE_USER", user);
     },
     async logout({ commit, dispatch }) {
         let loading = null;
@@ -106,7 +111,6 @@ export const actions = {
         const { get } = StorageService();
         try {
             return await get('projekata_token');
-
         }catch(error) {
             return null;
         }
@@ -115,6 +119,7 @@ export const actions = {
         const { set } = StorageService();
         try {
             await set('projekata_token', value);
+
             commit("SET_TOKEN", value);
         }catch(error) {
             commit("SET_TOKEN", null);

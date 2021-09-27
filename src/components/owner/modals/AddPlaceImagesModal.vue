@@ -1,6 +1,6 @@
 <template>
   <ion-content :fullscreen="true" scrollY="false">
-    <ion-item class="close-fake text-center" lines="none">
+    <ion-item class="mt-1 bg-transparent text-center" lines="none">
       <ion-button
           v-show="!images"
           @click="selectImages"
@@ -40,8 +40,16 @@
         <ion-icon :icon="close" slot="start"></ion-icon>
       </ion-button>
     </ion-item>
-
-
+    <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center">
+      <ion-button
+          @click="setAsMainImage"
+          fill="white"
+          expand="block"
+          class="text-sm font-bold uppercase main-img-button"
+      >
+        {{ loading === 0 ? `${$t('setting')}...` : $t('setMain') }}
+      </ion-button>
+    </div>
     <ion-slides
         ref="imagePreviewSlider"
         v-update-swiper
@@ -108,7 +116,7 @@ export default defineComponent({
     const userClickedToZoom = ref(true);
     const imagesInput = ref();
     const images = ref();
-    const loading = ref(0);
+    const loading = ref();
     const place = computed(() => store.getters['staff/place']);
 
     /* Composables */
@@ -144,7 +152,7 @@ export default defineComponent({
               noImageSelected: t('owner.noImage'),
             },
         );
-        loading.value = 0;
+        loading.value = null;
         return;
       }
 
@@ -167,7 +175,7 @@ export default defineComponent({
 
         await showErrorToast(errors);
       }finally {
-        loading.value = 0;
+        loading.value = null;
       }
     };
     const removeImage = async() => {
@@ -183,7 +191,23 @@ export default defineComponent({
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
-        loading.value = 0;
+        loading.value = null;
+      }
+    };
+    const setAsMainImage = async() => {
+      loading.value = 0;
+      try {
+        const imageIndex = await imagePreviewSlider.value?.$el?.getActiveIndex();
+
+        await OwnerService.setImageAsMain(place.value.images[imageIndex].id);
+
+        showSuccessToast(t('successImageMain'));
+
+        await store.dispatch('staff/getPlaceInfo');
+      }catch(errors) {
+        await showErrorToast(errors);
+      }finally {
+        loading.value = null;
       }
     };
 
@@ -204,6 +228,7 @@ export default defineComponent({
       imagesSelected,
       uploadImages,
       removeImage,
+      setAsMainImage,
 
       /* Icons */
       close,
@@ -227,13 +252,13 @@ ion-slides {
   height: 80%;
 }
 
-.close-fake {
-  --background: transparent;
-  margin-top: 10px;
-  margin-bottom: 30px;
-}
-
 #images {
   display: none;
+}
+
+.main-img-button {
+  --background: #f4f5f8 !important;
+  width: 90%;
+  --border-radius: 20px !important;
 }
 </style>

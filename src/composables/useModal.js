@@ -13,8 +13,13 @@ export function useModal() {
     const openModal = async(state, data = null) => {
         if(data) {
             modalData.value = data;
-            const response = await CafeService.images(data.id);
-            modalData.value.images = response.data;
+            if(!data.username) {
+                const response = await CafeService.images(data.id);
+                const responseHours = await CafeService.workingHours(data.id);
+
+                modalData.value.images = response.data;
+                modalData.value.working_hours = responseHours.data;
+            }
         }
         isModalOpen.value = state;
     };

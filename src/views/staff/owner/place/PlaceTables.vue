@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import {
   IonPage,
-  IonContent, onIonViewWillLeave,
-}                               from '@ionic/vue';
+  IonContent,
+}                          from '@ionic/vue';
 
 export default defineComponent({
   name: "PlaceTables",
@@ -23,16 +23,12 @@ export default defineComponent({
   },
   setup() {
     /* Component properties */
-    const resetInputs = ref(false);
 
     /* Lifecycle hooks */
-    onIonViewWillLeave(() => {
-      resetInputs.value = true;
-    });
+
 
     return {
       /* Component properties */
-      resetInputs,
 
       /* Event handlers */
     };

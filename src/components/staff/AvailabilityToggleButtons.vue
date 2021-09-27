@@ -5,7 +5,7 @@
         :disabled="isPlaceEmpty || toggling"
         class="w-full h-32"
     >
-      {{ toggling ? $t('toggling') : $t('release') }}
+      {{ toggling ? `${$t('toggling')}...` : $t('release') }}
       <ion-icon :icon="addOutline" class="text-2xl text-white-400"></ion-icon>
     </ion-button>
     <ion-button
@@ -13,7 +13,7 @@
         :disabled="isPlaceFull || toggling"
         class="w-full h-32 btn-bg-danger"
     >
-      {{ toggling ? $t('toggling') : $t('occupy') }}
+      {{ toggling ? `${$t('toggling')}...` : $t('occupy') }}
       <ion-icon :icon="removeOutline" class="text-2xl text-white-400"></ion-icon>
     </ion-button>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <div class="pt-6 px-14">
-      <ion-segment value="owner.place.info" @ionChange="pageChange($event)" class="bg-gray-100" mode="ios">
+      <ion-segment :value="$route.name" @ionChange="pageChange($event)" class="bg-gray-100" mode="ios">
         <ion-segment-button value="owner.place.info" layout="icon-top" mode="ios">
           <ion-label>{{ $t('basic') }}</ion-label>
         </ion-segment-button>
@@ -50,9 +50,7 @@ export default defineComponent({
 
     /* Composables */
 
-
     /* Lifecycle hooks */
-
 
     /* Event handlers */
     const pageChange = (e) => {

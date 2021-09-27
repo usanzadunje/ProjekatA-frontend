@@ -42,6 +42,9 @@ export default {
     images(id) {
         return API.apiClient.get(`/cafes/${id}/images`);
     },
+    workingHours(id) {
+        return API.apiClient.get(`/cafes/${id}/working-hours`);
+    },
     // Subscribing users to specific cafe
     subscribe(cafeId, notificationTime = null) {
         return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime || ''}`);

@@ -5,6 +5,7 @@
         :button="button"
         @click="$emit('editMember')"
     >
+      <slot></slot>
       <ion-card-header>
         <div class="flex items-center justify-center">
           <ion-thumbnail
@@ -33,11 +34,6 @@ import {
   IonCardHeader,
   IonThumbnail,
 }                          from '@ionic/vue';
-
-import {
-  create,
-  removeCircle,
-} from 'ionicons/icons';
 
 export default defineComponent({
   name: "StaffCard",
@@ -68,8 +64,6 @@ export default defineComponent({
       /* Event handlers */
 
       /* Icons */
-      create,
-      removeCircle,
     };
   },
 });
@@ -77,8 +71,9 @@ export default defineComponent({
 
 <style scoped>
 ion-card {
-  box-shadow: #000 0 2px 4px;
+  box-shadow: #000 0 1px 4px;
   --background: var(--staff-card-background);
+  border-radius: 20px !important;
 }
 
 ion-card-subtitle {
@@ -88,7 +83,12 @@ ion-card-subtitle {
   font-size: 12px;
 }
 
+h2 {
+  color: #F0F0F2 !important;
+}
+
 h3 {
+  color: #F0F0F2 !important;
   letter-spacing: 0 !important;
 }
 </style>

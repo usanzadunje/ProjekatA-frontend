@@ -26,4 +26,7 @@ export default {
     removePlaceImage(id) {
         return API.apiClient.post(`/owner/place/images/remove/${id}`);
     },
+    setImageAsMain(id) {
+        return API.apiClient.post(`/owner/place/images/set-main/${id}`);
+    },
 };

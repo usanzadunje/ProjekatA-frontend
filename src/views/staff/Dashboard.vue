@@ -8,7 +8,7 @@
         </ion-refresher-content>
       </ion-refresher>
       <div class="wrap">
-        <h1 class="text-center uppercase secondary-heading">Current availability situation in your place</h1>
+        <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentAvailabilitySituation') }}</h1>
 
         <div
             :class="`
@@ -20,7 +20,7 @@
               v-if="this.$store.getters['auth/isOwner']"
               class="mt-10"
           >
-            <h1 class="text-center uppercase secondary-heading">Currently active staff</h1>
+            <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentActiveStaff') }}</h1>
 
             <ActiveStaffMembers/>
           </div>

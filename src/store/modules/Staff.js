@@ -12,7 +12,9 @@ export const state = {
 
 export const mutations = {
     SET_PLACE_INFO(state, value) {
-        state.place = value;
+        Object.keys(value).forEach(key => {
+            state.place[key] = value[key];
+        });
     },
     SET_AVAILABILITY_RATIO(state, value) {
         state.availabilityRatio = value;
@@ -25,6 +27,7 @@ export const mutations = {
 export const actions = {
     async getPlaceInfo({ commit, rootGetters }) {
         const response = await CafeService.show(rootGetters['auth/authUser'].cafe);
+
         commit('SET_PLACE_INFO', response.data);
         commit('SET_AVAILABILITY_RATIO', response.data?.availability_ratio ?? '0/0');
     },
@@ -46,6 +49,7 @@ export const actions = {
             active: value,
         };
         await StaffService.toggleActivity(payload);
+
         commit('SET_ACTIVITY', value);
     },
 };

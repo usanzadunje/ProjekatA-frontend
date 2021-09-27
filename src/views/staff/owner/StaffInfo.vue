@@ -18,25 +18,18 @@
           {{ $t('owner.createStaff') }}
         </ion-button>
 
-        <div
+        <StaffCard
             v-for="member in staff"
             :key="member.id"
-            class="mt-4 relative"
+            :member="member"
+            @edit-member="editMember(member)"
+            :button="true"
         >
-          <div class="absolute top-1 right-9 z-40">
-            <div id="editSection" class="flex items-center justify-center mx-auto w-16">
-              <ion-icon :icon="create" class="text-2xl text-blue" slot="icon-only"
-                        @click="editMember(member, $event)"></ion-icon>
-              <ion-icon :icon="removeCircle" class="text-2xl text-danger ml-2" slot="icon-only"
-                        @click="deleteMember(member, $event)"></ion-icon>
-            </div>
+          <div class="absolute top-1.5 right-3 z-40">
+            <ion-icon :icon="close" class="text-2xl text-danger ml-2" slot="icon-only"
+                      @click="deleteMember(member, $event)"></ion-icon>
           </div>
-          <StaffCard
-              :member="member"
-              @edit-member="editMember(member)"
-              :button="true"
-          />
-        </div>
+        </StaffCard>
       </div>
       <Modal
           :is-open="isModalOpen"
@@ -76,8 +69,7 @@ import CreateEditStaffModal from '@/components/staff/modals/CreateEditStaffModal
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
-  removeCircle,
-  create,
+  close,
 }                   from 'ionicons/icons';
 import { useModal } from '@/composables/useModal';
 
@@ -178,8 +170,7 @@ export default defineComponent({
       openModal,
 
       /* Icons */
-      removeCircle,
-      create,
+      close,
     };
   },
 
@@ -189,9 +180,5 @@ export default defineComponent({
 ion-content {
   --background: var(--show-paint);
   background: var(--show-paint);
-}
-
-#editSection {
-  background: transparent;
 }
 </style>

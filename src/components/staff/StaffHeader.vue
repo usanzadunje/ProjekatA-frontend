@@ -6,13 +6,15 @@
       </ion-button>
 
       <div class="flex items-center">
+        <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'Dark' : 'Light' }}</ion-label>
         <ion-toggle
             class="dark-toggle-checked"
             :checked="isDarkModeOn"
             @ionChange="toggleDarkMode($event)"
             mode="md"
         ></ion-toggle>
-        <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'Dark' : 'Light' }}</ion-label>
+
+        <LanguagePicker class="ml-3"/>
       </div>
 
       <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
@@ -41,6 +43,7 @@ import {
 }                                    from '@ionic/vue';
 
 import SettingsPopover from '@/components/staff/popovers/SettingsPopover';
+import LanguagePicker  from '@/components/LanguagePicker';
 
 import { useMenu }    from '@/composables/useMenu';
 import { usePopover } from '@/composables/usePopover';
@@ -61,7 +64,7 @@ export default defineComponent({
     IonAvatar,
     IonLabel,
     IonToggle,
-
+    LanguagePicker,
   },
   props: {},
   setup() {
@@ -114,4 +117,7 @@ export default defineComponent({
 
 </script>
 <style scoped>
+ion-item {
+  --background: #F3F4F6 !important;
+}
 </style>

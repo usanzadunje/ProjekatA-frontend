@@ -4,7 +4,7 @@
       <div class="mb-6">
         <img
             id="mainImage"
-            :src="mainImagePath"
+            :src="`${backendStorageURL + mainImagePath}`"
             :alt="`Image of  cafe`"
             @click="openPreview"
             class="h-36 w-full img-border-15"
@@ -93,6 +93,91 @@
         ></ion-input>
       </ion-item>
     </div>
+    <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
+      <ion-label class="settings-fade-text">{{ $t('workingHours') }}</ion-label>
+      <ion-toggle
+          :checked="showWorkingHours"
+          @ionChange="toggleWorkingHours($event)"
+          mode="md"
+      ></ion-toggle>
+    </ion-item>
+    <div v-show="showWorkingHours">
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('mon_fri') }"
+      >
+        <ion-label class="settings-fade-text">{{ `${$t('monday')}-${$t('friday')}` }}</ion-label>
+        <ion-datetime
+            v-model="place.mon_fri_start"
+            :doneText="$t('choose')"
+            :cancelText="$t('cancel')"
+            display-format="HH:mm"
+            value="04:20"
+            :placeholder="$t('selectTime')"
+        ></ion-datetime>
+        &nbsp;
+        -
+        <ion-datetime
+            v-model="place.mon_fri_end"
+            :doneText="$t('choose')"
+            :cancelText="$t('cancel')"
+            display-format="HH:mm"
+            value="04:20"
+            :placeholder="$t('selectTime')"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('satudrady') }"
+      >
+        <ion-label class="settings-fade-text">{{ $t('saturday') }}</ion-label>
+        <ion-datetime
+            v-model="place.saturday_start"
+            :doneText="$t('choose')"
+            :cancelText="$t('cancel')"
+            display-format="HH:mm"
+            value="04:20"
+            :placeholder="$t('selectTime')"
+        ></ion-datetime>
+        &nbsp;
+        -
+        <ion-datetime
+            v-model="place.saturday_end"
+            :doneText="$t('choose')"
+            :cancelText="$t('cancel')"
+            display-format="HH:mm"
+            value="04:20"
+            :placeholder="$t('selectTime')"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('sunday') }"
+      >
+        <ion-label class="settings-fade-text">{{ $t('sunday') }}</ion-label>
+        <ion-datetime
+            v-model="place.sunday_start"
+            :doneText="$t('choose')"
+            :cancelText="$t('cancel')"
+            display-format="HH:mm"
+            value="04:20"
+            :placeholder="$t('selectTime')"
+        ></ion-datetime>
+        &nbsp;
+        -
+        <ion-datetime
+            v-model="place.sunday_end"
+            :doneText="$t('choose')"
+            :cancelText="$t('cancel')"
+            display-format="HH:mm"
+            value="04:20"
+            :placeholder="$t('selectTime')"
+        ></ion-datetime>
+      </ion-item>
+    </div>
 
     <div class="mt-14">
       <ion-button
@@ -128,7 +213,11 @@ import {
   IonInput,
   IonIcon,
   IonButton,
-  IonSpinner, modalController,
+  IonSpinner,
+  IonToggle,
+  IonLabel,
+  IonDatetime,
+  modalController,
 }
                                                                               from "@ionic/vue";
 
@@ -156,6 +245,9 @@ export default defineComponent({
     IonIcon,
     IonButton,
     IonSpinner,
+    IonToggle,
+    IonLabel,
+    IonDatetime,
   },
   props: {
     resetInputs: {
@@ -172,6 +264,14 @@ export default defineComponent({
     const placeInfo = computed(() => {
       return store.getters['staff/place'];
     });
+    const mainImagePath = computed(() => {
+      if(placeInfo.value.images?.length > 0) {
+        return placeInfo.value.images.find(image => image.is_main === 1)?.path ??
+            placeInfo.value.images[0]?.path;
+      }else {
+        return '/places/default_place_cover.png';
+      }
+    });
 
     /* Component properties */
     const place = reactive({});
@@ -182,16 +282,11 @@ export default defineComponent({
     const phoneInput = ref(null);
     const loading = ref(false);
     const { resetInputs } = toRefs(props);
-    const mainImagePath = ref();
+    const showWorkingHours = ref(false);
+
 
     /* Lifecycle hooks */
-    if(placeInfo.value.images.length > 0) {
-      mainImagePath.value =
-          process.env.VUE_APP_STORED_IMAGES_URL + placeInfo.value.images.find(image => image.is_main === 1)?.path ??
-          placeInfo.value.images[0]?.path;
-    }else {
-      mainImagePath.value = process.env.VUE_APP_STORED_IMAGES_URL + '/places/default_place_logo.png';
-    }
+
     onMounted(async() => {
       resetInput();
     });
@@ -202,11 +297,21 @@ export default defineComponent({
 
     /* Methods */
     const resetInput = () => {
+      const mon_fri_hours = placeInfo.value.working_hours.mon_fri.split('-');
+      const saturday_hours = placeInfo.value.working_hours.saturday.split('-');
+      const sunday_hours = placeInfo.value.working_hours.sunday.split('-');
+
       place.name = placeInfo.value.name;
       place.city = placeInfo.value.city;
       place.address = placeInfo.value.address;
       place.email = placeInfo.value.email;
       place.phone = placeInfo.value.phone;
+      place.mon_fri_start = mon_fri_hours[0];
+      place.mon_fri_end = mon_fri_hours[1];
+      place.saturday_start = saturday_hours[0];
+      place.saturday_end = saturday_hours[1];
+      place.sunday_start = sunday_hours[0];
+      place.sunday_end = sunday_hours[1];
     };
 
     /* Event handlers */
@@ -215,6 +320,7 @@ export default defineComponent({
       Keyboard.hide();
       try {
         await store.dispatch("staff/updatePlaceInfo", place);
+
         showSuccessToast(t('successUpdate'));
       }catch(errors) {
         errorNames.value = getError(errors);
@@ -233,10 +339,14 @@ export default defineComponent({
           });
       return modal.present();
     };
+    const toggleWorkingHours = (e) => {
+      showWorkingHours.value = e.target.checked;
+    };
 
     /* Watchers */
     watch(resetInputs, () => {
       if(resetInputs.value) {
+        showWorkingHours.value = false;
         resetInput();
       }
     });
@@ -254,10 +364,13 @@ export default defineComponent({
       emailInput,
       loading,
       mainImagePath,
+      showWorkingHours,
 
       /* Event handlers  */
       update,
       openPreview,
+      toggleWorkingHours,
+      resetInput,
 
       /* Icons */
       createOutline,

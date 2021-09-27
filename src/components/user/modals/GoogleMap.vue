@@ -8,16 +8,16 @@
     </div>
 
     <div class="mt-6 text-center">
-      <h1 class="main-toolbar-heading text-xl">Distance : {{ distance }}</h1>
+      <h1 class="main-toolbar-heading text-xl"> {{ `${$t('distance')}: ` + distance }}</h1>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, onBeforeUnmount, ref } from 'vue';
-import { useStore }                                         from 'vuex';
-import { useI18n }                                          from 'vue-i18n';
-import { loadingController }                                from '@ionic/vue';
+import { defineComponent, onMounted, onBeforeUnmount, ref, toRefs } from 'vue';
+import { useStore }                                                 from 'vuex';
+import { useI18n }                                                  from 'vue-i18n';
+import { loadingController }                                        from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
 
@@ -45,6 +45,7 @@ export default defineComponent({
     const distance = ref('N/A');
     const map = ref(null);
     const content = ref(null);
+    const { place } = toRefs(props);
 
     /* Composables */
     const { tryGettingLocation } = useGeolocation();
@@ -75,8 +76,8 @@ export default defineComponent({
           height: mapContainerBoundingRect.height - 4,
           x: mapContainerBoundingRect.x + 2,
           y: mapContainerBoundingRect.y + 2,
-          latitude: Number(props.place.latitude) || 43.317862492567,
-          longitude: Number(props.place.longitude) || 21.895785976058143,
+          latitude: Number(place.latitude) || 43.317862492567,
+          longitude: Number(place.longitude) || 21.895785976058143,
           zoom: 16,
           liteMode: true,
         });
@@ -90,13 +91,13 @@ export default defineComponent({
       }
 
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
-        distance.value = `${Math.round(CafeService.getDistance(props.place.latitude, props.place.longitude))}m`;
+        distance.value = `${Math.round(CafeService.getDistance(place.latitude, place.longitude))}m`;
 
         await CapacitorGoogleMaps.addMarker({
-          latitude: Number(props.place.latitude) || 43.317862492567,
-          longitude: Number(props.place.longitude) || 21.895785976058143,
-          title: props.place.name,
-          snippet: props.place.address + " ," + props.place.city,
+          latitude: Number(place.latitude) || 43.317862492567,
+          longitude: Number(place.longitude) || 21.895785976058143,
+          title: place.name,
+          snippet: place.address + " ," + place.city,
         });
 
         await CapacitorGoogleMaps.addMarker({

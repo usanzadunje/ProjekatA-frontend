@@ -103,7 +103,7 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-toolbar {
-  --background: url('https://resize.rs/storage/img/user/header-background.png') no-repeat;
+  --background: url('https://resize.rs/storage/img/users/header-background.png') no-repeat;
   background-color: #207DFF;
 }
 

@@ -16,4 +16,10 @@ export default {
     "warningGoogleMapsError": "We couldn't load map for you.",
     "tooManyRequests": "Too much requests in short period of time. Slow down.",
     "forceLogout": "There was an error but we forced logout.",
+    "successLogin": "Successfully logged in!",
+    "successUpdate": "Successfully updated profile information!",
+    "successImageUpload": "Successfully uploaded images!",
+    "successImageRemove": "Successfully removed image!",
+    "successImageMain": "Successfully set new image as main!",
+
 };

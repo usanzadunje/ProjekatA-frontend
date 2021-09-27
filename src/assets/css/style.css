@@ -479,7 +479,6 @@ ion-toggle.dark-toggle-checked {
 
 .auth-button-border-radius {
     --border-radius: 17px;
-    --border-color: #f00;
 }
 
 /* Input styles */

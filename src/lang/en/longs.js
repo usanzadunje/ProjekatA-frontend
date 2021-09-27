@@ -12,4 +12,6 @@ export default {
     "notificationModal2": " in the next : ",
     "showPlace": "Cafe, food, garden. Continue forward in order to see what our application has to offer you.",
     "freeSpotNotification": "There is a free spot at {place} now.",
+    "owner.currentAvailabilitySituation": "Current availability situation in your place",
+    "owner.currentActiveStaff": "Currently active staff",
 };

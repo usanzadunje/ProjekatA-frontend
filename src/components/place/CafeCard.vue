@@ -2,7 +2,7 @@
   <div class="background-white cafe-card-border-radius">
     <div class="p-4 flex justify-start items-center">
       <img
-          :src="`${backendStorageURL}${place.images[0]?.path ?? '/places/default_place_logo.png'}`"
+          :src="`${backendStorageURL + mainImagePath}`"
           alt="Logo"
           class="cafe-card-image"
       >
@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, toRefs } from 'vue';
 import {
   IonIcon,
-}                                    from '@ionic/vue';
+}                                            from '@ionic/vue';
 
 import CafeService from '@/services/CafeService';
 
@@ -59,13 +59,22 @@ export default defineComponent({
   },
   setup(props) {
     /* Component properties */
-    const distance = computed(() => Math.round(CafeService.getDistance(props.place.latitude, props.place.longitude)));
-
+    const { place } = toRefs(props);
+    const distance = computed(() => Math.round(CafeService.getDistance(place.latitude, place.longitude)));
+    const mainImagePath = computed(() => {
+      if(place.value.images?.length > 0) {
+        return place.value.images.find(image => image.is_main === 1)?.path ??
+            place.value.images[0]?.path;
+      }else {
+        return '/places/default_place_logo.png';
+      }
+    });
     /* Event handlers */
 
     return {
       /* Component Properties */
       distance,
+      mainImagePath,
 
       /* Event listeners */
 

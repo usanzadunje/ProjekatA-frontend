@@ -23,8 +23,7 @@
         <div>
           <div class="relative">
             <img
-                ref="mainImage"
-                src=""
+                :src="`${backendStorageURL + mainImagePath}`"
                 :alt="`Image of ${place.name} place`"
                 @click="openPreview(place)"
                 class="banner-image w-full object-fill img-border-15"
@@ -154,12 +153,19 @@ export default defineComponent({
     /* Component properties */
     const place = ref({});
     const isUserSubscribed = ref(false);
-    const mainImage = ref();
     let searchTab = null;
     const platformIsWeb = Capacitor.getPlatform() === 'web';
 
     /* Computed properties */
-    let loggedIn = computed(() => store.getters['auth/loggedIn']);
+    const loggedIn = computed(() => store.getters['auth/loggedIn']);
+    const mainImagePath = computed(() => {
+      if(place.value.images?.length > 0) {
+        return place.value.images?.find((image) => image.is_main === 1)?.path
+            ?? place.value.images[0].path;
+      }else {
+        return '/places/default_place_cover.png';
+      }
+    });
 
     /* Composables */
     const { showErrorToast } = useToastNotifications();
@@ -184,16 +190,9 @@ export default defineComponent({
     };
 
     /* Lifecycle hooks */
-    getPlace().then(() => {
-      let mainImg = '';
-      console.log(place.value.images);
-      if(place.value.images.length > 0) {
-        mainImg = place.value.images?.find((image) => image.is_main === 1)?.path ?? place.value.images[0].path;
-      }else {
-        mainImg = '/places/default_place_cover.png';
-      }
-      mainImage.value.src = process.env.VUE_APP_STORED_IMAGES_URL + mainImg;
-    });
+    (async() => {
+      await getPlace();
+    })();
     onIonViewWillEnter(() => {
       searchTab = document.getElementById('tab-button-search');
       if(searchTab) {
@@ -234,7 +233,7 @@ export default defineComponent({
 
       /* Component properties */
       place,
-      mainImage,
+      mainImagePath,
       isModalOpen,
       isUserSubscribed,
       platformIsWeb,

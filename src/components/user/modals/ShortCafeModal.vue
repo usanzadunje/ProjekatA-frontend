@@ -2,7 +2,7 @@
   <div class="px-4 pt-4">
     <div class="ion-item-no-padding-x flex items-center">
       <img
-          :src="mainImagePath"
+          :src="`${backendStorageURL + mainImagePath}`"
           :alt="`Logo`"
           class="modal-thumbnail radius-11px"
       >
@@ -62,17 +62,17 @@
 </template>
 
 <script>
-import { defineComponent, ref, toRef, onUnmounted } from 'vue';
-import { useRoute, useRouter }                      from 'vue-router';
-import { useStore }                                 from 'vuex';
-import { Capacitor }                                from '@capacitor/core';
+import { defineComponent, ref, computed, toRef, onUnmounted } from 'vue';
+import { useRoute, useRouter }                                from 'vue-router';
+import { useStore }                                           from 'vuex';
+import { Capacitor }                                          from '@capacitor/core';
 import {
   IonIcon,
   IonButton,
   IonSlides,
   IonSlide,
   modalController,
-}                                                   from '@ionic/vue';
+}                                                             from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/place/CafeInfoBody';
 import Modal                 from '@/components/Modal';
@@ -121,19 +121,19 @@ export default defineComponent({
     const isUserSubscribed = ref(false);
     const place = toRef(props, 'place');
     const isSubButtonDisabled = ref(true);
-    const mainImagePath = ref();
+    const mainImagePath = computed(() => {
+      if(place.value.images?.length > 0) {
+        return place.value.images.find(image => image.is_main === 1)?.path ??
+            place.value.images[0]?.path;
+      }else {
+        return '/places/default_place_logo.png';
+      }
+    });
 
     /* Composables */
     const { isModalOpen, openModal } = useModal();
 
     /* Lifecycle hooks */
-    if(place.value.images.length > 0) {
-      mainImagePath.value =
-          process.env.VUE_APP_STORED_IMAGES_URL + place.value.images.find(image => image.is_main === 1)?.path ??
-          place.value.images[0]?.path;
-    }else {
-      mainImagePath.value = process.env.VUE_APP_STORED_IMAGES_URL + '/places/default_place_logo.png';
-    }
     isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
     /* Checking if users is subscribed to this place */
     if(store.getters['auth/loggedIn']) {
@@ -189,5 +189,6 @@ export default defineComponent({
 <style scoped>
 img.slider-images {
   max-height: 75px !important;
+  border-radius: 14px;
 }
 </style>
