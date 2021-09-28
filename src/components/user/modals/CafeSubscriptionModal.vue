@@ -168,6 +168,7 @@ export default defineComponent({
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {
       indefiniteTimerActive.value = e.target.checked;
+      document.querySelector('ion-range').classList.toggle('indefinite');
     };
     /* Adding pair of users/place in database corresponding to authenticated users subscribed to certain place */
     const toggleSubscription = async(placeId) => {
@@ -228,14 +229,20 @@ ion-item {
 }
 
 ion-range {
-  --bar-background: #F6F7FB;
-  --bar-background-active: #1B6DE0;
-  --knob-background: #1B6DE0;
   --bar-height: 6px;
   --knob-size: 21px;
 }
 
 ion-range::part(knob) {
   outline: none !important;
+  background: var(--primary-button) !important;
+}
+
+ion-range::part(bar) {
+  background: #C1C9D2 !important;
+}
+
+ion-range::part(bar-active) {
+  background: var(--primary-button) !important;
 }
 </style>

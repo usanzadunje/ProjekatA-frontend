@@ -65,7 +65,6 @@ export default defineComponent({
         const response = await AuthService.authenticateSocial(payload);
 
         await store.dispatch("auth/setToken", response.data.token);
-        await store.dispatch("auth/getAuthUser");
         await store.dispatch("user/getSettings");
 
         await router.replace({ name: 'home' });

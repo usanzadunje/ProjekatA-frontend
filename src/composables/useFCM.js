@@ -33,14 +33,16 @@ export function useFCM() {
         PushNotifications.addListener(
             'registration',
             async(token) => {
-                const payload = {
-                    fcm_token: token.value,
-                };
-                /* Saving token from FCM into users table */
-                try {
-                    await AuthService.setFcmToken(payload);
-                }catch(error) {
-                    showErrorToast(error);
+                if(store.getters['auth/loggedIn']) {
+                    const payload = {
+                        fcm_token: token.value,
+                    };
+                    /* Saving token from FCM into users table */
+                    try {
+                        await AuthService.setFcmToken(payload);
+                    }catch(error) {
+                        showErrorToast(error);
+                    }
                 }
             },
         );

@@ -306,6 +306,14 @@ ion-toggle.dark-toggle-checked {
     margin-top: 0px !important;
 }
 
+.md ion-range.indefinite::part(knob) {
+    background: #E0E4E9 !important;
+}
+
+.md ion-range.indefinite::part(bar-active) {
+    background: #E0E4E9 !important;
+}
+
 
 /*
     END Android specific styles
@@ -325,6 +333,14 @@ ion-toggle.dark-toggle-checked {
 
 .ios .lang-pl {
     padding-right: 0.375rem !important;
+}
+
+.ios ion-range.indefinite::part(knob) {
+    background: #E0E4E9 !important;
+}
+
+.ios ion-range.indefinite::part(bar-active) {
+    background: #E0E4E9 !important;
 }
 
 /*
