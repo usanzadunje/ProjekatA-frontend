@@ -84,6 +84,8 @@ export const actions = {
 
             await toast.present();
         }finally {
+            const root = document.documentElement;
+
             await dispatch("setToken", null);
             commit("SET_USER", null);
             commit("SET_ROLE", null);
@@ -94,6 +96,8 @@ export const actions = {
 
             i18n.global.locale.value = 'sr';
             document.body.classList.toggle('dark', false);
+            root.style.setProperty('--user-selected-color', '#207DFF');
+            root.style.setProperty('--primary-button', '#1b6de0');
         }
     },
     // Getting authenticated users info and saving it to store

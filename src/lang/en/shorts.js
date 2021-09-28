@@ -120,4 +120,6 @@ export default {
     "friday": "Friday",
     "saturday": "Saturday",
     "sunday": "Sunday",
+    "reset": "Reset",
+    "primaryColor": "Primary color",
 };

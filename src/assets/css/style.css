@@ -64,11 +64,12 @@ ion-tab-bar {
 }
 
 ion-tab-button {
-    --color-selected: #207DFF;
+    --color-selected: var(--primary-button);
 }
 
 ion-button {
     --box-shadow: none;
+    --background-activated: rgba(164, 177, 159, 0.2);
 }
 
 ion-refresher {
@@ -207,7 +208,7 @@ ion-thumbnail {
 
 ion-toggle {
     --background: #C1C9D2;
-    --background-checked: var(--primary-button);
+    --background-checked: var(--user-selected-color);
     --handle-height: 13px;
     --handle-width: 13px;
     --handle-spacing: 3px;
@@ -265,6 +266,16 @@ ion-toggle.dark-toggle-checked {
 .full-size {
     width: 100vw;
     height: 100vh;
+}
+
+.user-selected-color {
+    color: var(--user-selected-color) !important;
+    --color: var(--user-selected-color) !important;
+}
+
+.user-selected-paint {
+    background: var(--user-selected-color) !important;
+    --background: var(--user-selected-color) !important;
 }
 
 /*
@@ -390,7 +401,7 @@ ion-toggle.dark-toggle-checked {
 }
 
 .sliding-filter-button-active {
-    --background: #207DFF;
+    --background: var(--user-selected-color);
 }
 
 .sliding-filter-button-active::part(native) {

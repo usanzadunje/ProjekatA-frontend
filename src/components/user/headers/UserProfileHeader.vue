@@ -1,40 +1,42 @@
 <template>
   <ion-header class="ion-no-border">
-    <ion-toolbar>
-      <div class="px-4 py-3 mt-3 mb-3 relative">
-        <div class="flex justify-between">
-          <p class="user-profile-header-heading mt-1">{{ $t('profile') }}</p>
-          <ion-button fill="clear" @click="openSettingsPopover($event)">
-            <ion-icon
-                slot="icon-only"
-                :icon="settingsOutline"
-                class="text-white"
-            ></ion-icon>
-          </ion-button>
-        </div>
-        <div class="mt-5 flex justify-start">
-          <div>
-            <img
-                ref="avatarDisplay"
-                :src="authUser?.avatar"
-                :alt="`Profile picture of user ${authUser?.fname} ${authUser?.lname}`"
-                class="user-profile-picture"
-            >
+    <div class="user-header-bg">
+      <ion-toolbar>
+        <div class="px-4 py-3 mt-3 mb-3 relative">
+          <div class="flex justify-between">
+            <p class="user-profile-header-heading mt-1">{{ $t('profile') }}</p>
+            <ion-button fill="clear" @click="openSettingsPopover($event)">
+              <ion-icon
+                  slot="icon-only"
+                  :icon="settingsOutline"
+                  class="text-white"
+              ></ion-icon>
+            </ion-button>
           </div>
-          <div class="ml-3 mt-3 user-profile-user-name">
-            <div v-if="authUser?.username || authUser?.fname || authUser?.lname">
-              <h2 v-if="authUser?.fname || authUser?.lname" class="user-profile-user-name">
-                {{ `${authUser?.fname || ''} ${authUser?.lname || ''}` }}
-              </h2>
-              <p v-if="authUser?.username" class="user-profile-username">{{ authUser?.username }}</p>
+          <div class="mt-5 flex justify-start">
+            <div>
+              <img
+                  ref="avatarDisplay"
+                  :src="authUser?.avatar"
+                  :alt="`Profile picture of user ${authUser?.fname} ${authUser?.lname}`"
+                  class="user-profile-picture"
+              >
             </div>
-            <a v-else @click="$router.push({ name: 'edit' })" class="user-profile-username underline lowercase">
-              {{ $t('noSettingsText') }}
-            </a>
+            <div class="ml-3 mt-3 user-profile-user-name">
+              <div v-if="authUser?.username || authUser?.fname || authUser?.lname">
+                <h2 v-if="authUser?.fname || authUser?.lname" class="user-profile-user-name">
+                  {{ `${authUser?.fname || ''} ${authUser?.lname || ''}` }}
+                </h2>
+                <p v-if="authUser?.username" class="user-profile-username">{{ authUser?.username }}</p>
+              </div>
+              <a v-else @click="$router.push({ name: 'edit' })" class="user-profile-username underline lowercase">
+                {{ $t('noSettingsText') }}
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </ion-toolbar>
+      </ion-toolbar>
+    </div>
   </ion-header>
 </template>
 
@@ -102,13 +104,23 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+ion-header {
+  --background: transparent;
+}
+
 ion-toolbar {
-  --background: url('https://resize.rs/storage/img/users/header-background.png') no-repeat;
-  background-color: #207DFF;
+  --background: transparent;
 }
 
 ion-button {
   padding: 0 0 0.625rem 0 !important;
   margin: 0 -1rem 0 0 !important;
+}
+
+.user-header-bg {
+  background: var(--user-selected-color) url('https://resize.rs/storage/img/users/header-background.png') no-repeat;
+  background-blend-mode: multiply;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;;
 }
 </style>

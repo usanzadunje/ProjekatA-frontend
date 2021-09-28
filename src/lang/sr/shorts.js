@@ -120,5 +120,7 @@ export default {
     "friday": "Petak",
     "saturday": "Subota",
     "sunday": "Nedelja",
+    "reset": "Resetuj",
+    "primaryColor": "Primarna boja",
 };
 

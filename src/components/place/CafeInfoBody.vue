@@ -10,7 +10,7 @@
         <ion-icon :icon="locationOutline" class="flex-shrink-0 mr-2 primary-icon-color text-lg"></ion-icon>
         <p class="modal-cafe-text-regular flex-shrink">{{ place.address }} - {{ place.city }}</p>
       </div>
-      <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold">
+      <ion-button @click="openModal(true)" fill="clear" class="uppercase font-bold user-selected-color">
         {{ $t('map') }}
       </ion-button>
     </div>

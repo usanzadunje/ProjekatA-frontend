@@ -52,6 +52,10 @@ const
           <p class="settings-item-text">{{ $t('language') }}</p>
           <LanguagePicker class="lang-pl"/>
         </ion-item>
+        <ion-item class="ion-item-padding-right">
+          <p class="settings-item-text">{{ $t('primaryColor') }}</p>
+          <ColorPicker/>
+        </ion-item>
       </div>
       <div class="mt-5">
         <ion-item class="flex justify-start no-border">
@@ -73,7 +77,7 @@ const
           </ion-button>
         </ion-item>
         <ion-button
-            class="mt-5 uppercase logout-button"
+            class="mt-5 uppercase logout-button user-selected-color"
             fill="clear"
             expand="block"
             @click="this.$store.dispatch('auth/logout');
@@ -86,11 +90,20 @@ const
 </template>
 
 <script>
-import { computed, defineComponent, ref }                                        from 'vue';
-import { useStore }                                                              from 'vuex';
-import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonPage, IonToggle } from '@ionic/vue';
+import { computed, defineComponent, ref } from 'vue';
+import { useStore }                       from 'vuex';
+import {
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonPage,
+  IonToggle,
+}                                         from '@ionic/vue';
 
 import LanguagePicker from '@/components/LanguagePicker';
+import ColorPicker    from '@/components/ColorPicker';
 
 import AuthService from '@/services/AuthService';
 
@@ -112,6 +125,7 @@ export default defineComponent({
     IonToggle,
     IonButton,
     LanguagePicker,
+    ColorPicker,
   },
   setup() {
     /* Global properties */

@@ -84,6 +84,8 @@ http://ionicframework.com/docs/theming/ */
 
     --primary-button: #1b6de0;
 
+    --user-selected-color: #207DFF;
+
     --staff-card-background: #4078c7;
 
     --secondary-button: #F6F7FB;
@@ -193,8 +195,6 @@ http://ionicframework.com/docs/theming/ */
 
         --primary-heading: #F0F0F2;
 
-        --primary-button: #1b6de0;
-
         --secondary-button: #1F1C2B;
 
         --primary-paint: #1F1C2B;
@@ -297,8 +297,6 @@ body.dark {
     --primary-heading: #F0F0F2;
 
     --primary-text: #808191;
-
-    --primary-button: #1b6de0;
 
     --secondary-button: #1F1C2B;
 
