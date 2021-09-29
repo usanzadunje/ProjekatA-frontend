@@ -8,6 +8,7 @@ export const namespaced = true;
 
 export const state = {
     settings: {},
+    notifications: [],
 };
 
 export const mutations = {
@@ -17,8 +18,24 @@ export const mutations = {
     SET_LOCALIZATION(state, value) {
         state.settings.localization = value;
     },
-    SET_NOTIFICATIONS(state, value) {
+    SET_NOTIFICATIONS_PERMISSION(state, value) {
         state.settings.notifications = value;
+    },
+    ADD_NOTIFICATIONS(state, value) {
+        state.notifications.unshift(value);
+    },
+    MARK_NOTIFICATION_AS_READ(state, id) {
+        state.notifications.find(notification => {
+            if(notification.id === id) {
+                notification.read = true;
+            }
+        });
+    },
+    REMOVE_NOTIFICATION(state, id) {
+        state.notifications = state.notifications.filter(notification => notification.id !== id);
+    },
+    CLEAR_NOTIFICATIONS(state) {
+        state.notifications = [];
     },
 };
 
@@ -44,7 +61,7 @@ export const actions = {
 
         commit("SET_DARKMODE", storedDarkMode);
         commit("SET_LOCALIZATION", storedLocalization);
-        commit("SET_NOTIFICATIONS", storedNotifications);
+        commit("SET_NOTIFICATIONS_PERMISSION", storedNotifications);
 
         if(Capacitor.isNativePlatform()) {
             if(storedDarkMode) {
@@ -72,7 +89,7 @@ export const actions = {
         const { set } = StorageService();
 
         await set(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`, value);
-        commit("SET_NOTIFICATIONS", value);
+        commit("SET_NOTIFICATIONS_PERMISSION", value);
     },
     async setLocalization({ commit, rootGetters }, value) {
         const { set } = StorageService();
@@ -116,5 +133,21 @@ export const getters = {
     },
     notifications: (state) => {
         return !!state.settings?.notifications;
+    },
+    pushNotifications: (state) => {
+        return state.notifications;
+    },
+    hasNotifications: (state) => {
+        return state.notifications.length > 0;
+    },
+    unreadNotificationsCount: (state, getters) => {
+        let unreadNotificationCount = 0;
+        getters.pushNotifications.forEach(notification => {
+            if(!notification.read) {
+                unreadNotificationCount++;
+            }
+        });
+
+        return unreadNotificationCount;
     },
 };

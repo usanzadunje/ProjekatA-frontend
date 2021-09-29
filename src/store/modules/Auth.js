@@ -8,7 +8,7 @@ import { StorageService } from '@/services/StorageService';
 export const namespaced = true;
 
 export const state = {
-    user: null,
+    user: {},
     role: null,
     token: null,
 };

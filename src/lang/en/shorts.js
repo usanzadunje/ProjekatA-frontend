@@ -122,4 +122,6 @@ export default {
     "sunday": "Sunday",
     "reset": "Reset",
     "primaryColor": "Primary color",
+    "clear": "Clear",
+    "noNotifications": "There are no new notifications.",
 };

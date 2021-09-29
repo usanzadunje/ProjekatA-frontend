@@ -100,9 +100,15 @@ export function useFCM() {
         }
     };
     const handleNotification = async(notification) => {
-        if(!store.getters['auth/isStaff'] && !store.getters['auth/isOwner']) {
+        if((!store.getters['auth/isStaff'] && !store.getters['auth/isOwner']) || store.getters['auth/authUser'].id === 1) {
             await Haptics.vibrate({ duration: 250 });
             showSuccessToast(t('freeSpotNotification', { place: notification.data?.place_name }));
+
+            store.commit('user/ADD_NOTIFICATIONS', {
+                id: notification?.data.id,
+                read: false,
+                body: t('freeSpotNotification', { place: notification.data?.place_name }),
+            });
         }
     };
     const handleDataNotification = async(notification) => {

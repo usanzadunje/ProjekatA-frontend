@@ -1,17 +1,16 @@
 <template>
   <ion-header class="ion-no-border">
     <ion-toolbar>
-      <div class="px-4 pt-3 pb-2 mt-2 md header-padding-bottom">
-        <div v-show="loggedIn" class="flex justify-between">
+      <div class="px-4 pt-3 pb-2 md header-padding-bottom">
+        <div v-show="loggedIn" class="flex items-center justify-between">
           <p class="main-toolbar-fade-text">
             {{ $t('hello') }}
             <span>
               {{ displayName }}!
             </span>
           </p>
-          <ion-button fill="clear" routerLink="/test">
-            <ion-icon :icon="notificationIcon" class="text-2xl text-gray-400"></ion-icon>
-          </ion-button>
+
+          <NotificationsPreview/>
         </div>
         <div v-show="!loggedIn" class="flex justify-around">
           <ion-button fill="clear" routerLink="/login">
@@ -22,7 +21,7 @@
           </ion-button>
         </div>
 
-        <h1 class="main-toolbar-heading text-xl">{{ mainHeading }}</h1>
+        <h1 class="main-toolbar-heading text-xl mt-2">{{ mainHeading }}</h1>
 
         <div>
           <ion-searchbar
@@ -41,27 +40,26 @@
 </template>
 
 <script>
-import { defineComponent }                                         from 'vue';
-import { mapGetters }                                              from 'vuex';
-import { IonHeader, IonIcon, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
+import { defineComponent }                                from 'vue';
+import { mapGetters }                                     from 'vuex';
+import { IonHeader, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
+
+import NotificationsPreview from '@/components/user/NotificationsPreview';
 
 import { Keyboard } from '@capacitor/keyboard';
-
-import { optionsOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'UserHeader',
   components: {
-    IonIcon,
     IonSearchbar,
     IonHeader,
     IonToolbar,
     IonButton,
+    NotificationsPreview,
   },
   props: {
     // hasSearchFilter: Boolean,
     mainHeading: String,
-    notificationIcon: String,
     searchTerm: String,
   },
   computed: {
@@ -89,7 +87,6 @@ export default defineComponent({
       searchEnterPressed,
 
       /* Icons from */
-      optionsOutline,
     };
   },
 });

@@ -5,13 +5,15 @@ import StaffService from '@/services/StaffService';
 export const namespaced = true;
 
 export const state = {
-    place: null,
+    place: {},
     availabilityRatio: '0/0',
     active: false,
 };
 
 export const mutations = {
     SET_PLACE_INFO(state, value) {
+        state.place = {};
+
         Object.keys(value).forEach(key => {
             state.place[key] = value[key];
         });

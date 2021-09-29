@@ -163,6 +163,12 @@ ion-modal ion-item {
     --max-width: 170px;
 }
 
+.notifications-popover {
+    --width: 60vw;
+    --height: auto;
+    --max-height: 30vh;
+}
+
 .undo-toast {
     --color: #FFF;
     --background: #222428;
@@ -306,13 +312,17 @@ ion-toggle.dark-toggle-checked {
     margin-top: 0px !important;
 }
 
-.md ion-range.indefinite::part(knob) {
-    background: #E0E4E9 !important;
-}
+/*.md ion-range.indefinite::part(knob) {*/
+/*    background: #E0E4E9 !important;*/
+/*}*/
 
-.md ion-range.indefinite::part(bar-active) {
-    background: #E0E4E9 !important;
-}
+/*.md ion-range.indefinite::part(bar) {*/
+/*    background: #E0E4E9 !important;*/
+/*}*/
+
+/*.md ion-range.indefinite::part(bar-active) {*/
+/*    background: #E0E4E9 !important;*/
+/*}*/
 
 
 /*
@@ -335,13 +345,17 @@ ion-toggle.dark-toggle-checked {
     padding-right: 0.375rem !important;
 }
 
-.ios ion-range.indefinite::part(knob) {
-    background: #E0E4E9 !important;
-}
+/*.ios ion-range.indefinite::part(knob) {*/
+/*    background: #E0E4E9 !important;*/
+/*}*/
 
-.ios ion-range.indefinite::part(bar-active) {
-    background: #E0E4E9 !important;
-}
+/*.ios ion-range.indefinite::part(bar) {*/
+/*    background: #E0E4E9 !important;*/
+/*}*/
+
+/*.ios ion-range.indefinite::part(bar-active) {*/
+/*    background: #E0E4E9 !important;*/
+/*}*/
 
 /*
     END IOS specific styles

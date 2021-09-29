@@ -1,5 +1,5 @@
 <template>
-  <ion-content class="ion-no-padding bg-red-600" :scrollY="false">
+  <ion-content class="ion-no-padding" :scrollY="false">
     <div class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
          @click="navigateTo('edit')">
       <ion-icon slot="start" :icon="personOutline" class="text-black"></ion-icon>

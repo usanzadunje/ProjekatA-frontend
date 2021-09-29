@@ -1,185 +1,187 @@
 <template>
-  <div class="px-8 pb-2">
+  <div class="h-full px-8 pb-2 flex flex-col justify-between">
     <div>
-      <div class="mb-6">
-        <img
-            id="mainImage"
-            :src="`${backendStorageURL + mainImagePath}`"
-            :alt="`Image of  cafe`"
-            @click="openPreview"
-            class="h-36 w-full img-border-15"
-        />
+      <div>
+        <div class="mb-6">
+          <img
+              id="mainImage"
+              :src="`${backendStorageURL + mainImagePath}`"
+              :alt="`Image of  cafe`"
+              @click="openPreview"
+              class="h-36 w-full img-border-15"
+          />
+        </div>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
+        >
+          <ion-icon :icon="createOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-input
+              v-capitalize
+              v-model.lazy="place.name"
+              @keyup.enter="cityInput.$el?.setFocus()"
+              type="text"
+              debounce="600"
+              :placeholder="$t('name')"
+              :autofocus="true"
+              required
+          ></ion-input>
+        </ion-item>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('city') }"
+        >
+          <ion-icon :icon="navigateOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-input
+              v-capitalize
+              ref="cityInput"
+              v-model="place.city"
+              @keyup.enter="addressInput.$el?.setFocus()"
+              type="text"
+              debounce="600"
+              :placeholder="$t('city')"
+              required
+          ></ion-input>
+        </ion-item>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('address') }"
+        >
+          <ion-icon :icon="homeOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-input
+              ref="addressInput"
+              v-model="place.address"
+              @keyup.enter="emailInput.$el?.setFocus()"
+              type="text"
+              debounce="600"
+              :placeholder="$t('address')"
+              required
+          ></ion-input>
+        </ion-item>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
+        >
+          <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-input
+              ref="emailInput"
+              v-model="place.email"
+              @keyup.enter="phoneInput.$el?.setFocus()"
+              type="email"
+              debounce="600"
+              :placeholder="$t('place.email')"
+              required
+          ></ion-input>
+        </ion-item>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
+        >
+          <ion-icon :icon="callOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-input
+              ref="phoneInput"
+              v-model="place.phone"
+              @keyup.enter="update"
+              type="tel"
+              debounce="600"
+              :placeholder="$t('phone')"
+              required
+          ></ion-input>
+        </ion-item>
       </div>
-      <ion-item
-          lines="none"
-          class="flex rounded-2xl h-11"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
-      >
-        <ion-icon :icon="createOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-        <ion-input
-            v-capitalize
-            v-model.lazy="place.name"
-            @keyup.enter="cityInput.$el?.setFocus()"
-            type="text"
-            debounce="600"
-            :placeholder="$t('name')"
-            :autofocus="true"
-            required
-        ></ion-input>
+      <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
+        <ion-label class="settings-fade-text">{{ $t('workingHours') }}</ion-label>
+        <ion-toggle
+            :checked="showWorkingHours"
+            @ionChange="toggleWorkingHours($event)"
+            mode="md"
+        ></ion-toggle>
       </ion-item>
-      <ion-item
-          lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('city') }"
-      >
-        <ion-icon :icon="navigateOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-        <ion-input
-            v-capitalize
-            ref="cityInput"
-            v-model="place.city"
-            @keyup.enter="addressInput.$el?.setFocus()"
-            type="text"
-            debounce="600"
-            :placeholder="$t('city')"
-            required
-        ></ion-input>
-      </ion-item>
-      <ion-item
-          lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('address') }"
-      >
-        <ion-icon :icon="homeOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-        <ion-input
-            ref="addressInput"
-            v-model="place.address"
-            @keyup.enter="emailInput.$el?.setFocus()"
-            type="text"
-            debounce="600"
-            :placeholder="$t('address')"
-            required
-        ></ion-input>
-      </ion-item>
-      <ion-item
-          lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
-      >
-        <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-        <ion-input
-            ref="emailInput"
-            v-model="place.email"
-            @keyup.enter="phoneInput.$el?.setFocus()"
-            type="email"
-            debounce="600"
-            :placeholder="$t('place.email')"
-            required
-        ></ion-input>
-      </ion-item>
-      <ion-item
-          lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
-      >
-        <ion-icon :icon="callOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
-        <ion-input
-            ref="phoneInput"
-            v-model="place.phone"
-            @keyup.enter="update"
-            type="tel"
-            debounce="600"
-            :placeholder="$t('phone')"
-            required
-        ></ion-input>
-      </ion-item>
-    </div>
-    <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
-      <ion-label class="settings-fade-text">{{ $t('workingHours') }}</ion-label>
-      <ion-toggle
-          :checked="showWorkingHours"
-          @ionChange="toggleWorkingHours($event)"
-          mode="md"
-      ></ion-toggle>
-    </ion-item>
-    <div v-show="showWorkingHours">
-      <ion-item
-          lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('mon_fri') }"
-      >
-        <ion-label class="settings-fade-text">{{ `${$t('monday')}-${$t('friday')}` }}</ion-label>
-        <ion-datetime
-            v-model="place.mon_fri_start"
-            :doneText="$t('choose')"
-            :cancelText="$t('cancel')"
-            display-format="HH:mm"
-            value="04:20"
-            :placeholder="$t('selectTime')"
-        ></ion-datetime>
-        &nbsp;
-        -
-        <ion-datetime
-            v-model="place.mon_fri_end"
-            :doneText="$t('choose')"
-            :cancelText="$t('cancel')"
-            display-format="HH:mm"
-            value="04:20"
-            :placeholder="$t('selectTime')"
-        ></ion-datetime>
-      </ion-item>
-      <ion-item
-          lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('satudrady') }"
-      >
-        <ion-label class="settings-fade-text">{{ $t('saturday') }}</ion-label>
-        <ion-datetime
-            v-model="place.saturday_start"
-            :doneText="$t('choose')"
-            :cancelText="$t('cancel')"
-            display-format="HH:mm"
-            value="04:20"
-            :placeholder="$t('selectTime')"
-        ></ion-datetime>
-        &nbsp;
-        -
-        <ion-datetime
-            v-model="place.saturday_end"
-            :doneText="$t('choose')"
-            :cancelText="$t('cancel')"
-            display-format="HH:mm"
-            value="04:20"
-            :placeholder="$t('selectTime')"
-        ></ion-datetime>
-      </ion-item>
-      <ion-item
-          lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('sunday') }"
-      >
-        <ion-label class="settings-fade-text">{{ $t('sunday') }}</ion-label>
-        <ion-datetime
-            v-model="place.sunday_start"
-            :doneText="$t('choose')"
-            :cancelText="$t('cancel')"
-            display-format="HH:mm"
-            value="04:20"
-            :placeholder="$t('selectTime')"
-        ></ion-datetime>
-        &nbsp;
-        -
-        <ion-datetime
-            v-model="place.sunday_end"
-            :doneText="$t('choose')"
-            :cancelText="$t('cancel')"
-            display-format="HH:mm"
-            value="04:20"
-            :placeholder="$t('selectTime')"
-        ></ion-datetime>
-      </ion-item>
+      <div v-show="showWorkingHours">
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('mon_fri') }"
+        >
+          <ion-label class="settings-fade-text">{{ `${$t('monday')}-${$t('friday')}` }}</ion-label>
+          <ion-datetime
+              v-model="place.mon_fri_start"
+              :doneText="$t('choose')"
+              :cancelText="$t('cancel')"
+              display-format="HH:mm"
+              value="04:20"
+              :placeholder="$t('selectTime')"
+          ></ion-datetime>
+          &nbsp;
+          -
+          <ion-datetime
+              v-model="place.mon_fri_end"
+              :doneText="$t('choose')"
+              :cancelText="$t('cancel')"
+              display-format="HH:mm"
+              value="04:20"
+              :placeholder="$t('selectTime')"
+          ></ion-datetime>
+        </ion-item>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('satudrady') }"
+        >
+          <ion-label class="settings-fade-text">{{ $t('saturday') }}</ion-label>
+          <ion-datetime
+              v-model="place.saturday_start"
+              :doneText="$t('choose')"
+              :cancelText="$t('cancel')"
+              display-format="HH:mm"
+              value="04:20"
+              :placeholder="$t('selectTime')"
+          ></ion-datetime>
+          &nbsp;
+          -
+          <ion-datetime
+              v-model="place.saturday_end"
+              :doneText="$t('choose')"
+              :cancelText="$t('cancel')"
+              display-format="HH:mm"
+              value="04:20"
+              :placeholder="$t('selectTime')"
+          ></ion-datetime>
+        </ion-item>
+        <ion-item
+            lines="none"
+            class="flex rounded-2xl h-11 mt-3.5"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('sunday') }"
+        >
+          <ion-label class="settings-fade-text">{{ $t('sunday') }}</ion-label>
+          <ion-datetime
+              v-model="place.sunday_start"
+              :doneText="$t('choose')"
+              :cancelText="$t('cancel')"
+              display-format="HH:mm"
+              value="04:20"
+              :placeholder="$t('selectTime')"
+          ></ion-datetime>
+          &nbsp;
+          -
+          <ion-datetime
+              v-model="place.sunday_end"
+              :doneText="$t('choose')"
+              :cancelText="$t('cancel')"
+              display-format="HH:mm"
+              value="04:20"
+              :placeholder="$t('selectTime')"
+          ></ion-datetime>
+        </ion-item>
+      </div>
     </div>
 
-    <div class="mt-14">
+    <div class="mt-10">
       <ion-button
           :disabled="loading"
           size="large"

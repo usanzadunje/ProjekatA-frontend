@@ -80,7 +80,7 @@ export default defineComponent({
 
     /* Event handlers */
     const openSettingsPopover = (event) => {
-      openPopover(SettingsPopover, event);
+      openPopover(SettingsPopover, event, 'settings-popover');
     };
     const toggleDarkMode = async(e) => {
       if(!e.target.checked) {

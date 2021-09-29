@@ -29,7 +29,7 @@ import AdminMenu   from '@/components/staff/AdminMenu';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useFCM }                from '@/composables/useFCM';
 
-import { Capacitor }             from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 
 
 export default defineComponent({
@@ -54,9 +54,12 @@ export default defineComponent({
     /* Lifecycle hooks */
     (async() => {
       try {
-        await store.dispatch('staff/getPlaceInfo');
+        if(store.getters['auth/isStaff']) {
+          await store.dispatch('staff/updatePlaceAvailability');
+        }
 
         if(store.getters['auth/isOwner']) {
+          await store.dispatch('staff/getPlaceInfo');
           await store.dispatch('owner/getStaffInfo');
         }
         if(Capacitor.isNativePlatform()) {

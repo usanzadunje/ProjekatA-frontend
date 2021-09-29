@@ -15,7 +15,6 @@
       >
         <UserHeader
             :main-heading="$t('search')"
-            :notification-icon="notificationsOffOutline"
             :search-term="cafeSearchString"
             @search-filter-changed="searchFilterChanged"
         >
@@ -75,7 +74,6 @@ import ShortCafeModal from '@/components/user/modals/ShortCafeModal';
 
 import { useModal } from '@/composables/useModal';
 
-import { notificationsOffOutline } from 'ionicons/icons';
 
 
 export default defineComponent({
@@ -197,7 +195,6 @@ export default defineComponent({
       scrollToTop,
 
       /* Icons from */
-      notificationsOffOutline,
     };
   },
 });

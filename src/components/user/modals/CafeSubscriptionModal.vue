@@ -168,7 +168,7 @@ export default defineComponent({
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {
       indefiniteTimerActive.value = e.target.checked;
-      document.querySelector('ion-range').classList.toggle('indefinite');
+      // document.querySelector('ion-range').classList.toggle('indefinite');
     };
     /* Adding pair of users/place in database corresponding to authenticated users subscribed to certain place */
     const toggleSubscription = async(placeId) => {

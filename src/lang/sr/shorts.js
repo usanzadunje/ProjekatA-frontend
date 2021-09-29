@@ -122,5 +122,7 @@ export default {
     "sunday": "Nedelja",
     "reset": "Resetuj",
     "primaryColor": "Primarna boja",
+    "clear": "Obriši",
+    "noNotifications": "Nema novih notifikacija.",
 };
 

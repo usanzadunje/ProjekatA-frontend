@@ -10,7 +10,6 @@
 
       <UserHeader
           :main-heading="$t('findAvailablePlace')"
-          :notification-icon="notificationsOutline"
           @search-enter-pressed="switchToSearch"
       />
 
@@ -123,8 +122,6 @@ import ShortCafeModal        from '@/components/user/modals/ShortCafeModal';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useModal }              from '@/composables/useModal';
-
-import { notificationsOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'Home',
@@ -276,7 +273,6 @@ export default defineComponent({
       /* Methods */
 
       /* Icons from */
-      notificationsOutline,
     };
   },
 });

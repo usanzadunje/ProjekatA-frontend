@@ -18,58 +18,60 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true" class="ion-padding relative">
-      <div id="flex" class="flex flex-col justify-between">
-        <div>
-          <div class="relative">
-            <img
-                :src="`${backendStorageURL + mainImagePath}`"
-                :alt="`Image of ${place.name} place`"
-                @click="openPreview(place)"
-                class="banner-image w-full object-fill img-border-15"
-            />
-            <div
-                class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
-            >
-              {{ $t('gallery') }}
+    <ion-content class="ion-padding h-full">
+      <div class="h-full">
+        <div class="h-full flex flex-col justify-between">
+          <div>
+            <div class="relative">
+              <img
+                  :src="`${backendStorageURL + mainImagePath}`"
+                  :alt="`Image of ${place.name} place`"
+                  @click="openPreview(place)"
+                  class="banner-image w-full object-fill img-border-15"
+              />
+              <div
+                  class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
+              >
+                {{ $t('gallery') }}
+              </div>
+            </div>
+
+            <div class="mt-4 ion-item-no-padding-x">
+              <h1 class="cafe-show-name">{{ place.name }}</h1>
+              <p class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
+            </div>
+
+            <CafeInfoBody :place="place"/>
+
+            <div class="mb-2">
+              <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
+              <AccordionList
+                  class="accordion-list-border-top"
+                  :title="$t('drinksCard')"
+                  :items="place.offerings?.filter(offer => offer.tag === 'drink')"
+                  :icon="beerOutline"
+              />
+              <AccordionList
+                  class="accordion-list-border-top accordion-list-border-bottom"
+                  :title="$t('food')"
+                  :items="place.offerings?.filter(offer => offer.tag === 'food')"
+                  :icon="pizzaOutline"
+              />
             </div>
           </div>
 
-          <div class="mt-4 ion-item-no-padding-x">
-            <h1 class="cafe-show-name">{{ place.name }}</h1>
-            <p class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
+          <div>
+            <ion-button
+                class="uppercase button-subscribe-wide"
+                expand="block"
+                @click="openModal(true)"
+                :disabled="!loggedIn || platformIsWeb"
+            >
+              <ion-icon slot="start"
+                        :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
+              {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
+            </ion-button>
           </div>
-
-          <CafeInfoBody :place="place"/>
-
-          <div class="mb-2">
-            <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
-            <AccordionList
-                class="accordion-list-border-top"
-                :title="$t('drinksCard')"
-                :items="place.offerings?.filter(offer => offer.tag === 'drink')"
-                :icon="beerOutline"
-            />
-            <AccordionList
-                class="accordion-list-border-top accordion-list-border-bottom"
-                :title="$t('food')"
-                :items="place.offerings?.filter(offer => offer.tag === 'food')"
-                :icon="pizzaOutline"
-            />
-          </div>
-        </div>
-
-        <div>
-          <ion-button
-              class="uppercase button-subscribe-wide"
-              expand="block"
-              @click="openModal(true)"
-              :disabled="!loggedIn || platformIsWeb"
-          >
-            <ion-icon slot="start"
-                      :icon="isUserSubscribed ? notifications : notificationsOutline"></ion-icon>
-            {{ isUserSubscribed ? $t('subscribed') : $t('subscribe') }}
-          </ion-button>
         </div>
       </div>
       <Modal
@@ -196,7 +198,8 @@ export default defineComponent({
     onIonViewWillEnter(() => {
       searchTab = document.getElementById('tab-button-search');
       if(searchTab) {
-        searchTab.style.color = '#207DFF';
+        searchTab.style.color = getComputedStyle(document.documentElement)
+            .getPropertyValue('--user-selected-color');
       }
     });
     onIonViewWillLeave(() => {
@@ -268,11 +271,5 @@ ion-toolbar {
 
 ion-content {
   --background: var(--show-paint);
-}
-
-@media screen and (min-height: 740px) {
-  #flex {
-    height: 100% !important;
-  }
 }
 </style>
