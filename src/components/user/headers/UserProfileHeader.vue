@@ -17,7 +17,7 @@
             <div>
               <img
                   ref="avatarDisplay"
-                  :src="authUser?.avatar"
+                  :src="authUser?.avatar ?? backendStorageURL + '/users/default_avatar.png'"
                   :alt="`Profile picture of user ${authUser?.fname} ${authUser?.lname}`"
                   class="user-profile-picture"
               >

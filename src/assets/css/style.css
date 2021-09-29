@@ -164,9 +164,9 @@ ion-modal ion-item {
 }
 
 .notifications-popover {
-    --width: 60vw;
+    --width: 65vw;
     --height: auto;
-    --max-height: 30vh;
+    --max-height: 35vh;
 }
 
 .undo-toast {

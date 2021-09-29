@@ -7,7 +7,8 @@ import AuthService from '@/services/AuthService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import { PushNotifications } from '@capacitor/push-notifications';
+import { PushNotifications }  from '@capacitor/push-notifications';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 import { Haptics } from '@capacitor/haptics';
 
@@ -59,15 +60,25 @@ export function useFCM() {
         PushNotifications.addListener(
             'pushNotificationReceived',
             async(notification) => {
-                if(Object.keys(notification.data).length === 0 || notification.data.type === 'notification') {
-                    await handleNotification(notification);
-                }else {
-                    await handleDataNotification(notification);
+                if(notification.data) {
+                    if(notification.data.type === 'notification') {
+                        await handleNotification(notification);
+                    }else {
+                        await handleDataNotification(notification);
+                    }
                 }
             },
         );
         PushNotifications.addListener(
             'pushNotificationActionPerformed',
+            () => {
+                router.push({
+                    name: 'dashboard',
+                });
+            },
+        );
+        LocalNotifications.addListener(
+            'localNotificationActionPerformed',
             () => {
                 router.push({
                     name: 'dashboard',
@@ -87,6 +98,8 @@ export function useFCM() {
         try {
             const permission = await PushNotifications.requestPermissions();
             if(permission.receive === 'granted') {
+                await LocalNotifications.requestPermissions();
+
                 await PushNotifications.register();
             }else {
                 showErrorToast(
@@ -101,6 +114,20 @@ export function useFCM() {
     };
     const handleNotification = async(notification) => {
         if((!store.getters['auth/isStaff'] && !store.getters['auth/isOwner']) || store.getters['auth/authUser'].id === 1) {
+            await LocalNotifications.schedule({
+                notifications: [
+                    {
+                        id: notification.data.id,
+                        title: notification.data.title,
+                        body: notification.data.body,
+                        largeIcon: 'ic_table_icon',
+                        schedule: {
+                            allowWhileIdle: true,
+                        },
+                    },
+                ],
+            });
+
             await Haptics.vibrate({ duration: 250 });
             showSuccessToast(t('freeSpotNotification', { place: notification.data?.place_name }));
 
