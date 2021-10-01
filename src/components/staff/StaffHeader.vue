@@ -24,7 +24,7 @@
               alt="Profile picture"
           >
         </ion-avatar>
-        <ion-label>{{ this.$store.getters['auth/displayName'] }}</ion-label>
+        <ion-label>{{ this.$store.getters['auth/authUser'].username || this.$store.getters['auth/authUser'].fname }}</ion-label>
       </ion-chip>
     </div>
   </div>

@@ -110,7 +110,7 @@ export default {
     "tables": "Stolovi",
     "owner.noImage": "Izaberite najmanje 1 fotografiju.",
     "uploadSelectedImages": "Sačuvaj",
-    "uploading": "Čuvam",
+    "saving": "Čuvam",
     "toggling": "Menjam",
     "setMain": "Postavi kao glavnu fotografiju",
     "setting": "Postavljam",

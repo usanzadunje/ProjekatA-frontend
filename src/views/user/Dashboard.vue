@@ -233,7 +233,6 @@ export default defineComponent({
       unsubscribe(cafeId);
       Haptics.impact({ style: ImpactStyle.Heavy });
       showUndoToast(t('successUnsubscribe'), async() => {
-        //POTREBNO PROSLEDITI VREME KOJE JE OSTALO KADA JE UNSUB KAO TIMER DO ISTEKA NOTIFIKOVANJA
         try {
           await CafeService.subscribe(cafeId);
         }catch(e) {

@@ -25,7 +25,7 @@
           color="light"
           class="text-lg uppercase"
       >
-        {{ loading === 1 ? `${$t('uploading')}...` : $t('uploadSelectedImages') }}
+        {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
       </ion-button>
       <ion-button
           @click="removeImage"
@@ -40,7 +40,7 @@
         <ion-icon :icon="close" slot="start"></ion-icon>
       </ion-button>
     </ion-item>
-    <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center">
+    <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
       <ion-button
           @click="setAsMainImage"
           fill="white"

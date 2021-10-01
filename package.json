@@ -42,6 +42,7 @@
     "cordova-plugin-android-permissions": "^1.1.2",
     "cordova-plugin-request-location-accuracy": "^2.3.0",
     "core-js": "^3.17.2",
+    "interactjs": "^1.10.11",
     "ionicons": "^5.5.3",
     "sass-loader": "^10.1.1",
     "vue": "^3.2.8",

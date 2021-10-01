@@ -32,7 +32,7 @@
           </ion-slide>
         </ion-slides>
 
-        <div v-if="showSkeleton">
+        <div v-show="showSkeleton">
           <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
           <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
         </div>
@@ -73,7 +73,7 @@
           </ion-slide>
         </ion-slides>
 
-        <div v-if="showSkeleton">
+        <div v-show="showSkeleton">
           <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
           <SkeletonCafeCard></SkeletonCafeCard>
         </div>

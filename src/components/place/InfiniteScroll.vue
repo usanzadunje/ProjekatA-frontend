@@ -1,7 +1,7 @@
 <template>
   <div>
     <FilterCategoryHeading :title="$t('searchResults')" class="mb-2"/>
-    <div v-if="!showSkeleton">
+    <div v-show="!showSkeleton">
       <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
         <CafeCard
             :place="cafe"
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div v-if="showSkeleton">
+    <div v-show="showSkeleton">
       <div v-for="i in 15" :key="i" class="mb-5">
         <SkeletonCafeCard></SkeletonCafeCard>
       </div>

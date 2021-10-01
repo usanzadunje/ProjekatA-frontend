@@ -45,7 +45,7 @@ export default {
     workingHours(id) {
         return API.apiClient.get(`/cafes/${id}/working-hours`);
     },
-    // Subscribing users to specific cafe
+    // Subscribing users to specific place
     subscribe(cafeId, notificationTime = null) {
         return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime || ''}`);
     },

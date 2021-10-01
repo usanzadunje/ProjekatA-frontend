@@ -2,7 +2,7 @@
   <ion-menu
       id="admin-menu"
       content-id="admin-outlet"
-      swipe-gesture="true"
+      :swipe-gesture="$route.name !== 'owner.place.tables'"
   >
     <div class="pb-2 pl-2 pr-4 h-full flex flex-col justify-between">
       <div>
@@ -18,7 +18,7 @@
           ></ion-icon>
           <span class="pb-1 text-xl">
               {{ $t('staff.dashboard') }}
-            </span>
+          </span>
         </div>
         <div
             v-if="isOwner"
@@ -38,7 +38,7 @@
         <div
             v-if="isOwner"
             class="flex flex-row flex-1 items-center mt-4"
-            :class="[activeMenuItem === 'staff' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
+            :class="[activeMenuItem === 'staff' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-800']"
             @click="menuItemClicked('owner.staff')"
         >
           <ion-icon
@@ -52,7 +52,7 @@
         </div>
         <div
             class="flex flex-row flex-1 items-center mt-4"
-            :class="[activeMenuItem === 'settings' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
+            :class="[activeMenuItem === 'settings' ? 'border-b-2 border-purple-700 text-purple-700' : 'text-gray-800']"
             @click="menuItemClicked('staff.settings')"
         >
           <ion-icon
