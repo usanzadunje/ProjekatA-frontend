@@ -153,9 +153,9 @@ export const getters = {
         return displayName || i18n.global.t('unknown');
     },
     isStaff: (state) => {
-        return state.user?.id === 1 || state.role === 2;
+        return state.user?.id === 1 || state.role === 2 || state.user?.role === 2;
     },
     isOwner: (state) => {
-        return state.user?.id === 1 || state.role === 1;
+        return state.user?.id === 1 || state.role === 1 || state.user?.role === 1;
     },
 };

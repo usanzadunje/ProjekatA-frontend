@@ -4,6 +4,7 @@ export const namespaced = true;
 
 export const state = {
     staff: [],
+    tables: [],
 };
 
 export const mutations = {
@@ -21,6 +22,26 @@ export const mutations = {
     },
     REMOVE_STAFF_MEMBER(state, id) {
         state.staff = state.staff.filter(member => member.id !== id);
+    },
+    SET_TABLES(state, value) {
+        state.tables = value;
+    },
+    UPDATE_TABLES(state, value) {
+        let existingTable = state.tables.find(table => table.id === value.id);
+
+        if(existingTable) {
+            existingTable.position = value.position;
+            existingTable.dirty = value.dirty;
+        }else {
+            state.tables.push(value);
+        }
+    },
+    CHANGE_TABLE_DIRTY_TO_CLEAN(state) {
+        state.tables.map(table => {
+            if(table.dirty) {
+                table.dirty = false;
+            }
+        });
     },
 };
 
@@ -45,10 +66,29 @@ export const actions = {
 
         commit('REMOVE_STAFF_MEMBER', staffId);
     },
+    async getTables({ commit }) {
+        const response = await OwnerService.allTables();
+
+        commit('SET_TABLES', response.data);
+    },
+    async updateTables({ getters, commit, dispatch }) {
+        const dirtyTables = getters.tables.filter(table => {
+            return table.dirty;
+        });
+
+        await OwnerService.updateTables(dirtyTables);
+
+        commit('CHANGE_TABLE_DIRTY_TO_CLEAN');
+
+        dispatch('getTables');
+    },
 };
 
 export const getters = {
     staff: (state) => {
         return state.staff;
+    },
+    tables: (state) => {
+        return state.tables;
     },
 };

@@ -1,14 +1,13 @@
 <template>
   <div
       class="draggable bg-yellow-800 h-6 w-6 rounded-full"
-      :class="{ 'absolute': absolute }"
-      :style="`top:${top}px; left:${left}px`"
   >
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import { useStore }        from 'vuex';
 import {}                  from '@ionic/vue';
 
 import interact from 'interactjs';
@@ -16,28 +15,13 @@ import interact from 'interactjs';
 export default defineComponent({
   name: 'Table',
   components: {},
-  props: {
-    top: {
-      type: Number,
-      default: 0,
-    },
-    left: {
-      type: Number,
-      default: 0,
-    },
-    absolute: {
-      type: Boolean,
-      default: true,
-    },
-  },
   setup() {
-    // This is position relative to our parent which will be saved in DB
-    const position = { x: 0, y: 0 };
-
-
     /* Global properties */
+    const store = useStore();
 
     /* Component properties */
+    // This is position relative to our parent which will be saved in DB
+    let position = { x: 0, y: 0 };
 
     /* Composables */
 
@@ -49,7 +33,6 @@ export default defineComponent({
       event.target.style.transform =
           `translate(${position.x}px, ${position.y}px)`;
     };
-
     const cloneTable = (event) => {
       const { currentTarget, interaction } = event;
       let element = currentTarget;
@@ -68,6 +51,14 @@ export default defineComponent({
         element.style.position = "absolute";
         element.style.left = 0;
         element.style.top = 0;
+        element.style.transform = 'translate(0px, 0px)';
+        // Marking each element with unique ID so we can update them in Vuex storage
+        // without this there is no way of identifying specific table in array for updates
+        element.setAttribute('data-id', Date.now());
+        // Marking cloned tables  so we are not showing them double from vuex store
+        element.setAttribute('data-cloned', true);
+        // Look at forcePositionUpdateFromAttribute method for explanation
+        element.setAttribute('data-force-position', true);
 
         // Adding object inside parent container element
         const container = document.querySelector("#dropzone");
@@ -76,12 +67,17 @@ export default defineComponent({
         position.x = 0;
         position.y = 0;
 
+
         // If we are moving an already existing item, we need to make sure the position object has
         // the correct values before we start dragging it
-      }else if(interaction.pointerIsDown && !interaction.interacting()) {
+      }else if(
+          interaction.pointerIsDown &&
+          !interaction.interacting()
+      ) {
         const regex = /translate\(([\d]+)px, ([\d]+)px\)/i;
         const transform = regex.exec(currentTarget.style.transform);
 
+        /* MARK POSITION VALUE */
         if(transform && transform.length > 1) {
           position.x = Number(transform[1]);
           position.y = Number(transform[2]);
@@ -91,6 +87,21 @@ export default defineComponent({
       // Start the drag event
       interaction.start({ name: "drag" }, event.interactable, element);
     };
+    const forcePositionUpdateFromAttribute = (event) => {
+      // For some reason dragging existing table that is pulled from database
+      // doesnt update position value from (MARK POSITION VALUE) piece of code
+      // this forces update and does the same
+      if(event.target.getAttribute('data-force-position') === 'true') {
+        const regex = /translate\(([\d]+)px, ([\d]+)px\)/i;
+        const transform = regex.exec(event.target.style.transform);
+
+        if(transform && transform.length > 1) {
+          position.x = Number(transform[1]);
+          position.y = Number(transform[2]);
+        }
+      }
+    };
+
     /* Lifecycle hooks */
     interact('.draggable').draggable({
       manualStart: true,
@@ -98,20 +109,28 @@ export default defineComponent({
       modifiers: [
         interact.modifiers.restrictRect({
           restriction: 'parent',
-          endOnly: true,
         }),
       ],
       listeners: {
         start(event) {
           event.target.classList.add('opacity-60');
+          forcePositionUpdateFromAttribute(event);
         },
         move(event) {
           onMove(event);
         },
         end(event) {
           event.target.classList.remove('opacity-60');
-          // Execute logic that will notify parent component
-          // that new element has been added or changed
+
+          store.commit('owner/UPDATE_TABLES', {
+            id: Number(event.target.getAttribute('data-id')),
+            position: {
+              top: position.y,
+              left: position.x,
+            },
+            dirty: true,
+            clone: Boolean(event.target.getAttribute('data-cloned')),
+          });
         },
       },
     }).on('move', cloneTable);

@@ -29,4 +29,10 @@ export default {
     setImageAsMain(id) {
         return API.apiClient.post(`/owner/place/images/set-main/${id}`);
     },
+    allTables() {
+        return API.apiClient.get(`/owner/tables`);
+    },
+    updateTables(tables) {
+        return API.apiClient.post(`/owner/tables`, tables);
+    },
 };

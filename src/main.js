@@ -4,7 +4,7 @@ import App from './App.vue';
 
 import router from './router';
 
-import { IonicVue }             from '@ionic/vue';
+import { createGesture, IonicVue } from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -32,13 +32,13 @@ import "tailwindcss/tailwind.css";
 import "@/assets/css/style.css";
 
 /* Vuex */
-import store                    from './store';
+import store                       from './store';
 
 /* Translations */
-import { i18n }                 from '@/./i18n';
+import { i18n }                    from '@/./i18n';
 
 /* PWA elements (used for web) */
-import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { defineCustomElements }    from '@ionic/pwa-elements/loader';
 
 defineCustomElements(window);
 
@@ -60,6 +60,19 @@ app.directive('update-swiper', {
         setTimeout(() => {
             el.update();
         }, 200);
+    },
+});
+app.directive('disable-swipe-back', {
+    beforeMount(el) {
+        const gesture = createGesture({
+            el,
+            threshold: 0,
+            gestureName: 'goback-swipe',
+            gesturePriority: 40.5,
+            onMove: () => {
+            },
+        });
+        gesture.enable(true);
     },
 });
 

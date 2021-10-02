@@ -17,7 +17,7 @@
       <div class="px-4 pb-4 mt-3">
         <FilterCategoryHeading :title="$t('subscribedPlaces')" class="mb-2"/>
 
-        <div v-if="!showSkeleton">
+        <div v-show="!showSkeleton">
           <ion-item-sliding v-for="cafe in cafesUserSubscribedTo" :key="cafe.id" class="ion-no-padding mb-5">
             <ion-item class="ion-no-padding ion-no-margin relative">
               <Timer
@@ -46,7 +46,7 @@
           </ion-item-sliding>
         </div>
 
-        <div v-if="showSkeleton">
+        <div v-show="showSkeleton">
           <div v-for="i in 5" :key="i" class="mb-5">
             <SkeletonCafeCard></SkeletonCafeCard>
           </div>
