@@ -256,6 +256,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    refresher: {
+      type: Object,
+    },
   },
   setup(props) {
     /* Global properties and methods */
@@ -299,6 +302,8 @@ export default defineComponent({
 
     /* Methods */
     const resetInput = () => {
+      showWorkingHours.value = false;
+
       const mon_fri_hours = placeInfo.value.working_hours.mon_fri.split('-');
       const saturday_hours = placeInfo.value.working_hours.saturday.split('-');
       const sunday_hours = placeInfo.value.working_hours.sunday.split('-');
@@ -350,6 +355,15 @@ export default defineComponent({
       if(resetInputs.value) {
         showWorkingHours.value = false;
         resetInput();
+      }
+    });
+    watch(props.refresher, async() => {
+      if(props.refresher.isActive) {
+        await store.dispatch("staff/getPlaceInfo");
+
+        resetInput();
+
+        props.refresher.event.target.complete();
       }
     });
 

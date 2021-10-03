@@ -70,6 +70,13 @@ export const actions = {
         const response = await OwnerService.allTables();
 
         commit('SET_TABLES', response.data);
+
+        // Since vuex is getting populated with tables that are stored in DB
+        // these cloned ones will still stay and be duplicated with ones returned
+        // to avoid this we remove cloned tables and keep only fresh ones from real DB
+        document.querySelectorAll('[data-cloned="true"]').forEach(clonedTable => {
+            document.querySelector("#dropzone").removeChild(clonedTable);
+        });
     },
     async updateTables({ getters, commit, dispatch }) {
         const dirtyTables = getters.tables.filter(table => {

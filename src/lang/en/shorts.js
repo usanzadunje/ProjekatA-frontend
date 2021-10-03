@@ -123,6 +123,7 @@ export default {
     "saturday": "Saturday",
     "sunday": "Sunday",
     "reset": "Reset",
+    "resetting": "Resetting",
     "primaryColor": "Primary color",
     "clear": "Clear",
     "noNotifications": "There are no new notifications.",

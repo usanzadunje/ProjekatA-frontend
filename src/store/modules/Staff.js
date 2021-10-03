@@ -12,8 +12,6 @@ export const state = {
 
 export const mutations = {
     SET_PLACE_INFO(state, value) {
-        state.place = {};
-
         Object.keys(value).forEach(key => {
             state.place[key] = value[key];
         });

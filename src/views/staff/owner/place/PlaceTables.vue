@@ -29,14 +29,23 @@
           </div>
         </div>
 
-        <div class="flex items-center">
+        <div class="flex flex-col items-center">
           <ion-button
               expand="block"
-              class="auth-button-size auth-button-border-radius uppercase button-text-white my-8 mx-auto w-5/6"
+              class="auth-button-size auth-button-border-radius uppercase button-text-white mt-8 mb-3 mx-auto w-5/6"
               @click="updateTables"
-              :disabled="loading"
+              :disabled="loading >= 0"
           >
-            {{ loading ? `${$t('updating')}...` : $t('update') }}
+            {{ loading === 0 ? `${$t('updating')}...` : $t('update') }}
+          </ion-button>
+          <ion-button
+              expand="block"
+              fill="clear"
+              class="auth-button-size auth-button-border-radius uppercase button-text-black mb-4 mx-auto w-5/6"
+              @click="resetTables"
+              :disabled="loading >= 0"
+          >
+            {{ loading === 1 ? `${$t('resetting')}...` : $t('reset') }}
           </ion-button>
         </div>
       </div>
@@ -73,7 +82,7 @@ export default defineComponent({
     const tables = computed(() => {
       return store.getters['owner/tables'].filter(table => !table.clone);
     });
-    const loading = ref(false);
+    const loading = ref(-1);
 
     /* Composables */
     const { t } = useI18n();
@@ -86,22 +95,25 @@ export default defineComponent({
 
     /* Event handlers */
     const updateTables = async() => {
-      loading.value = true;
+      loading.value = 0;
       try {
         await store.dispatch("owner/updateTables");
-
-        // Since vuex is getting populated with tables that are stored in DB
-        // these cloned ones will still stay and be duplicated with ones returned
-        // to avoid this we remove cloned tables and keep only fresh ones from real DB
-        document.querySelectorAll('[data-cloned="true"]').forEach(clonedTable => {
-          document.querySelector("#dropzone").removeChild(clonedTable);
-        });
 
         showSuccessToast(t('owner.updateTables'));
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
-        loading.value = false;
+        loading.value = -1;
+      }
+    };
+    const resetTables = async() => {
+      loading.value = 1;
+      try {
+        await store.dispatch("owner/getTables");
+      }catch(errors) {
+        await showErrorToast(errors);
+      }finally {
+        loading.value = -1;
       }
     };
 
@@ -112,6 +124,7 @@ export default defineComponent({
 
       /* Event handlers */
       updateTables,
+      resetTables,
     };
   },
 

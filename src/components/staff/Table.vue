@@ -125,8 +125,8 @@ export default defineComponent({
           store.commit('owner/UPDATE_TABLES', {
             id: Number(event.target.getAttribute('data-id')),
             position: {
-              top: position.y,
-              left: position.x,
+              top: Math.round(position.y),
+              left: Math.round(position.x),
             },
             dirty: true,
             clone: Boolean(event.target.getAttribute('data-cloned')),

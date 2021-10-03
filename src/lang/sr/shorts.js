@@ -123,6 +123,7 @@ export default {
     "saturday": "Subota",
     "sunday": "Nedelja",
     "reset": "Resetuj",
+    "resetting": "Resetujem",
     "primaryColor": "Primarna boja",
     "clear": "Obriši",
     "noNotifications": "Nema novih notifikacija.",
