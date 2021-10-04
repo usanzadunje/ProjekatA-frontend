@@ -45,7 +45,7 @@ export default {
     "gallery": "Gallery",
     "settings": "Settings",
     "currently": "Currently available",
-    "free": "Available vacancies",
+    "occupiedSeats": "Occupied seats",
     "place": "Place | Places",
     "refresherPulling": "Pull to refresh",
     "refresherText": "Refreshing...",

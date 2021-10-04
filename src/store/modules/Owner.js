@@ -1,5 +1,7 @@
 import OwnerService from '@/services/OwnerService';
 
+import { calculatePxFromPercent } from '@/utils/helpers';
+
 export const namespaced = true;
 
 export const state = {
@@ -25,6 +27,11 @@ export const mutations = {
     },
     SET_TABLES(state, value) {
         state.tables = value;
+    },
+    SET_TABLE_LEFT_POSITION(state, dropzoneWidth) {
+        state.tables.forEach(table => {
+            table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth);
+        });
     },
     UPDATE_TABLES(state, value) {
         let existingTable = state.tables.find(table => table.id === value.id);
@@ -79,15 +86,13 @@ export const actions = {
         });
     },
     async updateTables({ getters, commit, dispatch }) {
-        const dirtyTables = getters.tables.filter(table => {
-            return table.dirty;
-        });
+        const dirtyTables = getters.tables.filter(table => table.dirty);
 
         await OwnerService.updateTables(dirtyTables);
 
         commit('CHANGE_TABLE_DIRTY_TO_CLEAN');
 
-        dispatch('getTables');
+        await dispatch('getTables');
     },
 };
 

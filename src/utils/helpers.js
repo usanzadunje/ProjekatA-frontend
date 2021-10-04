@@ -46,3 +46,8 @@ export function loadLocaleMessages(locales) {
     });
     return messages;
 }
+
+// Calculating width in px from % of child element
+export function calculatePxFromPercent(percent, parentWidth) {
+    return Math.round((percent * (parentWidth - 24)) / 100);
+}

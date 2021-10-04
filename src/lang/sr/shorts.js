@@ -45,7 +45,7 @@ export default {
     "gallery": "Galerija",
     "settings": "Podešavanja",
     "currently": "Trenutno slobodni",
-    "free": "Slobodnih mesta",
+    "occupiedSeats": "Zauzetih mesta",
     "place": "Mesto | Mesta",
     "refresherPulling": "Povucite da osvežite",
     "refresherText": "Učitava se...",

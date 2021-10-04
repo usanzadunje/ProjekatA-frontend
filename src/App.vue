@@ -30,6 +30,8 @@ export default defineComponent({
       await store.dispatch("auth/getAuthUser");
       await store.dispatch("user/getSettings");
       await initPush();
+
+      store.commit("global/SET_WIDTH", window.innerWidth);
     })();
 
     return {};

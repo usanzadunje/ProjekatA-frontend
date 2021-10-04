@@ -30,9 +30,9 @@ export default {
         return API.apiClient.post(`/owner/place/images/set-main/${id}`);
     },
     allTables() {
-        return API.apiClient.get(`/owner/tables`);
+        return API.apiClient.get(`/owner/place/tables`);
     },
     updateTables(tables) {
-        return API.apiClient.post(`/owner/tables`, tables);
+        return API.apiClient.post(`/owner/place/tables`, tables);
     },
 };

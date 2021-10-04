@@ -1,14 +1,14 @@
 <template>
   <ion-page>
-    <div class="pt-6 px-14">
+    <div class="pt-6 px-8">
       <ion-segment :value="$route.name" @ionChange="pageChange($event)" class="bg-gray-100" mode="ios">
-        <ion-segment-button value="owner.place.info" layout="icon-top" mode="ios">
+        <ion-segment-button value="owner.place.info" mode="ios">
           <ion-label>{{ $t('basic') }}</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="owner.place.tables" layout="icon-top" mode="ios">
+        <ion-segment-button value="owner.place.tables" mode="ios">
           <ion-label>{{ $t('tables') }}</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="owner.place.menu" layout="icon-top" mode="ios">
+        <ion-segment-button value="owner.place.menu" mode="ios">
           <ion-label>{{ $t('menu') }}</ion-label>
         </ion-segment-button>
       </ion-segment>

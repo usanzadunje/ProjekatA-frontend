@@ -10,22 +10,23 @@
             <span class="ml-2 secondary-heading">-drop me where you want</span>
           </div>
 
-          <div class="px-4 mt-16">
-            <div class="p-0.5 border-2 border-black">
-              <div id="dropzone" class="relative h-44">
-                <Table
-                    v-for="table in tables"
-                    :key="table.id"
-                    :data-id="table.id"
-                    :data-force-position="true"
-                    :style="
-                    `position: absolute;
-                    top: 0; left: 0;
-                    transform:translate(${table.position.left}px, ${table.position.top}px)
-                    `"
-                />
-              </div>
-            </div>
+
+          <div class="px-4">
+            <TableContainer class="mt-16">
+              <Table
+                  v-for="table in tables"
+                  :key="table.id"
+                  :draggable="true"
+                  :data-id="table.id"
+                  :data-force-position="true"
+                  :style="
+                  `position: absolute;
+                  top: 0; left: 0;
+                  transform:translate(${table.position.left}px, ${table.position.top}px)
+                  `
+                "
+              />
+            </TableContainer>
           </div>
         </div>
 
@@ -63,7 +64,9 @@ import {
   IonButton,
 }                                         from '@ionic/vue';
 
-import Table                     from '@/components/staff/Table';
+import TableContainer from '@/components/TableContainer';
+import Table          from '@/components/Table';
+
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 export default defineComponent({
@@ -72,6 +75,7 @@ export default defineComponent({
     IonPage,
     IonContent,
     IonButton,
+    TableContainer,
     Table,
   },
   setup() {
@@ -82,6 +86,9 @@ export default defineComponent({
     const tables = computed(() => {
       return store.getters['owner/tables'].filter(table => !table.clone);
     });
+    const dropzoneWidth = computed(() => {
+      return store.getters['global/width'] - ((2.25 * parseFloat(getComputedStyle(document.documentElement).fontSize)) + 4);
+    });
     const loading = ref(-1);
 
     /* Composables */
@@ -91,13 +98,19 @@ export default defineComponent({
     /* Lifecycle hooks */
     (async() => {
       await store.dispatch('owner/getTables');
+
+      store.commit('owner/SET_TABLE_LEFT_POSITION', dropzoneWidth.value);
     })();
+
+    /* Methods */
 
     /* Event handlers */
     const updateTables = async() => {
       loading.value = 0;
       try {
         await store.dispatch("owner/updateTables");
+
+        store.commit('owner/SET_TABLE_LEFT_POSITION', dropzoneWidth.value);
 
         showSuccessToast(t('owner.updateTables'));
       }catch(errors) {
@@ -110,6 +123,8 @@ export default defineComponent({
       loading.value = 1;
       try {
         await store.dispatch("owner/getTables");
+
+        store.commit('owner/SET_TABLE_LEFT_POSITION', dropzoneWidth.value);
       }catch(errors) {
         await showErrorToast(errors);
       }finally {

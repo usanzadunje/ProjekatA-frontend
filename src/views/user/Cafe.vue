@@ -1,5 +1,6 @@
 <template>
   <ion-page>
+
     <ion-header class="ion-no-border">
       <ion-toolbar>
         <div class="flex justify-between mt-3 md margin-top-reset">
@@ -18,17 +19,29 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding h-full">
+    <ion-content class="h-full">
+      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+        <ion-refresher-content
+            refreshing-spinner="crescent"
+        >
+        </ion-refresher-content>
+      </ion-refresher>
+
       <div class="h-full">
         <div class="h-full flex flex-col justify-between">
           <div>
             <div class="relative">
-              <img
-                  :src="`${backendStorageURL + mainImagePath}`"
-                  :alt="`Image of ${place.name} place`"
-                  @click="openPreview(place)"
-                  class="banner-image w-full object-fill img-border-15"
-              />
+              <div v-show="!showSkeleton">
+                <img
+                    :src="`${backendStorageURL + mainImagePath}`"
+                    :alt="`Image of ${place.name} place`"
+                    @click="openPreview(place)"
+                    class="banner-image w-full object-fill img-border-15"
+                />
+              </div>
+              <div v-show="showSkeleton">
+                <ion-skeleton-text animated class="banner-image img-border-15"></ion-skeleton-text>
+              </div>
               <div
                   class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
               >
@@ -37,11 +50,39 @@
             </div>
 
             <div class="mt-4 ion-item-no-padding-x">
-              <h1 class="cafe-show-name">{{ place.name }}</h1>
-              <p class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
+              <h1 v-show="!showSkeleton" class="cafe-show-name">{{ place.name }}</h1>
+              <h1 v-show="showSkeleton">
+                <ion-skeleton-text animated class="rounded-md h-8 w-2/3"></ion-skeleton-text>
+              </h1>
+              <p v-show="!showSkeleton" class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
+              <p v-show="showSkeleton" class="mt-1">
+                <ion-skeleton-text animated class="rounded-md h-12"></ion-skeleton-text>
+              </p>
             </div>
 
             <CafeInfoBody :place="place"/>
+
+            <div>
+              <FilterCategoryHeading class="mt-4" :title="$t('tables')" :icon="storefrontOutline"/>
+              <TableContainer v-show="!showSkeleton" class="mt-2">
+                <Table
+                    v-for="table in place.tables"
+                    :key="table.id"
+                    :empty="table.empty"
+                    :draggable="false"
+                    :style="
+                      `position: absolute;
+                      top: 0; left: 0;
+                      transform:translate(${table.position.left}px, ${table.position.top}px)
+                      `
+                    "
+                />
+              </TableContainer>
+            </div>
+
+            <div v-show="showSkeleton">
+              <ion-skeleton-text animated class="rounded-md" style="height: 180px;"></ion-skeleton-text>
+            </div>
 
             <div class="mb-2">
               <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
@@ -103,6 +144,9 @@ import {
   IonContent,
   IonIcon,
   IonButton,
+  IonSkeletonText,
+  IonRefresher,
+  IonRefresherContent,
   modalController,
   onIonViewWillEnter,
   onIonViewWillLeave,
@@ -110,6 +154,8 @@ import {
 
 import CafeInfoBody          from '@/components/place/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
+import TableContainer        from '@/components/TableContainer';
+import Table                 from '@/components/Table';
 import AccordionList         from '@/components/user/AccordionList';
 import Modal                 from '@/components/Modal';
 import CafeSubscriptionModal from '@/components/user/modals/CafeSubscriptionModal';
@@ -119,16 +165,21 @@ import CafeService from '@/services/CafeService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useModal }              from '@/composables/useModal';
+
+import { calculatePxFromPercent } from '@/utils/helpers';
+
 import {
   arrowBackOutline,
   notifications,
   notificationsOutline,
+  storefrontOutline,
   fastFoodOutline,
   pizzaOutline,
   beerOutline,
 }
-                                 from 'ionicons/icons';
+  from 'ionicons/icons';
 
+import TableService from '@/services/TableService';
 
 export default defineComponent({
   name: "Cafe",
@@ -140,8 +191,13 @@ export default defineComponent({
     IonContent,
     IonIcon,
     IonButton,
+    IonSkeletonText,
+    IonRefresher,
+    IonRefresherContent,
     CafeInfoBody,
     FilterCategoryHeading,
+    TableContainer,
+    Table,
     AccordionList,
     Modal,
     CafeSubscriptionModal,
@@ -157,6 +213,10 @@ export default defineComponent({
     const isUserSubscribed = ref(false);
     let searchTab = null;
     const platformIsWeb = Capacitor.getPlatform() === 'web';
+    const showSkeleton = ref(true);
+    const dropzoneWidth = computed(() => {
+      return store.getters['global/width'] - ((2.25 * parseFloat(getComputedStyle(document.documentElement).fontSize)) + 4);
+    });
 
     /* Computed properties */
     const loggedIn = computed(() => store.getters['auth/loggedIn']);
@@ -175,13 +235,23 @@ export default defineComponent({
 
     /* Methods */
     const getPlace = async() => {
+      showSkeleton.value = true;
       try {
         const response = await CafeService.show(route.params.id);
+        const tablesResponse = await TableService.index(route.params.id);
+
         place.value = response.data;
+        place.value.tables = tablesResponse.data;
+
+        place.value.tables?.forEach(table => {
+          table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth.value);
+        });
+
         if(loggedIn.value) {
           const subscriptionResponse = await CafeService.isUserSubscribed(route.params.id);
           isUserSubscribed.value = !!subscriptionResponse.data.subscribed;
         }
+        showSkeleton.value = false;
       }catch(error) {
         showErrorToast(
             null,
@@ -221,7 +291,11 @@ export default defineComponent({
           });
       return modal.present();
     };
+    const refresh = async(event) => {
+      await getPlace();
 
+      event.target.complete();
+    };
 
     /* Watchers */
     // Watching for changes of id parameter in place show route and fetching right data
@@ -240,6 +314,7 @@ export default defineComponent({
       isModalOpen,
       isUserSubscribed,
       platformIsWeb,
+      showSkeleton,
 
       /* Computed properties */
       loggedIn,
@@ -247,11 +322,13 @@ export default defineComponent({
       /* Event handlers */
       openModal,
       openPreview,
+      refresh,
 
       /* Icons */
       arrowBackOutline,
       notifications,
       notificationsOutline,
+      storefrontOutline,
       fastFoodOutline,
       pizzaOutline,
       beerOutline,
@@ -271,5 +348,10 @@ ion-toolbar {
 
 ion-content {
   --background: var(--show-paint);
+  background: var(--show-paint);
+  --padding-start: 1rem;
+  --padding-top: 1rem;
+  --padding-end: 1rem;
+  --padding-bottom: 1rem;
 }
 </style>

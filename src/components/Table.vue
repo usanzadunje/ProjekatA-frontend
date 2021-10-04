@@ -1,6 +1,9 @@
 <template>
   <div
-      class="draggable bg-yellow-800 h-6 w-6 rounded-full"
+      class="rounded-full"
+      :class="{
+        'draggable' : draggable, 'bg-green-500' : empty === 1, 'bg-red-500' : empty === 0, 'bg-yellow-800' : empty === null
+      }"
   >
   </div>
 </template>
@@ -15,6 +18,16 @@ import interact from 'interactjs';
 export default defineComponent({
   name: 'Table',
   components: {},
+  props: {
+    draggable: {
+      type: Boolean,
+      default: true,
+    },
+    empty: {
+      type: Number,
+      default: null,
+    },
+  },
   setup() {
     /* Global properties */
     const store = useStore();
@@ -24,7 +37,6 @@ export default defineComponent({
     let position = { x: 0, y: 0 };
 
     /* Composables */
-
     /* Interact.js event handlers */
     const onMove = (event) => {
       position.x += event.dx;
@@ -44,6 +56,7 @@ export default defineComponent({
           !interaction.interacting() &&
           currentTarget.style.transform === ""
       ) {
+        console.log('clone');
         element = currentTarget.cloneNode(true);
 
         // Making clone absolute so we can position it it top left corner of container
@@ -125,8 +138,15 @@ export default defineComponent({
           store.commit('owner/UPDATE_TABLES', {
             id: Number(event.target.getAttribute('data-id')),
             position: {
+              // This is calculating distance in % so it will be shown precise on any screen
+              // -24 is because width of element is 24px which should not be calculated
               top: Math.round(position.y),
               left: Math.round(position.x),
+              // left property is directly connected with transform value
+              // Since it is calculated to % it will make buggy movement of existing table
+              // Vuex value will be replaced with % but it need px to be shown correctly
+              // So we make separate property for saving in DB as % and problem is solved.
+              leftToSave: Math.round(position.x) / (event.target.parentElement.getBoundingClientRect().width - 24) * 100,
             },
             dirty: true,
             clone: Boolean(event.target.getAttribute('data-cloned')),
@@ -142,6 +162,7 @@ export default defineComponent({
       /* Component properties */
 
       /* Event handlers */
+      cloneTable,
 
       /* Icons */
     };
@@ -153,5 +174,7 @@ export default defineComponent({
 div {
   touch-action: none;
   user-select: none;
+  width: 24px;
+  height: 24px;
 }
 </style>
