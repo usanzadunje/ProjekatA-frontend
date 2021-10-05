@@ -13,7 +13,7 @@ ion-header {
     background-color: var(--primary-paint) !important;
 }
 
-ion-input {
+ion-input, ion-textarea {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     font-size: 0.8rem !important;
@@ -226,6 +226,36 @@ ion-toggle {
     padding-bottom: 0 !important;
 }
 
+.custom-category-alert .alert-button-group button {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 1rem !important;
+}
+
+.custom-category-alert .alert-checkbox-icon.sc-ion-alert-ios {
+    background-color: white;
+}
+
+.custom-category-alert .alert-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 1.125rem !important;
+}
+
+.custom-category-alert .alert-sub-title {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 0.875rem !important;
+}
+
+.custom-category-alert .alert-checkbox-label {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 0.875rem !important;
+}
+
+
+/* UTILITY CLASSES */
+
 .no-padding-top {
     --padding-top: 0 !important;
 }
@@ -282,6 +312,18 @@ ion-toggle.dark-toggle-checked {
 .user-selected-paint {
     background: var(--user-selected-color) !important;
     --background: var(--user-selected-color) !important;
+}
+
+.smallButton {
+    font-size: 0.75rem !important;
+    --padding-top: 0 !important;
+    --padding-start: 0.875rem !important;
+    --padding-end: 0.875rem !important;
+    --padding-bottom: 0 !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    --color: #FFF;
+    --background: var(--primary-button);
 }
 
 /*
@@ -959,6 +1001,22 @@ ion-toggle.dark-toggle-checked {
 
 /*
     END GLOBAL STYLES
+*/
+
+/*
+    START CATEGORY FORM STYLES
+*/
+.category-label {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 0.8rem !important;
+    color: var(--primary-heading) !important;
+    opacity: 0.5;
+}
+
+
+/*
+    END CATEGORY FORM STYLES
 */
 
 /*

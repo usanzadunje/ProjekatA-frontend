@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-content>
       <div class="wrap h-full">
         <EditForm :clear-inputs="clearInputs"/>
       </div>

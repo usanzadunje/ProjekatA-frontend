@@ -105,6 +105,10 @@ export default {
     "owner.createStaff": "Kreirajte novog zaposlenog",
     "owner.createdStaff": "Uspešno ste kreirali novog zaposlenog!",
     "owner.updateTables": "Uspešno ste ažurirali pozicije stolova!",
+    "owner.createCategory": "Uspešno ste kreirali novu kategoriju!",
+    "owner.removeCategory": "Uspešno ste uklonili kategoriju proizvoda!",
+    "owner.createProduct": "Uspešno ste dodali novi proizvod u meni!",
+    "owner.removeProduct": "Uspešno ste uklonili proizvod iz menija!",
     "active": "Aktivan",
     "inactive": "Neaktivan",
     "timeLeft": "{time} minut | {time} minuta",
@@ -127,5 +131,15 @@ export default {
     "primaryColor": "Primarna boja",
     "clear": "Obriši",
     "noNotifications": "Nema novih notifikacija.",
+    "category": "Kategorija | Kategorije",
+    "createCategory": "Kreiraj kategoriju",
+    "showCreateCategory": "Prikaži formu za kreiranje kategorije",
+    "hideCreateCategory": "Sakrij formu za kreiranje kategorije",
+    "selectCategoryRemove": "Izaberite kategoriju za uklanjanje",
+    "selectCategoryProduct": "Izaberite kategoriju za proizvod",
+    "createMenuItem": "Kreiraj stavku menija",
+    "productCategory": "Kategorija proizvoda",
+    "productDescription": "Opis proizvoda",
+
 };
 

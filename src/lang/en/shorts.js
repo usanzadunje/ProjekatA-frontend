@@ -105,6 +105,10 @@ export default {
     "owner.createStaff": "Create new staff member",
     "owner.createdStaff": "Successfully created new staff member!",
     "owner.updateTables": "Successfully updated table position!",
+    "owner.createCategory": "Successfully created new product category!",
+    "owner.removeCategory": "Successfully removed product category!",
+    "owner.createProduct": "Successfully added new product to menu!",
+    "owner.removeProduct": "Successfully removed product from menu!",
     "active": "Active",
     "inactive": "Inactive",
     "timeLeft": "{time} minute | {time} minutes",
@@ -127,4 +131,15 @@ export default {
     "primaryColor": "Primary color",
     "clear": "Clear",
     "noNotifications": "There are no new notifications.",
+    "createCategory": "Create category",
+    "category": "Category | Categories",
+    "showCreateCategory": "Show create category form",
+    "hideCreateCategory": "Hide create category form",
+    "selectCategoryRemove": "Select category to remove",
+    "selectCategoryProduct": "Select category for product",
+    "createMenuItem": "Create menu item",
+    "productCategory": "Product category",
+    "productDescription": "Product description",
+
+
 };

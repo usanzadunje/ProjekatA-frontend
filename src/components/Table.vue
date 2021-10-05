@@ -56,7 +56,6 @@ export default defineComponent({
           !interaction.interacting() &&
           currentTarget.style.transform === ""
       ) {
-        console.log('clone');
         element = currentTarget.cloneNode(true);
 
         // Making clone absolute so we can position it it top left corner of container

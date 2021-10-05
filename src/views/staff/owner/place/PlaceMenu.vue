@@ -1,8 +1,8 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true" scrollY="false">
-      <div class="px-4">
-        <h1>PLACE menu</h1>
+    <ion-content>
+      <div class="px-4 pb-4">
+        <MenuForm/>
       </div>
     </ion-content>
   </ion-page>
@@ -12,14 +12,18 @@
 import { defineComponent } from 'vue';
 import {
   IonPage,
-  IonContent, onIonViewWillLeave,
+  IonContent,
+  onIonViewWillLeave,
 }                          from '@ionic/vue';
+
+import MenuForm from '@/components/owner/forms/MenuForm';
 
 export default defineComponent({
   name: "PlaceMenu",
   components: {
     IonPage,
     IonContent,
+    MenuForm,
   },
   setup() {
     /* Component properties */
@@ -40,5 +44,6 @@ export default defineComponent({
 <style scoped>
 ion-content {
   --background: var(--show-paint);
+  background: var(--show-paint);
 }
 </style>
