@@ -8,10 +8,13 @@
       <ion-icon :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline"
                 class="primary-icon-color"></ion-icon>
     </div>
-    <div class="panel" @click="togglePane($event, true)">
-      <div v-for="item in items" :key="item">
-        <p class="panel-items">{{ item.name }}</p>
+    <div class="panel">
+      <div v-if="items">
+        <div v-for="item in items" :key="item">
+          {{ item }}
+        </div>
       </div>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -20,7 +23,7 @@
 import { defineComponent, ref } from 'vue';
 import {
   IonIcon,
-} from '@ionic/vue';
+}                               from '@ionic/vue';
 
 import {
   chevronDownOutline,
@@ -65,7 +68,6 @@ export default defineComponent({
       isPanelOpen.value = !isPanelOpen.value;
     };
 
-
     return {
       /* Component properties */
       isPanelOpen,
@@ -81,3 +83,6 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+
+</style>

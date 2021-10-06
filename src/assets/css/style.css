@@ -3,6 +3,11 @@
 /*
     START Global styles for certain components
 */
+html {
+    font-family: 'Poppins', sans-serif !important;
+    --ion-font-family: 'Poppins', sans-serif !important;
+}
+
 ion-content {
     --background: var(--primary-paint);
     background-color: var(--primary-paint);
@@ -255,6 +260,9 @@ ion-toggle {
 
 
 /* UTILITY CLASSES */
+.primary-text-color {
+    color: var(--primary-heading) !important;
+}
 
 .no-padding-top {
     --padding-top: 0 !important;
@@ -829,14 +837,9 @@ ion-toggle.dark-toggle-checked {
 }
 
 .panel {
-    padding: 0 1.125rem;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-in;
-}
-
-.panel-items {
-    color: var(--primary-heading);
 }
 
 .button-subscribe-wide {

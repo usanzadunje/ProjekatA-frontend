@@ -140,6 +140,7 @@ export default {
     "createMenuItem": "Kreiraj stavku menija",
     "productCategory": "Kategorija proizvoda",
     "productDescription": "Opis proizvoda",
+    "price": "Cena",
 
 };
 

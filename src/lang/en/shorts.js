@@ -140,6 +140,7 @@ export default {
     "createMenuItem": "Create menu item",
     "productCategory": "Product category",
     "productDescription": "Product description",
+    "price": "Price",
 
 
 };

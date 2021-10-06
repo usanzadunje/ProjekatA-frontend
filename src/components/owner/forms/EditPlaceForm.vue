@@ -8,7 +8,7 @@
               :src="`${backendStorageURL + mainImagePath}`"
               :alt="`Image of  cafe`"
               @click="openPreview"
-              class="h-36 w-full img-border-15"
+              class="h-36 w-full img-border-15 object-cover"
           />
         </div>
         <ion-item

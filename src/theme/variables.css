@@ -1,7 +1,3 @@
-/* Ionic Variables and Theming. For more info, please see:
-http://ionicframework.com/docs/theming/ */
-
-/** Ionic CSS Variables **/
 :root {
     /** primary **/
     --ion-color-primary: #3880ff;
@@ -75,6 +71,15 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-light-shade: #d7d8da;
     --ion-color-light-tint: #f5f6f9;
 
+    /*
+        CUSTOM FONT SCHEME
+    */
+    --ion-font-family: 'Poppins', sans-serif !important;
+    /*
+        CUSTOM FONT SCHEME
+    */
+
+
     /**
        START CUSTOM COLOR SCHEME
     **/
@@ -122,6 +127,10 @@ http://ionicframework.com/docs/theming/ */
       END CUSTOM COLOR SCHEME
    **/
 }
+
+/* Ionic Variables and Theming. For more info, please see:
+http://ionicframework.com/docs/theming/ */
+/** Ionic CSS Variables **/
 
 
 @media (prefers-color-scheme: dark) {
@@ -291,6 +300,15 @@ http://ionicframework.com/docs/theming/ */
 }
 
 body.dark {
+    /*
+       CUSTOM FONT SCHEME
+   */
+    --ion-font-family: 'Poppins', sans-serif !important;
+    /*
+        CUSTOM FONT SCHEME
+    */
+
+
     /**
       START CUSTOM DARK MODE COLOR SCHEME
    **/

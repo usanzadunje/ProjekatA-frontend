@@ -13,10 +13,6 @@
           @search-enter-pressed="switchToSearch"
       />
 
-      dasdasdasd
-      sadasdsad
-      asdas
-
       <div class="ion-padding">
         <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
@@ -220,7 +216,7 @@ export default defineComponent({
 
           CafeService.getCafeCardsChunkInfo(
               0, 4,
-              '', 'default', true,
+              '', 'availability', true,
               store.getters['global/position'].latitude,
               store.getters['global/position'].longitude,
           ),

@@ -88,6 +88,8 @@ export default defineComponent({
         await CategoryService.create(payload);
 
         showSuccessToast(t('owner.createCategory'));
+
+        category.value = null;
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);

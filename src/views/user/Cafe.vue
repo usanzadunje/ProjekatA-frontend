@@ -87,17 +87,19 @@
             <div class="mb-2">
               <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
               <AccordionList
+                  v-for="category in place.categories"
+                  :key="category"
                   class="accordion-list-border-top"
-                  :title="$t('drinksCard')"
-                  :items="place.offerings?.filter(offer => offer.tag === 'drink')"
+                  :title="category.name"
                   :icon="beerOutline"
-              />
-              <AccordionList
-                  class="accordion-list-border-top accordion-list-border-bottom"
-                  :title="$t('food')"
-                  :items="place.offerings?.filter(offer => offer.tag === 'food')"
-                  :icon="pizzaOutline"
-              />
+              >
+                <ProductCard
+                    v-for="product in category.products"
+                    :key="product.id"
+                    :product="product"
+                    class="py-1"
+                />
+              </AccordionList>
             </div>
           </div>
 
@@ -157,6 +159,7 @@ import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import TableContainer        from '@/components/TableContainer';
 import Table                 from '@/components/Table';
 import AccordionList         from '@/components/user/AccordionList';
+import ProductCard           from '@/components/ProductCard';
 import Modal                 from '@/components/Modal';
 import CafeSubscriptionModal from '@/components/user/modals/CafeSubscriptionModal';
 import ImagePreviewModal     from '@/components/user/modals/ImagePreviewModal';
@@ -199,6 +202,7 @@ export default defineComponent({
     TableContainer,
     Table,
     AccordionList,
+    ProductCard,
     Modal,
     CafeSubscriptionModal,
   },

@@ -21,25 +21,23 @@
       <ion-item
           lines="none"
           class="flex rounded-2xl h-11 mt-3.5"
-          :class="{ 'error-border' : errorNames.hasOwnProperty('categories') }"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('category_id') }"
       >
         <ion-label class="category-label">{{ $t('productCategory') }}</ion-label>
         <ion-select
             ref="productCategory"
-            v-model="product.categories"
-            multiple="true"
+            v-model="product.category_id"
             :cancel-text="$t('cancel')"
             :ok-text="$t('confirm')"
             :interface-options="customAlertOptions"
         >
-          <ion-select-option value="olives">Black Olives</ion-select-option>
-          <ion-select-option value="xcheese">Extra Cheese</ion-select-option>
-          <ion-select-option value="peppers">Green Peppers</ion-select-option>
-          <ion-select-option value="mushrooms">Mushrooms</ion-select-option>
-          <ion-select-option value="onions">Onions</ion-select-option>
-          <ion-select-option value="pepperoni">Pepperoni</ion-select-option>
-          <ion-select-option value="pineapple">Pineapple</ion-select-option>
-          <ion-select-option value="sausage">Sausage</ion-select-option>
+          <ion-select-option
+              v-for="category in categories"
+              :key="category"
+              :value="category.id"
+          >
+            {{ category.name }}
+          </ion-select-option>
         </ion-select>
       </ion-item>
       <ion-item
@@ -60,6 +58,24 @@
         >
         </ion-textarea>
       </ion-item>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('price') }"
+      >
+        <ion-icon :icon="walletOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+
+        <ion-input
+            v-capitalize
+            v-model.lazy="product.price"
+            @keyup.enter="createProduct"
+            type="number"
+            debounce="600"
+            :placeholder="$t('price')"
+            required
+        ></ion-input>
+      </ion-item>
+
       <!--      ADD IMAGE FUNCTIONALITY HERE-->
       <!--      <ion-item-->
       <!--          lines="none"-->
@@ -117,10 +133,12 @@ import { useToastNotifications } from '@/composables/useToastNotifications';
 import {
   pricetagOutline,
   createOutline,
+  walletOutline,
 
 } from 'ionicons/icons';
 
 import { getError, sleep } from '@/utils/helpers';
+import CategoryService     from '@/services/CategoryService';
 
 export default defineComponent({
   name: "CreateMenuItemForm",
@@ -144,6 +162,7 @@ export default defineComponent({
     const { showSuccessToast, showErrorToast } = useToastNotifications();
 
     /* Component properties */
+    const categories = ref();
     const product = reactive({});
     const productCategory = ref();
     const errorNames = ref({});
@@ -157,6 +176,11 @@ export default defineComponent({
 
     /* Computed properties */
     /* Lifecycle hooks */
+    (async() => {
+      const response = await CategoryService.index();
+
+      categories.value = response.data;
+    })();
     /* Methods */
 
     /* Event handlers */
@@ -166,6 +190,10 @@ export default defineComponent({
         await ProductService.create(product);
 
         showSuccessToast(t('owner.createProduct'));
+
+        Object.keys(product).forEach(key => {
+          product[key] = null;
+        });
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);
@@ -183,6 +211,7 @@ export default defineComponent({
       /* Global properties */
 
       /* Component properties */
+      categories,
       product,
       productCategory,
       errorNames,
@@ -195,6 +224,7 @@ export default defineComponent({
       /* Icons */
       createOutline,
       pricetagOutline,
+      walletOutline,
     };
   },
 });
@@ -206,6 +236,9 @@ hr {
 }
 
 ion-select::part(text) {
-  display: none;
+  font-size: 0.95rem !important;
+  font-weight: 500;
+  color: var(--primary-heading) !important;
+  opacity: 0.8;
 }
 </style>
