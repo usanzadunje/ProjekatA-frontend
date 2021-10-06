@@ -106,8 +106,10 @@ export default {
     "owner.createdStaff": "Uspešno ste kreirali novog zaposlenog!",
     "owner.updateTables": "Uspešno ste ažurirali pozicije stolova!",
     "owner.createCategory": "Uspešno ste kreirali novu kategoriju!",
+    "owner.updateCategory": "Uspešno ste izmenilikategoriju!",
     "owner.removeCategory": "Uspešno ste uklonili kategoriju proizvoda!",
     "owner.createProduct": "Uspešno ste dodali novi proizvod u meni!",
+    "owner.updateProduct": "Uspešno ste izmenili proizvod!",
     "owner.removeProduct": "Uspešno ste uklonili proizvod iz menija!",
     "active": "Aktivan",
     "inactive": "Neaktivan",
@@ -132,15 +134,18 @@ export default {
     "clear": "Obriši",
     "noNotifications": "Nema novih notifikacija.",
     "category": "Kategorija | Kategorije",
-    "createCategory": "Kreiraj kategoriju",
+    "createCategory": "Kreiraj novu kategoriju",
     "showCreateCategory": "Prikaži formu za kreiranje kategorije",
     "hideCreateCategory": "Sakrij formu za kreiranje kategorije",
     "selectCategoryRemove": "Izaberite kategoriju za uklanjanje",
     "selectCategoryProduct": "Izaberite kategoriju za proizvod",
     "createMenuItem": "Kreiraj stavku menija",
+    "product": "Proizvod | Proizvodi",
     "productCategory": "Kategorija proizvoda",
     "productDescription": "Opis proizvoda",
     "price": "Cena",
+    "createProduct": "Kreiraj novi proizvod",
+
 
 };
 

@@ -1,48 +1,58 @@
 <template>
-  <div class="flex items-center justify-between">
+  <div class="">
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 w-4/6"
+        class="flex rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('category') }"
     >
       <ion-icon :icon="pricetagOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           v-capitalize
-          v-model.lazy="category"
-          @keyup.enter="createCategory"
+          v-model.lazy="categoryName"
+          @keyup.enter="createOrUpdateCategory"
           type="text"
-          debounce="600"
           :placeholder="$t('category')"
           :autofocus="true"
           required
       ></ion-input>
     </ion-item>
 
-    <ion-button
-        @click="createCategory"
-        :disabled="loading"
-        size="large"
-        expand="block"
-        class="auth-button-border-radius uppercase h-11 smallButton"
-    >
-      <span v-show="!loading">{{ $t('confirm') }}</span>
-      <ion-spinner v-show="loading" name="crescent"></ion-spinner>
-    </ion-button>
+    <div class="mt-12">
+      <ion-button
+          :disabled="loading"
+          size="large"
+          expand="block"
+          class="auth-button-size auth-button-border-radius uppercase button-text-white relative"
+          @click="createOrUpdateCategory"
+      >
+        {{ loading ? $t('checking') : (!category ? $t('create') : $t('update')) }}
+        <ion-spinner v-if="loading" name="crescent" class="absolute right-0"></ion-spinner>
+      </ion-button>
+      <ion-button
+          :disabled="loading"
+          fill="clear"
+          @click="$emit('dismiss')"
+          size="large"
+          expand="block"
+          class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
+      >
+        {{ $t('cancel') }}
+      </ion-button>
+    </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { useI18n }              from 'vue-i18n';
+import { defineComponent, onMounted, ref, toRefs } from 'vue';
+import { useStore }                                from 'vuex';
+import { useI18n }                                 from 'vue-i18n';
 import {
   IonItem,
   IonIcon,
   IonInput,
   IonButton,
   IonSpinner,
-}                               from '@ionic/vue';
-
-import CategoryService from '@/services/CategoryService';
+}                                                  from '@ionic/vue';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -61,35 +71,55 @@ export default defineComponent({
     IonButton,
     IonSpinner,
   },
-  props: {},
-  setup() {
+  props: {
+    category: {
+      type: Object,
+      default: null,
+    },
+  },
+  emits: ['dismiss'],
+  setup(props, { emit }) {
     /* Global properties and methods */
+    const store = useStore();
 
     /* Composables */
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
 
     /* Component properties */
-    const category = ref(null);
+    const { category } = toRefs(props);
+    const categoryName = ref(null);
     const errorNames = ref({});
     const loading = ref(false);
 
     /* Computed properties */
     /* Lifecycle hooks */
+    onMounted(async() => {
+      if(category?.value) {
+        categoryName.value = category.value.name;
+      }
+    });
+
     /* Methods */
 
     /* Event handlers */
-    const createCategory = async() => {
+    const createOrUpdateCategory = async() => {
       loading.value = true;
       try {
-        const payload = {
-          category: category.value,
-        };
-        await CategoryService.create(payload);
+        if(category?.value) {
+          await store.dispatch("owner/updateCategory", {
+            id: category.value.id,
+            value: categoryName.value,
+          });
 
-        showSuccessToast(t('owner.createCategory'));
+          showSuccessToast(t('owner.updateCategory'));
+        }else {
+          await store.dispatch("owner/createCategory", categoryName.value);
 
-        category.value = null;
+          showSuccessToast(t('owner.createCategory'));
+        }
+
+        emit('dismiss');
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);
@@ -107,12 +137,12 @@ export default defineComponent({
       /* Global properties */
 
       /* Component properties */
-      category,
+      categoryName,
       errorNames,
       loading,
 
       /* Event handlers  */
-      createCategory,
+      createOrUpdateCategory,
 
       /* Icons */
       pricetagOutline,

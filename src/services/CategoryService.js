@@ -13,7 +13,7 @@ export default {
     update(id, payload) {
         return API.apiClient.put(`/owner/menu/category/${id}`, payload);
     },
-    destroy(payload) {
-        return API.apiClient.delete(`/owner/menu/category`, payload);
+    destroy(id) {
+        return API.apiClient.delete(`/owner/menu/category/${id}`);
     },
 };

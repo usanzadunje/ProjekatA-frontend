@@ -10,10 +10,10 @@ export function useModal() {
 
 
     /* Methods */
-    const openModal = async(state, data = null) => {
+    const openModal = async(state, data = null, dataType = '') => {
         if(data) {
             modalData.value = data;
-            if(!data.username) {
+            if(dataType === 'place') {
                 const response = await CafeService.images(data.id);
                 const responseHours = await CafeService.workingHours(data.id);
 

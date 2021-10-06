@@ -15,7 +15,7 @@
           v-model.lazy="user.fname"
           @keyup.enter="lnameInput.$el?.setFocus()"
           type="text"
-          debounce="600"
+          debounce="100"
           :placeholder="$t('fname')"
           :autofocus="true"
           required
@@ -30,10 +30,10 @@
       <ion-input
           v-capitalize
           ref="lnameInput"
-          v-model="user.lname"
+          v-model.lazy="user.lname"
           @keyup.enter="usernameInput.$el?.setFocus()"
           type="text"
-          debounce="600"
+          debounce="100"
           :placeholder="$t('lname')"
           required
       ></ion-input>
@@ -46,10 +46,10 @@
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           ref="usernameInput"
-          v-model="user.username"
+          v-model.lazy="user.username"
           @keyup.enter="emailInput.$el?.setFocus()"
           type="text"
-          debounce="600"
+          debounce="100"
           :placeholder="$t('username')"
           required
       ></ion-input>
@@ -62,10 +62,10 @@
       <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           ref="emailInput"
-          v-model="user.email"
+          v-model.lazy="user.email"
           @keyup.enter="passwordInput.$el?.setFocus()"
           type="email"
-          debounce="600"
+          debounce="100"
           :placeholder="$t('email')"
           required
       ></ion-input>
@@ -80,7 +80,6 @@
           ref="passwordInput"
           v-model="user.password"
           @keyup.enter="createOrUpdate"
-          debounce="1"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
           :placeholder="$t('passwordNew')"

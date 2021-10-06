@@ -1,27 +1,30 @@
 <template>
-  <div @click="openModal">
+  <div>
     <div
-        class="flex items-center py-2 px-2 border border-gray-300 rounded-2xl bg-gray-100"
+        class="flex items-center justify-between py-2 px-2 border border-gray-300 rounded-2xl bg-gray-100"
     >
-      <img
-          :src="backendStorageURL + product.image_path"
-          :alt="`Image of ${product.name} menu product`"
-      >
-      <div class="primary-text-color ml-3">
-        <h3 class="mb-1">{{ product.name }}</h3>
-        <p>
-          {{
-            product.description.length > 45 ? product.description.substring(0, 45).concat('...') : product.description
-          }}
-        </p>
+      <div class="flex items-center">
+        <img
+            :src="backendStorageURL + product.image_path"
+            :alt="`Image of ${product.name} menu product`"
+        >
+        <div class="ml-3">
+          <h3 class="mb-1">{{ product.name }}</h3>
+          <p>
+            {{
+              product.description.length > 45 ? product.description.substring(0, 45).concat('...') : product.description
+            }}
+          </p>
+        </div>
       </div>
+      <slot></slot>
     </div>
   </div>
 </template>
 <script>
 
-import { defineComponent, toRefs } from 'vue';
-import {}                          from '@ionic/vue';
+import { defineComponent } from 'vue';
+import {}                  from '@ionic/vue';
 
 export default defineComponent({
   name: 'ProductCard',
@@ -32,23 +35,19 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     /* Global properties */
 
     /* Component properties */
-    const { product } = toRefs(props);
     /* Composables */
 
     /* Event handlers */
-    const openModal = () => {
-      console.log(product.value);
-    };
+
 
     return {
       /* Component properties */
 
       /* Event handlers */
-      openModal,
     };
   },
 });
@@ -64,10 +63,12 @@ h3 {
   font-size: 0.925rem;
   font-weight: 600 !important;
   text-transform: capitalize;
+  color: #232B38;
 }
 
 p {
   font-size: 0.875rem;
   font-weight: 400 !important;
+  color: #232B38;
 }
 </style>

@@ -31,7 +31,7 @@
             :cafe-search-string="cafeSearchString"
             :sort-by="sortBy"
             @scroll-to-top="scrollToTop"
-            @open-cafe-modal="openModal(true, $event)"
+            @open-cafe-modal="openModal(true, $event, 'place')"
             @infinite-scroll-toggle="infiniteScrollLoading = !infiniteScrollLoading"
             :refresher="refresher"
         />
@@ -73,7 +73,6 @@ import Modal          from '@/components/Modal';
 import ShortCafeModal from '@/components/user/modals/ShortCafeModal';
 
 import { useModal } from '@/composables/useModal';
-
 
 
 export default defineComponent({

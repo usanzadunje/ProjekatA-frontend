@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="">
     <div>
       <ion-item
           lines="none"
@@ -10,10 +10,10 @@
 
         <ion-input
             v-capitalize
-            v-model.lazy="product.name"
+            v-model="newProduct.name"
             @keyup.enter="productCategory.$el?.open()"
             type="text"
-            debounce="600"
+            debounce="100"
             :placeholder="$t('name')"
             required
         ></ion-input>
@@ -26,7 +26,7 @@
         <ion-label class="category-label">{{ $t('productCategory') }}</ion-label>
         <ion-select
             ref="productCategory"
-            v-model="product.category_id"
+            v-model="newProduct.category_id"
             :cancel-text="$t('cancel')"
             :ok-text="$t('confirm')"
             :interface-options="customAlertOptions"
@@ -47,12 +47,12 @@
       >
 
         <ion-textarea
-            v-model.lazy="product.description"
+            v-model="newProduct.description"
             v-capitalize
             :placeholder="$t('productDescription')"
             auto-grow="true"
             :autocapitalize="true"
-            debounce="600"
+            debounce="100"
             inputmode="text"
             required
         >
@@ -60,17 +60,15 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11"
+          class="flex rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('price') }"
       >
         <ion-icon :icon="walletOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
 
         <ion-input
-            v-capitalize
-            v-model.lazy="product.price"
-            @keyup.enter="createProduct"
+            v-model.number="newProduct.price"
+            @keyup.enter="createOrUpdateProduct"
             type="number"
-            debounce="600"
             :placeholder="$t('price')"
             required
         ></ion-input>
@@ -84,7 +82,7 @@
       <!--      >-->
       <!--        &lt;!&ndash;        errorNames.hasOwnProperty('name')&ndash;&gt;-->
       <!--        <ion-icon :icon="pricetagOutline" class="mr-2 text-xl text-gray-500"></ion-icon>-->
-      <!--        &lt;!&ndash;      v-model.lazy=""&ndash;&gt;-->
+      <!--        &lt;!&ndash;      v-model=""&ndash;&gt;-->
       <!--        &lt;!&ndash;      @keyup.enter=""&ndash;&gt;-->
       <!--        <ion-input-->
       <!--            v-capitalize-->
@@ -99,21 +97,33 @@
 
     <div class="mt-12">
       <ion-button
+          :disabled="loading"
+          size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-white relative"
-          @click="createProduct"
-          :disabled="loading"
+          @click="createOrUpdateProduct"
       >
-        {{ loading ? `${$t('checking')}...` : $t('create') }}
+        {{ loading ? $t('checking') : (!product ? $t('create') : $t('update')) }}
         <ion-spinner v-if="loading" name="crescent" class="absolute right-0"></ion-spinner>
+      </ion-button>
+      <ion-button
+          :disabled="loading"
+          fill="clear"
+          @click="$emit('dismiss')"
+          size="large"
+          expand="block"
+          class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
+      >
+        {{ $t('cancel') }}
       </ion-button>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
-import { useI18n }                        from 'vue-i18n';
+import { computed, defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
+import { useStore }                                                    from 'vuex';
+import { useI18n }                                                     from 'vue-i18n';
 import {
   IonItem,
   IonIcon,
@@ -124,9 +134,7 @@ import {
   IonSelectOption,
   IonButton,
   IonSpinner,
-}                                         from '@ionic/vue';
-
-import ProductService from '@/services/ProductService';
+}                                                                      from '@ionic/vue';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -138,10 +146,9 @@ import {
 } from 'ionicons/icons';
 
 import { getError, sleep } from '@/utils/helpers';
-import CategoryService     from '@/services/CategoryService';
 
 export default defineComponent({
-  name: "CreateMenuItemForm",
+  name: "CreateProductForm",
   components: {
     IonItem,
     IonIcon,
@@ -153,17 +160,25 @@ export default defineComponent({
     IonButton,
     IonSpinner,
   },
-  props: {},
-  setup() {
+  props: {
+    product: {
+      type: Object,
+      default: null,
+    },
+  },
+  emits: ['dismiss'],
+  setup(props, { emit }) {
     /* Global properties and methods */
+    const store = useStore();
 
     /* Composables */
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
 
     /* Component properties */
-    const categories = ref();
-    const product = reactive({});
+    const categories = computed(() => store.getters['owner/categories']);
+    const { product } = toRefs(props);
+    const newProduct = reactive({});
     const productCategory = ref();
     const errorNames = ref({});
     const loading = ref(false);
@@ -176,24 +191,35 @@ export default defineComponent({
 
     /* Computed properties */
     /* Lifecycle hooks */
-    (async() => {
-      const response = await CategoryService.index();
+    onMounted(async() => {
+      if(product?.value) {
+        newProduct.name = product.value.name;
+        newProduct.category_id = product.value.category_id;
+        newProduct.description = product.value.description;
+        newProduct.price = product.value.price;
+      }
+    });
 
-      categories.value = response.data;
-    })();
     /* Methods */
 
     /* Event handlers */
-    const createProduct = async() => {
+    const createOrUpdateProduct = async() => {
       loading.value = true;
       try {
-        await ProductService.create(product);
+        if(product?.value) {
+          await store.dispatch("owner/updateProduct", {
+            id: product.value.id,
+            payload: newProduct,
+          });
 
-        showSuccessToast(t('owner.createProduct'));
+          showSuccessToast(t('owner.updateProduct'));
+        }else {
+          await store.dispatch("owner/createProduct", newProduct);
 
-        Object.keys(product).forEach(key => {
-          product[key] = null;
-        });
+          showSuccessToast(t('owner.createProduct'));
+        }
+
+        emit('dismiss');
       }catch(errors) {
         errorNames.value = getError(errors);
         await showErrorToast(errors);
@@ -212,14 +238,14 @@ export default defineComponent({
 
       /* Component properties */
       categories,
-      product,
+      newProduct,
       productCategory,
       errorNames,
       loading,
       customAlertOptions,
 
       /* Event handlers  */
-      createProduct,
+      createOrUpdateProduct,
 
       /* Icons */
       createOutline,

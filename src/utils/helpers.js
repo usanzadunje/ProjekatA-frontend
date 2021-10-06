@@ -11,6 +11,10 @@ export function getError(error) {
             router.push({ path: "/404" });
     }
 
+    if(error.response?.status === 401 || error.response?.status === 403) {
+        return { unauthorized: [i18n.global.t('unauthorized')] };
+    }
+
     if(error.response?.status === 429) {
         return { tooManyRequests: [i18n.global.t('tooManyRequests')] };
     }

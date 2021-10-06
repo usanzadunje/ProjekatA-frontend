@@ -30,7 +30,7 @@
               <CafeCard
                   class="w-full"
                   :place="cafe"
-                  @click="openModal(true, cafe)"
+                  @click="openModal(true, cafe, 'place')"
               />
             </ion-item>
 

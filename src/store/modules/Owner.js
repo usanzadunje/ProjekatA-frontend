@@ -1,12 +1,16 @@
 import OwnerService from '@/services/OwnerService';
 
 import { calculatePxFromPercent } from '@/utils/helpers';
+import CategoryService            from '@/services/CategoryService';
+import ProductService             from '@/services/ProductService';
 
 export const namespaced = true;
 
 export const state = {
     staff: [],
     tables: [],
+    categories: [],
+    products: [],
 };
 
 export const mutations = {
@@ -14,12 +18,10 @@ export const mutations = {
         state.staff = value;
     },
     UPDATE_STAFF_MEMBER(state, { staffId, user }) {
-        state.staff.forEach(staff => {
-            if(staff.id === staffId) {
-                Object.keys(user).forEach(key => {
-                    staff[key] = user[key];
-                });
-            }
+        let staff = state.staff.find(staff => staff.id === staffId);
+
+        Object.keys(user).forEach(key => {
+            staff[key] = user[key];
         });
     },
     REMOVE_STAFF_MEMBER(state, id) {
@@ -49,6 +51,30 @@ export const mutations = {
                 table.dirty = false;
             }
         });
+    },
+    SET_CATEGORIES(state, value) {
+        state.categories = value;
+    },
+    UPDATE_CATEGORY(state, { id, value }) {
+        let category = state.categories.find(category => category.id === id);
+
+        category.name = value;
+    },
+    REMOVE_CATEGORY(state, id) {
+        state.categories = state.categories.filter(category => category.id !== id);
+    },
+    SET_PRODUCTS(state, value) {
+        state.products = value;
+    },
+    UPDATE_PRODUCT(state, { id, value }) {
+        let product = state.products.find(product => product.id === id);
+
+        Object.keys(value).forEach(key => {
+            product[key] = value[key];
+        });
+    },
+    REMOVE_PRODUCT(state, id) {
+        state.products = state.products.filter(product => product.id !== id);
     },
 };
 
@@ -94,6 +120,54 @@ export const actions = {
 
         await dispatch('getTables');
     },
+    async getCategories({ commit }) {
+        const response = await CategoryService.index();
+
+        commit('SET_CATEGORIES', response.data);
+    },
+    async createCategory({ dispatch }, value) {
+        const payload = {
+            category: value,
+        };
+
+        await CategoryService.create(payload);
+
+        await dispatch('getCategories');
+    },
+    async updateCategory({ commit }, { id, value }) {
+        const payload = {
+            category: value,
+        };
+
+        await CategoryService.update(id, payload);
+
+        commit('UPDATE_CATEGORY', { id, value });
+    },
+    async deleteCategory({ commit }, id) {
+        await CategoryService.destroy(id);
+
+        commit('REMOVE_CATEGORY', id);
+    },
+    async getProducts({ commit }) {
+        const response = await ProductService.index();
+
+        commit('SET_PRODUCTS', response.data);
+    },
+    async createProduct({ dispatch }, payload) {
+        await ProductService.create(payload);
+
+        await dispatch('getProducts');
+    },
+    async updateProduct({ commit }, { id, payload }) {
+        await ProductService.update(id, payload);
+
+        commit('UPDATE_PRODUCT', { id, value: payload });
+    },
+    async deleteProduct({ commit }, id) {
+        await ProductService.destroy(id);
+
+        commit('REMOVE_PRODUCT', id);
+    },
 };
 
 export const getters = {
@@ -102,5 +176,14 @@ export const getters = {
     },
     tables: (state) => {
         return state.tables;
+    },
+    categories: (state) => {
+        return state.categories;
+    },
+    createdCategories: (state) => {
+        return state.categories.filter(category => category.cafe_id);
+    },
+    products: (state) => {
+        return state.products;
     },
 };

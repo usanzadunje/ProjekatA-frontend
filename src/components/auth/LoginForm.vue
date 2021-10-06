@@ -13,7 +13,7 @@
           autocomplete="email"
           type="text"
           inputmode="text"
-          debounce="600"
+          debounce="300"
           :placeholder="`E-mail ${$t('or')} ${$t('username').toLowerCase()}`"
           :autofocus="true"
           required
@@ -31,7 +31,6 @@
           @keyup.enter="login"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
-          debounce="1"
           placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
           required
       ></ion-input>

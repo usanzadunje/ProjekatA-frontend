@@ -14,7 +14,7 @@ export default {
         return API.apiClient.put(`/owner/menu/product/${id}`, payload);
     },
     destroy(id) {
-        return API.apiClient.get(`/owner/menu/product/${id}`);
+        return API.apiClient.delete(`/owner/menu/product/${id}`);
     },
 
 };

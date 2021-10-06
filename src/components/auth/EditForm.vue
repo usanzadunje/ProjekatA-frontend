@@ -28,7 +28,7 @@
             v-model.lazy="user.fname"
             @keyup.enter="lnameInput.$el?.setFocus()"
             type="text"
-            debounce="600"
+            debounce="100"
             :placeholder="$t('fname')"
             :autofocus="true"
             required
@@ -46,7 +46,7 @@
             v-model="user.lname"
             @keyup.enter="usernameInput.$el?.setFocus()"
             type="text"
-            debounce="600"
+            debounce="100"
             :placeholder="$t('lname')"
             required
         ></ion-input>
@@ -62,7 +62,7 @@
             v-model="user.username"
             @keyup.enter="emailInput.$el?.setFocus()"
             type="text"
-            debounce="600"
+            debounce="100"
             :placeholder="$t('username')"
             required
         ></ion-input>
@@ -78,7 +78,7 @@
             v-model="user.email"
             @keyup.enter="phoneInput.$el?.setFocus()"
             type="email"
-            debounce="600"
+            debounce="100"
             :placeholder="$t('email')"
             required
         ></ion-input>
@@ -109,7 +109,7 @@
             v-model="user.phone"
             @keyup.enter="update"
             type="tel"
-            debounce="600"
+            debounce="100"
             :placeholder="$t('phone')"
             required
         ></ion-input>
@@ -132,7 +132,6 @@
           <ion-input
               v-model="user.old_password"
               @keyup.enter="passwordInput.$el?.setFocus()"
-              debounce="1"
               inputmode="password"
               :type="showOldPassword ? 'text' : 'password'"
               :placeholder="$t('passwordOld')"
@@ -155,7 +154,6 @@
               ref="passwordInput"
               v-model="user.password"
               @keyup.enter="passwordConfirmInput.$el?.setFocus()"
-              debounce="1"
               inputmode="password"
               :type="showPassword ? 'text' : 'password'"
               :placeholder="$t('passwordNew')"
@@ -177,7 +175,6 @@
               ref="passwordConfirmInput"
               v-model="user.password_confirmation"
               @keyup.enter="update"
-              debounce="1"
               inputmode="password"
               :type="showPasswordConfirm ? 'text' : 'password'"
               :placeholder="$t('passwordConfirm')"

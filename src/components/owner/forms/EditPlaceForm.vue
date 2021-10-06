@@ -22,7 +22,7 @@
               v-model.lazy="place.name"
               @keyup.enter="cityInput.$el?.setFocus()"
               type="text"
-              debounce="600"
+              debounce="100"
               :placeholder="$t('name')"
               :autofocus="true"
               required
@@ -37,10 +37,10 @@
           <ion-input
               v-capitalize
               ref="cityInput"
-              v-model="place.city"
+              v-model.lazy="place.city"
               @keyup.enter="addressInput.$el?.setFocus()"
               type="text"
-              debounce="600"
+              debounce="100"
               :placeholder="$t('city')"
               required
           ></ion-input>
@@ -53,10 +53,10 @@
           <ion-icon :icon="homeOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
           <ion-input
               ref="addressInput"
-              v-model="place.address"
+              v-model.lazy="place.address"
               @keyup.enter="emailInput.$el?.setFocus()"
               type="text"
-              debounce="600"
+              debounce="100"
               :placeholder="$t('address')"
               required
           ></ion-input>
@@ -69,10 +69,10 @@
           <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
           <ion-input
               ref="emailInput"
-              v-model="place.email"
+              v-model.lazy="place.email"
               @keyup.enter="phoneInput.$el?.setFocus()"
               type="email"
-              debounce="600"
+              debounce="100"
               :placeholder="$t('place.email')"
               required
           ></ion-input>
@@ -85,10 +85,10 @@
           <ion-icon :icon="callOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
           <ion-input
               ref="phoneInput"
-              v-model="place.phone"
+              v-model.lazy="place.phone"
               @keyup.enter="update"
               type="tel"
-              debounce="600"
+              debounce="100"
               :placeholder="$t('phone')"
               required
           ></ion-input>
