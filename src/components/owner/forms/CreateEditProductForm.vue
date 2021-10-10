@@ -148,7 +148,7 @@ import {
 import { getError, sleep } from '@/utils/helpers';
 
 export default defineComponent({
-  name: "CreateProductForm",
+  name: "CreateEditProductForm",
   components: {
     IonItem,
     IonIcon,

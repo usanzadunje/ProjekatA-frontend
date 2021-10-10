@@ -1,23 +1,7 @@
 <template>
   <ion-page>
 
-    <ion-header class="ion-no-border">
-      <ion-toolbar>
-        <div class="flex justify-between mt-3 md margin-top-reset">
-          <ion-buttons slot="start">
-            <ion-button
-                :routerLink="`${$route.query.redirect || '/home'}`">
-              <ion-icon slot="icon-only" :icon="arrowBackOutline" class="text-gray-400"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-          <ion-buttons slot="start">
-            <ion-button>
-              <ion-icon slot="icon-only" :icon="notificationsOutline" class="text-gray-400"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </div>
-      </ion-toolbar>
-    </ion-header>
+    <GoBackHeader/>
 
     <ion-content class="h-full">
       <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
@@ -27,7 +11,7 @@
         </ion-refresher-content>
       </ion-refresher>
 
-      <div class="h-full">
+      <div class="h-full mt-2">
         <div class="h-full flex flex-col justify-between">
           <div>
             <div class="relative">
@@ -84,23 +68,7 @@
               <ion-skeleton-text animated class="rounded-md" style="height: 180px;"></ion-skeleton-text>
             </div>
 
-            <div class="mb-2">
-              <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="fastFoodOutline"/>
-              <AccordionList
-                  v-for="category in place.categories"
-                  :key="category"
-                  class="accordion-list-border-top"
-                  :title="category.name"
-                  :icon="beerOutline"
-              >
-                <ProductCard
-                    v-for="product in category.products"
-                    :key="product.id"
-                    :product="product"
-                    class="py-1"
-                />
-              </AccordionList>
-            </div>
+            <Menu :place-info="place"/>
           </div>
 
           <div>
@@ -140,9 +108,6 @@ import { useI18n }                               from 'vue-i18n';
 import { Capacitor }                             from '@capacitor/core';
 import {
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonButtons,
   IonContent,
   IonIcon,
   IonButton,
@@ -154,12 +119,12 @@ import {
   onIonViewWillLeave,
 }                                                from '@ionic/vue';
 
+import GoBackHeader          from '@/components/user/headers/GoBackHeader';
 import CafeInfoBody          from '@/components/place/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import TableContainer        from '@/components/TableContainer';
 import Table                 from '@/components/Table';
-import AccordionList         from '@/components/user/AccordionList';
-import ProductCard           from '@/components/ProductCard';
+import Menu                  from '@/components/user/Menu';
 import Modal                 from '@/components/Modal';
 import CafeSubscriptionModal from '@/components/user/modals/CafeSubscriptionModal';
 import ImagePreviewModal     from '@/components/user/modals/ImagePreviewModal';
@@ -172,13 +137,10 @@ import { useModal }              from '@/composables/useModal';
 import { calculatePxFromPercent } from '@/utils/helpers';
 
 import {
-  arrowBackOutline,
   notifications,
   notificationsOutline,
   storefrontOutline,
-  fastFoodOutline,
   pizzaOutline,
-  beerOutline,
 }
   from 'ionicons/icons';
 
@@ -188,21 +150,18 @@ export default defineComponent({
   name: "Cafe",
   components: {
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonButtons,
     IonContent,
     IonIcon,
     IonButton,
     IonSkeletonText,
     IonRefresher,
     IonRefresherContent,
+    GoBackHeader,
     CafeInfoBody,
     FilterCategoryHeading,
     TableContainer,
     Table,
-    AccordionList,
-    ProductCard,
+    Menu,
     Modal,
     CafeSubscriptionModal,
   },
@@ -329,13 +288,10 @@ export default defineComponent({
       refresh,
 
       /* Icons */
-      arrowBackOutline,
       notifications,
       notificationsOutline,
       storefrontOutline,
-      fastFoodOutline,
       pizzaOutline,
-      beerOutline,
     };
   },
 
@@ -354,7 +310,6 @@ ion-content {
   --background: var(--show-paint);
   background: var(--show-paint);
   --padding-start: 1rem;
-  --padding-top: 1rem;
   --padding-end: 1rem;
   --padding-bottom: 1rem;
 }

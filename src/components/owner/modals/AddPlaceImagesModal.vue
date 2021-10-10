@@ -42,12 +42,24 @@
     </ion-item>
     <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
       <ion-button
+          :disabled="loading === 0"
           @click="setAsMainImage"
           fill="white"
           expand="block"
           class="text-sm font-bold uppercase main-img-button"
       >
         {{ loading === 0 ? `${$t('setting')}...` : $t('setMain') }}
+      </ion-button>
+    </div>
+    <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40">
+      <ion-button
+          :disabled="loading === 0"
+          @click="setAsLogo"
+          fill="white"
+          expand="block"
+          class="text-sm font-bold uppercase main-img-button"
+      >
+        {{ loading === 0 ? `${$t('setting')}...` : $t('setLogo') }}
       </ion-button>
     </div>
     <ion-slides
@@ -210,6 +222,22 @@ export default defineComponent({
         loading.value = null;
       }
     };
+    const setAsLogo = async() => {
+      loading.value = 0;
+      try {
+        const imageIndex = await imagePreviewSlider.value?.$el?.getActiveIndex();
+
+        await OwnerService.setImageAsLogo(place.value.images[imageIndex].id);
+
+        showSuccessToast(t('successImageLogo'));
+
+        await store.dispatch('staff/getPlaceInfo');
+      }catch(errors) {
+        await showErrorToast(errors);
+      }finally {
+        loading.value = null;
+      }
+    };
 
     return {
       /* Component properties */
@@ -229,6 +257,7 @@ export default defineComponent({
       uploadImages,
       removeImage,
       setAsMainImage,
+      setAsLogo,
 
       /* Icons */
       close,

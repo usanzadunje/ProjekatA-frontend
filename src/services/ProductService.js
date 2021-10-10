@@ -1,8 +1,8 @@
 import * as API from "../services/API";
 
 export default {
-    index() {
-        return API.apiClient.get(`/owner/menu/product`);
+    index(placeId = null) {
+        return API.apiClient.get(`/owner/menu/product/place/${placeId ?? ''}`);
     },
     show(id) {
         return API.apiClient.get(`/owner/menu/product/${id}`);

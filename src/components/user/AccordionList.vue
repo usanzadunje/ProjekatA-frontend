@@ -1,12 +1,22 @@
 <template>
   <div class="accordion-list-box">
     <div @click="togglePane" class="flex justify-between items-center py-2.5">
-      <div class="flex">
-        <ion-icon :icon="icon" class="primary-icon-color"></ion-icon>
-        <p class="inline-block ml-1 cafe-show-menu-headers">{{ title }}</p>
+      <div class="flex items-center">
+        <ion-icon
+            :icon="icon"
+            class="primary-icon-color"
+            :style="`font-size:${iconSize}`"
+        ></ion-icon>
+        <p
+            class="inline-block ml-1 cafe-show-menu-headers"
+            :style="`font-size:${titleSize}`"
+        >{{ title }}</p>
       </div>
-      <ion-icon :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline"
-                class="primary-icon-color"></ion-icon>
+      <ion-icon
+          :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline"
+          class="primary-icon-color"
+          :style="`font-size:${iconSize}`"
+      ></ion-icon>
     </div>
     <div class="panel">
       <div v-if="items">
@@ -40,6 +50,18 @@ export default defineComponent({
       type: String,
       default: 'Title',
     },
+    titleSize: {
+      type: String,
+      default: '0.75rem',
+    },
+    iconSize: {
+      type: String,
+      default: '',
+    },
+    open: {
+      type: Boolean,
+      default: false,
+    },
     items: {
       type: Array,
       default: null,
@@ -51,7 +73,7 @@ export default defineComponent({
   },
   setup() {
     /* Component properties */
-    const isPanelOpen = ref(false);
+    const isPanelOpen = ref(true);
 
     /* Methods */
     const togglePane = (e, paneClicked = false) => {

@@ -5,7 +5,7 @@
     </h2>
     <h2 v-else class="secondary-heading text-center mb-6"> {{ $t('createProduct') }}</h2>
 
-    <CreateProductForm
+    <CreateEditProductForm
         :product="product"
         @dismiss="dismiss"
         class="px-6"
@@ -16,13 +16,13 @@
 <script>
 import { defineComponent } from 'vue';
 
-import CreateProductForm from '@/components/owner/forms/CreateProductForm';
+import CreateEditProductForm from '@/components/owner/forms/CreateEditProductForm';
 
 
 export default defineComponent({
   name: 'CreateEditStaffModal',
   components: {
-    CreateProductForm,
+    CreateEditProductForm,
   },
   props: {
     product: {

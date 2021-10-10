@@ -3,7 +3,9 @@
     <ion-button fill="clear" @click="showNotifications($event)" class="h-auto">
       <div class="relative">
         <ion-icon
-            :icon="hasNotifications ? (unreadNotificationsCount > 0 ? notifications : notificationsOutline) : notificationsOffOutline"
+            :icon="hasNotifications
+            ? (unreadNotificationsCount > 0 ? notifications : notificationsOutline)
+            : notificationsOffOutline"
             class="primary-icon-color"
             slot="icon-only"
         ></ion-icon>
@@ -81,7 +83,7 @@ ion-button {
 }
 
 ion-icon {
-  font-size: 30px !important;
+  font-size: 1.75rem !important;
 }
 
 ion-badge {

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <h2 class="secondary-heading text-center">{{ $t('createProduct') }}</h2>
-
-    <div class="flex justify-end mt-4">
+    <div class="flex justify-end">
       <ion-button
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-white"

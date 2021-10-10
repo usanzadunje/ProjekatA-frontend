@@ -2,7 +2,7 @@
   <div class="px-4 pt-4">
     <div class="ion-item-no-padding-x flex items-center">
       <img
-          :src="`${backendStorageURL + mainImagePath}`"
+          :src="`${backendStorageURL + logoPath}`"
           :alt="`Logo`"
           class="modal-thumbnail radius-11px"
       >
@@ -121,9 +121,9 @@ export default defineComponent({
     const isUserSubscribed = ref(false);
     const place = toRef(props, 'place');
     const isSubButtonDisabled = ref(true);
-    const mainImagePath = computed(() => {
+    const logoPath = computed(() => {
       if(place.value.images?.length > 0) {
-        return place.value.images.find(image => image.is_main === 1)?.path ??
+        return place.value.images.find(image => image.is_logo === 1)?.path ??
             place.value.images[0]?.path;
       }else {
         return '/places/default_place_logo.png';
@@ -171,7 +171,7 @@ export default defineComponent({
       isSubButtonDisabled,
       isModalOpen,
       isUserSubscribed,
-      mainImagePath,
+      logoPath,
 
       /* Computed properties */
 

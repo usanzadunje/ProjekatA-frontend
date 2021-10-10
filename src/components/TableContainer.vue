@@ -1,5 +1,5 @@
 <template>
-  <div class="p-0.5 border-2 border-black rounded-md">
+  <div class="p-0.5 border-2 rounded-md border-primary">
     <div id="dropzone" class="relative">
       <slot></slot>
     </div>

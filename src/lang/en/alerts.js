@@ -26,5 +26,6 @@ export default {
     "successImageUpload": "Successfully uploaded images!",
     "successImageRemove": "Successfully removed image!",
     "successImageMain": "Successfully set new image as main!",
+    "successImageLogo": "Successfully set new image as logo!",
 
 };

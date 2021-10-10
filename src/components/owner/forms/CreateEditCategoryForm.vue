@@ -63,7 +63,7 @@ import {
 import { getError, sleep } from '@/utils/helpers';
 
 export default defineComponent({
-  name: "CreateCategoryForm",
+  name: "CreateEditCategoryForm",
   components: {
     IonItem,
     IonIcon,

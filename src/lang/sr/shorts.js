@@ -121,6 +121,7 @@ export default {
     "saving": "Čuvam",
     "toggling": "Menjam",
     "setMain": "Postavi kao glavnu fotografiju",
+    "setLogo": "Postavi kao logo",
     "setting": "Postavljam",
     "distance": "Udaljenost",
     "workingHours": "Radno vreme",
@@ -145,7 +146,6 @@ export default {
     "productDescription": "Opis proizvoda",
     "price": "Cena",
     "createProduct": "Kreiraj novi proizvod",
-
-
+    "close": "Zatvori",
 };
 

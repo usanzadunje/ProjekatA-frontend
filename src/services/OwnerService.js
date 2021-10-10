@@ -29,6 +29,9 @@ export default {
     setImageAsMain(id) {
         return API.apiClient.post(`/owner/place/images/set-main/${id}`);
     },
+    setImageAsLogo(id) {
+        return API.apiClient.post(`/owner/place/images/set-logo/${id}`);
+    },
     allTables() {
         return API.apiClient.get(`/owner/place/tables`);
     },

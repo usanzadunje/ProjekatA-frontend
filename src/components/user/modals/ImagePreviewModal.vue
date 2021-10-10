@@ -7,7 +7,7 @@
     </ion-item>
 
     <ion-slides v-update-swiper :options="slideOpts">
-      <ion-slide v-for="image in place.images.filter(img => img.is_main !== 1)" :key="image.id">
+      <ion-slide v-for="image in place.images.filter(img => img.is_logo !== 1)" :key="image.id">
         <img
             :src="`${backendStorageURL + image.path}`"
             alt=""

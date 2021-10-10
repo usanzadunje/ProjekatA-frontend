@@ -15,18 +15,27 @@
       </ion-button>
     </div>
     <hr class="card-horizontal-ruler">
-    <div class="flex justify-start items-center mt-3.5">
-      <div class="ion-item-no-padding-x flex items-center">
-        <ion-icon :icon="fastFoodOutline" class="mr-2 primary-icon-color"></ion-icon>
-        <p class="modal-cafe-text-regular lowercase">{{ $t('food') }}</p>
+    <div class="flex justify-between items-center mt-3.5">
+      <div class="flex flex-col items-center">
+        <span class="modal-cafe-text-regular">{{ `${$t('monday')}-${$t('friday')}` }}</span>
+        <div class="ion-item-no-padding-x flex items-center mt-0.5">
+          <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>
+          <p class="modal-cafe-text-regular lowercase">{{ place.working_hours?.mon_fri }}</p>
+        </div>
       </div>
-      <div class="ion-item-no-padding-x flex items-center ml-3.5">
-        <ion-icon :icon="leafOutline" class="mr-2 primary-icon-color"></ion-icon>
-        <p class="modal-cafe-text-regular lowercase">{{ $t('has') }} {{ $t('garden') }}</p>
+      <div class="flex flex-col items-center">
+        <span class="modal-cafe-text-regular">{{ $t('saturday') }}</span>
+        <div class="ion-item-no-padding-x flex items-center mt-0.5">
+          <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>
+          <p class="modal-cafe-text-regular lowercase">{{ place.working_hours?.saturday }}</p>
+        </div>
       </div>
-      <div class="ion-item-no-padding-x flex items-center ml-3.5">
-        <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>
-        <p class="modal-cafe-text-regular">09am-01pm</p>
+      <div class="flex flex-col items-center">
+        <p class="modal-cafe-text-regular">{{ $t('sunday') }}</p>
+        <div class="ion-item-no-padding-x flex items-center mt-0.5">
+          <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>
+          <p class="modal-cafe-text-regular">{{ place.working_hours?.sunday }}</p>
+        </div>
       </div>
     </div>
     <hr class="card-horizontal-ruler mt-3.5">
@@ -56,8 +65,6 @@ import { useModal } from '@/composables/useModal';
 import {
   pieChart,
   locationOutline,
-  leafOutline,
-  fastFoodOutline,
   timeOutline,
 
 }
@@ -93,8 +100,6 @@ export default defineComponent({
       /* Icons from */
       pieChart,
       locationOutline,
-      fastFoodOutline,
-      leafOutline,
       timeOutline,
     };
   },

@@ -121,6 +121,7 @@ export default {
     "saving": "Saving",
     "toggling": "Toggling",
     "setMain": "Set as main image",
+    "setLogo": "Set as logo",
     "setting": "Setting",
     "distance": "Distance",
     "workingHours": "Working hours",
@@ -145,5 +146,5 @@ export default {
     "productDescription": "Product description",
     "price": "Price",
     "createProduct": "Create new product",
-
+    "close": "Close",
 };

@@ -5,7 +5,7 @@
     </h2>
     <h2 v-else class="secondary-heading text-center mb-6"> {{ $t('createCategory') }}</h2>
 
-    <CreateCategoryForm
+    <CreateEditCategoryForm
         :category="category"
         @dismiss="dismiss"
         class="px-6"
@@ -16,13 +16,13 @@
 <script>
 import { defineComponent } from 'vue';
 
-import CreateCategoryForm from '@/components/owner/forms/CreateCategoryForm';
+import CreateEditCategoryForm from '@/components/owner/forms/CreateEditCategoryForm';
 
 
 export default defineComponent({
   name: 'CreateEditCategoryModal',
   components: {
-    CreateCategoryForm,
+    CreateEditCategoryForm,
   },
   props: {
     category: {

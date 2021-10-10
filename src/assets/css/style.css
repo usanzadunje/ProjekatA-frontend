@@ -263,6 +263,9 @@ ion-toggle {
 .primary-text-color {
     color: var(--primary-heading) !important;
 }
+.border-primary {
+    border-color: var(--primary-heading) !important;
+}
 
 .no-padding-top {
     --padding-top: 0 !important;
@@ -822,7 +825,6 @@ ion-toggle.dark-toggle-checked {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     color: var(--primary-heading) !important;
-    font-size: 0.75rem !important;
 }
 
 .accordion-list-box {

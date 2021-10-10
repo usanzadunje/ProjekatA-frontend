@@ -57,6 +57,7 @@ img {
   height: 63px;
   width: 63px;
   border-radius: 15px;
+  object-fit: cover;
 }
 
 h3 {

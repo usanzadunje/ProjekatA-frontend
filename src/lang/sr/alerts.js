@@ -26,5 +26,6 @@ export default {
     "successImageUpload": "Uspešno ste dodali fotografije!",
     "successImageRemove": "Uspešno ste uklonili fotografiju!",
     "successImageMain": "Uspešno ste postavili fotografiju kao glavnu!",
+    "successImageLogo": "Uspešno ste postavili fotografiju kao logo!",
 
 };

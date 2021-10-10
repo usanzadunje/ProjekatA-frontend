@@ -2,7 +2,7 @@
   <div class="background-white cafe-card-border-radius">
     <div class="p-4 flex justify-start items-center">
       <img
-          :src="`${backendStorageURL + mainImagePath}`"
+          :src="`${backendStorageURL + logoPath}`"
           alt="Logo"
           class="cafe-card-image"
       >
@@ -61,9 +61,9 @@ export default defineComponent({
     /* Component properties */
     const { place } = toRefs(props);
     const distance = computed(() => Math.round(CafeService.getDistance(place.latitude, place.longitude)));
-    const mainImagePath = computed(() => {
+    const logoPath = computed(() => {
       if(place.value.images?.length > 0) {
-        return place.value.images.find(image => image.is_main === 1)?.path ??
+        return place.value.images.find(image => image.is_logo === 1)?.path ??
             place.value.images[0]?.path;
       }else {
         return '/places/default_place_logo.png';
@@ -74,7 +74,7 @@ export default defineComponent({
     return {
       /* Component Properties */
       distance,
-      mainImagePath,
+      logoPath,
 
       /* Event listeners */
 
