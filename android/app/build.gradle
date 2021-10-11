@@ -7,8 +7,8 @@ android {
         applicationId "com.projekata"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 56
-        versionName "56.0"
+        versionCode 57
+        versionName "57.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes

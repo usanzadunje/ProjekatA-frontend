@@ -1,12 +1,11 @@
 <template>
   <div class="p-4 staff-modal-bg">
-    <div class="flex justify-center">
-      <img
-          :src="backendStorageURL + product?.image_path ?? '/places/default_place_product_logo.png'"
-          :alt="`Image of product ${product.name}`"
-          class="rounded-2xl"
-      >
-    </div>
+    <MainImagePreview
+        :path="mainImagePath"
+        :label="$t('gallery', 2)"
+        :show-skeleton="showSkeleton"
+        @click="openPreview(images)"
+    />
 
     <div class="mt-4">
       <ion-item
@@ -38,13 +37,9 @@
           class="flex rounded-2xl mt-3.5"
       >
 
-        <ion-textarea
-            :placeholder="product?.description"
-            inputmode="text"
-            disabled
-            :auto-grow="true"
-        >
-        </ion-textarea>
+        <p>
+          {{ product?.description }}
+        </p>
       </ion-item>
       <ion-item
           lines="none"
@@ -75,14 +70,18 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref, toRefs } from 'vue';
 import {
   IonItem,
   IonInput,
-  IonTextarea,
   IonIcon,
-  IonButton,
-}                          from '@ionic/vue';
+  IonButton, modalController,
+}                                                 from '@ionic/vue';
+
+import MainImagePreview  from '@/components/MainImagePreview';
+import ImagePreviewModal from '@/components/user/modals/ImagePreviewModal';
+
+import ProductService from '@/services/ProductService';
 
 import {
   createOutline,
@@ -90,14 +89,15 @@ import {
   walletOutline,
 } from 'ionicons/icons';
 
+
 export default defineComponent({
   name: 'ShortMenuProductModal',
   components: {
     IonItem,
     IonInput,
-    IonTextarea,
     IonIcon,
     IonButton,
+    MainImagePreview,
   },
   props: {
     product: {
@@ -106,10 +106,32 @@ export default defineComponent({
     },
   },
   emits: ['dismiss'],
-  setup() {
+  setup(props) {
     /* Global properties */
 
     /* Component properties */
+    const { product } = toRefs(props);
+    const mainImagePath = computed(() => {
+      if(product.value.images?.length > 0) {
+        return product.value.images?.find(image => image.is_main === 1)?.path ??
+            product.value.images[0]?.path;
+      }else {
+        return '/places/default_place_product_logo.png';
+      }
+    });
+    const images = ref(null);
+    const showSkeleton = ref(true);
+
+    /* Lifecycle hooks */
+    ProductService.images(product.value.id)
+                  .then((response) => {
+                    images.value = response.data;
+
+                    showSkeleton.value = false;
+                  })
+                  .catch(() => {
+                    images.value = null;
+                  });
 
     /* Composables */
 
@@ -117,15 +139,27 @@ export default defineComponent({
     /* Methods */
 
 
-    /* Lifecycle hooks */
-
     /* Event Handlers */
-
+    const openPreview = async(images) => {
+      const modal = await modalController
+          .create({
+            component: ImagePreviewModal,
+            cssClass: 'custom-gallery-modal',
+            componentProps: {
+              images,
+            },
+          });
+      return modal.present();
+    };
 
     return {
       /* Component properties */
+      mainImagePath,
+      images,
+      showSkeleton,
 
       /* Event handlers */
+      openPreview,
 
       /* Icons */
       createOutline,
@@ -141,9 +175,12 @@ ion-input {
   --placeholder-opacity: 1 !important;
 }
 
-ion-textarea {
+p {
+  font-size: 0.8rem;
+  font-weight: 400;
   color: var(--primary-heading) !important;
-  --placeholder-opacity: 1 !important;
+  opacity: 0.4;
+  padding: 10px 0;
 }
 
 img {

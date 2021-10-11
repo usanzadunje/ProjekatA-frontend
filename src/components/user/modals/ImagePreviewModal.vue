@@ -6,29 +6,24 @@
       </ion-button>
     </ion-item>
 
-    <ion-slides v-update-swiper :options="slideOpts">
-      <ion-slide v-for="image in place.images.filter(img => img.is_logo !== 1)" :key="image.id">
-        <img
-            :src="`${backendStorageURL + image.path}`"
-            alt=""
-            @dblclick="zoom(userClickedToZoom)"
-        >
-      </ion-slide>
-    </ion-slides>
+    <ImagePreviewModalSlider
+        :images="images"
+    />
+
   </ion-content>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import {
   IonContent,
   IonItem,
   IonIcon,
   IonButton,
-  IonSlides,
-  IonSlide,
   modalController,
-}                               from '@ionic/vue';
+}                          from '@ionic/vue';
+
+import ImagePreviewModalSlider from '@/components/ImagePreviewModalSlider';
 
 import {
   close,
@@ -41,49 +36,31 @@ export default defineComponent({
     IonItem,
     IonIcon,
     IonButton,
-    IonSlides,
-    IonSlide,
+    ImagePreviewModalSlider,
   },
   props: {
-    place: {
+    images: {
       type: Object,
       default: null,
     },
   },
   setup() {
     /* Component properties */
-    const imagePreviewSlider = ref(null);
-    const slideOpts = {
-      zoom: {
-        maxRatio: 2,
-      },
-    };
-    const userClickedToZoom = ref(true);
+
 
     /* Lifecycle hooks */
 
     /* Event handlers */
-    const zoom = async(zoomIn) => {
-      let swiper = await imagePreviewSlider?.value?.$el.getSwiper();
-      if(zoomIn) {
-        swiper.zoom.in();
-      }else {
-        swiper.zoom.out();
-      }
-      userClickedToZoom.value = !userClickedToZoom.value;
-    };
+
     const dismiss = () => {
       modalController.dismiss();
     };
 
     return {
       /* Component properties */
-      imagePreviewSlider,
-      slideOpts,
-      userClickedToZoom,
+
 
       /* Event handlers */
-      zoom,
       dismiss,
 
       /* Icons */
@@ -100,10 +77,6 @@ ion-content {
 
 ion-icon {
   font-size: 2rem;
-}
-
-ion-slides {
-  height: 80%;
 }
 
 .close-fake {

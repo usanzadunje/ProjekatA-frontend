@@ -51,40 +51,39 @@
         {{ loading === 0 ? `${$t('setting')}...` : $t('setMain') }}
       </ion-button>
     </div>
-    <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40">
-      <ion-button
-          :disabled="loading === 0"
-          @click="setAsLogo"
-          fill="white"
-          expand="block"
-          class="text-sm font-bold uppercase main-img-button"
-      >
-        {{ loading === 0 ? `${$t('setting')}...` : $t('setLogo') }}
-      </ion-button>
-    </div>
 
     <ImagePreviewModalSlider
-        :id="'placeImageSlider'"
-        :images="place.images"
+        v-if="imagesReady"
+        :id="'productImageSlider'"
+        :images="productImages"
+        @mounted="setSliderRef"
     />
+    <div v-show="!imagesReady" class="h-4/5 flex items-center justify-center">
+      <div class="snippet" data-title=".dot-pulse">
+        <div class="stage">
+          <div class="dot-pulse"></div>
+        </div>
+      </div>
+    </div>
   </ion-content>
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted } from 'vue';
-import { useStore }                                  from 'vuex';
-import { useI18n }                                   from 'vue-i18n';
+import { defineComponent, ref, toRefs } from 'vue';
+import { useStore }                     from 'vuex';
+import { useI18n }                      from 'vue-i18n';
 import {
   IonContent,
   IonItem,
   IonIcon,
   IonButton,
   modalController,
-}                                                    from '@ionic/vue';
+}                                       from '@ionic/vue';
 
 import ImagePreviewModalSlider from '@/components/ImagePreviewModalSlider';
 
-import OwnerService from '@/services/OwnerService';
+import OwnerService   from '@/services/OwnerService';
+import ProductService from '@/services/ProductService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
@@ -95,7 +94,7 @@ import {
 } from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'AddPlaceImageModal',
+  name: 'AddProductImagesModal',
   components: {
     IonContent,
     IonItem,
@@ -103,25 +102,43 @@ export default defineComponent({
     IonButton,
     ImagePreviewModalSlider,
   },
-  setup() {
+  props: {
+    productId: {
+      type: Number,
+      default: null,
+    },
+  },
+  setup(props) {
     /* Global properties */
     const store = useStore();
 
     /* Component properties */
     const imagePreviewSlider = ref();
+    const { productId } = toRefs(props);
+    const productImages = ref();
     const imagesInput = ref();
     const images = ref();
     const loading = ref();
-    const place = computed(() => store.getters['staff/place']);
+    const imagesReady = ref(false);
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { t } = useI18n();
 
     /* Lifecycle hooks */
-    onMounted(() => {
-      imagePreviewSlider.value = document.getElementById('placeImageSlider');
-    });
+    if(productId.value) {
+      ProductService.images(productId.value)
+                    .then((response) => {
+                      productImages.value = response.data;
+                      imagesReady.value = true;
+                    })
+                    .catch(() => {
+                      productImages.value = null;
+                    });
+    }else {
+      imagesReady.value = true;
+    }
+
     /* Event handlers */
     const dismiss = () => {
       modalController.dismiss();
@@ -152,13 +169,11 @@ export default defineComponent({
           formData.append(`images[${i}]`, images.value[i]);
         }
 
-        await OwnerService.uploadPlaceImages(formData);
+        await ProductService.uploadImages(productId.value, formData);
 
         showSuccessToast(t('successImageUpload'));
 
         dismiss();
-
-        await store.dispatch('staff/getPlaceInfo');
       }catch(errors) {
         images.value = null;
 
@@ -171,12 +186,13 @@ export default defineComponent({
       loading.value = -1;
       try {
         const imageIndex = await imagePreviewSlider.value.getActiveIndex();
+        const imageToRemoveId = productImages.value[imageIndex].id;
 
-        await OwnerService.removePlaceImage(place.value.images[imageIndex].id);
+        await OwnerService.removePlaceImage(imageToRemoveId);
 
         showSuccessToast(t('successImageRemove'));
 
-        await store.dispatch('staff/getPlaceInfo');
+        productImages.value = productImages.value.filter(img => img.id !== imageToRemoveId);
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
@@ -188,40 +204,30 @@ export default defineComponent({
       try {
         const imageIndex = await imagePreviewSlider.value.getActiveIndex();
 
-        await OwnerService.setImageAsMain(place.value.images[imageIndex].id);
+        await OwnerService.setImageAsMain(productImages.value[imageIndex].id, '?type=App\\Models\\Product');
 
         showSuccessToast(t('successImageMain'));
 
-        await store.dispatch('staff/getPlaceInfo');
+        store.dispatch("owner/getProducts");
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
         loading.value = null;
       }
     };
-    const setAsLogo = async() => {
-      loading.value = 0;
-      try {
-        const imageIndex = await imagePreviewSlider.value.getActiveIndex();
-
-        await OwnerService.setImageAsLogo(place.value.images[imageIndex].id);
-
-        showSuccessToast(t('successImageLogo'));
-
-        await store.dispatch('staff/getPlaceInfo');
-      }catch(errors) {
-        await showErrorToast(errors);
-      }finally {
-        loading.value = null;
-      }
+    const setSliderRef = () => {
+      imagePreviewSlider.value = document.getElementById('productImageSlider');
     };
+    /* Watchers */
+
 
     return {
       /* Component properties */
+      productImages,
       imagesInput,
       images,
       loading,
-      place,
+      imagesReady,
 
       /* Event handlers */
       dismiss,
@@ -230,7 +236,7 @@ export default defineComponent({
       uploadImages,
       removeImage,
       setAsMainImage,
-      setAsLogo,
+      setSliderRef,
 
       /* Icons */
       close,
@@ -238,7 +244,8 @@ export default defineComponent({
       remove,
     };
   },
-});
+})
+;
 </script>
 
 <style scoped>
@@ -259,4 +266,81 @@ ion-icon {
   width: 90%;
   --border-radius: 20px !important;
 }
+
+.dot-pulse {
+  position: relative;
+  left: -9999px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #f4f5f8;
+  color: #f4f5f8;
+  box-shadow: 9999px 0 0 -5px #f4f5f8;
+  animation: dotPulse 1.5s infinite linear;
+  animation-delay: .25s;
+}
+
+.dot-pulse::before, .dot-pulse::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #f4f5f8;
+  color: #f4f5f8;
+}
+
+.dot-pulse::before {
+  box-shadow: 9984px 0 0 -5px #f4f5f8;
+  animation: dotPulseBefore 1.5s infinite linear;
+  animation-delay: 0s;
+}
+
+.dot-pulse::after {
+  box-shadow: 10014px 0 0 -5px #f4f5f8;
+  animation: dotPulseAfter 1.5s infinite linear;
+  animation-delay: .5s;
+}
+
+@keyframes dotPulseBefore {
+  0% {
+    box-shadow: 9984px 0 0 -5px #f4f5f8;
+  }
+  30% {
+    box-shadow: 9984px 0 0 2px #f4f5f8;
+  }
+  60%,
+  100% {
+    box-shadow: 9984px 0 0 -5px #f4f5f8;
+  }
+}
+
+@keyframes dotPulse {
+  0% {
+    box-shadow: 9999px 0 0 -5px #f4f5f8;
+  }
+  30% {
+    box-shadow: 9999px 0 0 2px #f4f5f8;
+  }
+  60%,
+  100% {
+    box-shadow: 9999px 0 0 -5px #f4f5f8;
+  }
+}
+
+@keyframes dotPulseAfter {
+  0% {
+    box-shadow: 10014px 0 0 -5px #f4f5f8;
+  }
+  30% {
+    box-shadow: 10014px 0 0 2px #f4f5f8;
+  }
+  60%,
+  100% {
+    box-shadow: 10014px 0 0 -5px #f4f5f8;
+  }
+}
+
 </style>

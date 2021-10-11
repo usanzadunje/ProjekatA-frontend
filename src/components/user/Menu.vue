@@ -13,7 +13,7 @@
           :key="product.id"
           :product="product"
           class="py-1"
-          @click="showProductModal(product)"
+          @click="showProductModal(product, category.name)"
       />
     </AccordionList>
 
@@ -46,9 +46,8 @@ import {
   bookOutline,
   beerOutline,
 }
-                       from 'ionicons/icons';
-import { useModal }    from '@/composables/useModal';
-import CategoryService from '@/services/CategoryService';
+                    from 'ionicons/icons';
+import { useModal } from '@/composables/useModal';
 
 export default defineComponent({
   name: 'Menu',
@@ -79,13 +78,11 @@ export default defineComponent({
     /* Methods */
 
     /* Event handlers */
-    const showProductModal = async(product) => {
-      const response = await CategoryService.show(product.category_id);
+    const showProductModal = (product, category) => {
+      product.category = category;
 
-      product.category = response.data.name;
-
-      await openModal(true, product)
-    }
+      openModal(true, product);
+    };
     return {
       /* Component properties */
       place,

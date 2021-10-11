@@ -27,11 +27,11 @@
 
 
       <div class="ion-padding">
-        <InfiniteScroll
+        <InfinitePlaceScroll
             :cafe-search-string="cafeSearchString"
             :sort-by="sortBy"
             @scroll-to-top="scrollToTop"
-            @open-cafe-modal="openModal(true, $event, 'place')"
+            @open-cafe-modal="openModal(true, $event)"
             @infinite-scroll-toggle="infiniteScrollLoading = !infiniteScrollLoading"
             :refresher="refresher"
         />
@@ -68,7 +68,7 @@ import {
 
 import UserHeader     from '@/components/user/headers/UserHeader';
 import SlidingFilter  from '@/components/user/SlidingFilter';
-import InfiniteScroll from '@/components/place/InfiniteScroll';
+import InfinitePlaceScroll from '@/components/place/InfinitePlaceScroll';
 import Modal          from '@/components/Modal';
 import ShortCafeModal from '@/components/user/modals/ShortCafeModal';
 
@@ -84,7 +84,7 @@ export default defineComponent({
     IonRefresherContent,
     UserHeader,
     SlidingFilter,
-    InfiniteScroll,
+    InfinitePlaceScroll,
     Modal,
     ShortCafeModal,
   },

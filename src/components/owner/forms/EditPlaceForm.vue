@@ -3,12 +3,10 @@
     <div>
       <div>
         <div class="mb-6">
-          <img
-              id="mainImage"
-              :src="`${backendStorageURL + mainImagePath}`"
-              :alt="`Image of  cafe`"
-              @click="openPreview"
-              class="h-36 w-full img-border-15 object-cover"
+          <MainImagePreview
+              :path="mainImagePath"
+              :label="$t('image', 2)"
+              @click="openPreview(place)"
           />
         </div>
         <ion-item
@@ -223,6 +221,7 @@ import {
 }
                                                                               from "@ionic/vue";
 
+import MainImagePreview    from '@/components/MainImagePreview';
 import AddPlaceImagesModal from '@/components/owner/modals/AddPlaceImagesModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
@@ -250,6 +249,7 @@ export default defineComponent({
     IonToggle,
     IonLabel,
     IonDatetime,
+    MainImagePreview,
   },
   props: {
     resetInputs: {

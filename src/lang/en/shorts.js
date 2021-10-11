@@ -45,6 +45,7 @@ export default {
     "gallery": "Gallery",
     "settings": "Settings",
     "currently": "Currently available",
+    "availableSeats": "Available seats",
     "occupiedSeats": "Occupied seats",
     "place": "Place | Places",
     "refresherPulling": "Pull to refresh",
@@ -147,4 +148,6 @@ export default {
     "price": "Price",
     "createProduct": "Create new product",
     "close": "Close",
+    "image": "Image | Images",
+    "noImages": "There are no images to show.",
 };

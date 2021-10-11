@@ -95,7 +95,7 @@
       <!--      </ion-item>-->
     </div>
 
-    <div class="mt-12">
+    <div class="mt-4">
       <ion-button
           :disabled="loading"
           size="large"

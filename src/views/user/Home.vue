@@ -19,14 +19,14 @@
           <ion-slide>
             <SlidingCards
                 :places="cafes.closestToUser?.slice(0, 2)"
-                @open-cafe-modal="openModal(true, $event, 'place')"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
                 :places="cafes.closestToUser?.slice(2, 4)"
-                @open-cafe-modal="openModal(true, $event, 'place')"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
@@ -42,14 +42,14 @@
           <ion-slide>
             <SlidingCards
                 :places="cafes.currentlyAvailable?.slice(0, 2)"
-                @open-cafe-modal="openModal(true, $event, 'place')"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
                 :places="cafes.currentlyAvailable?.slice(2, 4)"
-                @open-cafe-modal="openModal(true, $event, 'place')"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
@@ -60,14 +60,14 @@
           <ion-slide>
             <SlidingCards
                 :places="cafes.haveFood?.slice(0, 2)"
-                @open-cafe-modal="openModal(true, $event, 'place')"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>
           <ion-slide>
             <SlidingCards
                 :places="cafes.haveFood?.slice(2, 4)"
-                @open-cafe-modal="openModal(true, $event, 'place')"
+                @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </ion-slide>

@@ -33,10 +33,10 @@ export default {
         );
     },
     // Getting only one specific cafe
-    show(id) {
+    show(id, query = '') {
         // Only getting
         return API.apiClient.get(
-            `/cafes/${id}`,
+            `/cafes/${id}${query}`,
         );
     },
     images(id) {

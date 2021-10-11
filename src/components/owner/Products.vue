@@ -115,10 +115,12 @@ export default defineComponent({
     /* Component properties */
     const products = computed(() => store.getters['owner/products']);
 
-    /* Lifecycle hooks */
+    /* Composables */
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { isModalOpen, modalData, openModal } = useModal();
+
+    /* Lifecycle hooks */
 
     /* Methods */
     const removeProduct = async(id) => {

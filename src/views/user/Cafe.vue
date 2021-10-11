@@ -14,25 +14,12 @@
       <div class="h-full mt-2">
         <div class="h-full flex flex-col justify-between">
           <div>
-            <div class="relative">
-              <div v-show="!showSkeleton">
-                <img
-                    :src="`${backendStorageURL + mainImagePath}`"
-                    :alt="`Image of ${place.name} place`"
-                    @click="openPreview(place)"
-                    class="banner-image w-full object-fill img-border-15"
-                />
-              </div>
-              <div v-show="showSkeleton">
-                <ion-skeleton-text animated class="banner-image img-border-15"></ion-skeleton-text>
-              </div>
-              <div
-                  class="uppercase absolute bottom-2 right-3 bg-black opacity-60 popover-text-block inline-block text-white p-1.5"
-              >
-                {{ $t('gallery') }}
-              </div>
-            </div>
-
+            <MainImagePreview
+                :path="mainImagePath"
+                :label="$t('gallery')"
+                :show-skeleton="showSkeleton"
+                @click="openPreview(place.images?.filter(img => img.is_logo === 0 && img.is_main === 0))"
+            />
             <div class="mt-4 ion-item-no-padding-x">
               <h1 v-show="!showSkeleton" class="cafe-show-name">{{ place.name }}</h1>
               <h1 v-show="showSkeleton">
@@ -44,7 +31,10 @@
               </p>
             </div>
 
-            <CafeInfoBody :place="place"/>
+            <CafeInfoBody
+                :place="place"
+                :show-skeleton="showSkeleton"
+            />
 
             <div>
               <FilterCategoryHeading class="mt-4" :title="$t('tables')" :icon="storefrontOutline"/>
@@ -120,6 +110,7 @@ import {
 }                                                from '@ionic/vue';
 
 import GoBackHeader          from '@/components/user/headers/GoBackHeader';
+import MainImagePreview      from '@/components/MainImagePreview';
 import CafeInfoBody          from '@/components/place/CafeInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import TableContainer        from '@/components/TableContainer';
@@ -157,6 +148,7 @@ export default defineComponent({
     IonRefresher,
     IonRefresherContent,
     GoBackHeader,
+    MainImagePreview,
     CafeInfoBody,
     FilterCategoryHeading,
     TableContainer,
@@ -200,7 +192,7 @@ export default defineComponent({
     const getPlace = async() => {
       showSkeleton.value = true;
       try {
-        const response = await CafeService.show(route.params.id);
+        const response = await CafeService.show(route.params.id, '?products=true');
         const tablesResponse = await TableService.index(route.params.id);
 
         place.value = response.data;
@@ -243,13 +235,13 @@ export default defineComponent({
 
 
     /* Event handlers */
-    const openPreview = async(place) => {
+    const openPreview = async(images) => {
       const modal = await modalController
           .create({
             component: ImagePreviewModal,
             cssClass: 'custom-gallery-modal',
             componentProps: {
-              place,
+              images,
             },
           });
       return modal.present();

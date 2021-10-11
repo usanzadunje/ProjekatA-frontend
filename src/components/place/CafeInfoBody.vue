@@ -1,9 +1,17 @@
 <template>
   <div>
-    <div class="flex justify-start items-center py-2 ion-item-no-padding-x mt-2 ">
+    <div
+        v-show="!showSkeleton"
+        class="flex justify-start items-center py-2 ion-item-no-padding-x mt-2"
+    >
       <ion-icon :icon="pieChart" class="mr-2 text-yellow-400" style="font-size: 25px"></ion-icon>
-      <span class="modal-cafe-text-medium lowercase">{{ place.availability_ratio }} - {{ $t('occupiedSeats') }}</span>
+      <span class="modal-cafe-text-medium lowercase">{{ freeSeats }} - {{ $t('availableSeats') }}</span>
     </div>
+    <ion-skeleton-text
+        animated
+        v-show="showSkeleton"
+        class="h-6 w-48 rounded-md mt-2"
+    ></ion-skeleton-text>
     <hr class="card-horizontal-ruler mt-1">
     <div class="flex justify-between items-center">
       <div class="flex items-center">
@@ -16,26 +24,38 @@
     </div>
     <hr class="card-horizontal-ruler">
     <div class="flex justify-between items-center mt-3.5">
-      <div class="flex flex-col items-center">
-        <span class="modal-cafe-text-regular">{{ `${$t('monday')}-${$t('friday')}` }}</span>
-        <div class="ion-item-no-padding-x flex items-center mt-0.5">
-          <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>
+      <div>
+        <div v-show="!showSkeleton" class="ion-item-no-padding-x flex flex-col items-center mt-0.5">
+          <span class="modal-cafe-text-regular">{{ `${$t('monday')}-${$t('friday')}` }}</span>
           <p class="modal-cafe-text-regular lowercase">{{ place.working_hours?.mon_fri }}</p>
         </div>
+        <ion-skeleton-text
+            animated
+            v-show="showSkeleton"
+            class="h-8 w-28 rounded-md"
+        ></ion-skeleton-text>
       </div>
-      <div class="flex flex-col items-center">
-        <span class="modal-cafe-text-regular">{{ $t('saturday') }}</span>
-        <div class="ion-item-no-padding-x flex items-center mt-0.5">
-          <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>
+      <div>
+        <div v-show="!showSkeleton" class="ion-item-no-padding-x flex flex-col items-center mt-0.5">
+          <span class="modal-cafe-text-regular">{{ $t('saturday') }}</span>
           <p class="modal-cafe-text-regular lowercase">{{ place.working_hours?.saturday }}</p>
         </div>
+        <ion-skeleton-text
+            animated
+            v-show="showSkeleton"
+            class="h-8 w-28 rounded-md ml-2"
+        ></ion-skeleton-text>
       </div>
-      <div class="flex flex-col items-center">
-        <p class="modal-cafe-text-regular">{{ $t('sunday') }}</p>
-        <div class="ion-item-no-padding-x flex items-center mt-0.5">
-          <ion-icon :icon="timeOutline" class="mr-2 primary-icon-color"></ion-icon>
+      <div>
+        <div v-show="!showSkeleton" class="ion-item-no-padding-x flex flex-col items-center mt-0.5">
+          <p class="modal-cafe-text-regular">{{ $t('sunday') }}</p>
           <p class="modal-cafe-text-regular">{{ place.working_hours?.sunday }}</p>
         </div>
+        <ion-skeleton-text
+            animated
+            v-show="showSkeleton"
+            class="h-8 w-28 rounded-md ml-2"
+        ></ion-skeleton-text>
       </div>
     </div>
     <hr class="card-horizontal-ruler mt-3.5">
@@ -50,12 +70,13 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-
+import { computed, defineComponent, toRefs } from 'vue';
+import { useI18n }                           from 'vue-i18n';
 import {
   IonIcon,
   IonButton,
-} from '@ionic/vue';
+  IonSkeletonText,
+}                                            from '@ionic/vue';
 
 import Modal     from '@/components/Modal';
 import GoogleMap from '@/components/user/modals/GoogleMap';
@@ -65,7 +86,6 @@ import { useModal } from '@/composables/useModal';
 import {
   pieChart,
   locationOutline,
-  timeOutline,
 
 }
   from 'ionicons/icons';
@@ -76,6 +96,7 @@ export default defineComponent({
   components: {
     IonIcon,
     IonButton,
+    IonSkeletonText,
     Modal,
     GoogleMap,
   },
@@ -84,23 +105,39 @@ export default defineComponent({
       type: Object,
       default: null,
     },
+    showSkeleton: {
+      type: Boolean,
+      default: null,
+    },
   },
-  setup() {
+  setup(props) {
+    /* Component properties */
+    const { place } = toRefs(props);
+    const freeSeats = computed(() => {
+      const ratio = place.value?.availability_ratio?.split('/');
 
+      if(!ratio) {
+        return t('loading');
+      }
+
+      return `${ratio[1] - ratio[0]}/${ratio[1]}`;
+    });
     /* Composables */
     const { isModalOpen, openModal } = useModal();
+    const { t } = useI18n();
 
 
     return {
       /* Component properties */
       isModalOpen,
+      freeSeats,
+
       /* Event handlers */
       openModal,
 
       /* Icons from */
       pieChart,
       locationOutline,
-      timeOutline,
     };
   },
 

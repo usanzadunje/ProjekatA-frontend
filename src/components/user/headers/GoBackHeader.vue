@@ -2,12 +2,12 @@
   <ion-header class="ion-no-border">
     <ion-toolbar>
       <div class="flex justify-between mt-1 md margin-top-reset">
-        <ion-buttons slot="start">
-          <ion-button
-              :routerLink="`${$route.query.redirect || '/home'}`">
-            <ion-icon slot="icon-only" :icon="arrowBackOutline" class="text-gray-400"></ion-icon>
-          </ion-button>
-        </ion-buttons>
+        <ion-button fill="clear" :routerLink="$route.query.redirect || '/home'" class="h-auto">
+          <ion-icon
+              :icon="arrowBackOutline"
+              class="text-gray-400"
+          ></ion-icon>
+        </ion-button>
 
         <NotificationsPreview/>
       </div>
@@ -20,7 +20,6 @@ import { defineComponent } from 'vue';
 import {
   IonHeader,
   IonToolbar,
-  IonButtons,
   IonButton,
   IonIcon,
 }                          from '@ionic/vue';
@@ -37,7 +36,6 @@ export default defineComponent({
   components: {
     IonHeader,
     IonToolbar,
-    IonButtons,
     IonButton,
     IonIcon,
     NotificationsPreview,
@@ -59,5 +57,12 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+ion-icon {
+  font-size: 1.75rem !important;
+}
 
+ion-button {
+  --padding-start: 0 !important;
+  --padding-end: 5px !important;
+}
 </style>

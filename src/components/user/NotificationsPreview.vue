@@ -6,7 +6,7 @@
             :icon="hasNotifications
             ? (unreadNotificationsCount > 0 ? notifications : notificationsOutline)
             : notificationsOffOutline"
-            class="primary-icon-color"
+            class="primary-icon-color flex"
             slot="icon-only"
         ></ion-icon>
         <div v-if="unreadNotificationsCount > 0" class="absolute z-200 top-0 left-4">

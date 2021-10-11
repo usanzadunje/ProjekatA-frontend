@@ -12,18 +12,15 @@
       </div>
     </div>
 
-    <CafeInfoBody :place="place"/>
+    <CafeInfoBody
+        :place="place"
+        :show-skeleton="showSkeleton"
+    />
     <div class="mt-6 ion-no-padding">
-      <ion-slides v-update-swiper :options="slideOpts">
-        <ion-slide v-for="image in place.images?.filter(img => img.is_main !== 1)" :key="image?.id">
-          <img
-              :src="`${backendStorageURL + image?.path}`"
-              :alt="`Image of ${place.name}`"
-              @click="openPreview(place)"
-              class="object-cover slider-images"
-          >
-        </ion-slide>
-      </ion-slides>
+      <PlaceImageModalSlider
+          :images="place.images?.filter(img => img.is_logo === 0 && img.is_main === 0)"
+          :show-skeleton="showSkeleton"
+      />
     </div>
 
     <div class="mt-5 mb-3 flex justify-around">
@@ -69,15 +66,12 @@ import { Capacitor }                                          from '@capacitor/c
 import {
   IonIcon,
   IonButton,
-  IonSlides,
-  IonSlide,
-  modalController,
 }                                                             from '@ionic/vue';
 
 import CafeInfoBody          from '@/components/place/CafeInfoBody';
+import PlaceImageModalSlider from '@/components/user/sliders/PlaceImageModalSlider';
 import Modal                 from '@/components/Modal';
 import CafeSubscriptionModal from '@/components/user/modals/CafeSubscriptionModal';
-import ImagePreviewModal     from '@/components/user/modals/ImagePreviewModal';
 
 import CafeService from '@/services/CafeService';
 
@@ -94,11 +88,10 @@ export default defineComponent({
   components: {
     IonIcon,
     IonButton,
-    IonSlides,
-    IonSlide,
+    CafeInfoBody,
+    PlaceImageModalSlider,
     Modal,
     CafeSubscriptionModal,
-    CafeInfoBody,
   },
   props: {
     place: {
@@ -114,26 +107,36 @@ export default defineComponent({
     const router = useRouter();
 
     /* Component properties */
-    const slideOpts = {
-      slidesPerView: 2.5,
-      spaceBetween: 10,
-    };
+
     const isUserSubscribed = ref(false);
     const place = toRef(props, 'place');
     const isSubButtonDisabled = ref(true);
     const logoPath = computed(() => {
       if(place.value.images?.length > 0) {
-        return place.value.images.find(image => image.is_logo === 1)?.path ??
+        return place.value.images?.find(image => image.is_logo === 1)?.path ??
             place.value.images[0]?.path;
       }else {
         return '/places/default_place_logo.png';
       }
     });
+    const showSkeleton = ref(true);
 
     /* Composables */
     const { isModalOpen, openModal } = useModal();
 
     /* Lifecycle hooks */
+    Promise.all([
+      CafeService.images(place.value.id),
+      CafeService.workingHours(place.value.id),
+    ]).then((response) => {
+      place.value.images = response[0].data;
+      place.value.working_hours = response[1].data;
+
+      showSkeleton.value = false;
+    }).catch(() => {
+      place.value.images = null;
+      place.value.working_hours = null;
+    });
     isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
     /* Checking if users is subscribed to this place */
     if(store.getters['auth/loggedIn']) {
@@ -153,31 +156,20 @@ export default defineComponent({
     });
 
     /* Event handlers */
-    const openPreview = async(place) => {
-      const modal = await modalController
-          .create({
-            component: ImagePreviewModal,
-            cssClass: 'custom-image-preview-modal',
-            componentProps: {
-              place,
-            },
-          });
-      return modal.present();
-    };
+
 
     return {
       /* Component properties */
-      slideOpts,
       isSubButtonDisabled,
       isModalOpen,
       isUserSubscribed,
       logoPath,
+      showSkeleton,
 
       /* Computed properties */
 
       /* Event handlers */
       openModal,
-      openPreview,
 
       /* Icons from */
       notifications,
@@ -187,8 +179,5 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-img.slider-images {
-  max-height: 75px !important;
-  border-radius: 14px;
-}
+
 </style>

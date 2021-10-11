@@ -16,5 +16,14 @@ export default {
     destroy(id) {
         return API.apiClient.delete(`/owner/menu/product/${id}`);
     },
-
+    images(id) {
+        return API.apiClient.get(`/cafes/product/${id}/images`);
+    },
+    uploadImages(productId, payload) {
+        return API.apiClient.post(`/owner/product/${productId}/images/upload`, payload, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    },
 };

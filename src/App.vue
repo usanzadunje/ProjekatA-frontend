@@ -20,6 +20,7 @@ export default defineComponent({
   setup() {
     /* Global properties */
     const store = useStore();
+
     /* Methods */
 
     /* Composables */

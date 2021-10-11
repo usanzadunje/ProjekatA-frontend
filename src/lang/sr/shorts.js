@@ -45,6 +45,7 @@ export default {
     "gallery": "Galerija",
     "settings": "Podešavanja",
     "currently": "Trenutno slobodni",
+    "availableSeats": "Slobodnih mesta",
     "occupiedSeats": "Zauzetih mesta",
     "place": "Mesto | Mesta",
     "refresherPulling": "Povucite da osvežite",
@@ -147,5 +148,8 @@ export default {
     "price": "Cena",
     "createProduct": "Kreiraj novi proizvod",
     "close": "Zatvori",
+    "image": "Fotografija | Fotografije",
+    "noImages": "Nema fotografija za prikazati.",
+
 };
 

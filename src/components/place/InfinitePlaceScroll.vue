@@ -50,7 +50,7 @@ import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
 
 export default defineComponent({
-  name: "InfiniteScroll",
+  name: "InfinitePlaceScroll",
   components: {
     IonInfiniteScroll,
     IonInfiniteScrollContent,
