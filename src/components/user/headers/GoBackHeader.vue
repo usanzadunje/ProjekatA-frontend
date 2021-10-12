@@ -1,25 +1,21 @@
 <template>
-  <ion-header class="ion-no-border">
-    <ion-toolbar>
-      <div class="flex justify-between mt-1 md margin-top-reset">
-        <ion-button fill="clear" :routerLink="$route.query.redirect || '/home'" class="h-auto">
-          <ion-icon
-              :icon="arrowBackOutline"
-              class="text-gray-400"
-          ></ion-icon>
-        </ion-button>
+  <div id="goHeader">
+    <div class="flex justify-between mt-1 md margin-top-reset">
+      <ion-button fill="clear" :routerLink="$route.query.redirect || '/home'" class="h-auto">
+        <ion-icon
+            :icon="arrowBackOutline"
+            class="text-gray-400"
+        ></ion-icon>
+      </ion-button>
 
-        <NotificationsPreview/>
-      </div>
-    </ion-toolbar>
-  </ion-header>
+      <NotificationsPreview/>
+    </div>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
 import {
-  IonHeader,
-  IonToolbar,
   IonButton,
   IonIcon,
 }                          from '@ionic/vue';
@@ -34,8 +30,6 @@ import {
 export default defineComponent({
   name: 'GoBackHeader',
   components: {
-    IonHeader,
-    IonToolbar,
     IonButton,
     IonIcon,
     NotificationsPreview,

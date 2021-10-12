@@ -10,6 +10,7 @@
 
       <div class="px-4 pb-4">
         <AccordionList
+            :panel-id="'categoryPanel'"
             class="accordion-list-border-top"
             :title="$t('category', 2)"
             :title-size="'1.125rem'"
@@ -19,6 +20,7 @@
           <Categories class="mb-4"/>
         </AccordionList>
         <AccordionList
+            :panel-id="'productPanel'"
             class="accordion-list-border-top accordion-list-border-bottom"
             :title="$t('product', 2)"
             :title-size="'1.125rem'"

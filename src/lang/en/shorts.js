@@ -36,7 +36,7 @@ export default {
     "removing": "Removing",
     "add": "Add",
     "drinksCard": "Card of drinks",
-    "privacy": "Privacy",
+    "privacyPolicy": "Privacy policy",
     "global": "Global",
     "language": "Language | Languages",
     "about": "About application",
@@ -121,7 +121,7 @@ export default {
     "uploadSelectedImages": "Upload",
     "saving": "Saving",
     "toggling": "Toggling",
-    "setMain": "Set as main image",
+    "setCover": "Set as cover image",
     "setLogo": "Set as logo",
     "setting": "Setting",
     "distance": "Distance",
@@ -150,4 +150,6 @@ export default {
     "close": "Close",
     "image": "Image | Images",
     "noImages": "There are no images to show.",
+    "createProductImagesAlert": "Create product in order to add images.",
+
 };

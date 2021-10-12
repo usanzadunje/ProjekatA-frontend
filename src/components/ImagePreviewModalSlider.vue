@@ -4,7 +4,7 @@
       :id="id"
       v-update-swiper
       :options="slideOpts"
-      v-if="images.length > 0"
+      v-if="images?.length > 0"
   >
     <ion-slide v-for="image in images" :key="image.id">
       <img

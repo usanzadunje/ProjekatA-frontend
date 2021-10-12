@@ -48,7 +48,7 @@
           expand="block"
           class="text-sm font-bold uppercase main-img-button"
       >
-        {{ loading === 0 ? `${$t('setting')}...` : $t('setMain') }}
+        {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
       </ion-button>
     </div>
     <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40">

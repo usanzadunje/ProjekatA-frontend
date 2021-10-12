@@ -12,7 +12,9 @@
           <h3 class="mb-1">{{ product.name }}</h3>
           <p>
             {{
-              product.description.length > 45 ? product.description.substring(0, 45).concat('...') : product.description
+              product.description?.length > 45
+                  ? product.description.substring(0, 45).concat('...')
+                  : (product.description ?? '')
             }}
           </p>
         </div>

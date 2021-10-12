@@ -189,7 +189,13 @@ export default defineComponent({
       cssClass: 'custom-category-alert',
     };
 
-    /* Computed properties */
+    /* Methods */
+    const increaseParentHeight = (additionalHeight) => {
+      const accordionPanel = document.getElementById('productPanel');
+      const panelCurrentMaxHeight = parseInt(getComputedStyle(accordionPanel).getPropertyValue('max-height'));
+      accordionPanel.style.setProperty('max-height', `${panelCurrentMaxHeight + additionalHeight}px`);
+    };
+
     /* Lifecycle hooks */
     onMounted(async() => {
       if(product?.value) {
@@ -217,6 +223,8 @@ export default defineComponent({
           await store.dispatch("owner/createProduct", newProduct);
 
           showSuccessToast(t('owner.createProduct'));
+
+          increaseParentHeight(100);
         }
 
         emit('dismiss');

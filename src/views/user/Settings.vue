@@ -24,12 +24,6 @@ const
             ></ion-toggle>
           </ion-item>
         </ion-item>
-        <ion-item class="ion-item-padding-right" @click="showPrivacy">
-          <p class="settings-item-text">{{ $t('privacy') }}</p>
-          <ion-button fill="clear" slot="end">
-            <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
-          </ion-button>
-        </ion-item>
         <ion-item class="ion-item-padding-right" routerLink="/edit">
           <p class="settings-item-text">{{ $t('profile') }}</p>
           <ion-button fill="clear" slot="end">
@@ -63,6 +57,12 @@ const
             <ion-icon :icon="rocket" class="text-white"></ion-icon>
           </div>
           <p class="uppercase settings-fade-text ml-2">{{ $t('about') }}</p>
+        </ion-item>
+        <ion-item class="ion-item-padding-right" @click="showPrivacyPolicy">
+          <p class="settings-item-text">{{ $t('privacyPolicy') }}</p>
+          <ion-button fill="clear" slot="end">
+            <ion-icon slot="icon-only" :icon="chevronForward" class="text-gray-400"></ion-icon>
+          </ion-button>
         </ion-item>
         <ion-item class="ion-item-padding-right" @click="showSupportAuthors">
           <p class="settings-item-text">{{ $t('support') }}</p>
@@ -185,8 +185,8 @@ export default defineComponent({
         areNotificationsDisabled.value = false;
       }
     };
-    const showPrivacy = () => {
-      // alert('Privacy');
+    const showPrivacyPolicy = () => {
+      alert('Privacy policy');
     };
     const showSupportAuthors = () => {
       alert('Support authors');
@@ -205,7 +205,7 @@ export default defineComponent({
       /* Event handlers */
       toggleDarkMode,
       toggleNotifications,
-      showPrivacy,
+      showPrivacyPolicy,
       showSupportAuthors,
       redirectToWebsite,
 

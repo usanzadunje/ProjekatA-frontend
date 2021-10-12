@@ -10,13 +10,15 @@
       <div class="wrap">
         <h1 class="secondary-heading text-center uppercase">{{ $t('owner.staff') }}</h1>
 
-        <ion-button
-            expand="block"
-            class="auth-button-size auth-button-border-radius uppercase button-text-white my-8 mx-auto w-5/6"
-            @click="createMember"
-        >
-          {{ $t('owner.createStaff') }}
-        </ion-button>
+        <div class="flex justify-end w-5/6 mx-auto mt-6 mb-4">
+          <ion-button
+              expand="block"
+              class="auth-button-size auth-button-border-radius uppercase button-text-white"
+              @click="createMember"
+          >
+            {{ $t('create') }}
+          </ion-button>
+        </div>
 
         <StaffCard
             v-for="member in staff"

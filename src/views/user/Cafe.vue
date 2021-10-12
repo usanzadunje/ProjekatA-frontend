@@ -1,7 +1,7 @@
 <template>
   <ion-page>
 
-    <GoBackHeader/>
+    <GoBackHeader class="px-2 pb-1"/>
 
     <ion-content class="h-full">
       <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
@@ -11,7 +11,7 @@
         </ion-refresher-content>
       </ion-refresher>
 
-      <div class="h-full mt-2">
+      <div class="h-full mt-3">
         <div class="h-full flex flex-col justify-between">
           <div>
             <MainImagePreview
@@ -290,6 +290,10 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+#goHeader {
+  background: var(--show-paint);
+  border-bottom: solid 1px var(--horizontal-divider);
+}
 
 ion-toolbar {
   --border-style: none;
@@ -300,7 +304,6 @@ ion-toolbar {
 
 ion-content {
   --background: var(--show-paint);
-  background: var(--show-paint);
   --padding-start: 1rem;
   --padding-end: 1rem;
   --padding-bottom: 1rem;

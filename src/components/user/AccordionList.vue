@@ -18,7 +18,7 @@
           :style="`font-size:${iconSize}`"
       ></ion-icon>
     </div>
-    <div class="panel">
+    <div :id="panelId" class="panel">
       <div v-if="items">
         <div v-for="item in items" :key="item">
           {{ item }}
@@ -46,6 +46,10 @@ export default defineComponent({
     IonIcon,
   },
   props: {
+    panelId: {
+      type: String,
+      default: null,
+    },
     title: {
       type: String,
       default: 'Title',

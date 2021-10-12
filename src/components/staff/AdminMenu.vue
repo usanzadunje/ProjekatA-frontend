@@ -64,6 +64,14 @@
               {{ $t('profile') }}
             </span>
         </div>
+
+        <ActivityToggle
+            v-if="this.$store.getters['auth/isStaff']"
+            class="w-full mt-4"
+            :icon-classes="'pb-1 text-2xl mr-2'"
+            :text-classes="'pb-1 text-xl'"
+        />
+
       </div>
       <div class="">
         <div
@@ -91,9 +99,9 @@ import { useStore }                  from 'vuex';
 import {
   IonMenu,
   IonIcon,
-
 }                                    from '@ionic/vue';
 
+import ActivityToggle from '@/components/staff/ActivityToggle';
 
 import {
   statsChartOutline,
@@ -110,6 +118,7 @@ export default defineComponent({
   components: {
     IonMenu,
     IonIcon,
+    ActivityToggle,
   },
   props: {},
   setup() {

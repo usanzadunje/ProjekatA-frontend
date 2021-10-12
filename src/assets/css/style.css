@@ -168,6 +168,10 @@ ion-modal ion-item {
     --max-width: 170px;
 }
 
+.staff-settings-popover {
+    --max-width: 185px;
+}
+
 .notifications-popover {
     --width: 65vw;
     --height: auto;
@@ -263,6 +267,11 @@ ion-toggle {
 .primary-text-color {
     color: var(--primary-heading) !important;
 }
+
+.placeholder-text-color {
+    color: var(--placeholder-paint)
+}
+
 .border-primary {
     border-color: var(--primary-heading) !important;
 }
@@ -339,6 +348,10 @@ ion-toggle.dark-toggle-checked {
 
 .item-border {
     border-bottom: 0.55px solid #c8c7cc !important;
+}
+
+.icon-popover-size {
+    font-size: 1.4rem;
 }
 
 /*

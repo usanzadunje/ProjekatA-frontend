@@ -24,7 +24,10 @@
               alt="Profile picture"
           >
         </ion-avatar>
-        <ion-label>{{ this.$store.getters['auth/authUser'].username || this.$store.getters['auth/authUser'].fname }}</ion-label>
+        <ion-label>{{
+            this.$store.getters['auth/authUser'].username || this.$store.getters['auth/authUser'].fname
+                   }}
+        </ion-label>
       </ion-chip>
     </div>
   </div>
@@ -45,7 +48,7 @@ import {
 import SettingsPopover from '@/components/staff/popovers/SettingsPopover';
 import LanguagePicker  from '@/components/LanguagePicker';
 
-import { useMenu }    from '@/composables/useMenu';
+import { useMenu } from '@/composables/useMenu';
 import { usePopover } from '@/composables/usePopover';
 
 import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
@@ -80,7 +83,7 @@ export default defineComponent({
 
     /* Event handlers */
     const openSettingsPopover = (event) => {
-      openPopover(SettingsPopover, event, 'settings-popover');
+      openPopover(SettingsPopover, event, 'staff-settings-popover');
     };
     const toggleDarkMode = async(e) => {
       if(!e.target.checked) {

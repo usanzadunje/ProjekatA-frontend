@@ -6,10 +6,17 @@
     <h2 v-else class="secondary-heading text-center mb-6"> {{ $t('createProduct') }}</h2>
 
     <MainImagePreview
+        v-if="product"
         :path="mainImagePath"
         :label="$t('image', 2)"
         @click="openPreview"
     />
+    <div
+        v-else
+        class="text-center placeholder-text-color text-xs"
+    >
+      {{ $t('createProductImagesAlert') }}
+    </div>
 
     <CreateEditProductForm
         :product="product"
@@ -48,7 +55,7 @@ export default defineComponent({
     /* Component properties */
     const { product } = toRefs(props);
     const mainImagePath = computed(() => {
-      const currentProduct = store.getters['owner/products'].find(prod => prod.id === product.value.id);
+      const currentProduct = store.getters['owner/products'].find(prod => prod.id === product?.value?.id);
       if(currentProduct?.images?.length > 0) {
         return currentProduct?.images?.find(image => image.is_main === 1)?.path ??
             currentProduct?.images[0]?.path;

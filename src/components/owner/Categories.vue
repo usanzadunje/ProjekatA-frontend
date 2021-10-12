@@ -184,6 +184,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ion-list {
+  background: #F3F4F6;
+}
+
+ion-list.list-md {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 ion-item {
   --background: #F3F4F6;
   --inner-padding-end: 0;

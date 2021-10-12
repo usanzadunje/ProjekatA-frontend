@@ -101,6 +101,11 @@ export default defineComponent({
     });
 
     /* Methods */
+    const increaseParentHeight = (additionalHeight) => {
+      const accordionPanel = document.getElementById('categoryPanel');
+      const panelCurrentMaxHeight = parseInt(getComputedStyle(accordionPanel).getPropertyValue('max-height'));
+      accordionPanel.style.setProperty('max-height', `${panelCurrentMaxHeight + additionalHeight}px`);
+    };
 
     /* Event handlers */
     const createOrUpdateCategory = async() => {
@@ -117,6 +122,8 @@ export default defineComponent({
           await store.dispatch("owner/createCategory", categoryName.value);
 
           showSuccessToast(t('owner.createCategory'));
+
+          increaseParentHeight(55);
         }
 
         emit('dismiss');

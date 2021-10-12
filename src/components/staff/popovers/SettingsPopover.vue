@@ -35,22 +35,12 @@
       <span class="text-sm ml-3">{{ $t('profile') }}</span>
     </div>
 
-    <div
-        class="flex justify-between items-center h-12 text-black w-full px-3 bg-gray-200"
+    <ActivityToggle
         v-if="this.$store.getters['auth/isStaff']"
-    >
-      <div class="flex items-center">
-        <ion-icon slot="start" :icon="isStaffActive ? checkmarkOutline : closeOutline" class="text-black"></ion-icon>
-        <span class="text-sm ml-3">{{ isStaffActive ? $t('active') : $t('inactive') }}</span>
-      </div>
-      <ion-toggle
-          class="pl-0"
-          :checked="isStaffActive"
-          @click="toggleActivity($event)"
-          mode="md"
-      ></ion-toggle>
-    </div>
-
+        class="h-12 text-black w-full px-3 bg-gray-200"
+        :icon-classes="'icon-popover-size'"
+        :text-classes="'text-sm ml-3'"
+    />
     <div
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-gray-300"
         @click="logout"
@@ -68,17 +58,16 @@ import { useStore }                  from 'vuex';
 import {
   IonContent,
   IonIcon,
-  IonToggle,
   popoverController,
 }                                    from '@ionic/vue';
+
+import ActivityToggle from '@/components/staff/ActivityToggle';
 
 import {
   statsChartOutline,
   personOutline,
   peopleOutline,
   homeOutline,
-  checkmarkOutline,
-  closeOutline,
   logOutOutline,
 } from 'ionicons/icons';
 
@@ -87,7 +76,7 @@ export default defineComponent({
   components: {
     IonContent,
     IonIcon,
-    IonToggle,
+    ActivityToggle,
   },
   setup() {
     /* Global properties */
@@ -96,7 +85,6 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
-    const isStaffActive = computed(() => store.getters['staff/active']);
     const activeRouteName = computed(() => route.name.split('.')[1]);
 
     /* Event handlers */
@@ -110,31 +98,20 @@ export default defineComponent({
 
       await popoverController.dismiss();
     };
-    const toggleActivity = async(e) => {
-      if(e.target.checked) {
-        await store.dispatch('staff/toggleActivity', false);
-      }else {
-        await store.dispatch('staff/toggleActivity', true);
-      }
-    };
 
     return {
       /* Component properties */
-      isStaffActive,
       activeRouteName,
 
       /* Event handlers */
       logout,
       navigateTo,
-      toggleActivity,
 
       /* Icons */
       statsChartOutline,
       personOutline,
       peopleOutline,
       homeOutline,
-      checkmarkOutline,
-      closeOutline,
       logOutOutline,
     };
   },

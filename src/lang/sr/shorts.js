@@ -36,6 +36,7 @@ export default {
     "removing": "Uklanjam",
     "add": "Dodaj",
     "drinksCard": "Karta pića",
+    "privacyPolicy": "Politika privatnosti",
     "privacy": "Privatnost",
     "global": "Globalna",
     "language": "Jezik | Jezici",
@@ -121,7 +122,7 @@ export default {
     "uploadSelectedImages": "Sačuvaj",
     "saving": "Čuvam",
     "toggling": "Menjam",
-    "setMain": "Postavi kao glavnu fotografiju",
+    "setCover": "Postavi kao naslovnu fotografiju",
     "setLogo": "Postavi kao logo",
     "setting": "Postavljam",
     "distance": "Udaljenost",
@@ -150,6 +151,7 @@ export default {
     "close": "Zatvori",
     "image": "Fotografija | Fotografije",
     "noImages": "Nema fotografija za prikazati.",
+    "createProductImagesAlert": "Kreirajte proizvod kako biste dodali fotografije.",
 
 };
 
