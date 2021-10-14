@@ -267,11 +267,11 @@ export default defineComponent({
 
     /* Computed properties */
     const placeInfo = computed(() => {
-      return store.getters['staff/place'];
+      return store.getters['owner/place'];
     });
     const mainImagePath = computed(() => {
       if(placeInfo.value.images?.length > 0) {
-        return placeInfo.value.images.find(image => image.is_main === 1)?.path ??
+        return placeInfo.value.images.find(image => image.is_main)?.path ??
             placeInfo.value.images[0]?.path;
       }else {
         return '/places/default_place_cover.png';
@@ -326,7 +326,7 @@ export default defineComponent({
       loading.value = true;
       Keyboard.hide();
       try {
-        await store.dispatch("staff/updatePlaceInfo", place);
+        await store.dispatch("owner/updatePlaceInfo", place);
 
         showSuccessToast(t('successUpdate'));
       }catch(errors) {
@@ -359,7 +359,7 @@ export default defineComponent({
     });
     watch(props.refresher, async() => {
       if(props.refresher.isActive) {
-        await store.dispatch("staff/getPlaceInfo");
+        await store.dispatch("owner/getPlaceInfo");
 
         resetInput();
 

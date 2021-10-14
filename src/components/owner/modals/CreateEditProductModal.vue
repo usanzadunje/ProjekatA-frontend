@@ -57,7 +57,7 @@ export default defineComponent({
     const mainImagePath = computed(() => {
       const currentProduct = store.getters['owner/products'].find(prod => prod.id === product?.value?.id);
       if(currentProduct?.images?.length > 0) {
-        return currentProduct?.images?.find(image => image.is_main === 1)?.path ??
+        return currentProduct?.images?.find(image => image.is_main)?.path ??
             currentProduct?.images[0]?.path;
       }else {
         return '/places/default_place_product_logo.png';

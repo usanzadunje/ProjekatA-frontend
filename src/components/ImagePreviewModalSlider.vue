@@ -1,19 +1,23 @@
 <template>
-  <ion-slides
-      ref="imagePreviewSlider"
+  <swiper
       :id="id"
+      ref="swiperRef"
+      :zoom="true"
+      :navigation="true"
       v-update-swiper
-      :options="slideOpts"
       v-if="images?.length > 0"
   >
-    <ion-slide v-for="image in images" :key="image.id">
+    <swiper-slide
+        v-for="image in images"
+        :key="image.id"
+        :zoom="true"
+    >
       <img
           :src="`${backendStorageURL + image.path}`"
           alt="Image of place"
-          @dblclick="zoom(userClickedToZoom)"
       >
-    </ion-slide>
-  </ion-slides>
+    </swiper-slide>
+  </swiper>
   <div
       v-else
       class="h-4/5 flex items-center justify-center text-white"
@@ -24,16 +28,23 @@
 
 <script>
 import { defineComponent, onMounted, ref } from 'vue';
-import {
-  IonSlides,
-  IonSlide,
-}                                          from '@ionic/vue';
+import { Swiper, SwiperSlide }             from 'swiper/vue';
+// Importing styles for swiper and modules
+import 'swiper/swiper.min.css';
+import 'swiper/components/zoom/zoom.min.css';
+import 'swiper/components/navigation/navigation.min.css';
+// Installing Swiper modules
+import SwiperCore, {
+  Zoom, Navigation,
+}                                          from 'swiper';
+
+SwiperCore.use([Zoom, Navigation]);
 
 export default defineComponent({
   name: 'ImagePreviewModalSlider',
   components: {
-    IonSlides,
-    IonSlide,
+    Swiper,
+    SwiperSlide,
   },
   props: {
     id: {
@@ -48,38 +59,17 @@ export default defineComponent({
   emits: ['mounted'],
   setup(props, { emit }) {
     /* Component properties */
-    const imagePreviewSlider = ref(null);
-    const slideOpts = {
-      zoom: {
-        maxRatio: 2,
-      },
-    };
-    const userClickedToZoom = ref(true);
-
-    /* Event handlers */
-    const zoom = async(zoomIn) => {
-      let swiper = await imagePreviewSlider?.value?.$el.getSwiper();
-      if(zoomIn) {
-        swiper.zoom.in();
-      }else {
-        swiper.zoom.out();
-      }
-      userClickedToZoom.value = !userClickedToZoom.value;
-    };
+    const swiperRef = ref(null);
 
     /* Lifecycle hooks */
     onMounted(() => {
       emit('mounted');
     });
-
     return {
       /* Component properties */
-      imagePreviewSlider,
-      slideOpts,
-      userClickedToZoom,
+      swiperRef,
 
       /* Event handlers */
-      zoom,
 
       /* Icons */
     };
@@ -87,7 +77,11 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-slides {
+.swiper-container {
+  height: 100%;
+}
+
+.swiper-slide {
   height: 80%;
 }
 </style>

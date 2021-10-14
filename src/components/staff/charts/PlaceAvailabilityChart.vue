@@ -84,6 +84,9 @@ export default defineComponent({
             legend: {
               display: true,
               position: 'right',
+              labels: {
+                color: store.getters['user/darkMode'] ? '#F0F0F2' : '#232B38',
+              },
             },
             datalabels: {
               display: true,
@@ -91,7 +94,7 @@ export default defineComponent({
               color: '#FFF',
               font: {
                 family: 'Poppins',
-                size: 48,
+                size: 36,
                 weight: 'bold',
               },
             },

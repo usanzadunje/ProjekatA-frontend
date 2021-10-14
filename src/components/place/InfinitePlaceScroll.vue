@@ -18,9 +18,9 @@
   </div>
 
   <ion-infinite-scroll
+      id="infinite-scroll"
       @ionInfinite="loadMoreCafes($event)"
       threshold="100px"
-      id="infinite-scroll"
       :disabled="isInfiniteScrollDisabled"
   >
     <ion-infinite-scroll-content
@@ -83,7 +83,7 @@ export default defineComponent({
     const isInfiniteScrollDisabled = ref(false);
     const showSkeleton = ref(true);
     // From which number on to take cafe records
-    let cafeStart = 0;
+    let placeOffset = 0;
 
     /* Lifecycle hooks */
     //*Before mounting fetching initial 20 cafes to show
@@ -98,11 +98,14 @@ export default defineComponent({
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
     /* Methods */
-    const getCafes = async(start = 0, concat = false) => {
+    const getCafes = async(offset = 0, concat = false) => {
       try {
-        const response = await CafeService.getCafeCardsChunkInfo(
-            start, 20,
-            cafeSearchString.value, sortBy.value, true,
+        const response = await CafeService.index(
+            true,
+            sortBy.value,
+            cafeSearchString.value,
+            offset,
+            20,
             store.getters['global/position'].latitude,
             store.getters['global/position'].longitude,
         );
@@ -144,8 +147,8 @@ export default defineComponent({
     /* Event handlers */
     const loadMoreCafes = async(ev) => {
       emit('infiniteScrollToggle');
-      cafeStart += 20;
-      await getCafes(cafeStart, true);
+      placeOffset += 20;
+      await getCafes(placeOffset, true);
       emit('infiniteScrollToggle');
 
       ev?.target.complete();
@@ -156,7 +159,7 @@ export default defineComponent({
     // resetting all the variables for filtered data and loading first 20 records from new filtered data
     watch(cafeSearchString, async() => {
       isInfiniteScrollDisabled.value = false;
-      cafeStart = 0;
+      placeOffset = 0;
       getCafes();
       emit('scrollToTop');
     });
@@ -170,7 +173,7 @@ export default defineComponent({
       await tryGettingLocation();
 
       isInfiniteScrollDisabled.value = false;
-      cafeStart = 0;
+      placeOffset = 0;
       getCafes();
       emit('scrollToTop');
     });

@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import { useStore }        from 'vuex';
-import {}                  from '@ionic/vue';
+import { defineComponent, onMounted } from 'vue';
+import { useStore }                   from 'vuex';
+import {}                             from '@ionic/vue';
 
 import interact from 'interactjs';
 
@@ -34,8 +34,13 @@ export default defineComponent({
 
     /* Component properties */
     // This is position relative to our parent which will be saved in DB
+    let dropzone;
     let position = { x: 0, y: 0 };
 
+    /* Lifecycle hooks */
+    onMounted(() => {
+      dropzone = document.querySelector("#dropzone");
+    });
     /* Composables */
     /* Interact.js event handlers */
     const onMove = (event) => {
@@ -73,8 +78,7 @@ export default defineComponent({
         element.setAttribute('data-force-position', true);
 
         // Adding object inside parent container element
-        const container = document.querySelector("#dropzone");
-        container && container.appendChild(element);
+        dropzone && dropzone.appendChild(element);
 
         position.x = 0;
         position.y = 0;
@@ -134,13 +138,13 @@ export default defineComponent({
         end(event) {
           event.target.classList.remove('opacity-60');
 
-          store.commit('owner/UPDATE_TABLES', {
+          store.commit('owner/UPDATE_TABLE', {
             id: Number(event.target.getAttribute('data-id')),
             position: {
-              // This is calculating distance in % so it will be shown precise on any screen
-              // -24 is because width of element is 24px which should not be calculated
               top: Math.round(position.y),
               left: Math.round(position.x),
+              // This is calculating distance in % so it will be shown precise on any screen
+              // -24 is because width of element is 24px which should not be calculated
               // left property is directly connected with transform value
               // Since it is calculated to % it will make buggy movement of existing table
               // Vuex value will be replaced with % but it need px to be shown correctly

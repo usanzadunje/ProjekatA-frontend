@@ -40,6 +40,6 @@ export default {
         return authClient.post("/fcm-token", payload);
     },
     removeFcmToken() {
-        return authClient.post("/fcm-token/remove");
+        return authClient.delete("/fcm-token");
     },
 };

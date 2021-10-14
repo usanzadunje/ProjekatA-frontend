@@ -54,12 +54,8 @@ export default defineComponent({
     /* Lifecycle hooks */
     (async() => {
       try {
-        if(store.getters['auth/isStaff']) {
-          await store.dispatch('staff/updatePlaceAvailability');
-        }
-
         if(store.getters['auth/isOwner']) {
-          await store.dispatch('staff/getPlaceInfo');
+          await store.dispatch('owner/getPlaceInfo');
           await store.dispatch('owner/getStaffInfo');
         }
         if(Capacitor.isNativePlatform()) {

@@ -12,7 +12,6 @@
           :main-heading="$t('findAvailablePlace')"
           @search-enter-pressed="switchToSearch"
       />
-
       <div class="ion-padding">
         <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
         <ion-slides v-show="!showSkeleton" :options="slideOpts">
@@ -174,9 +173,12 @@ export default defineComponent({
         (state, getters) => getters['global/position'],
         async() => {
           try {
-            const response = await CafeService.getCafeCardsChunkInfo(
-                0, 4,
-                '', 'distance', true,
+            const response = await CafeService.index(
+                true,
+                'distance',
+                '',
+                0,
+                4,
                 store.getters['global/position'].latitude,
                 store.getters['global/position'].longitude,
             );
@@ -207,23 +209,32 @@ export default defineComponent({
     const getFilteredCafes = async() => {
       try {
         const response = await Promise.all([
-          CafeService.getCafeCardsChunkInfo(
-              0, 4,
-              '', 'distance', true,
+          CafeService.index(
+              true,
+              'distance',
+              '',
+              0,
+              4,
               store.getters['global/position'].latitude,
               store.getters['global/position'].longitude,
           ),
 
-          CafeService.getCafeCardsChunkInfo(
-              0, 4,
-              '', 'availability', true,
+          CafeService.index(
+              true,
+              'availability',
+              '',
+              0,
+              4,
               store.getters['global/position'].latitude,
               store.getters['global/position'].longitude,
           ),
 
-          CafeService.getCafeCardsChunkInfo(
-              0, 4,
-              '', 'food', true,
+          CafeService.index(
+              true,
+              'food',
+              '',
+              0,
+              4,
               store.getters['global/position'].latitude,
               store.getters['global/position'].longitude,
           ),

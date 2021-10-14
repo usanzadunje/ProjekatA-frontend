@@ -63,7 +63,7 @@ export default defineComponent({
     const distance = computed(() => Math.round(CafeService.getDistance(place.latitude, place.longitude)));
     const logoPath = computed(() => {
       if(place.value.images?.length > 0) {
-        return place.value.images.find(image => image.is_logo === 1)?.path ??
+        return place.value.images.find(image => image.is_logo)?.path ??
             place.value.images[0]?.path;
       }else {
         return '/places/default_place_logo.png';

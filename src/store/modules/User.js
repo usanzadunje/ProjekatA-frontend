@@ -15,9 +15,12 @@ export const mutations = {
     SET_DARKMODE(state, value) {
         state.settings.darkMode = value;
     },
+
     SET_LOCALIZATION(state, value) {
         state.settings.localization = value;
     },
+
+    /* NOTIFICATIONS */
     SET_NOTIFICATIONS_PERMISSION(state, value) {
         state.settings.notifications = value;
     },
@@ -77,6 +80,7 @@ export const actions = {
 
 
     },
+
     async setDarkMode({ commit, rootGetters }, value) {
         const { set } = StorageService();
 
@@ -85,12 +89,7 @@ export const actions = {
 
         document.body.classList.toggle('dark', value);
     },
-    async setNotifications({ commit, rootGetters }, value) {
-        const { set } = StorageService();
 
-        await set(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`, value);
-        commit("SET_NOTIFICATIONS_PERMISSION", value);
-    },
     async setLocalization({ commit, rootGetters }, value) {
         const { set } = StorageService();
 
@@ -99,6 +98,14 @@ export const actions = {
 
         i18n.global.locale.value = value.value;
     },
+
+    async setNotifications({ commit, rootGetters }, value) {
+        const { set } = StorageService();
+
+        await set(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`, value);
+        commit("SET_NOTIFICATIONS_PERMISSION", value);
+    },
+
     async setGlobalColor({ rootGetters }, value) {
         const root = document.documentElement;
 

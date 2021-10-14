@@ -9,6 +9,7 @@ export const mutations = {
     SET_POSITION(state, value) {
         state.position = value;
     },
+
     SET_WIDTH(state, value) {
         state.width = value;
     },

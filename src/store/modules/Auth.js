@@ -22,6 +22,7 @@ export const mutations = {
             state.user[key] = user[key];
         });
     },
+
     SET_TOKEN(state, token) {
         state.token = token;
     },
@@ -54,11 +55,6 @@ export const actions = {
         commit("SET_ROLE", null);
 
         return response.data?.role;
-    },
-    async updateAuthUser({ commit }, user) {
-        await AuthService.updateUser(user);
-
-        commit("UPDATE_USER", user);
     },
     async logout({ commit, dispatch }) {
         let loading = null;
@@ -100,7 +96,7 @@ export const actions = {
             root.style.setProperty('--primary-button', '#1b6de0');
         }
     },
-    // Getting authenticated users info and saving it to store
+
     async getAuthUser({ commit }) {
         try {
             const response = await AuthService.getAuthUser();
@@ -111,6 +107,13 @@ export const actions = {
             return false;
         }
     },
+    async updateAuthUser({ commit }, user) {
+        await AuthService.updateUser(user);
+
+        commit("UPDATE_USER", user);
+    },
+
+    // Getting authenticated users info and saving it to store
     async getToken() {
         const { get } = StorageService();
         try {

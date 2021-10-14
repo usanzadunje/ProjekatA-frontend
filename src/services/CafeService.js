@@ -3,29 +3,26 @@ import * as API from "@/services/API";
 import store from "@/store";
 
 export default {
-    // Listing all cafes
-    index() {
-        return API.apiClient.get(`/cafes`);
-    },
-    // Getting cafes in chunks
-    getCafeCardsChunkInfo(
-        start = 0,
-        numberOfCafes = 20,
-        filter = '',
-        sortBy = 'name',
+    index(
         getAllColumns = false,
-        latitude = 0,
-        longitude = 0,
+        sortBy = null,
+        filter = null,
+        offset = null,
+        limit = null,
+        latitude = null,
+        longitude = null,
     ) {
         // Only fetching columns needed to show in cafe card component
         // Search and Home screen have it
         return API.apiClient.get(
-            `/cafes/chunked/start/number-of-cafes/${start}/${numberOfCafes}`,
+            `/places`,
             {
                 params: {
-                    filter,
-                    sortBy,
                     getAllColumns,
+                    sortBy,
+                    offset,
+                    limit,
+                    filter,
                     latitude,
                     longitude,
                 },
@@ -36,31 +33,19 @@ export default {
     show(id, query = '') {
         // Only getting
         return API.apiClient.get(
-            `/cafes/${id}${query}`,
+            `/places/${id}${query}`,
         );
     },
     images(id) {
-        return API.apiClient.get(`/cafes/${id}/images`);
+        return API.apiClient.get(`/places/${id}/images`);
     },
     workingHours(id) {
-        return API.apiClient.get(`/cafes/${id}/working-hours`);
-    },
-    // Subscribing users to specific place
-    subscribe(cafeId, notificationTime = null) {
-        return API.apiClient.post(`/user/subscribe/cafe/${cafeId}/notify-in-next/${notificationTime || ''}`);
-    },
-    // Unsubscribing users to specific cafe
-    unsubscribe(cafeId) {
-        return API.apiClient.post(`/user/unsubscribe/cafe/${cafeId}`);
-    },
-    // Checking whether users is subscribed to specific cafe
-    isUserSubscribed(cafeId) {
-        return API.apiClient.post(`/user/subscribed/cafe/${cafeId}`);
+        return API.apiClient.get(`/places/${id}/working-hours`);
     },
     // Listing all cafes users is subscribed to
     getAllCafesUserSubscribedTo(sortBy = 'default', latitude = 0, longitude = 0) {
         return API.apiClient.get(
-            `/user/cafes/subscriptions`,
+            `/user/subscriptions/place`,
             {
                 params: {
                     sortBy,
@@ -69,6 +54,18 @@ export default {
                 },
             },
         );
+    },
+    // Subscribing users to specific place
+    // Checking whether users is subscribed to specific cafe
+    isUserSubscribed(cafeId) {
+        return API.apiClient.post(`/user/subscriptions/place/${cafeId}`);
+    },
+    subscribe(cafeId, notificationTime = null) {
+        return API.apiClient.post(`/user/subscriptions/place/${cafeId}/notify-in-next/${notificationTime || ''}`);
+    },
+    // Unsubscribing users to specific cafe
+    unsubscribe(cafeId) {
+        return API.apiClient.delete(`/user/subscriptions/place/${cafeId}`);
     },
     getDistance(placeLatitude = 0, placeLongitude = 0) {
         const latitude = store.getters['global/position'].latitude;

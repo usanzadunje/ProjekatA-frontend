@@ -1,6 +1,14 @@
 <template>
   <div>
-    <div class="flex justify-end">
+    <div class="flex">
+      <ion-searchbar
+          :value="searchTerm"
+          :placeholder="$t('searchPlaceholder')"
+          @ionChange="searchInputChanged($event)"
+          @keyup.enter="searchEnterPressed($event)"
+          enterkeyhint="search"
+          class=""
+      ></ion-searchbar>
       <ion-button
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-white"
@@ -67,9 +75,9 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue';
-import { useStore }                  from 'vuex';
-import { useI18n }                   from 'vue-i18n';
+import { computed, defineComponent, ref } from 'vue';
+import { useStore }                       from 'vuex';
+import { useI18n }                        from 'vue-i18n';
 import {
   IonButton,
   IonList,
@@ -77,8 +85,10 @@ import {
   IonItem,
   IonIcon,
   IonItemOptions,
-  IonItemOption, alertController,
-}                                    from '@ionic/vue';
+  IonItemOption,
+  IonSearchbar,
+  alertController,
+}                                         from '@ionic/vue';
 
 import ProductCard            from '@/components/ProductCard';
 import Modal                  from '@/components/Modal';
@@ -93,6 +103,7 @@ import {
 } from 'ionicons/icons';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Keyboard }             from '@capacitor/keyboard';
 
 export default defineComponent({
   name: 'Products',
@@ -104,6 +115,7 @@ export default defineComponent({
     IonIcon,
     IonItemOptions,
     IonItemOption,
+    IonSearchbar,
     ProductCard,
     Modal,
     CreateEditProductModal,
@@ -113,6 +125,7 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
+    const searchTerm = ref('');
     const products = computed(() => store.getters['owner/products']);
 
     /* Composables */
@@ -171,18 +184,28 @@ export default defineComponent({
           });
       await alert.present();
     };
+    const searchInputChanged = (e) => {
+      searchTerm.value = e.target.value;
+    };
+    const searchEnterPressed = (e) => {
+      Keyboard.hide();
+      searchTerm.value = e.target.value;
+    };
 
     return {
       /* Component properties */
       products,
       isModalOpen,
       modalData,
+      searchTerm,
 
       /* Event handlers */
       openModal,
       createProduct,
       editProduct,
       showAlert,
+      searchInputChanged,
+      searchEnterPressed,
 
       /* Icons */
       createOutline,

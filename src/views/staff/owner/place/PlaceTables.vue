@@ -83,12 +83,7 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
-    const tables = computed(() => {
-      return store.getters['owner/tables'].filter(table => !table.clone);
-    });
-    const dropzoneWidth = computed(() => {
-      return store.getters['global/width'] - ((2.25 * parseFloat(getComputedStyle(document.documentElement).fontSize)) + 4);
-    });
+    const tables = computed(() => store.getters['owner/tables'].filter(table => !table.clone));
     const loading = ref(-1);
 
     /* Composables */
@@ -98,19 +93,14 @@ export default defineComponent({
     /* Lifecycle hooks */
     (async() => {
       await store.dispatch('owner/getTables');
-
-      store.commit('owner/SET_TABLE_LEFT_POSITION', dropzoneWidth.value);
     })();
 
     /* Methods */
-
     /* Event handlers */
     const updateTables = async() => {
       loading.value = 0;
       try {
         await store.dispatch("owner/updateTables");
-
-        store.commit('owner/SET_TABLE_LEFT_POSITION', dropzoneWidth.value);
 
         showSuccessToast(t('owner.updateTables'));
       }catch(errors) {
@@ -123,8 +113,6 @@ export default defineComponent({
       loading.value = 1;
       try {
         await store.dispatch("owner/getTables");
-
-        store.commit('owner/SET_TABLE_LEFT_POSITION', dropzoneWidth.value);
       }catch(errors) {
         await showErrorToast(errors);
       }finally {

@@ -18,7 +18,7 @@
     />
     <div class="mt-6 ion-no-padding">
       <PlaceImageModalSlider
-          :images="place.images?.filter(img => img.is_logo === 0 && img.is_main === 0)"
+          :images="place.images?.filter(img => !img.is_logo)"
           :show-skeleton="showSkeleton"
       />
     </div>
@@ -113,7 +113,7 @@ export default defineComponent({
     const isSubButtonDisabled = ref(true);
     const logoPath = computed(() => {
       if(place.value.images?.length > 0) {
-        return place.value.images?.find(image => image.is_logo === 1)?.path ??
+        return place.value.images?.find(image => image.is_logo)?.path ??
             place.value.images[0]?.path;
       }else {
         return '/places/default_place_logo.png';

@@ -1,7 +1,7 @@
 <template>
   <ion-page>
 
-    <GoBackHeader class="px-2 pb-1"/>
+    <GoBackHeader class="px-2 py-1"/>
 
     <ion-content class="h-full">
       <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
@@ -18,7 +18,7 @@
                 :path="mainImagePath"
                 :label="$t('gallery')"
                 :show-skeleton="showSkeleton"
-                @click="openPreview(place.images?.filter(img => img.is_logo === 0 && img.is_main === 0))"
+                @click="openPreview(place.images?.filter(img => !img.is_logo))"
             />
             <div class="mt-4 ion-item-no-padding-x">
               <h1 v-show="!showSkeleton" class="cafe-show-name">{{ place.name }}</h1>
@@ -177,7 +177,7 @@ export default defineComponent({
     const loggedIn = computed(() => store.getters['auth/loggedIn']);
     const mainImagePath = computed(() => {
       if(place.value.images?.length > 0) {
-        return place.value.images?.find((image) => image.is_main === 1)?.path
+        return place.value.images?.find((image) => image.is_main)?.path
             ?? place.value.images[0].path;
       }else {
         return '/places/default_place_cover.png';
@@ -304,6 +304,7 @@ ion-toolbar {
 
 ion-content {
   --background: var(--show-paint);
+  background: var(--show-paint);
   --padding-start: 1rem;
   --padding-end: 1rem;
   --padding-bottom: 1rem;

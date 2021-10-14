@@ -55,3 +55,11 @@ export function loadLocaleMessages(locales) {
 export function calculatePxFromPercent(percent, parentWidth) {
     return Math.round((percent * (parentWidth - 24)) / 100);
 }
+// Since vuex is getting populated with tables that are stored in DB
+// these cloned ones will still stay and be duplicated with ones returned
+// to avoid this we remove cloned tables and keep only fresh ones from real DB
+export function removeClonedTableElements() {
+    document.querySelectorAll('[data-cloned="true"]').forEach(clonedTable => {
+        document.querySelector("#dropzone").removeChild(clonedTable);
+    });
+}

@@ -1044,3 +1044,30 @@ ion-toggle.dark-toggle-checked {
 /*
     END STAFF COMPONENTS  STYLES
 */
+
+/*
+    START SWIPER  STYLES
+*/
+.swiper-button-prev {
+    top: 40% !important;
+    left: 5px !important;
+    color: #f4f5f8 !important;
+}
+
+.swiper-button-prev::after {
+    font-size: 30px !important;
+}
+
+.swiper-button-next {
+    top: 40% !important;
+    right: 5px !important;
+    color: #f4f5f8 !important;
+}
+
+.swiper-button-next::after {
+    font-size: 30px !important;
+}
+
+/*
+    END SWIPER STYLES
+*/

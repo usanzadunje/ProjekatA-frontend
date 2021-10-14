@@ -112,7 +112,7 @@ export default defineComponent({
     const imagesInput = ref();
     const images = ref();
     const loading = ref();
-    const place = computed(() => store.getters['staff/place']);
+    const place = computed(() => store.getters['owner/place']);
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
@@ -120,7 +120,7 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     onMounted(() => {
-      imagePreviewSlider.value = document.getElementById('placeImageSlider');
+      imagePreviewSlider.value = document.getElementById('placeImageSlider').swiper;
     });
     /* Event handlers */
     const dismiss = () => {
@@ -152,13 +152,9 @@ export default defineComponent({
           formData.append(`images[${i}]`, images.value[i]);
         }
 
-        await OwnerService.uploadPlaceImages(formData);
+        await store.dispatch('owner/uploadPlaceImages', formData);
 
         showSuccessToast(t('successImageUpload'));
-
-        dismiss();
-
-        await store.dispatch('staff/getPlaceInfo');
       }catch(errors) {
         images.value = null;
 
@@ -170,13 +166,13 @@ export default defineComponent({
     const removeImage = async() => {
       loading.value = -1;
       try {
-        const imageIndex = await imagePreviewSlider.value.getActiveIndex();
+        const imageIndex = await imagePreviewSlider.value.activeIndex;
 
         await OwnerService.removePlaceImage(place.value.images[imageIndex].id);
 
-        showSuccessToast(t('successImageRemove'));
+        await store.dispatch('owner/getPlaceInfo');
 
-        await store.dispatch('staff/getPlaceInfo');
+        showSuccessToast(t('successImageRemove'));
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
@@ -186,13 +182,14 @@ export default defineComponent({
     const setAsMainImage = async() => {
       loading.value = 0;
       try {
-        const imageIndex = await imagePreviewSlider.value.getActiveIndex();
+        const imageIndex = await imagePreviewSlider.value.activeIndex;
 
-        await OwnerService.setImageAsMain(place.value.images[imageIndex].id);
+        await store.dispatch('owner/setPlaceImageType', {
+          id: place.value.images[imageIndex].id,
+          type: 'is_main',
+        });
 
         showSuccessToast(t('successImageMain'));
-
-        await store.dispatch('staff/getPlaceInfo');
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
@@ -202,13 +199,14 @@ export default defineComponent({
     const setAsLogo = async() => {
       loading.value = 0;
       try {
-        const imageIndex = await imagePreviewSlider.value.getActiveIndex();
-
-        await OwnerService.setImageAsLogo(place.value.images[imageIndex].id);
+        const imageIndex = await imagePreviewSlider.value.activeIndex;
 
         showSuccessToast(t('successImageLogo'));
 
-        await store.dispatch('staff/getPlaceInfo');
+        await store.dispatch('owner/setPlaceImageType', {
+          id: place.value.images[imageIndex].id,
+          type: 'is_logo',
+        });
       }catch(errors) {
         await showErrorToast(errors);
       }finally {

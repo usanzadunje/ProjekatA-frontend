@@ -1,8 +1,17 @@
-import * as API from "../services/API";
+import * as API from "@/services/API";
 
 export default {
-    index(placeId = null) {
-        return API.apiClient.get(`/owner/menu/product/place/${placeId ?? ''}`);
+    index(placeId = null, filter = null, offset = null, limit = null) {
+        return API.apiClient.get(
+            `/owner/menu/product/place/${placeId ?? ''}`,
+            {
+                params: {
+                    filter,
+                    offset,
+                    limit,
+                },
+            },
+        );
     },
     show(id) {
         return API.apiClient.get(`/owner/menu/product/${id}`);
@@ -17,10 +26,10 @@ export default {
         return API.apiClient.delete(`/owner/menu/product/${id}`);
     },
     images(id) {
-        return API.apiClient.get(`/cafes/product/${id}/images`);
+        return API.apiClient.get(`/places/product/${id}/images`);
     },
     uploadImages(productId, payload) {
-        return API.apiClient.post(`/owner/product/${productId}/images/upload`, payload, {
+        return API.apiClient.post(`/owner/product/${productId}/images`, payload, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
