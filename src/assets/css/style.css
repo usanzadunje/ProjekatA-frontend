@@ -353,7 +353,6 @@ ion-toggle.dark-toggle-checked {
 .icon-popover-size {
     font-size: 1.4rem;
 }
-
 /*
     START Android specific styles
 */
@@ -1049,8 +1048,7 @@ ion-toggle.dark-toggle-checked {
     START SWIPER  STYLES
 */
 .swiper-button-prev {
-    top: 40% !important;
-    left: 5px !important;
+    left: 3px !important;
     color: #f4f5f8 !important;
 }
 
@@ -1059,8 +1057,7 @@ ion-toggle.dark-toggle-checked {
 }
 
 .swiper-button-next {
-    top: 40% !important;
-    right: 5px !important;
+    right: 3px !important;
     color: #f4f5f8 !important;
 }
 

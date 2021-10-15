@@ -16,7 +16,10 @@
         :place="place"
         :show-skeleton="showSkeleton"
     />
-    <div class="mt-6 ion-no-padding">
+    <div
+        v-if="place.images?.length !== 0"
+        class="mt-6 ion-no-padding"
+    >
       <PlaceImageModalSlider
           :images="place.images?.filter(img => !img.is_logo)"
           :show-skeleton="showSkeleton"

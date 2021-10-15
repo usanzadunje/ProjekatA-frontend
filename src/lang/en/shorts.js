@@ -49,7 +49,7 @@ export default {
     "occupiedSeats": "Occupied seats",
     "place": "Place | Places",
     "refresherPulling": "Pull to refresh",
-    "refresherText": "Refreshing...",
+    "refresherText": "Loading...",
     "filter": "Filter | Filters",
     "searchResults": "Search results",
     "indefinitely": "Indefinitely",

@@ -73,26 +73,6 @@
             required
         ></ion-input>
       </ion-item>
-
-      <!--      ADD IMAGE FUNCTIONALITY HERE-->
-      <!--      <ion-item-->
-      <!--          lines="none"-->
-      <!--          class="flex rounded-2xl h-11 mt-3.5"-->
-      <!--          :class="{ 'error-border' : false }"-->
-      <!--      >-->
-      <!--        &lt;!&ndash;        errorNames.hasOwnProperty('name')&ndash;&gt;-->
-      <!--        <ion-icon :icon="pricetagOutline" class="mr-2 text-xl text-gray-500"></ion-icon>-->
-      <!--        &lt;!&ndash;      v-model=""&ndash;&gt;-->
-      <!--        &lt;!&ndash;      @keyup.enter=""&ndash;&gt;-->
-      <!--        <ion-input-->
-      <!--            v-capitalize-->
-      <!--            type="text"-->
-      <!--            debounce="600"-->
-      <!--            :placeholder="$t('category')"-->
-      <!--            :autofocus="true"-->
-      <!--            required-->
-      <!--        ></ion-input>-->
-      <!--      </ion-item>-->
     </div>
 
     <div class="mt-4">
@@ -145,7 +125,7 @@ import {
 
 } from 'ionicons/icons';
 
-import { getError, sleep } from '@/utils/helpers';
+import { getError, increaseAccordionMaxHeight, sleep } from '@/utils/helpers';
 
 export default defineComponent({
   name: "CreateEditProductForm",
@@ -190,12 +170,6 @@ export default defineComponent({
     };
 
     /* Methods */
-    const increaseParentHeight = (additionalHeight) => {
-      const accordionPanel = document.getElementById('productPanel');
-      const panelCurrentMaxHeight = parseInt(getComputedStyle(accordionPanel).getPropertyValue('max-height'));
-      accordionPanel.style.setProperty('max-height', `${panelCurrentMaxHeight + additionalHeight}px`);
-    };
-
     /* Lifecycle hooks */
     onMounted(async() => {
       if(product?.value) {
@@ -224,7 +198,7 @@ export default defineComponent({
 
           showSuccessToast(t('owner.createProduct'));
 
-          increaseParentHeight(100);
+          increaseAccordionMaxHeight('productPanel', 100);
         }
 
         emit('dismiss');

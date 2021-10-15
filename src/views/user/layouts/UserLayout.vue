@@ -1,6 +1,7 @@
 <template>
   <ion-page>
     <ion-tabs id="tabs" @ionTabsDidChange="clearRedirectQuery">
+      <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="home" href="/home">
           <ion-icon
@@ -40,6 +41,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  IonRouterOutlet,
 }                                     from '@ionic/vue';
 
 import { useGeolocation } from '@/composables/useGeolocation';
@@ -49,7 +51,7 @@ import {
   searchOutline,
   personOutline,
   settingsOutline,
-}                         from 'ionicons/icons';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: 'UserLayout',
@@ -59,6 +61,7 @@ export default defineComponent({
     IonTabBar,
     IonTabButton,
     IonTabs,
+    IonRouterOutlet,
   },
   computed: {
     ...mapGetters('auth', ['loggedIn']),

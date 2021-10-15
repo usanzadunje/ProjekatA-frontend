@@ -1,55 +1,48 @@
 <template>
   <ion-content :fullscreen="true" scrollY="false">
-    <ion-item class="mt-1 bg-transparent text-center" lines="none">
-      <ion-button
-          v-show="!images"
-          @click="selectImages"
-          fill="clear"
-          color="light"
-          class="text-lg uppercase"
-      >
-        {{ $t('add') }}
-        <input
-            id="images"
-            ref="imagesInput"
-            type="file"
-            @change="imagesSelected"
-            accept="image/png, image/jpeg, image/jpg"
-            multiple
+    <div class="absolute top-0 z-40 w-full">
+      <ion-item class="mt-1 bg-transparent text-center" lines="none">
+        <ion-button
+            v-show="!images"
+            @click="selectImages"
+            fill="clear"
+            color="light"
+            class="text-lg uppercase"
         >
-      </ion-button>
-      <ion-button
-          v-show="images"
-          @click="uploadImages"
-          fill="clear"
-          color="light"
-          class="text-lg uppercase"
-      >
-        {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
-      </ion-button>
-      <ion-button
-          @click="removeImage"
-          fill="clear"
-          color="light"
-          class="text-lg uppercase"
-          slot="end"
-      >
-        {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
-      </ion-button>
-      <ion-button @click="dismiss" fill="clear" color="light" slot="end">
-        <ion-icon :icon="close" slot="start"></ion-icon>
-      </ion-button>
-    </ion-item>
-    <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
-      <ion-button
-          :disabled="loading === 0"
-          @click="setAsMainImage"
-          fill="white"
-          expand="block"
-          class="text-sm font-bold uppercase main-img-button"
-      >
-        {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
-      </ion-button>
+          {{ $t('add') }}
+          <input
+              id="images"
+              ref="imagesInput"
+              type="file"
+              @change="imagesSelected"
+              accept="image/png, image/jpeg, image/jpg"
+              multiple
+          >
+        </ion-button>
+        <ion-button
+            v-show="images"
+            @click="uploadImages"
+            fill="clear"
+            color="light"
+            class="text-lg uppercase"
+        >
+          {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
+        </ion-button>
+        <ion-button
+            id="removeButton"
+            @click="removeImage"
+            fill="clear"
+            color="light"
+            class="text-lg uppercase"
+            slot="end"
+            :disabled="!imagesReady || productImages?.length === 0"
+        >
+          {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
+        </ion-button>
+        <ion-button @click="dismiss" fill="clear" color="light" slot="end">
+          <ion-icon :icon="close" slot="start"></ion-icon>
+        </ion-button>
+      </ion-item>
     </div>
 
     <ImagePreviewModalSlider
@@ -57,13 +50,26 @@
         :id="'productImageSlider'"
         :images="productImages"
         @mounted="setSliderRef"
+        @updated="setSliderRef"
     />
-    <div v-show="!imagesReady" class="h-4/5 flex items-center justify-center">
+    <div v-show="!imagesReady" class="h-full flex items-center justify-center">
       <div class="snippet" data-title=".dot-pulse">
         <div class="stage">
           <div class="dot-pulse"></div>
         </div>
       </div>
+    </div>
+
+    <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
+      <ion-button
+          :disabled="loading === 0 || productImages?.length === 0"
+          @click="setAsMainImage"
+          fill="white"
+          expand="block"
+          class="text-sm font-bold uppercase main-img-button"
+      >
+        {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
+      </ion-button>
     </div>
   </ion-content>
 </template>
@@ -115,7 +121,7 @@ export default defineComponent({
     /* Component properties */
     const imagePreviewSlider = ref();
     const { productId } = toRefs(props);
-    const productImages = ref();
+    const productImages = ref([]);
     const imagesInput = ref();
     const images = ref();
     const loading = ref();
@@ -135,8 +141,6 @@ export default defineComponent({
                     .catch(() => {
                       productImages.value = null;
                     });
-    }else {
-      imagesReady.value = true;
     }
 
     /* Event handlers */
@@ -169,11 +173,11 @@ export default defineComponent({
           formData.append(`images[${i}]`, images.value[i]);
         }
 
-        await ProductService.uploadImages(productId.value, formData);
+        const response = await ProductService.uploadImages(productId.value, formData);
+
+        productImages.value = productImages.value.concat(response.data);
 
         showSuccessToast(t('successImageUpload'));
-
-        dismiss();
       }catch(errors) {
         images.value = null;
 
@@ -185,14 +189,18 @@ export default defineComponent({
     const removeImage = async() => {
       loading.value = -1;
       try {
-        const imageIndex = await imagePreviewSlider.value.getActiveIndex();
-        const imageToRemoveId = productImages.value[imageIndex].id;
+        const imageIndex = imagePreviewSlider.value.activeIndex;
+        const image = productImages.value[imageIndex];
 
-        await OwnerService.removePlaceImage(imageToRemoveId);
+        await OwnerService.removePlaceImage(image.id);
+
+        if(image.is_main) {
+          store.commit('owner/REMOVE_PRODUCT_MAIN_IMAGE', productId.value);
+        }
+
+        productImages.value = productImages.value.filter(img => img.id !== image.id);
 
         showSuccessToast(t('successImageRemove'));
-
-        productImages.value = productImages.value.filter(img => img.id !== imageToRemoveId);
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
@@ -202,13 +210,21 @@ export default defineComponent({
     const setAsMainImage = async() => {
       loading.value = 0;
       try {
-        const imageIndex = await imagePreviewSlider.value.getActiveIndex();
+        const imageIndex = imagePreviewSlider.value.activeIndex;
+        const image = productImages.value[imageIndex];
 
-        await OwnerService.setImageAsMain(productImages.value[imageIndex].id, '?type=App\\Models\\Product');
+        await store.dispatch('owner/setPlaceImageType', {
+          id: image.id,
+          type: 'is_main',
+          product: true,
+        });
+
+        store.commit('owner/SET_NEW_PRODUCT_IMAGE_AS_MAIN', {
+          productId: productId.value,
+          image,
+        });
 
         showSuccessToast(t('successImageMain'));
-
-        store.dispatch("owner/getProducts");
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
@@ -216,10 +232,12 @@ export default defineComponent({
       }
     };
     const setSliderRef = () => {
-      imagePreviewSlider.value = document.getElementById('productImageSlider');
+      if(!imagePreviewSlider.value || imagePreviewSlider.value.destroyed) {
+        imagePreviewSlider.value = document.getElementById('productImageSlider')?.swiper;
+      }
     };
-    /* Watchers */
 
+    /* Watchers */
 
     return {
       /* Component properties */
@@ -255,6 +273,7 @@ ion-content {
 
 ion-icon {
   font-size: 2rem;
+  margin: 0;
 }
 
 #images {
@@ -265,6 +284,14 @@ ion-icon {
   --background: #f4f5f8 !important;
   width: 90%;
   --border-radius: 20px !important;
+}
+
+ion-button {
+  margin: 0;
+}
+
+#removeButton {
+  margin-right: 1rem !important;
 }
 
 .dot-pulse {

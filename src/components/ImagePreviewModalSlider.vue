@@ -20,15 +20,15 @@
   </swiper>
   <div
       v-else
-      class="h-4/5 flex items-center justify-center text-white"
+      class="h-full flex items-center justify-center text-white"
   >
     {{ $t('noImages') }}
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
-import { Swiper, SwiperSlide }             from 'swiper/vue';
+import { defineComponent, onMounted, onUpdated, ref } from 'vue';
+import { Swiper, SwiperSlide }                        from 'swiper/vue';
 // Importing styles for swiper and modules
 import 'swiper/swiper.min.css';
 import 'swiper/components/zoom/zoom.min.css';
@@ -36,7 +36,7 @@ import 'swiper/components/navigation/navigation.min.css';
 // Installing Swiper modules
 import SwiperCore, {
   Zoom, Navigation,
-}                                          from 'swiper';
+}                                                     from 'swiper';
 
 SwiperCore.use([Zoom, Navigation]);
 
@@ -56,7 +56,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['mounted'],
+  emits: ['mounted', 'updated'],
   setup(props, { emit }) {
     /* Component properties */
     const swiperRef = ref(null);
@@ -64,6 +64,9 @@ export default defineComponent({
     /* Lifecycle hooks */
     onMounted(() => {
       emit('mounted');
+    });
+    onUpdated(() => {
+      emit('updated');
     });
     return {
       /* Component properties */
@@ -82,6 +85,6 @@ export default defineComponent({
 }
 
 .swiper-slide {
-  height: 80%;
+  height: 100%;
 }
 </style>

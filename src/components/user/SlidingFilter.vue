@@ -1,8 +1,11 @@
 <template>
   <div class="mt-1">
     <p v-if="hasTitle" class="sliding-filter-title uppercase ml-1">{{ $t('filter', 5) }}</p>
-    <ion-slides :options="slideOpts">
-      <ion-slide>
+    <swiper
+        id="slidingFilterSwiper"
+        :slides-per-view="this.$store.getters['global/width'] <= 360 ? 2.1 : 2.7"
+    >
+      <swiper-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'distance' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
@@ -12,8 +15,8 @@
           {{ $t('closest') }}
           <ion-icon slot="start" :icon="locationOutline"></ion-icon>
         </ion-button>
-      </ion-slide>
-      <ion-slide>
+      </swiper-slide>
+      <swiper-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'availability' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
@@ -23,8 +26,8 @@
           {{ $t('available') }}
           <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
-      </ion-slide>
-      <ion-slide>
+      </swiper-slide>
+      <swiper-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
@@ -34,8 +37,8 @@
           {{ $t('food') }}
           <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
-      </ion-slide>
-      <ion-slide>
+      </swiper-slide>
+      <swiper-slide>
         <ion-button
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'popular' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
@@ -45,8 +48,8 @@
           {{ $t('popular') }}
           <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
-      </ion-slide>
-    </ion-slides>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
@@ -55,9 +58,9 @@ import { defineComponent, ref } from 'vue';
 import {
   IonIcon,
   IonButton,
-  IonSlides,
-  IonSlide,
 }                               from '@ionic/vue';
+import { Swiper, SwiperSlide }  from 'swiper/vue';
+import 'swiper/swiper.min.css';
 
 import {
   locationOutline,
@@ -69,8 +72,8 @@ export default defineComponent({
   components: {
     IonIcon,
     IonButton,
-    IonSlides,
-    IonSlide,
+    Swiper,
+    SwiperSlide,
   },
   props: {
     hasTitle: {
@@ -82,10 +85,8 @@ export default defineComponent({
   setup(props, { emit }) {
     /* Component properties */
     let activeSlidingButton = ref('distance');
-    const slideOpts = {
-      freeMode: true,
-      slidesPerView: 2.7,
-    };
+
+    /* Lifecycle hooks */
 
     /* Event handlers */
     const sortButtonActivated = (event) => {
@@ -96,7 +97,6 @@ export default defineComponent({
     return {
       /* Component properties */
       activeSlidingButton,
-      slideOpts,
 
       /* Event listeners */
       sortButtonActivated,

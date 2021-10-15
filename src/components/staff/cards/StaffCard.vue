@@ -14,12 +14,12 @@
             <img
                 class="user-profile-picture-edit"
                 alt="avatar"
-                :src="member.avatar"
+                :src="member.avatar ?? backendStorageURL + '/users/default_avatar.png'"
             >
           </ion-thumbnail>
           <div class="ml-8">
             <h3 class="main-heading-smaller">{{ member.active ? $t('active') : $t('inactive') }}</h3>
-            <h2 class="secondary-heading">{{ `${member.lname} ${member.fname}` }}</h2>
+            <h2 class="secondary-heading">{{ displayName }}</h2>
           </div>
         </div>
       </ion-card-header>
@@ -28,12 +28,12 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import {
   IonCard,
   IonCardHeader,
   IonThumbnail,
-}                          from '@ionic/vue';
+}                                    from '@ionic/vue';
 
 export default defineComponent({
   name: "StaffCard",
@@ -55,12 +55,20 @@ export default defineComponent({
     },
   },
   emits: ['editMember'],
-  setup() {
+  setup(props) {
     /* Component properties */
+    const displayName = computed(() => {
+      return !props.member.fname && !props.member.lname
+          ? props.member.username ?? ''
+          : `${props.member.fname ?? ''} ${props.member.lname ?? ''}`;
+    });
 
     /* Event handlers */
 
     return {
+      /* Component properties */
+      displayName,
+
       /* Event handlers */
 
       /* Icons */

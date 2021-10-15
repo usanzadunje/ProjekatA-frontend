@@ -28,7 +28,7 @@
             :open="true"
             :icon="fastFoodOutline"
         >
-          <Products/>
+          <Products :enable-infinite-scroll="enableInfiniteScroll"/>
         </AccordionList>
       </div>
     </ion-content>
@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import { useStore }        from 'vuex';
+import { defineComponent, ref } from 'vue';
+import { useStore }             from 'vuex';
 import {
   IonPage,
   IonContent,
@@ -66,13 +66,15 @@ export default defineComponent({
     Products,
   },
   setup() {
-    /* Component properties */
+    /* Global properties */
     const store = useStore();
 
+    /* Component properties */
+    const enableInfiniteScroll = ref();
     /* Methods */
     const getMenuData = async() => {
       await store.dispatch("owner/getCategories");
-      await store.dispatch("owner/getProducts");
+      await store.dispatch("owner/getProducts", {});
     };
 
     /* Lifecycle hooks */
@@ -82,13 +84,18 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     const refresh = async(event) => {
+      enableInfiniteScroll.value = true;
+
       await getMenuData();
 
       event.target.complete();
+
+      enableInfiniteScroll.value = false;
     };
 
     return {
       /* Component properties */
+      enableInfiniteScroll,
 
       /* Event handlers */
       refresh,

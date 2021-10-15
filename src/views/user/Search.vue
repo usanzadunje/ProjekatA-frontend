@@ -1,8 +1,10 @@
 <template>
   <ion-page>
-
-
-    <ion-content ref="content" :scroll-events="true" @ionScroll="pullAnimation($event)">
+    <ion-content
+        ref="content"
+        :scroll-events="true"
+        @ionScroll="pullAnimation($event)"
+    >
       <ion-refresher pull-max="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
@@ -10,9 +12,7 @@
         </ion-refresher-content>
       </ion-refresher>
 
-      <div
-          id="header"
-      >
+      <div id="header">
         <UserHeader
             :main-heading="$t('search')"
             :search-term="cafeSearchString"
@@ -21,6 +21,7 @@
           <SlidingFilter
               :has-title="true"
               @sort-has-changed="sortHasChanged"
+              v-if="showSwiper"
           />
         </UserHeader>
       </div>
@@ -34,6 +35,7 @@
             @open-cafe-modal="openModal(true, $event)"
             @infinite-scroll-toggle="infiniteScrollLoading = !infiniteScrollLoading"
             :refresher="refresher"
+            @mounted="renderSwiper"
         />
       </div>
 
@@ -66,13 +68,14 @@ import {
 }
                                 from '@ionic/vue';
 
-import UserHeader     from '@/components/user/headers/UserHeader';
-import SlidingFilter  from '@/components/user/SlidingFilter';
+import UserHeader          from '@/components/user/headers/UserHeader';
+import SlidingFilter       from '@/components/user/SlidingFilter';
 import InfinitePlaceScroll from '@/components/place/InfinitePlaceScroll';
-import Modal          from '@/components/Modal';
-import ShortCafeModal from '@/components/user/modals/ShortCafeModal';
+import Modal               from '@/components/Modal';
+import ShortCafeModal      from '@/components/user/modals/ShortCafeModal';
 
-import { useModal } from '@/composables/useModal';
+import { useModal }   from '@/composables/useModal';
+import { useContent } from '@/composables/useContent';
 
 
 export default defineComponent({
@@ -94,23 +97,24 @@ export default defineComponent({
     const router = useRouter();
 
     /* Component properties */
-    const content = ref(null);
     const cafeSearchString = ref('');
     const sortBy = ref('distance');
-    const scrollTopOffset = ref(0);
-    const prevScrollDirectionDown = ref(false);
+    // const scrollTopOffset = ref(0);
+    // const prevScrollDirectionDown = ref(false);
     const infiniteScrollLoading = ref(false);
     const refresher = ref({
       isActive: false,
       event: null,
     });
+    const showSwiper = ref(false);
 
     /* Composables */
     const { isModalOpen, modalData, openModal, hideModal } = useModal();
+    const { content, scrollToTop } = useContent();
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
-      // Before enterning vuew check if there is search term if there is
+      // Before entering view check if there is search term if there is
       // Set search input to search term passed from Home page
       // And remove query string
       if(route.query.searchTerm || route.query.searchTerm === '') {
@@ -135,42 +139,42 @@ export default defineComponent({
     const sortHasChanged = async(sortValue) => {
       sortBy.value = sortValue;
     };
-    const pullAnimation = async(event) => {
-      if(infiniteScrollLoading.value) {
-        return;
-      }
-      let currentScrollDirectionDown = event.detail.currentY > scrollTopOffset.value;
-      const header = document.querySelector('#header');
-      if(
-          event.detail.currentY <= 0 ||
-          event.detail.currentY === scrollTopOffset.value ||
-          currentScrollDirectionDown === prevScrollDirectionDown.value
-      ) {
-        scrollTopOffset.value = event.detail.currentY;
-
-        return;
-      }
-
-      if(event.detail.currentY > scrollTopOffset.value) {
-        header.classList.add('hide-header');
-      }else {
-        header.classList.remove('hide-header');
-      }
-
-      scrollTopOffset.value = event.detail.currentY;
-      prevScrollDirectionDown.value = currentScrollDirectionDown;
+    const pullAnimation = async() => {
+      // console.log('active');
+      // if(infiniteScrollLoading.value) {
+      //   return;
+      // }
+      // let currentScrollDirectionDown = event.detail.currentY > scrollTopOffset.value;
+      // const header = document.querySelector('#header');
+      // if(
+      //     event.detail.currentY <= 0 ||
+      //     event.detail.currentY === scrollTopOffset.value ||
+      //     currentScrollDirectionDown === prevScrollDirectionDown.value
+      // ) {
+      //   scrollTopOffset.value = event.detail.currentY;
+      //
+      //   return;
+      // }
+      //
+      // if(event.detail.currentY > scrollTopOffset.value) {
+      //   header.classList.add('hide-header');
+      // }else {
+      //   header.classList.remove('hide-header');
+      // }
+      //
+      // scrollTopOffset.value = event.detail.currentY;
+      // prevScrollDirectionDown.value = currentScrollDirectionDown;
     };
     const refresh = async(event) => {
       refresher.value.isActive = true;
       refresher.value.event = event;
     };
-
+    const renderSwiper = () => {
+      showSwiper.value = true;
+    };
     /* Methods */
     // When search term is changed infinity scroll component changes data and
     // this function scrolls users back to top to see new filtered data from start
-    const scrollToTop = () => {
-      content.value?.$el.scrollToTop(500);
-    };
 
     return {
       /* Component properties */
@@ -181,6 +185,7 @@ export default defineComponent({
       modalData,
       infiniteScrollLoading,
       refresher,
+      showSwiper,
 
       /* Event handlers */
       searchFilterChanged,
@@ -189,6 +194,7 @@ export default defineComponent({
       openModal,
       hideModal,
       refresh,
+      renderSwiper,
 
       /* Methods */
       scrollToTop,

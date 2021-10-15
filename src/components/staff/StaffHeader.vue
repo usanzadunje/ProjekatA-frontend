@@ -24,9 +24,10 @@
               alt="Profile picture"
           >
         </ion-avatar>
-        <ion-label>{{
-            this.$store.getters['auth/authUser'].username || this.$store.getters['auth/authUser'].fname
-                   }}
+        <ion-label>
+          {{
+            this.$store.getters['auth/authUser']?.username || this.$store.getters['auth/authUser']?.fname
+          }}
         </ion-label>
       </ion-chip>
     </div>
@@ -48,7 +49,7 @@ import {
 import SettingsPopover from '@/components/staff/popovers/SettingsPopover';
 import LanguagePicker  from '@/components/LanguagePicker';
 
-import { useMenu } from '@/composables/useMenu';
+import { useMenu }    from '@/composables/useMenu';
 import { usePopover } from '@/composables/usePopover';
 
 import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';

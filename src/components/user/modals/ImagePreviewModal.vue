@@ -1,10 +1,10 @@
 <template>
-  <ion-content :fullscreen="true">
-    <ion-item class="close-fake text-center" lines="none">
-      <ion-button @click="dismiss" fill="clear" color="light" slot="end">
-        <ion-icon :icon="close" slot="start"></ion-icon>
+  <ion-content :fullscreen="true" scrollY="false">
+    <div class="absolute top-0 right-0 z-40">
+      <ion-button @click="dismiss" fill="clear" color="light">
+        <ion-icon :icon="close" slot="icon-only"></ion-icon>
       </ion-button>
-    </ion-item>
+    </div>
 
     <ImagePreviewModalSlider
         :images="images"
@@ -17,7 +17,6 @@
 import { defineComponent } from 'vue';
 import {
   IonContent,
-  IonItem,
   IonIcon,
   IonButton,
   modalController,
@@ -33,7 +32,6 @@ export default defineComponent({
   name: 'ImagePreviewModal',
   components: {
     IonContent,
-    IonItem,
     IonIcon,
     IonButton,
     ImagePreviewModalSlider,
@@ -79,10 +77,13 @@ ion-icon {
   font-size: 2rem;
 }
 
-.close-fake {
-  --background: transparent;
-  margin-top: 10px;
-  margin-bottom: 30px;
+ion-button {
+  margin: 0;
+  --padding-top: 8px;
+  --padding-end: 8px;
 }
 
+ion-button::part(native) {
+  height: auto !important;
+}
 </style>

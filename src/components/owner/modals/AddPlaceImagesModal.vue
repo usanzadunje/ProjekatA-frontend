@@ -1,48 +1,59 @@
 <template>
   <ion-content :fullscreen="true" scrollY="false">
-    <ion-item class="mt-1 bg-transparent text-center" lines="none">
-      <ion-button
-          v-show="!images"
-          @click="selectImages"
-          fill="clear"
-          color="light"
-          class="text-lg uppercase"
-      >
-        {{ $t('add') }}
-        <input
-            id="images"
-            ref="imagesInput"
-            type="file"
-            @change="imagesSelected"
-            accept="image/png, image/jpeg, image/jpg"
-            multiple
+    <div class="absolute top-0 z-40 w-full">
+      <ion-item class="mt-1 bg-transparent text-center" lines="none">
+        <ion-button
+            v-show="!images"
+            @click="selectImages"
+            fill="clear"
+            color="light"
+            class="text-lg uppercase"
         >
-      </ion-button>
-      <ion-button
-          v-show="images"
-          @click="uploadImages"
-          fill="clear"
-          color="light"
-          class="text-lg uppercase"
-      >
-        {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
-      </ion-button>
-      <ion-button
-          @click="removeImage"
-          fill="clear"
-          color="light"
-          class="text-lg uppercase"
-          slot="end"
-      >
-        {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
-      </ion-button>
-      <ion-button @click="dismiss" fill="clear" color="light" slot="end">
-        <ion-icon :icon="close" slot="start"></ion-icon>
-      </ion-button>
-    </ion-item>
+          {{ $t('add') }}
+          <input
+              id="images"
+              ref="imagesInput"
+              type="file"
+              @change="imagesSelected"
+              accept="image/png, image/jpeg, image/jpg"
+              multiple
+          >
+        </ion-button>
+        <ion-button
+            v-show="images"
+            @click="uploadImages"
+            fill="clear"
+            color="light"
+            class="text-lg uppercase"
+        >
+          {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
+        </ion-button>
+        <ion-button
+            id="removeButton"
+            @click="removeImage"
+            fill="clear"
+            color="light"
+            class="text-lg uppercase"
+            slot="end"
+            :disabled="place.images?.length === 0"
+        >
+          {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
+        </ion-button>
+        <ion-button @click="dismiss" fill="clear" color="light" slot="end">
+          <ion-icon :icon="close" slot="start"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </div>
+
+    <ImagePreviewModalSlider
+        :id="'placeImageSlider'"
+        :images="place.images"
+        @updated="setSliderRef"
+    />
+
     <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
       <ion-button
-          :disabled="loading === 0"
+          :disabled="loading === 0 || place.images?.length === 0"
           @click="setAsMainImage"
           fill="white"
           expand="block"
@@ -53,7 +64,7 @@
     </div>
     <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40">
       <ion-button
-          :disabled="loading === 0"
+          :disabled="loading === 0 || place.images?.length === 0"
           @click="setAsLogo"
           fill="white"
           expand="block"
@@ -62,11 +73,6 @@
         {{ loading === 0 ? `${$t('setting')}...` : $t('setLogo') }}
       </ion-button>
     </div>
-
-    <ImagePreviewModalSlider
-        :id="'placeImageSlider'"
-        :images="place.images"
-    />
   </ion-content>
 </template>
 
@@ -118,10 +124,18 @@ export default defineComponent({
     const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { t } = useI18n();
 
+    /* Methods */
+    const setSliderRef = () => {
+      if(!imagePreviewSlider.value) {
+        imagePreviewSlider.value = document.getElementById('placeImageSlider')?.swiper;
+      }
+    };
+
     /* Lifecycle hooks */
     onMounted(() => {
-      imagePreviewSlider.value = document.getElementById('placeImageSlider').swiper;
+      setSliderRef();
     });
+
     /* Event handlers */
     const dismiss = () => {
       modalController.dismiss();
@@ -166,7 +180,7 @@ export default defineComponent({
     const removeImage = async() => {
       loading.value = -1;
       try {
-        const imageIndex = await imagePreviewSlider.value.activeIndex;
+        const imageIndex = imagePreviewSlider.value.activeIndex;
 
         await OwnerService.removePlaceImage(place.value.images[imageIndex].id);
 
@@ -182,7 +196,7 @@ export default defineComponent({
     const setAsMainImage = async() => {
       loading.value = 0;
       try {
-        const imageIndex = await imagePreviewSlider.value.activeIndex;
+        const imageIndex = imagePreviewSlider.value.activeIndex;
 
         await store.dispatch('owner/setPlaceImageType', {
           id: place.value.images[imageIndex].id,
@@ -199,20 +213,22 @@ export default defineComponent({
     const setAsLogo = async() => {
       loading.value = 0;
       try {
-        const imageIndex = await imagePreviewSlider.value.activeIndex;
-
-        showSuccessToast(t('successImageLogo'));
+        const imageIndex = imagePreviewSlider.value.activeIndex;
 
         await store.dispatch('owner/setPlaceImageType', {
           id: place.value.images[imageIndex].id,
           type: 'is_logo',
         });
+
+        showSuccessToast(t('successImageLogo'));
       }catch(errors) {
         await showErrorToast(errors);
       }finally {
         loading.value = null;
       }
     };
+
+    /* Watchers */
 
     return {
       /* Component properties */
@@ -229,6 +245,7 @@ export default defineComponent({
       removeImage,
       setAsMainImage,
       setAsLogo,
+      setSliderRef,
 
       /* Icons */
       close,
@@ -246,6 +263,7 @@ ion-content {
 
 ion-icon {
   font-size: 2rem;
+  margin: 0;
 }
 
 #images {
@@ -256,5 +274,13 @@ ion-icon {
   --background: #f4f5f8 !important;
   width: 90%;
   --border-radius: 20px !important;
+}
+
+ion-button {
+  margin: 0;
+}
+
+#removeButton {
+  margin-right: 1rem !important;
 }
 </style>

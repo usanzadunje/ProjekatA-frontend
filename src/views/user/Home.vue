@@ -14,22 +14,26 @@
       />
       <div class="ion-padding">
         <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
-        <ion-slides v-show="!showSkeleton" :options="slideOpts">
-          <ion-slide>
+        <swiper
+            v-if="!showSkeleton"
+            :slides-per-view="1.1"
+        >
+          <swiper-slide>
             <SlidingCards
                 :places="cafes.closestToUser?.slice(0, 2)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
-          </ion-slide>
-          <ion-slide>
+          </swiper-slide>
+          <swiper-slide>
             <SlidingCards
                 :places="cafes.closestToUser?.slice(2, 4)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
-          </ion-slide>
-        </ion-slides>
+          </swiper-slide>
+        </swiper>
+
 
         <div v-show="showSkeleton">
           <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
@@ -37,40 +41,46 @@
         </div>
 
         <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
-        <ion-slides v-show="!showSkeleton" :options="slideOpts">
-          <ion-slide>
+        <swiper
+            v-if="!showSkeleton"
+            :slides-per-view="1.1"
+        >
+          <swiper-slide>
             <SlidingCards
                 :places="cafes.currentlyAvailable?.slice(0, 2)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
-          </ion-slide>
-          <ion-slide>
+          </swiper-slide>
+          <swiper-slide>
             <SlidingCards
                 :places="cafes.currentlyAvailable?.slice(2, 4)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
-          </ion-slide>
-        </ion-slides>
+          </swiper-slide>
+        </swiper>
 
         <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
-        <ion-slides v-show="!showSkeleton" :options="slideOpts">
-          <ion-slide>
+        <swiper
+            v-if="!showSkeleton"
+            :slides-per-view="1.1"
+        >
+          <swiper-slide>
             <SlidingCards
                 :places="cafes.haveFood?.slice(0, 2)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
-          </ion-slide>
-          <ion-slide>
+          </swiper-slide>
+          <swiper-slide>
             <SlidingCards
                 :places="cafes.haveFood?.slice(2, 4)"
                 @open-cafe-modal="openModal(true, $event)"
                 class="pr-3"
             />
-          </ion-slide>
-        </ion-slides>
+          </swiper-slide>
+        </swiper>
 
         <div v-show="showSkeleton">
           <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
@@ -102,12 +112,13 @@ import { useI18n }                                   from 'vue-i18n';
 import {
   IonContent,
   IonPage,
-  IonSlides,
-  IonSlide,
   IonRefresher,
   IonRefresherContent,
   onIonViewDidEnter,
 }                                                    from '@ionic/vue';
+import { Swiper, SwiperSlide }                       from 'swiper/vue';
+import 'swiper/swiper.min.css';
+
 
 import CafeService from '@/services/CafeService';
 
@@ -127,10 +138,10 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    IonSlides,
-    IonSlide,
     IonRefresher,
     IonRefresherContent,
+    Swiper,
+    SwiperSlide,
     UserHeader,
     FilterCategoryHeading,
     SlidingCards,
@@ -151,9 +162,6 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
-    const slideOpts = {
-      slidesPerView: 1.1,
-    };
     const cafes = reactive({
       closestToUser: [],
       currentlyAvailable: [],
@@ -269,7 +277,6 @@ export default defineComponent({
     return {
       /* Global properties */
       /* Component properties */
-      slideOpts,
       cafes,
       isModalOpen,
       modalData,

@@ -26,8 +26,8 @@ export default {
     removePlaceImage(id) {
         return API.apiClient.delete(`/owner/place/images/${id}`);
     },
-    setImageAsMain(id, query = '?type=App\\Models\\Cafe') {
-        return API.apiClient.post(`/owner/place/images/main/${id}${query}`);
+    setImageAsMain(id) {
+        return API.apiClient.post(`/owner/place/images/main/${id}`);
     },
     setImageAsLogo(id) {
         return API.apiClient.post(`/owner/place/images/logo/${id}`);

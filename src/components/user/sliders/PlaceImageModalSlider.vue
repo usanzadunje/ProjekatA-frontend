@@ -1,7 +1,11 @@
 <template>
   <div>
-    <ion-slides v-if="!showSkeleton" v-update-swiper :options="slideOpts">
-      <ion-slide
+    <swiper
+        v-if="!showSkeleton"
+        :slides-per-view="2.5"
+        :space-between="10"
+    >
+      <swiper-slide
           v-for="image in images"
           :key="image?.id"
       >
@@ -11,8 +15,8 @@
             @click="openPreview(images)"
             class="object-cover slider-images"
         >
-      </ion-slide>
-    </ion-slides>
+      </swiper-slide>
+    </swiper>
     <div
         v-if="showSkeleton !== null"
         v-show="showSkeleton"
@@ -35,21 +39,22 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent }     from 'vue';
 import {
-  IonSlides,
-  IonSlide,
+
   IonSkeletonText,
   modalController,
-}                          from '@ionic/vue';
+}                              from '@ionic/vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/swiper.min.css';
 
 import ImagePreviewModal from '@/components/user/modals/ImagePreviewModal';
 
 export default defineComponent({
   name: 'PlaceImageModalSlider',
   components: {
-    IonSlides,
-    IonSlide,
+    Swiper,
+    SwiperSlide,
     IonSkeletonText,
   },
   props: {
@@ -64,11 +69,6 @@ export default defineComponent({
   },
   setup() {
     /* Component properties */
-    const slideOpts = {
-      slidesPerView: 2.5,
-      spaceBetween: 10,
-    };
-
     /* Event handlers */
     const openPreview = async(images) => {
       const modal = await modalController
@@ -84,8 +84,6 @@ export default defineComponent({
 
     return {
       /* Component properties */
-      slideOpts,
-
       /* Event listeners */
       openPreview,
 
@@ -99,6 +97,7 @@ export default defineComponent({
   max-height: 75px !important;
   border-radius: 14px;
 }
+
 .half-skeleton {
   max-height: 75px !important;
   border-radius: 14px 0 0 14px;

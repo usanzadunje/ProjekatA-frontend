@@ -34,6 +34,9 @@ export const mutations = {
     SET_STAFF_MEMBERS(state, value) {
         state.staff = value;
     },
+    CREATE_STAFF(state, value) {
+        state.staff.push(value);
+    },
     UPDATE_STAFF_MEMBER(state, { staffId, user }) {
         let staff = state.staff.find(staff => staff.id === staffId);
 
@@ -98,6 +101,9 @@ export const mutations = {
     SET_PRODUCTS(state, value) {
         state.products = value;
     },
+    LOAD_MORE_PRODUCTS(state, value) {
+        state.products = state.products.concat(value);
+    },
     CREATE_PRODUCT(state, value) {
         state.products.unshift(value);
     },
@@ -110,6 +116,15 @@ export const mutations = {
     },
     REMOVE_PRODUCT(state, id) {
         state.products = state.products.filter(product => product.id !== id);
+    },
+    SET_NEW_PRODUCT_IMAGE_AS_MAIN(state, { productId, image }) {
+        let product = state.products.find(prod => prod.id === productId);
+        product.images[0] = image;
+    },
+    REMOVE_PRODUCT_MAIN_IMAGE(state, productId) {
+        let product = state.products.find(prod => prod.id === productId);
+
+        product.images = [];
     },
 };
 
@@ -127,9 +142,16 @@ export const actions = {
         commit('SET_PLACE_INFO', place);
     },
     async setPlaceImageType({ commit }, value) {
-        await OwnerService.setImageAsMain(value.id);
+        if(value.type === 'is_main') {
+            await OwnerService.setImageAsMain(value.id);
+        }
+        if(value.type === 'is_logo') {
+            await OwnerService.setImageAsLogo(value.id);
+        }
 
-        commit('SET_PLACE_IMAGE_TYPE', value);
+        if(!value.product) {
+            commit('SET_PLACE_IMAGE_TYPE', value);
+        }
     },
     async uploadPlaceImages({ state, commit }, value) {
         const response = await OwnerService.uploadPlaceImages(value);
@@ -147,10 +169,10 @@ export const actions = {
 
         commit('SET_STAFF_MEMBERS', response.data);
     },
-    async createStaff({ dispatch }, user) {
-        await OwnerService.createStaff(user);
+    async createStaff({ commit }, user) {
+        const response = await OwnerService.createStaff(user);
 
-        dispatch("getStaffInfo");
+        commit("CREATE_STAFF", response.data);
     },
     async updateStaff({ commit }, { staffId, user }) {
         await OwnerService.updateStaff(staffId, user);
@@ -224,10 +246,29 @@ export const actions = {
     },
 
     /* PRODUCTS */
-    async getProducts({ commit }) {
-        const response = await ProductService.index(null, '', 0, 20);
+    async getProducts(
+        { commit },
+        {
+            filter = null,
+            offset = 0,
+            limit = 15,
+            load = false,
+        },
+    ) {
+        const response = await ProductService.index(null, filter, offset, limit);
 
-        commit('SET_PRODUCTS', response.data);
+        if(load) {
+            commit('LOAD_MORE_PRODUCTS', response.data);
+        }else {
+            commit('SET_PRODUCTS', response.data);
+        }
+
+        // Returning false so infinite scroll can be disabled in components
+        // When there is no more data or backend returned less data than required
+        // which means there is no more data to be returned
+        if(!response.data || response.data.length < limit) {
+            return true;
+        }
     },
     async createProduct({ commit }, payload) {
         const response = await ProductService.create(payload);

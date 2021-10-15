@@ -12,7 +12,7 @@
       <UserProfileHeader/>
 
 
-      <SlidingFilter @sort-has-changed="sortHasChanged" class="mt-2"/>
+      <SlidingFilter v-if="!showSkeleton" @sort-has-changed="sortHasChanged" class="mt-2 px-4"/>
 
       <div class="px-4 pb-4 mt-3">
         <FilterCategoryHeading :title="$t('subscribedPlaces')" class="mb-2"/>

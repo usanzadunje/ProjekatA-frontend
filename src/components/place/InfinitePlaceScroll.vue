@@ -71,7 +71,7 @@ export default defineComponent({
       type: Object,
     },
   },
-  emits: ['scrollToTop', 'openCafeModal', 'infiniteScrollToggle'],
+  emits: ['mounted', 'scrollToTop', 'openCafeModal', 'infiniteScrollToggle'],
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
@@ -86,10 +86,12 @@ export default defineComponent({
     let placeOffset = 0;
 
     /* Lifecycle hooks */
-    //*Before mounting fetching initial 20 cafes to show
+    //*Before mounting fetching initial 10 cafes to show
     onMounted(async() => {
       await getCafes();
       showSkeleton.value = false;
+
+      emit('mounted');
     });
 
     /* Composables */
@@ -98,14 +100,14 @@ export default defineComponent({
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
     /* Methods */
-    const getCafes = async(offset = 0, concat = false) => {
+    const getCafes = async(concat = false) => {
       try {
         const response = await CafeService.index(
             true,
             sortBy.value,
             cafeSearchString.value,
-            offset,
-            20,
+            placeOffset,
+            10,
             store.getters['global/position'].latitude,
             store.getters['global/position'].longitude,
         );
@@ -114,7 +116,7 @@ export default defineComponent({
           isInfiniteScrollDisabled.value = true;
           return;
         }
-        if(response.data.length < 20) {
+        if(response.data.length < 10) {
           isInfiniteScrollDisabled.value = true;
         }
 
@@ -142,21 +144,24 @@ export default defineComponent({
       await getCafes();
 
       event.target.complete();
+
+      placeOffset = 0;
+      isInfiniteScrollDisabled.value = false;
     };
 
     /* Event handlers */
-    const loadMoreCafes = async(ev) => {
+    const loadMoreCafes = async(e) => {
       emit('infiniteScrollToggle');
-      placeOffset += 20;
-      await getCafes(placeOffset, true);
+      placeOffset += 10;
+      await getCafes(true);
       emit('infiniteScrollToggle');
 
-      ev?.target.complete();
+      e?.target.complete();
     };
 
     /* Watchers */
     // Watching for a change on cafeSearchString(search term from search input) prop
-    // resetting all the variables for filtered data and loading first 20 records from new filtered data
+    // resetting all the variables for filtered data and loading first 10 records from new filtered data
     watch(cafeSearchString, async() => {
       isInfiniteScrollDisabled.value = false;
       placeOffset = 0;
@@ -164,7 +169,7 @@ export default defineComponent({
       emit('scrollToTop');
     });
     // Watching for a change on sortBy(term for sorting records) prop
-    // when new button for sorting is clicked initial 20 cafes are changed to appear correctly
+    // when new button for sorting is clicked initial 10 cafes are changed to appear correctly
     // (be sorted) on initial view show
     watch(sortBy, async() => {
       if(sortBy.value === 'distance') {
@@ -190,7 +195,8 @@ export default defineComponent({
       showSkeleton,
 
       /* Event handlers */
-      loadMoreCafes, refresh,
+      loadMoreCafes,
+      refresh,
 
       /* Icons */
 
