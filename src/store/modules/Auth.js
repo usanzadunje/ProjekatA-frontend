@@ -56,7 +56,7 @@ export const actions = {
 
         return response.data?.role;
     },
-    async logout({ commit, dispatch }) {
+    async logout({ getters, commit, dispatch }) {
         let loading = null;
         try {
             loading = await loadingController
@@ -77,12 +77,17 @@ export const actions = {
                 cssClass: 'error-toast',
                 mode: 'ios',
             });
-
             await toast.present();
         }finally {
             const root = document.documentElement;
 
             await dispatch("setToken", null);
+
+            /* PURGING ALL OWNER DATA*/
+            if(getters.isOwner) {
+                commit('owner/PURGE_DATA', null, { root: true });
+            }
+
             commit("SET_USER", null);
             commit("SET_ROLE", null);
             commit('user/SET_DARKMODE', false, { root: true });

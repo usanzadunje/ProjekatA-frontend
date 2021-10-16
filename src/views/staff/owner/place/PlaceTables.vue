@@ -65,6 +65,7 @@ import TableContainer from '@/components/TableContainer';
 import Table          from '@/components/Table';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useFetchCondition } from '@/composables/useFetchCondition';
 
 export default defineComponent({
   name: "PlaceTables",
@@ -86,10 +87,11 @@ export default defineComponent({
     /* Composables */
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { getPlaceTables } = useFetchCondition();
 
     /* Lifecycle hooks */
     (async() => {
-      await store.dispatch('owner/getTables');
+      await getPlaceTables();
     })();
 
     /* Methods */

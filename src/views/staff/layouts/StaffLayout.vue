@@ -28,6 +28,7 @@ import AdminMenu   from '@/components/staff/AdminMenu';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useFCM }                from '@/composables/useFCM';
+import { useFetchCondition }     from '@/composables/useFetchCondition';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -50,12 +51,13 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { registerToken } = useFCM();
+    const { getPlaceInfo } = useFetchCondition();
 
     /* Lifecycle hooks */
     (async() => {
       try {
         if(store.getters['auth/isOwner']) {
-          await store.dispatch('owner/getPlaceInfo');
+          await getPlaceInfo();
           await store.dispatch('owner/getStaffInfo');
         }
         if(Capacitor.isNativePlatform()) {

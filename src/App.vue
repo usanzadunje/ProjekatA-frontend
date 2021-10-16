@@ -9,7 +9,8 @@ import { defineComponent }         from 'vue';
 import { useStore }                from 'vuex';
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 
-import { useFCM } from '@/composables/useFCM';
+import { useFCM }            from '@/composables/useFCM';
+import { useFetchCondition } from '@/composables/useFetchCondition';
 
 export default defineComponent({
   name: 'App',
@@ -25,10 +26,11 @@ export default defineComponent({
 
     /* Composables */
     const { initPush } = useFCM();
+    const { getAuthUser } = useFetchCondition();
 
     /* Lifecycle hooks */
     (async() => {
-      await store.dispatch("auth/getAuthUser");
+      await getAuthUser();
       await store.dispatch("user/getSettings");
       await initPush();
 

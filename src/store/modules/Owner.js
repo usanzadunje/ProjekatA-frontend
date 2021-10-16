@@ -3,7 +3,7 @@ import OwnerService from '@/services/OwnerService';
 import { calculatePxFromPercent, removeClonedTableElements } from '@/utils/helpers';
 import CategoryService                                       from '@/services/CategoryService';
 import ProductService                                        from '@/services/ProductService';
-import PlaceService                                           from '@/services/PlaceService';
+import PlaceService                                          from '@/services/PlaceService';
 
 const fontSize = getComputedStyle(document.documentElement).fontSize;
 
@@ -126,6 +126,14 @@ export const mutations = {
 
         product.images = [];
     },
+
+    PURGE_DATA(state) {
+        state.place = {};
+        state.staff = [];
+        state.tables = [];
+        state.categories = [];
+        state.products = [];
+    },
 };
 
 export const actions = {
@@ -134,7 +142,6 @@ export const actions = {
         const response = await PlaceService.show(rootGetters['auth/authUser'].place);
 
         commit('SET_PLACE_INFO', response.data);
-        commit('staff/SET_AVAILABILITY_RATIO', response.data?.availability_ratio ?? '0/0', { root: true });
     },
     async updatePlaceInfo({ commit }, place) {
         await OwnerService.updatePlace(place);

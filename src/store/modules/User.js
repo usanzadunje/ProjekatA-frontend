@@ -129,6 +129,9 @@ export const actions = {
 };
 
 export const getters = {
+    areSettingsPresent: (state) => {
+        return state.settings;
+    },
     darkMode: (state) => {
         return !!state.settings?.darkMode;
     },

@@ -49,10 +49,12 @@ import AccordionList from '@/components/user/AccordionList';
 import Categories    from '@/components/owner/Categories';
 import Products      from '@/components/owner/Products';
 
+import { useFetchCondition } from '@/composables/useFetchCondition';
+
 import {
   pricetagOutline,
   fastFoodOutline,
-} from 'ionicons/icons';
+}                            from 'ionicons/icons';
 
 export default defineComponent({
   name: "PlaceMenu",
@@ -71,9 +73,13 @@ export default defineComponent({
 
     /* Component properties */
     const enableInfiniteScroll = ref();
+
+    /* Composables */
+    const { getPlaceCategories } = useFetchCondition();
+
     /* Methods */
     const getMenuData = async() => {
-      await store.dispatch("owner/getCategories");
+      await getPlaceCategories();
       await store.dispatch("owner/getProducts", {});
     };
 
