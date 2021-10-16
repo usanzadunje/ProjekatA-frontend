@@ -44,13 +44,13 @@ export default defineComponent({
     /* Composables */
     /* Interact.js event handlers */
     const onMove = (event) => {
-      position.x += event.dx;
-      position.y += event.dy;
+      position.x += Math.round(event.dx);
+      position.y += Math.round(event.dy);
 
       event.target.style.transform =
           `translate(${position.x}px, ${position.y}px)`;
     };
-    const cloneTable = (event) => {
+    const dragOrClone = (event) => {
       const { currentTarget, interaction } = event;
       let element = currentTarget;
 
@@ -74,8 +74,6 @@ export default defineComponent({
         element.setAttribute('data-id', Date.now());
         // Marking cloned tables  so we are not showing them double from vuex store
         element.setAttribute('data-cloned', true);
-        // Look at forcePositionUpdateFromAttribute method for explanation
-        element.setAttribute('data-force-position', true);
 
         // Adding object inside parent container element
         dropzone && dropzone.appendChild(element);
@@ -83,38 +81,26 @@ export default defineComponent({
         position.x = 0;
         position.y = 0;
 
-
         // If we are moving an already existing item, we need to make sure the position object has
         // the correct values before we start dragging it
       }else if(
           interaction.pointerIsDown &&
           !interaction.interacting()
       ) {
-        const regex = /translate\(([\d]+)px, ([\d]+)px\)/i;
-        const transform = regex.exec(currentTarget.style.transform);
-
-        /* MARK POSITION VALUE */
-        if(transform && transform.length > 1) {
-          position.x = Number(transform[1]);
-          position.y = Number(transform[2]);
-        }
+        updatePositionFromTransform(currentTarget);
       }
 
       // Start the drag event
       interaction.start({ name: "drag" }, event.interactable, element);
     };
-    const forcePositionUpdateFromAttribute = (event) => {
-      // For some reason dragging existing table that is pulled from database
-      // doesnt update position value from (MARK POSITION VALUE) piece of code
-      // this forces update and does the same
-      if(event.target.getAttribute('data-force-position') === 'true') {
-        const regex = /translate\(([\d]+)px, ([\d]+)px\)/i;
-        const transform = regex.exec(event.target.style.transform);
+    const updatePositionFromTransform = (element) => {
+      const regex = /translate\(([\d]+)px, ([\d]+)px\)/i;
+      const transform = regex.exec(element.style.transform);
 
-        if(transform && transform.length > 1) {
-          position.x = Number(transform[1]);
-          position.y = Number(transform[2]);
-        }
+      /* MARK POSITION VALUE */
+      if(transform && transform.length > 1) {
+        position.x = Number(transform[1]);
+        position.y = Number(transform[2]);
       }
     };
 
@@ -130,7 +116,7 @@ export default defineComponent({
       listeners: {
         start(event) {
           event.target.classList.add('opacity-60');
-          forcePositionUpdateFromAttribute(event);
+          updatePositionFromTransform(event.target);
         },
         move(event) {
           onMove(event);
@@ -141,22 +127,22 @@ export default defineComponent({
           store.commit('owner/UPDATE_TABLE', {
             id: Number(event.target.getAttribute('data-id')),
             position: {
-              top: Math.round(position.y),
-              left: Math.round(position.x),
+              top: position.y,
+              left: position.x,
               // This is calculating distance in % so it will be shown precise on any screen
               // -24 is because width of element is 24px which should not be calculated
               // left property is directly connected with transform value
               // Since it is calculated to % it will make buggy movement of existing table
               // Vuex value will be replaced with % but it need px to be shown correctly
               // So we make separate property for saving in DB as % and problem is solved.
-              leftToSave: Math.round(position.x) / (event.target.parentElement.getBoundingClientRect().width - 24) * 100,
+              leftToSave: position.x / (event.target.parentElement.getBoundingClientRect().width - 24) * 100,
             },
             dirty: true,
             clone: Boolean(event.target.getAttribute('data-cloned')),
           });
         },
       },
-    }).on('move', cloneTable);
+    }).on('move', dragOrClone);
 
     /* Event handlers */
 
@@ -165,7 +151,6 @@ export default defineComponent({
       /* Component properties */
 
       /* Event handlers */
-      cloneTable,
 
       /* Icons */
     };

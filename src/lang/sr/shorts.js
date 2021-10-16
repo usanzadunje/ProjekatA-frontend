@@ -152,6 +152,8 @@ export default {
     "image": "Fotografija | Fotografije",
     "noImages": "Nema fotografija za prikazati.",
     "createProductImagesAlert": "Kreirajte proizvod kako biste dodali fotografije.",
+    "searchPlaceholder": "Unesite naziv objekta...",
+    "searchProductPlaceholder": "Unesite naziv proizvoda...",
 
 };
 

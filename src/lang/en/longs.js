@@ -7,7 +7,6 @@ export default {
     "onboardingFindT": "There are many variations of passages of Lorem Ipsum available, but majority have suffered alteration in some form, bz injected humor.",
     "onboardingNotification": "Notify me when there are vacancies!",
     "onboardingNotificationT": "There are many variations of passages of Lorem Ipsum available, but majority have suffered alteration in some form, bz injected humor.",
-    "searchPlaceholder": "Type place name...",
     "notificationModal1": "Notify me if there are vacancies in place ",
     "notificationModal2": " in the next : ",
     "showPlace": "Cafe, food, garden. Continue forward in order to see what our application has to offer you.",

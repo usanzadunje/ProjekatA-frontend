@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-        class="flex items-center justify-between py-2 px-2 border border-gray-300 rounded-2xl bg-gray-100"
+        class="flex items-center justify-between py-2 px-2 rounded-2xl bg-gray-100"
     >
       <div class="flex items-center">
         <img

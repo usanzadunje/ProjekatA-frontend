@@ -63,7 +63,8 @@ export default defineComponent({
       clearInputs.value = false;
       settingsTab = document.getElementById('tab-button-settings');
       if(settingsTab) {
-        settingsTab.style.color = '#207DFF';
+        settingsTab.style.color = getComputedStyle(document.documentElement)
+            .getPropertyValue('--user-selected-color');
       }
     });
     onIonViewWillLeave(() => {

@@ -151,5 +151,7 @@ export default {
     "image": "Image | Images",
     "noImages": "There are no images to show.",
     "createProductImagesAlert": "Create product in order to add images.",
+    "searchPlaceholder": "Type place name...",
+    "searchProductPlaceholder": "Type product name...",
 
 };

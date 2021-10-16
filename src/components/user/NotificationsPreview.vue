@@ -79,7 +79,8 @@ export default defineComponent({
 <style scoped>
 ion-button {
   --padding-start: 0 !important;
-  --padding-end: 5px !important;
+  --padding-end: 0 !important;
+  margin: 0 !important;
 }
 
 ion-icon {

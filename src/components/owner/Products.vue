@@ -1,13 +1,14 @@
 <template>
   <div>
-    <div class="flex">
+    <div>
       <ion-searchbar
           :value="searchTerm"
-          :placeholder="$t('searchPlaceholder')"
+          :placeholder="$t('searchProductPlaceholder')"
           @ionChange="searchInputChanged($event)"
           enterkeyhint="search"
-          class=""
       ></ion-searchbar>
+    </div>
+    <div class="flex justify-end mt-2">
       <ion-button
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-white"
@@ -285,5 +286,14 @@ ion-item-option {
 
 ion-item-option:active {
   --background: #E01B43;
+}
+
+ion-searchbar {
+  width: 100% !important;
+  padding: 0 !important;
+  margin-left: 0 !important;
+  --background: #F6F7FB !important;
+  --placeholder-color: #9EAAB7 !important;
+  --icon-color: #000000 !important;
 }
 </style>

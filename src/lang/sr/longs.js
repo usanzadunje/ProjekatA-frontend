@@ -7,7 +7,6 @@ export default {
     "onboardingFindT": "There are many variations of passages of Lorem Ipsum available, but majority have suffered alteration in some form, bz injected humor.",
     "onboardingNotification": "Obavesti me kada se mesto oslobodi!",
     "onboardingNotificationT": "There are many variations of passages of Lorem Ipsum available, but majority have suffered alteration in some form, bz injected humor.",
-    "searchPlaceholder": "Unesite ime objekta...",
     "notificationModal": "{place}",
     "notificationModal1": "Obavesti me ukoliko se oslobodi sto u objektu ",
     "notificationModal2": " u narednih : ",

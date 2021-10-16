@@ -1,24 +1,21 @@
 <template>
-  <ion-page v-disable-swipe-back>
-    <ion-content>
+  <ion-page>
+    <ion-content scrollY="false">
       <div class="h-full flex flex-col justify-between">
         <div>
-          <h1 class="secondary-heading text-center">Pick a table and drag</h1>
-
-          <div class="flex items-center justify-center mt-5 ml-5">
+          <div class="flex items-center justify-center">
             <Table/>
-            <span class="ml-2 secondary-heading">-drop me where you want</span>
+            <span class="ml-2 secondary-heading">-pick a table and drag</span>
           </div>
 
 
           <div class="px-4">
-            <TableContainer class="mt-16">
+            <TableContainer class="mt-10">
               <Table
                   v-for="table in tables"
                   :key="table.id"
                   :draggable="true"
                   :data-id="table.id"
-                  :data-force-position="true"
                   :style="
                   `position: absolute;
                   top: 0; left: 0;

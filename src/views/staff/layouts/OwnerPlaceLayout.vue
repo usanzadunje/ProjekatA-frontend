@@ -13,21 +13,23 @@
         </ion-segment-button>
       </ion-segment>
     </div>
-    <ion-router-outlet class="mt-20">
-
+    <ion-router-outlet
+        ref="ownerPlaceRouterOutlet"
+        class="mt-20"
+    >
     </ion-router-outlet>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   IonPage,
   IonRouterOutlet,
   IonSegment,
   IonSegmentButton,
   IonLabel,
-}                          from '@ionic/vue';
+}                               from '@ionic/vue';
 
 import {
   heart,
@@ -46,18 +48,22 @@ export default defineComponent({
   setup() {
     /* Global properties */
     const router = useRouter();
-    /* Component properties */
 
+    /* Component properties */
+    const ownerPlaceRouterOutlet = ref();
     /* Composables */
 
     /* Lifecycle hooks */
-
+    window.addEventListener('load', () => {
+      ownerPlaceRouterOutlet.value.$el.swipeHandler = null;
+    });
     /* Event handlers */
     const pageChange = (e) => {
       router.push({ name: e.target.value });
     };
     return {
       /* Component properties */
+      ownerPlaceRouterOutlet,
 
       /* Event handlers */
       pageChange,
