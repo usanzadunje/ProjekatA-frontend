@@ -2,24 +2,24 @@
   <div>
     <FilterCategoryHeading :title="$t('searchResults')" class="mb-2"/>
     <div v-show="!showSkeleton">
-      <div v-for="cafe in cafes" :key="cafe.id" class="mb-5">
-        <CafeCard
-            :place="cafe"
-            @click="$emit('openCafeModal', cafe)"
+      <div v-for="place in places" :key="place.id" class="mb-5">
+        <PlaceCard
+            :place="place"
+            @click="$emit('openPlaceModal', place)"
         />
       </div>
     </div>
 
     <div v-show="showSkeleton">
       <div v-for="i in 15" :key="i" class="mb-5">
-        <SkeletonCafeCard></SkeletonCafeCard>
+        <SkeletonPlaceCard></SkeletonPlaceCard>
       </div>
     </div>
   </div>
 
   <ion-infinite-scroll
       id="infinite-scroll"
-      @ionInfinite="loadMoreCafes($event)"
+      @ionInfinite="loadMorePlaces($event)"
       threshold="100px"
       :disabled="isInfiniteScrollDisabled"
   >
@@ -41,10 +41,10 @@ import {
 }                                                         from '@ionic/vue';
 
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import CafeCard              from '@/components/place/CafeCard';
-import SkeletonCafeCard      from '@/components/place/SkeletonCafeCard';
+import PlaceCard              from '@/components/place/PlaceCard';
+import SkeletonPlaceCard      from '@/components/place/SkeletonPlaceCard';
 
-import CafeService from '@/services/CafeService';
+import PlaceService from '@/services/PlaceService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
@@ -55,11 +55,11 @@ export default defineComponent({
     IonInfiniteScroll,
     IonInfiniteScrollContent,
     FilterCategoryHeading,
-    CafeCard,
-    SkeletonCafeCard,
+    PlaceCard,
+    SkeletonPlaceCard,
   },
   props: {
-    cafeSearchString: {
+    placeSearchTerm: {
       type: String,
       default: '',
     },
@@ -71,24 +71,24 @@ export default defineComponent({
       type: Object,
     },
   },
-  emits: ['mounted', 'scrollToTop', 'openCafeModal', 'infiniteScrollToggle'],
+  emits: ['mounted', 'scrollToTop', 'openPlaceModal', 'infiniteScrollToggle'],
   setup(props, { emit }) {
     /* Global properties */
     const store = useStore();
 
     /* Component properties */
-    const cafes = ref([]);
-    const { cafeSearchString } = toRefs(props);
+    const places = ref([]);
+    const { placeSearchTerm } = toRefs(props);
     const { sortBy } = toRefs(props);
     const isInfiniteScrollDisabled = ref(false);
     const showSkeleton = ref(true);
-    // From which number on to take cafe records
+    // From which number on to take place records
     let placeOffset = 0;
 
     /* Lifecycle hooks */
-    //*Before mounting fetching initial 10 cafes to show
+    //*Before mounting fetching initial 10 places to show
     onMounted(async() => {
-      await getCafes();
+      await getPlaces();
       showSkeleton.value = false;
 
       emit('mounted');
@@ -100,12 +100,12 @@ export default defineComponent({
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
     /* Methods */
-    const getCafes = async(concat = false) => {
+    const getPlaces = async(concat = false) => {
       try {
-        const response = await CafeService.index(
+        const response = await PlaceService.index(
             true,
             sortBy.value,
-            cafeSearchString.value,
+            placeSearchTerm.value,
             placeOffset,
             10,
             store.getters['global/position'].latitude,
@@ -121,9 +121,9 @@ export default defineComponent({
         }
 
         if(concat) {
-          cafes.value = cafes.value.concat(response.data);
+          places.value = places.value.concat(response.data);
         }else {
-          cafes.value = response.data;
+          places.value = response.data;
         }
       }catch(error) {
         showErrorToast(
@@ -141,7 +141,7 @@ export default defineComponent({
 
       document.querySelector('#header').classList.remove('hide-header');
 
-      await getCafes();
+      await getPlaces();
 
       event.target.complete();
 
@@ -150,26 +150,26 @@ export default defineComponent({
     };
 
     /* Event handlers */
-    const loadMoreCafes = async(e) => {
+    const loadMorePlaces = async(e) => {
       emit('infiniteScrollToggle');
       placeOffset += 10;
-      await getCafes(true);
+      await getPlaces(true);
       emit('infiniteScrollToggle');
 
       e?.target.complete();
     };
 
     /* Watchers */
-    // Watching for a change on cafeSearchString(search term from search input) prop
+    // Watching for a change on placeSearchTerm(search term from search input) prop
     // resetting all the variables for filtered data and loading first 10 records from new filtered data
-    watch(cafeSearchString, async() => {
+    watch(placeSearchTerm, async() => {
       isInfiniteScrollDisabled.value = false;
       placeOffset = 0;
-      getCafes();
+      getPlaces();
       emit('scrollToTop');
     });
     // Watching for a change on sortBy(term for sorting records) prop
-    // when new button for sorting is clicked initial 10 cafes are changed to appear correctly
+    // when new button for sorting is clicked initial 10 places are changed to appear correctly
     // (be sorted) on initial view show
     watch(sortBy, async() => {
       if(sortBy.value === 'distance') {
@@ -179,7 +179,7 @@ export default defineComponent({
 
       isInfiniteScrollDisabled.value = false;
       placeOffset = 0;
-      getCafes();
+      getPlaces();
       emit('scrollToTop');
     });
     watch(props.refresher, async() => {
@@ -190,12 +190,12 @@ export default defineComponent({
 
     return {
       /* Component properties */
-      cafes,
+      places,
       isInfiniteScrollDisabled,
       showSkeleton,
 
       /* Event handlers */
-      loadMoreCafes,
+      loadMorePlaces,
       refresh,
 
       /* Icons */

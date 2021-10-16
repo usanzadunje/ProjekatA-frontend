@@ -68,7 +68,7 @@ import {
   alertController,
 }                                      from '@ionic/vue';
 
-import CafeService from '@/services/CafeService';
+import PlaceService from '@/services/PlaceService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useFCM }                from '@/composables/useFCM';
@@ -79,7 +79,7 @@ import {
 } from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'CafeSubscriptionModal',
+  name: 'PlaceSubscriptionModal',
   components: {
     IonItem,
     IonIcon,
@@ -115,7 +115,7 @@ export default defineComponent({
     const subscribe = async(placeId) => {
       const notifyIn = indefiniteTimerActive.value ? '' : notificationTime.value;
       try {
-        await CafeService.subscribe(placeId, notifyIn);
+        await PlaceService.subscribe(placeId, notifyIn);
         isUserSubscribed.value = true;
         emit('userToggledSubscription');
         await showSuccessToast(t('successSubscribe'));
@@ -153,7 +153,7 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     //When users lands on page check if he is already subscribed to place
-    CafeService.isUserSubscribed(place.value.id)
+    PlaceService.isUserSubscribed(place.value.id)
                .then((response) => {
                  isUserSubscribed.value = !!response.data.subscribed;
                })
@@ -179,7 +179,7 @@ export default defineComponent({
 
       if(isUserSubscribed.value) {
         try {
-          await CafeService.unsubscribe(placeId);
+          await PlaceService.unsubscribe(placeId);
           isUserSubscribed.value = false;
           emit('userToggledSubscription');
           await showSuccessToast(t('successUnsubscribe'));

@@ -19,7 +19,7 @@ import { useStore }                                                 from 'vuex';
 import { useI18n }                                                  from 'vue-i18n';
 import { loadingController }                                        from '@ionic/vue';
 
-import CafeService from '@/services/CafeService';
+import PlaceService from '@/services/PlaceService';
 
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useToastNotifications } from '@/composables/useToastNotifications';
@@ -91,7 +91,7 @@ export default defineComponent({
       }
 
       CapacitorGoogleMaps.addListener("onMapReady", async function() {
-        distance.value = `${Math.round(CafeService.getDistance(place.latitude, place.longitude))}m`;
+        distance.value = `${Math.round(PlaceService.getDistance(place.latitude, place.longitude))}m`;
 
         await CapacitorGoogleMaps.addMarker({
           latitude: Number(place.latitude) || 43.317862492567,

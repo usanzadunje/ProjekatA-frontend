@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <CafeInfoBody
+    <PlaceInfoBody
         :place="place"
         :show-skeleton="showSkeleton"
     />
@@ -29,8 +29,8 @@
     <div class="mt-5 mb-3 flex justify-around">
       <ion-button
           class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
-          :routerLink="`/cafes/${place.id}?redirect=${$route.path + '?openModal=true'}`"
-          @click="$emit('dismissShortCafeModal')"
+          :routerLink="`/places/${place.id}?redirect=${$route.path + '?openModal=true'}`"
+          @click="$emit('dismissPlaceInfoModal')"
       >
         {{ $t('more') }}
       </ion-button>
@@ -51,9 +51,9 @@
   <Modal
       :is-open="isModalOpen"
       css-class="custom-map-modal"
-      @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
+      @didDismiss="openModal(false);$emit('dismissPlaceInfoModal')"
   >
-    <CafeSubscriptionModal
+    <PlaceSubscriptionModal
         :place="{'id': place.id, 'name': place.name}"
         @dismiss-subscription-modal="openModal(false);"
         @user-toggled-subscription="$emit('userToggledSubscription')"
@@ -71,12 +71,12 @@ import {
   IonButton,
 }                                                             from '@ionic/vue';
 
-import CafeInfoBody          from '@/components/place/CafeInfoBody';
+import PlaceInfoBody          from '@/components/place/PlaceInfoBody';
 import PlaceImageModalSlider from '@/components/user/sliders/PlaceImageModalSlider';
 import Modal                 from '@/components/Modal';
-import CafeSubscriptionModal from '@/components/user/modals/CafeSubscriptionModal';
+import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
 
-import CafeService from '@/services/CafeService';
+import PlaceService from '@/services/PlaceService';
 
 import { useModal } from '@/composables/useModal';
 
@@ -87,14 +87,14 @@ import {
 } from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'ShortCafeModal',
+  name: 'PlaceInfoModal',
   components: {
     IonIcon,
     IonButton,
-    CafeInfoBody,
+    PlaceInfoBody,
     PlaceImageModalSlider,
     Modal,
-    CafeSubscriptionModal,
+    PlaceSubscriptionModal,
   },
   props: {
     place: {
@@ -102,7 +102,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissShortCafeModal', 'subModalOpened', 'userToggledSubscription'],
+  emits: ['dismissPlaceInfoModal', 'subModalOpened', 'userToggledSubscription'],
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
@@ -129,8 +129,8 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     Promise.all([
-      CafeService.images(place.value.id),
-      CafeService.workingHours(place.value.id),
+      PlaceService.images(place.value.id),
+      PlaceService.workingHours(place.value.id),
     ]).then((response) => {
       place.value.images = response[0].data;
       place.value.working_hours = response[1].data;
@@ -143,7 +143,7 @@ export default defineComponent({
     isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
     /* Checking if users is subscribed to this place */
     if(store.getters['auth/loggedIn']) {
-      CafeService.isUserSubscribed(place.value.id)
+      PlaceService.isUserSubscribed(place.value.id)
                  .then((response) => {
                    isUserSubscribed.value = !!response.data.subscribed;
                  })

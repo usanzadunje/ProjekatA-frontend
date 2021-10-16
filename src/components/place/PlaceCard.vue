@@ -37,7 +37,7 @@ import {
   IonIcon,
 }                                            from '@ionic/vue';
 
-import CafeService from '@/services/CafeService';
+import PlaceService from '@/services/PlaceService';
 
 import {
   locationOutline,
@@ -47,7 +47,7 @@ import {
 } from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'CafeCard',
+  name: 'PlaceCard',
   components: {
     IonIcon,
   },
@@ -60,7 +60,7 @@ export default defineComponent({
   setup(props) {
     /* Component properties */
     const { place } = toRefs(props);
-    const distance = computed(() => Math.round(CafeService.getDistance(place.latitude, place.longitude)));
+    const distance = computed(() => Math.round(PlaceService.getDistance(place.latitude, place.longitude)));
     const logoPath = computed(() => {
       if(place.value.images?.length > 0) {
         return place.value.images.find(image => image.is_logo)?.path ??

@@ -87,11 +87,11 @@ const routes = [
                 component: () => import(/* webpackChunkName: "Home" */ "@/views/user/Home"),
             },
             {
-                path: "cafes/:id",
-                name: "cafe",
+                path: "places/:id",
+                name: "place.show",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "Place" */ "@/views/user/Cafe"),
+                    import(/* webpackChunkName: "ShowPlace" */ "@/views/user/ShowPlace"),
             },
             {
                 path: "search",

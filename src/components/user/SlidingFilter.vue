@@ -3,7 +3,7 @@
     <p v-if="hasTitle" class="sliding-filter-title uppercase ml-1">{{ $t('filter', 5) }}</p>
     <swiper
         id="slidingFilterSwiper"
-        :slides-per-view="this.$store.getters['global/width'] <= 360 ? 2.1 : 2.7"
+        :slides-per-view="this.$store.getters['global/width'] <= 335 ? 2.1 : 2.6"
     >
       <swiper-slide>
         <ion-button

@@ -16,7 +16,7 @@
         </ion-slide>
         <ion-slide>
           <div class="relative">
-            <CafePreviewExample/>
+            <PlacePreviewExample/>
             <OnboardingButton @next-slide="slideNext"/>
           </div>
         </ion-slide>
@@ -45,7 +45,7 @@ import {
 import OnboardingButton              from '@/components/onboarding/OnboardingButton';
 import RegistrationSuccess           from '@/components/onboarding/RegistrationSuccess';
 import SearchingExample              from '@/components/onboarding/SearchingExample';
-import CafePreviewExample            from '@/components/onboarding/CafePreviewExample';
+import PlacePreviewExample            from '@/components/onboarding/PlacePreviewExample';
 import ActivatingNotificationExample from '@/components/onboarding/ActivatingNotificationExample';
 
 export default defineComponent({
@@ -58,7 +58,7 @@ export default defineComponent({
     OnboardingButton,
     RegistrationSuccess,
     SearchingExample,
-    CafePreviewExample,
+    PlacePreviewExample,
     ActivatingNotificationExample,
   },
   setup() {

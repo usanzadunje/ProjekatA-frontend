@@ -15,7 +15,7 @@
       <div id="header">
         <UserHeader
             :main-heading="$t('search')"
-            :search-term="cafeSearchString"
+            :search-term="placeSearchTerm"
             @search-filter-changed="searchFilterChanged"
         >
           <SlidingFilter
@@ -29,10 +29,10 @@
 
       <div class="ion-padding">
         <InfinitePlaceScroll
-            :cafe-search-string="cafeSearchString"
+            :place-search-term="placeSearchTerm"
             :sort-by="sortBy"
             @scroll-to-top="scrollToTop"
-            @open-cafe-modal="openModal(true, $event)"
+            @open-place-modal="openModal(true, $event)"
             @infinite-scroll-toggle="infiniteScrollLoading = !infiniteScrollLoading"
             :refresher="refresher"
             @mounted="renderSwiper"
@@ -44,9 +44,9 @@
           css-class="custom-modal"
           @didDismiss="openModal(false);"
       >
-        <ShortCafeModal
+        <PlaceInfoModal
             :place="modalData"
-            @dismiss-short-cafe-modal="openModal(false)"
+            @dismiss-place-info-modal="openModal(false)"
             @sub-modal-opened="hideModal('custom-modal')"
         />
       </Modal>
@@ -72,7 +72,7 @@ import UserHeader          from '@/components/user/headers/UserHeader';
 import SlidingFilter       from '@/components/user/SlidingFilter';
 import InfinitePlaceScroll from '@/components/place/InfinitePlaceScroll';
 import Modal               from '@/components/Modal';
-import ShortCafeModal      from '@/components/user/modals/ShortCafeModal';
+import PlaceInfoModal      from '@/components/user/modals/PlaceInfoModal';
 
 import { useModal }   from '@/composables/useModal';
 import { useContent } from '@/composables/useContent';
@@ -89,7 +89,7 @@ export default defineComponent({
     SlidingFilter,
     InfinitePlaceScroll,
     Modal,
-    ShortCafeModal,
+    PlaceInfoModal,
   },
   setup() {
     /* Global properties */
@@ -97,7 +97,7 @@ export default defineComponent({
     const router = useRouter();
 
     /* Component properties */
-    const cafeSearchString = ref('');
+    const placeSearchTerm = ref('');
     const sortBy = ref('distance');
     // const scrollTopOffset = ref(0);
     // const prevScrollDirectionDown = ref(false);
@@ -118,7 +118,7 @@ export default defineComponent({
       // Set search input to search term passed from Home page
       // And remove query string
       if(route.query.searchTerm || route.query.searchTerm === '') {
-        cafeSearchString.value = route.query.searchTerm;
+        placeSearchTerm.value = route.query.searchTerm;
         router.replace();
       }
     });
@@ -129,12 +129,12 @@ export default defineComponent({
     // onIonViewWillLeave(() => {
     //   // Before leaving page remove search input value and clear search string
     //   document.querySelector('ion-searchbar div input').value = null;
-    //   cafeSearchString.value = '';
+    //   placeSearchTerm.value = '';
     // });
 
     /* Event handlers */
     const searchFilterChanged = (searchInputValue) => {
-      cafeSearchString.value = searchInputValue;
+      placeSearchTerm.value = searchInputValue;
     };
     const sortHasChanged = async(sortValue) => {
       sortBy.value = sortValue;
@@ -178,7 +178,7 @@ export default defineComponent({
 
     return {
       /* Component properties */
-      cafeSearchString,
+      placeSearchTerm,
       sortBy,
       content,
       isModalOpen,

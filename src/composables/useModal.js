@@ -4,7 +4,7 @@ export function useModal() {
     /* Component properties */
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
-    // Cafe which information is sent to modal
+    // Place which information is sent to modal
     const modalData = ref({});
 
 

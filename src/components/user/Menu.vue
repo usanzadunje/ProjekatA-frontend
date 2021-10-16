@@ -24,7 +24,7 @@
         :swipe-to-close="false"
         width="90%"
     >
-      <ShortMenuProductModal
+      <ProductInfoModal
           :product="modalData"
           @dismiss="openModal(false)"
       />
@@ -39,7 +39,7 @@ import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import AccordionList         from '@/components/user/AccordionList';
 import ProductCard           from '@/components/ProductCard';
 import Modal                 from '@/components/Modal';
-import ShortMenuProductModal from '@/components/user/modals/ShortMenuProductModal';
+import ProductInfoModal from '@/components/user/modals/ProductInfoModal';
 
 
 import {
@@ -56,7 +56,7 @@ export default defineComponent({
     AccordionList,
     ProductCard,
     Modal,
-    ShortMenuProductModal,
+    ProductInfoModal,
   },
   props: {
     placeInfo: {

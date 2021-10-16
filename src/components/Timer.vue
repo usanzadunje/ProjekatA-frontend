@@ -1,7 +1,7 @@
 <template>
   <div>
     <span v-if="timeLeft === -1" class="lowercase">{{ $t('indefinitely') }}</span>
-    <span v-else>{{ $t('timeLeft', { time: timeLeft }, timeLeft) }}</span>
+    <span :id="timerTextId" v-else>{{ $t('timeLeft', { time: timeLeft }, timeLeft) }}</span>
   </div>
 </template>
 <script>
@@ -15,6 +15,10 @@ export default defineComponent({
     start: {
       type: Number,
       default: 0,
+    },
+    timerTextId: {
+      type: String,
+      default: null,
     },
   },
   emits: ['subscriptionExpired'],

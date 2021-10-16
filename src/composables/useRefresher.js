@@ -13,8 +13,8 @@
 //     const refresh = async(event, promises) => {
 //         await checkForLocationPermission();
 //         await tryGettingLocation();
-//         // Only after both cafe arrays have been updated then complete refresher
-//         // Fetching 4 cafes in each category with new live data
+//         // Only after both place arrays have been updated then complete refresher
+//         // Fetching 4 places in each category with new live data
 //         Promise.all([
 //             promises
 //         ]).then((response) => {

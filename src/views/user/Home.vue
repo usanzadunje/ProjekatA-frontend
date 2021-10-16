@@ -20,15 +20,15 @@
         >
           <swiper-slide>
             <SlidingCards
-                :places="cafes.closestToUser?.slice(0, 2)"
-                @open-cafe-modal="openModal(true, $event)"
+                :places="places.closestToUser?.slice(0, 2)"
+                @open-place-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </swiper-slide>
           <swiper-slide>
             <SlidingCards
-                :places="cafes.closestToUser?.slice(2, 4)"
-                @open-cafe-modal="openModal(true, $event)"
+                :places="places.closestToUser?.slice(2, 4)"
+                @open-place-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </swiper-slide>
@@ -36,8 +36,8 @@
 
 
         <div v-show="showSkeleton">
-          <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
-          <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
+          <SkeletonPlaceCard class="mb-2"></SkeletonPlaceCard>
+          <SkeletonPlaceCard class="mb-2"></SkeletonPlaceCard>
         </div>
 
         <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
@@ -47,15 +47,15 @@
         >
           <swiper-slide>
             <SlidingCards
-                :places="cafes.currentlyAvailable?.slice(0, 2)"
-                @open-cafe-modal="openModal(true, $event)"
+                :places="places.currentlyAvailable?.slice(0, 2)"
+                @open-place-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </swiper-slide>
           <swiper-slide>
             <SlidingCards
-                :places="cafes.currentlyAvailable?.slice(2, 4)"
-                @open-cafe-modal="openModal(true, $event)"
+                :places="places.currentlyAvailable?.slice(2, 4)"
+                @open-place-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </swiper-slide>
@@ -68,23 +68,23 @@
         >
           <swiper-slide>
             <SlidingCards
-                :places="cafes.haveFood?.slice(0, 2)"
-                @open-cafe-modal="openModal(true, $event)"
+                :places="places.haveFood?.slice(0, 2)"
+                @open-place-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </swiper-slide>
           <swiper-slide>
             <SlidingCards
-                :places="cafes.haveFood?.slice(2, 4)"
-                @open-cafe-modal="openModal(true, $event)"
+                :places="places.haveFood?.slice(2, 4)"
+                @open-place-modal="openModal(true, $event)"
                 class="pr-3"
             />
           </swiper-slide>
         </swiper>
 
         <div v-show="showSkeleton">
-          <SkeletonCafeCard class="mb-2"></SkeletonCafeCard>
-          <SkeletonCafeCard></SkeletonCafeCard>
+          <SkeletonPlaceCard class="mb-2"></SkeletonPlaceCard>
+          <SkeletonPlaceCard></SkeletonPlaceCard>
         </div>
       </div>
 
@@ -94,9 +94,9 @@
           css-class="custom-modal"
           @didDismiss="openModal(false);"
       >
-        <ShortCafeModal
+        <PlaceInfoModal
             :place="modalData"
-            @dismiss-short-cafe-modal="openModal(false)"
+            @dismiss-place-info-modal="openModal(false)"
             @sub-modal-opened="hideModal('custom-modal')"
         />
       </Modal>
@@ -120,14 +120,14 @@ import { Swiper, SwiperSlide }                       from 'swiper/vue';
 import 'swiper/swiper.min.css';
 
 
-import CafeService from '@/services/CafeService';
+import PlaceService from '@/services/PlaceService';
 
 import UserHeader            from '@/components/user/headers/UserHeader';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import SlidingCards          from '@/components/place/SlidingCards';
-import SkeletonCafeCard      from '@/components/place/SkeletonCafeCard';
+import SkeletonPlaceCard     from '@/components/place/SkeletonPlaceCard';
 import Modal                 from '@/components/Modal';
-import ShortCafeModal        from '@/components/user/modals/ShortCafeModal';
+import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
@@ -146,8 +146,8 @@ export default defineComponent({
     FilterCategoryHeading,
     SlidingCards,
     Modal,
-    ShortCafeModal,
-    SkeletonCafeCard,
+    PlaceInfoModal,
+    SkeletonPlaceCard,
   },
   beforeRouteEnter(to) {
     // Before entering route remove query params
@@ -162,7 +162,7 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
-    const cafes = reactive({
+    const places = reactive({
       closestToUser: [],
       currentlyAvailable: [],
       haveFood: [],
@@ -181,7 +181,7 @@ export default defineComponent({
         (state, getters) => getters['global/position'],
         async() => {
           try {
-            const response = await CafeService.index(
+            const response = await PlaceService.index(
                 true,
                 'distance',
                 '',
@@ -191,7 +191,7 @@ export default defineComponent({
                 store.getters['global/position'].longitude,
             );
 
-            cafes.closestToUser = response.data;
+            places.closestToUser = response.data;
 
             unwatch();
           }catch(error) {
@@ -204,9 +204,9 @@ export default defineComponent({
         },
     );
 
-    //Before fetching cafes by distance get location and then pass it to query string in API call to backend
+    //Before fetching places by distance get location and then pass it to query string in API call to backend
     onMounted(async() => {
-      await getFilteredCafes();
+      await getFilteredPlaces();
       showSkeleton.value = false;
     });
     onIonViewDidEnter(() => {
@@ -214,10 +214,10 @@ export default defineComponent({
     });
 
     /* Methods */
-    const getFilteredCafes = async() => {
+    const getFilteredPlaces = async() => {
       try {
         const response = await Promise.all([
-          CafeService.index(
+          PlaceService.index(
               true,
               'distance',
               '',
@@ -227,7 +227,7 @@ export default defineComponent({
               store.getters['global/position'].longitude,
           ),
 
-          CafeService.index(
+          PlaceService.index(
               true,
               'availability',
               '',
@@ -237,7 +237,7 @@ export default defineComponent({
               store.getters['global/position'].longitude,
           ),
 
-          CafeService.index(
+          PlaceService.index(
               true,
               'food',
               '',
@@ -248,9 +248,9 @@ export default defineComponent({
           ),
         ]);
 
-        cafes.closestToUser = response[0].data;
-        cafes.currentlyAvailable = response[1].data;
-        cafes.haveFood = response[2].data;
+        places.closestToUser = response[0].data;
+        places.currentlyAvailable = response[1].data;
+        places.haveFood = response[2].data;
       }catch(error) {
         showErrorToast(
             null,
@@ -270,14 +270,14 @@ export default defineComponent({
       await checkForLocationPermission();
       await tryGettingLocation();
 
-      await getFilteredCafes();
+      await getFilteredPlaces();
       event.target.complete();
     };
 
     return {
       /* Global properties */
       /* Component properties */
-      cafes,
+      places,
       isModalOpen,
       modalData,
       showSkeleton,

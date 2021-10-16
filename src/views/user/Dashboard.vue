@@ -18,24 +18,24 @@
         <FilterCategoryHeading :title="$t('subscribedPlaces')" class="mb-2"/>
 
         <div v-show="!showSkeleton">
-          <ion-item-sliding v-for="cafe in cafesUserSubscribedTo" :key="cafe.id" class="ion-no-padding mb-5">
+          <ion-item-sliding v-for="place in placesUserSubscribedTo" :key="place.id" class="ion-no-padding mb-5">
             <ion-item class="ion-no-padding ion-no-margin relative">
               <Timer
-                  id="timer"
-                  :start="cafe.subscription_expires_in"
-                  :key="cafe.subscription_expires_in"
-                  class="absolute top-2 right-4 text-sm font-bold"
-                  @subscription-expired="subscriptionExpired(cafe.id)"
+                  :timer-text-id="`expiryText${place.id}`"
+                  :start="place.subscription_expires_in"
+                  :key="place.subscription_expires_in"
+                  class="absolute top-2 right-4 text-sm font-bold primary-text-color"
+                  @subscription-expired="removeExpiredSubscription(place.id)"
               />
-              <CafeCard
+              <PlaceCard
                   class="w-full"
-                  :place="cafe"
-                  @click="openModal(true, cafe)"
+                  :place="place"
+                  @click="openModal(true, place)"
               />
             </ion-item>
 
-            <ion-item-options side="end" @ionSwipe="unsubscribeSwiping(cafe.id)">
-              <ion-item-option type="button" :expandable="true" @click="showAlert(cafe.id)">
+            <ion-item-options side="end" @ionSwipe="unsubscribeSwiping(place.id)">
+              <ion-item-option type="button" :expandable="true" @click="showAlert(place.id)">
                 <ion-icon
                     slot="icon-only"
                     :icon="trashOutline"
@@ -48,7 +48,7 @@
 
         <div v-show="showSkeleton">
           <div v-for="i in 5" :key="i" class="mb-5">
-            <SkeletonCafeCard></SkeletonCafeCard>
+            <SkeletonPlaceCard></SkeletonPlaceCard>
           </div>
         </div>
       </div>
@@ -58,9 +58,9 @@
           css-class="custom-modal"
           @didDismiss="openModal(false);"
       >
-        <ShortCafeModal
+        <PlaceInfoModal
             :place="modalData"
-            @dismiss-short-cafe-modal="openModal(false)"
+            @dismiss-place-info-modal="openModal(false)"
             @sub-modal-opened="hideModal('custom-modal')"
             @user-toggled-subscription="getSubscriptions"
         />
@@ -92,12 +92,12 @@ import UserProfileHeader     from '@/components/user/headers/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import Timer                 from '@/components/Timer';
-import CafeCard              from '@/components/place/CafeCard';
-import SkeletonCafeCard      from '@/components/place/SkeletonCafeCard';
+import PlaceCard              from '@/components/place/PlaceCard';
+import SkeletonPlaceCard      from '@/components/place/SkeletonPlaceCard';
 import Modal                 from '@/components/Modal';
-import ShortCafeModal        from '@/components/user/modals/ShortCafeModal';
+import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
 
-import CafeService from '@/services/CafeService';
+import PlaceService from '@/services/PlaceService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
@@ -126,10 +126,10 @@ export default defineComponent({
     SlidingFilter,
     FilterCategoryHeading,
     Timer,
-    CafeCard,
+    PlaceCard,
     Modal,
-    ShortCafeModal,
-    SkeletonCafeCard,
+    PlaceInfoModal,
+    SkeletonPlaceCard,
   },
   setup() {
     /* Global properties */
@@ -138,10 +138,11 @@ export default defineComponent({
     const route = useRoute();
 
     /* Component properties */
-    // Cafes users is subscribed to
-    const cafesUserSubscribedTo = ref([]);
+    // places users is subscribed to
+    const placesUserSubscribedTo = ref([]);
     const sortBy = ref('distance');
     const showSkeleton = ref(true);
+    let timeLeftText = null;
 
     /* Composables */
     const { showUndoToast, showSuccessToast, showErrorToast } = useToastNotifications();
@@ -151,7 +152,7 @@ export default defineComponent({
     /* Lifecycle hooks */
     onIonViewDidEnter(async() => {
       openModal(!!route.query.openModal);
-      // Everytime users comes to the page give him view of fresh cafes he has subscribed to
+      // Everytime users comes to the page give him view of fresh places he has subscribed to
       await getSubscriptions();
       showSkeleton.value = false;
     });
@@ -159,12 +160,12 @@ export default defineComponent({
     /* Methods */
     const getSubscriptions = async() => {
       try {
-        const response = await CafeService.getAllCafesUserSubscribedTo(
+        const response = await PlaceService.userSubscriptions(
             sortBy.value,
             store.getters['global/position'].latitude,
             store.getters['global/position'].longitude,
         );
-        cafesUserSubscribedTo.value = response.data;
+        placesUserSubscribedTo.value = response.data;
       }catch(error) {
         showErrorToast(
             null,
@@ -192,7 +193,7 @@ export default defineComponent({
       await tryGettingLocation();
       await getSubscriptions();
     };
-    const showAlert = async(cafeId) => {
+    const showAlert = async(placeId) => {
       const alert = await alertController
           .create({
             header: t('alertUnsubscribeHeader'),
@@ -206,7 +207,7 @@ export default defineComponent({
               {
                 text: t('agree'),
                 handler: () => {
-                  unsubscribe(cafeId);
+                  unsubscribe(placeId);
                   showSuccessToast(t('successUnsubscribe'));
                 },
               },
@@ -215,11 +216,11 @@ export default defineComponent({
       await alert.present();
     };
 
-    const unsubscribe = async(cafeId) => {
+    const unsubscribe = async(placeId) => {
       try {
-        await CafeService.unsubscribe(cafeId);
-        cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter((cafe) => {
-          return cafe.id !== cafeId;
+        await PlaceService.unsubscribe(placeId);
+        placesUserSubscribedTo.value = placesUserSubscribedTo.value.filter((place) => {
+          return place.id !== placeId;
         });
       }catch(error) {
         showErrorToast(
@@ -229,12 +230,16 @@ export default defineComponent({
             });
       }
     };
-    const unsubscribeSwiping = (cafeId) => {
-      unsubscribe(cafeId);
+    const unsubscribeSwiping = (placeId) => {
+      timeLeftText = document.getElementById('expiryText' + placeId).innerHTML.split(' ');
+
+      unsubscribe(placeId);
       Haptics.impact({ style: ImpactStyle.Heavy });
       showUndoToast(t('successUnsubscribe'), async() => {
         try {
-          await CafeService.subscribe(cafeId);
+          const notifyIn = timeLeftText.length === 1 ? null : timeLeftText[0];
+
+          await PlaceService.subscribe(placeId, notifyIn);
         }catch(e) {
           showErrorToast(
               null,
@@ -246,13 +251,13 @@ export default defineComponent({
         }
       });
     };
-    const subscriptionExpired = (placeId) => {
-      cafesUserSubscribedTo.value = cafesUserSubscribedTo.value.filter(place => place.id !== placeId);
+    const removeExpiredSubscription = (placeId) => {
+      placesUserSubscribedTo.value = placesUserSubscribedTo.value.filter(place => place.id !== placeId);
     };
 
     return {
       /* Component properties */
-      cafesUserSubscribedTo,
+      placesUserSubscribedTo,
       sortBy,
       isModalOpen,
       modalData,
@@ -266,7 +271,7 @@ export default defineComponent({
       hideModal,
       refresh,
       unsubscribeSwiping,
-      subscriptionExpired,
+      removeExpiredSubscription,
 
       /* Icons */
       trashOutline,
@@ -301,9 +306,5 @@ ion-item-option {
 
 ion-item-option:active {
   --background: #E01B43;
-}
-
-#timer {
-  color: var(--primary-heading);
 }
 </style>

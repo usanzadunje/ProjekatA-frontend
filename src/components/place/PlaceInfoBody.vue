@@ -92,7 +92,7 @@ import {
 
 export default defineComponent({
 
-  name: "CafeInfoBody",
+  name: "PlaceInfoBody",
   components: {
     IonIcon,
     IonButton,

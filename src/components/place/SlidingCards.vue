@@ -1,11 +1,11 @@
 <template>
   <div class="w-full">
-    <CafeCard
+    <PlaceCard
         v-for="place in places"
         :key="place.id"
         class="mb-5"
         :place="place"
-        @click="$emit('openCafeModal', place)"
+        @click="$emit('openPlaceModal', place)"
     />
   </div>
 </template>
@@ -13,12 +13,12 @@
 <script>
 import { defineComponent } from 'vue';
 
-import CafeCard from '@/components/place/CafeCard';
+import PlaceCard from '@/components/place/PlaceCard';
 
 export default defineComponent({
-  name: "HomeSlidingCafeCards",
+  name: "HomeSlidingPlaceCards",
   components: {
-    CafeCard,
+    PlaceCard,
   },
   props: {
     places: {
@@ -26,7 +26,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['openCafeModal'],
+  emits: ['openPlaceModal'],
   setup() {
 
 

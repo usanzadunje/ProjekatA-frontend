@@ -91,7 +91,7 @@ import {
 
 
 export default defineComponent({
-  name: 'ShortMenuProductModal',
+  name: 'ProductInfoModal',
   components: {
     IonItem,
     IonInput,

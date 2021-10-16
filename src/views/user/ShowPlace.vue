@@ -31,7 +31,7 @@
               </p>
             </div>
 
-            <CafeInfoBody
+            <PlaceInfoBody
                 :place="place"
                 :show-skeleton="showSkeleton"
             />
@@ -78,9 +78,9 @@
       <Modal
           :is-open="isModalOpen"
           css-class="custom-sub-modal"
-          @didDismiss="openModal(false);$emit('dismissShortCafeModal')"
+          @didDismiss="openModal(false);$emit('dismissPlaceInfoModal')"
       >
-        <CafeSubscriptionModal
+        <PlaceSubscriptionModal
             :place="{'id': place.id, 'name': place.name}"
             @dismiss-subscription-modal="openModal(false);"
             @user-toggled-subscription="isUserSubscribed = !isUserSubscribed"
@@ -111,16 +111,16 @@ import {
 
 import GoBackHeader          from '@/components/user/headers/GoBackHeader';
 import MainImagePreview      from '@/components/MainImagePreview';
-import CafeInfoBody          from '@/components/place/CafeInfoBody';
+import PlaceInfoBody          from '@/components/place/PlaceInfoBody';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import TableContainer        from '@/components/TableContainer';
 import Table                 from '@/components/Table';
 import Menu                  from '@/components/user/Menu';
 import Modal                 from '@/components/Modal';
-import CafeSubscriptionModal from '@/components/user/modals/CafeSubscriptionModal';
+import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
 import ImagePreviewModal     from '@/components/user/modals/ImagePreviewModal';
 
-import CafeService from '@/services/CafeService';
+import PlaceService from '@/services/PlaceService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useModal }              from '@/composables/useModal';
@@ -138,7 +138,7 @@ import {
 import TableService from '@/services/TableService';
 
 export default defineComponent({
-  name: "Cafe",
+  name: "ShowPlace",
   components: {
     IonPage,
     IonContent,
@@ -149,13 +149,13 @@ export default defineComponent({
     IonRefresherContent,
     GoBackHeader,
     MainImagePreview,
-    CafeInfoBody,
+    PlaceInfoBody,
     FilterCategoryHeading,
     TableContainer,
     Table,
     Menu,
     Modal,
-    CafeSubscriptionModal,
+    PlaceSubscriptionModal,
   },
   setup() {
     /* Global properties */
@@ -192,7 +192,7 @@ export default defineComponent({
     const getPlace = async() => {
       showSkeleton.value = true;
       try {
-        const response = await CafeService.show(route.params.id, '?products=true');
+        const response = await PlaceService.show(route.params.id, '?products=true');
         const tablesResponse = await TableService.index(route.params.id);
 
         place.value = response.data;
@@ -203,7 +203,7 @@ export default defineComponent({
         });
 
         if(loggedIn.value) {
-          const subscriptionResponse = await CafeService.isUserSubscribed(route.params.id);
+          const subscriptionResponse = await PlaceService.isUserSubscribed(route.params.id);
           isUserSubscribed.value = !!subscriptionResponse.data.subscribed;
         }
         showSkeleton.value = false;
@@ -255,7 +255,7 @@ export default defineComponent({
     /* Watchers */
     // Watching for changes of id parameter in place show route and fetching right data
     watch(route, async() => {
-      if(route.name === 'cafe' && route.params.id) {
+      if(route.name === 'place.show' && route.params.id) {
         await getPlace();
       }
     });

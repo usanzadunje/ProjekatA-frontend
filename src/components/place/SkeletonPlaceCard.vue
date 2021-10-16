@@ -32,7 +32,7 @@ import { defineComponent }               from 'vue';
 import { IonSkeletonText, IonThumbnail } from '@ionic/vue';
 
 export default defineComponent({
-  name: "SkeletonCafeCard",
+  name: "SkeletonPlaceCard",
   components: {
     IonSkeletonText,
     IonThumbnail,

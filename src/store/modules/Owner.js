@@ -3,7 +3,7 @@ import OwnerService from '@/services/OwnerService';
 import { calculatePxFromPercent, removeClonedTableElements } from '@/utils/helpers';
 import CategoryService                                       from '@/services/CategoryService';
 import ProductService                                        from '@/services/ProductService';
-import CafeService                                           from '@/services/CafeService';
+import PlaceService                                           from '@/services/PlaceService';
 
 const fontSize = getComputedStyle(document.documentElement).fontSize;
 
@@ -131,7 +131,7 @@ export const mutations = {
 export const actions = {
     /* PLACE */
     async getPlaceInfo({ commit, rootGetters }) {
-        const response = await CafeService.show(rootGetters['auth/authUser'].cafe);
+        const response = await PlaceService.show(rootGetters['auth/authUser'].place);
 
         commit('SET_PLACE_INFO', response.data);
         commit('staff/SET_AVAILABILITY_RATIO', response.data?.availability_ratio ?? '0/0', { root: true });
@@ -301,7 +301,7 @@ export const getters = {
         return state.categories;
     },
     createdCategories: (state) => {
-        return state.categories.filter(category => category.cafe_id);
+        return state.categories.filter(category => category.place_id);
     },
     products: (state) => {
         return state.products;
