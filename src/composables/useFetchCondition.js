@@ -27,7 +27,6 @@ export function useFetchCondition() {
     };
     const getPlaceCategories = async() => {
         if(store.getters['owner/categories']?.length === 0) {
-            console.log('fetch');
             await store.dispatch('owner/getCategories');
         }
     };

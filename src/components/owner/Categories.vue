@@ -12,13 +12,14 @@
 
     <ion-list class="rounded-2xl mt-4" lines="none">
       <ion-item-sliding
+          ref="slidingItem"
           v-for="(category, index) in categories"
           :key="category.id"
           class="ion-no-padding"
           :class="{ 'item-border': index !== categories.length - 1 }"
-          @click="editCategory(category)"
+          @click="closeOpenItems"
       >
-        <ion-item class="ion-no-padding ion-no-margin">
+        <ion-item class="ion-no-padding ion-no-margin" @click="editCategory(category)">
           <div class="px-4 flex justify-between items-center w-full">
             <span>{{ category.name }}</span>
             <div>
@@ -88,6 +89,7 @@ import {
 } from 'ionicons/icons';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { useSlidingItem }       from '@/composables/useSlidingItem';
 
 export default defineComponent({
   name: 'Categories',
@@ -109,6 +111,8 @@ export default defineComponent({
     /* Component properties */
     const categories = computed(() => store.getters['owner/createdCategories']);
 
+    /* Composables */
+    const { slidingItem, closeOpenItems } = useSlidingItem();
     /* Lifecycle hooks */
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
@@ -168,12 +172,14 @@ export default defineComponent({
       categories,
       isModalOpen,
       modalData,
+      slidingItem,
 
       /* Event handlers */
       openModal,
       createCategory,
       editCategory,
       showAlert,
+      closeOpenItems,
 
       /* Icons */
       createOutline,

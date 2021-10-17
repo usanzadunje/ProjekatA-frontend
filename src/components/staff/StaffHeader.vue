@@ -22,9 +22,10 @@
           <img
               :src="this.$store.getters['auth/authUser']?.avatar ?? backendStorageURL + '/users/default_avatar.png'"
               alt="Profile picture"
+              class="w-full h-full object-cover"
           >
         </ion-avatar>
-        <ion-label>
+        <ion-label class="break-all">
           {{
             this.$store.getters['auth/authUser']?.username || this.$store.getters['auth/authUser']?.fname
           }}

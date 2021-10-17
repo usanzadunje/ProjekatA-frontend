@@ -20,23 +20,27 @@
 
     <ion-list class="mt-4" lines="none">
       <ion-item-sliding
+          ref="slidingItem"
           v-for="product in products"
           :key="product.id"
           class="ion-no-padding mb-2"
+          @click="closeOpenItems"
       >
-        <ion-item class="ion-no-padding ion-no-margin" lines="none">
+        <ion-item
+            class="ion-no-padding ion-no-margin"
+            lines="none"
+            @click="showEditProductModal(product)"
+        >
           <div class="flex justify-between items-center w-full">
             <ProductCard
                 :product="product"
                 class="w-full"
-                @click="showEditProductModal(product)"
             >
               <div class="flex justify-end items-center w-20">
                 <ion-icon
                     slot="icon-only"
                     :icon="createOutline"
                     class="text-2xl text-blue"
-                    @click="showEditProductModal(product)"
                 ></ion-icon>
                 <ion-icon
                     slot="icon-only"
@@ -117,6 +121,7 @@ import { createOutline, trashOutline } from 'ionicons/icons';
 import { increaseAccordionMaxHeight } from '@/utils/helpers';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { useSlidingItem }       from '@/composables/useSlidingItem';
 
 export default defineComponent({
   name: 'Products',
@@ -156,6 +161,7 @@ export default defineComponent({
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { isModalOpen, modalData, openModal } = useModal();
+    const { slidingItem, closeOpenItems } = useSlidingItem();
 
     /* Lifecycle hooks */
 
@@ -246,6 +252,7 @@ export default defineComponent({
       modalData,
       searchTerm,
       isInfiniteScrollDisabled,
+      slidingItem,
 
       /* Event handlers */
       openModal,
@@ -254,6 +261,7 @@ export default defineComponent({
       showAlert,
       searchInputChanged,
       loadMoreProducts,
+      closeOpenItems,
 
       /* Icons */
       createOutline,

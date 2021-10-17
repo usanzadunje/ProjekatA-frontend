@@ -1,6 +1,6 @@
 <template>
   <div class="background-white cafe-card-border-radius">
-    <div class="p-4 flex justify-start items-center">
+    <div class="py-4 px-3 flex justify-start items-center">
       <img
           :src="`${backendStorageURL + logoPath}`"
           alt="Logo"

@@ -36,15 +36,15 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue';
-import { useStore }                  from 'vuex';
+import { computed, defineComponent, onMounted } from 'vue';
+import { useStore }                             from 'vuex';
 import {
   IonPage,
   IonContent,
   IonRefresher,
   IonRefresherContent,
   onIonViewWillEnter,
-}                                    from '@ionic/vue';
+}                                               from '@ionic/vue';
 
 import ActiveStaffMembers        from '@/components/staff/ActiveStaffMembers';
 import PlaceAvailabilityChart    from '@/components/staff/charts/PlaceAvailabilityChart';
@@ -68,6 +68,9 @@ export default defineComponent({
     const store = useStore();
 
     /* Lifecycle hooks */
+    onMounted(async() => {
+      await store.dispatch('staff/updatePlaceAvailability');
+    });
     onIonViewWillEnter(async() => {
       if(!Capacitor.isNativePlatform()) {
         await store.dispatch('staff/updatePlaceAvailability');

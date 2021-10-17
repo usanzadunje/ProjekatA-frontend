@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex">
     <ion-button fill="clear" @click="showNotifications($event)" class="h-auto">
       <div class="relative">
         <ion-icon
@@ -9,8 +9,10 @@
             class="primary-icon-color flex"
             slot="icon-only"
         ></ion-icon>
-        <div v-if="unreadNotificationsCount > 0" class="absolute z-200 top-0 left-4">
-          <ion-badge>{{ unreadNotificationsCount }}</ion-badge>
+        <div id="badge-container" v-if="unreadNotificationsCount > 0" class="absolute z-40 top-0">
+          <div class="w-4 h-4 rounded-full">
+            <ion-badge class="w-full rounded-full">{{ unreadNotificationsCount }}</ion-badge>
+          </div>
         </div>
       </div>
     </ion-button>
@@ -84,11 +86,13 @@ ion-button {
 }
 
 ion-icon {
-  font-size: 1.75rem !important;
+  font-size: 1.6rem !important;
 }
-
+#badge-container {
+  left: 10px;
+}
 ion-badge {
-  font-size: 11px !important;
+  font-size: 9px !important;
   padding: 3px !important;
   --background: var(--user-selected-color);
 }

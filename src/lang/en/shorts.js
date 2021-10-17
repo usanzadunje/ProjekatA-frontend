@@ -29,7 +29,7 @@ export default {
     "subscribe": "Subscribe",
     "subscribed": "Subscribed",
     "map": "Map",
-    "notifications": "Notification",
+    "notification": "Notification | Notifications",
     "confirm": "Confirm",
     "cancel": "Cancel",
     "remove": "Remove",

@@ -1,16 +1,13 @@
-import { ref } from 'vue';
-
 export function useContent() {
     /* Component properties */
-    const content = ref(null);
 
     /* Methods */
-    const scrollToTop = () => {
-        content.value?.$el?.scrollToTop(500);
+    const scrollToTop = (element, duration = 500) => {
+        element.$el.scrollToTop(duration);
     };
+    
     return {
         /* Component properties */
-        content,
 
         /* Methods */
         scrollToTop,

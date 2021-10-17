@@ -3,7 +3,7 @@
 
     <GoBackHeader class="px-2 py-1"/>
 
-    <ion-content class="h-full">
+    <ion-content ref="content" class="h-full">
       <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
@@ -109,16 +109,16 @@ import {
   onIonViewWillLeave,
 }                                                from '@ionic/vue';
 
-import GoBackHeader          from '@/components/user/headers/GoBackHeader';
-import MainImagePreview      from '@/components/MainImagePreview';
+import GoBackHeader           from '@/components/user/headers/GoBackHeader';
+import MainImagePreview       from '@/components/MainImagePreview';
 import PlaceInfoBody          from '@/components/place/PlaceInfoBody';
-import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import TableContainer        from '@/components/TableContainer';
-import Table                 from '@/components/Table';
-import Menu                  from '@/components/user/Menu';
-import Modal                 from '@/components/Modal';
+import FilterCategoryHeading  from '@/components/user/FilterCategoryHeading';
+import TableContainer         from '@/components/TableContainer';
+import Table                  from '@/components/Table';
+import Menu                   from '@/components/user/Menu';
+import Modal                  from '@/components/Modal';
 import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
-import ImagePreviewModal     from '@/components/user/modals/ImagePreviewModal';
+import ImagePreviewModal      from '@/components/user/modals/ImagePreviewModal';
 
 import PlaceService from '@/services/PlaceService';
 
@@ -135,7 +135,8 @@ import {
 }
   from 'ionicons/icons';
 
-import TableService from '@/services/TableService';
+import TableService   from '@/services/TableService';
+import { useContent } from '@/composables/useContent';
 
 export default defineComponent({
   name: "ShowPlace",
@@ -164,6 +165,7 @@ export default defineComponent({
     const { t } = useI18n();
 
     /* Component properties */
+    const content = ref();
     const place = ref({});
     const isUserSubscribed = ref(false);
     let searchTab = null;
@@ -187,6 +189,7 @@ export default defineComponent({
     /* Composables */
     const { showErrorToast } = useToastNotifications();
     const { isModalOpen, openModal } = useModal();
+    const { scrollToTop } = useContent();
 
     /* Methods */
     const getPlace = async() => {
@@ -231,6 +234,8 @@ export default defineComponent({
       if(searchTab) {
         searchTab.style.color = '';
       }
+
+      scrollToTop(content.value, 1);
     });
 
 
@@ -262,8 +267,8 @@ export default defineComponent({
 
     return {
       /* Global properties */
-
       /* Component properties */
+      content,
       place,
       mainImagePath,
       isModalOpen,

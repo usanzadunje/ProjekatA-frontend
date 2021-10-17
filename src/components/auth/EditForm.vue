@@ -5,13 +5,13 @@
           class="flex justify-center mb-6"
       >
         <ion-thumbnail
-            class="user-profile-picture-edit"
+            class="edit-avatar"
             :class="{ 'error-border' : errorNames.hasOwnProperty('avatar') }"
             @click="selectImageSource"
         >
           <img
               ref="avatarDisplay"
-              class="user-profile-picture-edit"
+              class="edit-avatar"
               alt="avatar"
               :src="avatar"
           >

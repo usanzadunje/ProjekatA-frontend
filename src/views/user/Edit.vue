@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <ion-header :translucent="true" class="ion-no-border">
       <ion-toolbar mode="ios">
         <ion-buttons slot="start">
           <ion-back-button
@@ -85,6 +85,10 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+ion-header {
+  border-bottom: solid 1px var(--horizontal-divider);
+}
+
 ion-toolbar {
   --border-color: var(--header-border-color);
   --background: var(--show-paint);

@@ -61,7 +61,7 @@
     <hr class="card-horizontal-ruler mt-3.5">
     <Modal
         :is-open="isModalOpen"
-        css-class="custom-sub-modal"
+        css-class="custom-map-modal"
         @didDismiss="openModal(false);"
     >
       <GoogleMap :place="place"/>

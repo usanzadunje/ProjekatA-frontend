@@ -18,13 +18,19 @@
         <FilterCategoryHeading :title="$t('subscribedPlaces')" class="mb-2"/>
 
         <div v-show="!showSkeleton">
-          <ion-item-sliding v-for="place in placesUserSubscribedTo" :key="place.id" class="ion-no-padding mb-5">
+          <ion-item-sliding
+              ref="slidingItem"
+              v-for="place in placesUserSubscribedTo"
+              :key="place.id"
+              class="ion-no-padding mb-5"
+              @click="closeOpenItems"
+          >
             <ion-item class="ion-no-padding ion-no-margin relative">
               <Timer
                   :timer-text-id="`expiryText${place.id}`"
                   :start="place.subscription_expires_in"
                   :key="place.subscription_expires_in"
-                  class="absolute top-2 right-4 text-sm font-bold primary-text-color"
+                  class="absolute top-1 right-3 text-sm font-bold primary-text-color"
                   @subscription-expired="removeExpiredSubscription(place.id)"
               />
               <PlaceCard
@@ -92,8 +98,8 @@ import UserProfileHeader     from '@/components/user/headers/UserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import Timer                 from '@/components/Timer';
-import PlaceCard              from '@/components/place/PlaceCard';
-import SkeletonPlaceCard      from '@/components/place/SkeletonPlaceCard';
+import PlaceCard             from '@/components/place/PlaceCard';
+import SkeletonPlaceCard     from '@/components/place/SkeletonPlaceCard';
 import Modal                 from '@/components/Modal';
 import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
 
@@ -102,6 +108,7 @@ import PlaceService from '@/services/PlaceService';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useModal }              from '@/composables/useModal';
+import { useSlidingItem }        from '@/composables/useSlidingItem';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
@@ -148,6 +155,7 @@ export default defineComponent({
     const { showUndoToast, showSuccessToast, showErrorToast } = useToastNotifications();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal, hideModal } = useModal();
+    const { slidingItem, closeOpenItems } = useSlidingItem();
 
     /* Lifecycle hooks */
     onIonViewDidEnter(async() => {
@@ -231,13 +239,13 @@ export default defineComponent({
       }
     };
     const unsubscribeSwiping = (placeId) => {
-      timeLeftText = document.getElementById('expiryText' + placeId).innerHTML.split(' ');
+      timeLeftText = document.getElementById('expiryText' + placeId)?.innerHTML.split(' ');
 
       unsubscribe(placeId);
       Haptics.impact({ style: ImpactStyle.Heavy });
       showUndoToast(t('successUnsubscribe'), async() => {
         try {
-          const notifyIn = timeLeftText.length === 1 ? null : timeLeftText[0];
+          const notifyIn = timeLeftText?.length > 0 ? timeLeftText[0] : null;
 
           await PlaceService.subscribe(placeId, notifyIn);
         }catch(e) {
@@ -262,6 +270,7 @@ export default defineComponent({
       isModalOpen,
       modalData,
       showSkeleton,
+      slidingItem,
 
       /* Event handlers */
       sortHasChanged,
@@ -272,6 +281,7 @@ export default defineComponent({
       refresh,
       unsubscribeSwiping,
       removeExpiredSubscription,
+      closeOpenItems,
 
       /* Icons */
       trashOutline,

@@ -1,7 +1,7 @@
 <template>
   <ion-content scrollY="false">
     <div class="px-4 py-1 flex items-center justify-between border-b border-dotted border-gray-400">
-      <span>{{ $t('notifications') }}</span>
+      <span>{{ $t('notification', 2) }}</span>
       <ion-button class="h-auto" @click="clearNotifications">
         <span class="py-0.5 lowercase">{{ $t('clear') }}</span>
       </ion-button>

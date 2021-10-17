@@ -29,7 +29,7 @@ export default {
     "subscribe": "Pretplati se",
     "subscribed": "Pretplaćen",
     "map": "Mapa",
-    "notifications": "Notifikacije",
+    "notification": "Notifikacija | Notifikacije",
     "confirm": "Potvrdi",
     "cancel": "Otkaži",
     "remove": "Ukloni",
