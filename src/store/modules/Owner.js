@@ -214,7 +214,9 @@ export const actions = {
 
         commit('REMOVE_CLONED_TABLES');
         commit('CLEAN_DIRTY_TABLES');
+
         removeClonedTableElements();
+        
         response.data.forEach(table => {
             table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth);
 

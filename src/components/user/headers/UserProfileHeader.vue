@@ -14,14 +14,11 @@
             </ion-button>
           </div>
           <div class="mt-5 flex justify-start">
-            <div>
-              <img
-                  ref="avatarDisplay"
-                  :src="authUser?.avatar ?? backendStorageURL + '/users/default_avatar.png'"
-                  :alt="`Profile picture of user ${authUser?.fname} ${authUser?.lname}`"
-                  class="profile-avatar"
-              >
-            </div>
+            <Avatar
+                :avatar-path="authUser?.avatar"
+                :avatar-img-classes="'profile-avatar'"
+                :altText="`Profile picture of user ${authUser?.fname} ${authUser?.lname}`"
+            />
             <div class="ml-3 mt-3 user-profile-user-name">
               <div v-if="authUser?.username || authUser?.fname || authUser?.lname">
                 <h2 v-if="authUser?.fname || authUser?.lname" class="user-profile-user-name">
@@ -51,6 +48,7 @@ import {
 }                                    from '@ionic/vue';
 
 import SettingsPopover from '@/components/user/popovers/SettingsPopover';
+import Avatar          from '@/components/Avatar';
 
 import {
   settingsOutline,
@@ -64,6 +62,7 @@ export default defineComponent({
     IonHeader,
     IonToolbar,
     IonButton,
+    Avatar,
   },
   emits: ['searchFilterChanged'],
   setup(props, { emit }) {

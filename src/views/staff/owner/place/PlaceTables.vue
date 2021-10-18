@@ -19,7 +19,7 @@
                   :style="
                   `position: absolute;
                   top: 0; left: 0;
-                  transform:translate(${table.position.left}px, ${table.position.top}px)
+                  transform:translate(${table.position?.left}px, ${table.position.top}px)
                   `
                 "
               />
@@ -59,13 +59,16 @@ import {
   IonPage,
   IonContent,
   IonButton,
+  onIonViewWillLeave,
 }                                         from '@ionic/vue';
 
 import TableContainer from '@/components/TableContainer';
 import Table          from '@/components/Table';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useFetchCondition } from '@/composables/useFetchCondition';
+import { useFetchCondition }     from '@/composables/useFetchCondition';
+
+import { removeClonedTableElements } from '@/utils/helpers';
 
 export default defineComponent({
   name: "PlaceTables",
@@ -93,6 +96,10 @@ export default defineComponent({
     (async() => {
       await getPlaceTables();
     })();
+    onIonViewWillLeave(() => {
+      removeClonedTableElements();
+      store.commit('owner/REMOVE_CLONED_TABLES');
+    });
 
     /* Methods */
     /* Event handlers */

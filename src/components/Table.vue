@@ -69,6 +69,8 @@ export default defineComponent({
         element.style.left = 0;
         element.style.top = 0;
         element.style.transform = 'translate(0px, 0px)';
+        element.classList.remove('bg-yellow-800');
+        element.classList.add('bg-yellow-600');
         // Marking each element with unique ID so we can update them in Vuex storage
         // without this there is no way of identifying specific table in array for updates
         element.setAttribute('data-id', Date.now());

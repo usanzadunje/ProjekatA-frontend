@@ -14,22 +14,22 @@
           <ion-button
               expand="block"
               class="auth-button-size auth-button-border-radius uppercase button-text-white"
-              @click="createMember"
+              @click="createStaffMember"
           >
             {{ $t('create') }}
           </ion-button>
         </div>
 
         <StaffCard
-            v-for="member in staff"
-            :key="member.id"
-            :member="member"
-            @edit-member="editMember(member)"
+            v-for="staffMember in staff"
+            :key="staffMember.id"
+            :staff="staffMember"
+            @edit-staff="editStaffMember(staffMember)"
             :button="true"
         >
           <div class="absolute top-1.5 right-3 z-40">
             <ion-icon :icon="close" class="text-2xl text-danger ml-2" slot="icon-only"
-                      @click="deleteMember(member, $event)"></ion-icon>
+                      @click="deleteStaffMember(staffMember, $event)"></ion-icon>
           </div>
         </StaffCard>
       </div>
@@ -103,23 +103,23 @@ export default defineComponent({
     /* Lifecycle hooks */
 
     /* Event handlers */
-    const createMember = async() => {
+    const createStaffMember = async() => {
       modalData.value = null;
 
       openModal(true);
     };
-    const editMember = async(member, event = null) => {
+    const editStaffMember = async(staffMember, event = null) => {
       event?.stopPropagation();
 
-      openModal(true, member);
+      openModal(true, staffMember);
     };
-    const deleteMember = async(member, event = null) => {
+    const deleteStaffMember = async(staffMember, event = null) => {
       event?.stopPropagation();
 
       const alert = await alertController
           .create({
             header: t('staff.alertRemoveStaffHeader'),
-            message: t('staff.removeStaffMessage', { staff: `${member.fname} ${member.lname}` }),
+            message: t('staff.removeStaffMessage', { staff: `${staffMember.fname} ${staffMember.lname}` }),
             mode: 'ios',
             buttons: [
               {
@@ -130,7 +130,7 @@ export default defineComponent({
                 text: t('agree'),
                 handler: async() => {
                   try {
-                    await store.dispatch('owner/deleteStaff', member.id);
+                    await store.dispatch('owner/deleteStaff', staffMember.id);
                   }catch(errors) {
                     showErrorToast(
                         null,
@@ -165,9 +165,9 @@ export default defineComponent({
       modalData,
 
       /* Event handlers */
-      createMember,
-      editMember,
-      deleteMember,
+      createStaffMember,
+      editStaffMember,
+      deleteStaffMember,
       refresh,
       openModal,
 

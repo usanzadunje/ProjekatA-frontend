@@ -3,22 +3,18 @@
     <ion-card
         class="mb-6 mt-0 mx-auto w-5/6"
         :button="button"
-        @click="$emit('editMember')"
+        @click="$emit('editStaff')"
     >
       <slot></slot>
       <ion-card-header>
         <div class="flex items-center justify-center">
-          <ion-thumbnail
-              class="user-profile-picture-edit"
-          >
-            <img
-                class="user-profile-picture-edit"
-                alt="avatar"
-                :src="member.avatar ?? backendStorageURL + '/users/default_avatar.png'"
-            >
-          </ion-thumbnail>
-          <div class="ml-8">
-            <h3 class="main-heading-smaller">{{ member.active ? $t('active') : $t('inactive') }}</h3>
+          <Avatar
+              :avatar-path="staff.avatar"
+              :avatar-img-classes="'profile-avatar'"
+          />
+
+          <div class="ml-8 flex-shrink">
+            <h3 class="main-heading-smaller">{{ staff.active ? $t('active') : $t('inactive') }}</h3>
             <h2 class="secondary-heading">{{ displayName }}</h2>
           </div>
         </div>
@@ -32,18 +28,19 @@ import { computed, defineComponent } from 'vue';
 import {
   IonCard,
   IonCardHeader,
-  IonThumbnail,
 }                                    from '@ionic/vue';
+
+import Avatar from '@/components/Avatar';
 
 export default defineComponent({
   name: "StaffCard",
   components: {
     IonCard,
     IonCardHeader,
-    IonThumbnail,
+    Avatar,
   },
   props: {
-    member: {
+    staff: {
       type: Object,
       default: null,
       required: true,
@@ -54,13 +51,13 @@ export default defineComponent({
       required: false,
     },
   },
-  emits: ['editMember'],
+  emits: ['editStaff'],
   setup(props) {
     /* Component properties */
     const displayName = computed(() => {
-      return !props.member.fname && !props.member.lname
-          ? props.member.username ?? ''
-          : `${props.member.fname ?? ''} ${props.member.lname ?? ''}`;
+      return !props.staff.fname && !props.staff.lname
+          ? props.staff.username ?? ''
+          : `${props.staff.fname ?? ''} ${props.staff.lname ?? ''}`;
     });
 
     /* Event handlers */

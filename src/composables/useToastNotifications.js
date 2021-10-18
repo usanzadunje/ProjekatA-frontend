@@ -41,6 +41,7 @@ export function useToastNotifications() {
         });
 
         toast.style.top = '-3.5rem';
+
         await toast.present();
     };
     //Generating toast success notifications
@@ -53,6 +54,11 @@ export function useToastNotifications() {
                 cssClass: 'success-toast',
                 mode: 'ios',
             });
+
+        toast.addEventListener('click', () => {
+            toast.dismiss();
+        });
+
         await toast.present();
     };
 
@@ -69,7 +75,13 @@ export function useToastNotifications() {
                         cssClass: 'error-toast',
                         mode: 'ios',
                     });
+
+                    toast.addEventListener('click', () => {
+                        toast.dismiss();
+                    });
+
                     toast.style.top = `${(3.5 * i) + (3.5 * j)}rem`;
+
                     await toast.present();
                 }
             }else {
@@ -80,7 +92,13 @@ export function useToastNotifications() {
                     cssClass: 'error-toast',
                     mode: 'ios',
                 });
+
+                toast.addEventListener('click', () => {
+                    toast.dismiss();
+                });
+
                 toast.style.top = `${3.5 * i}rem`;
+
                 await toast.present();
             }
 

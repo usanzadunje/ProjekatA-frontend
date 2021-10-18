@@ -4,18 +4,11 @@
       <div
           class="flex justify-center mb-6"
       >
-        <ion-thumbnail
-            class="edit-avatar"
-            :class="{ 'error-border' : errorNames.hasOwnProperty('avatar') }"
+        <Avatar
+            :avatar-path="user.avatar"
+            :avatar-img-classes="{ 'error-border' : errorNames.hasOwnProperty('avatar'), 'edit-avatar': true }"
             @click="selectImageSource"
-        >
-          <img
-              ref="avatarDisplay"
-              class="edit-avatar"
-              alt="avatar"
-              :src="avatar"
-          >
-        </ion-thumbnail>
+        />
       </div>
       <ion-item
           lines="none"
@@ -226,8 +219,9 @@ import {
   IonDatetime,
   IonLabel,
   IonToggle,
-  IonThumbnail,
 }                                                                             from "@ionic/vue";
+
+import Avatar from '@/components/Avatar';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { usePhotos }             from '@/composables/usePhotos';
@@ -256,7 +250,7 @@ export default defineComponent({
     IonDatetime,
     IonToggle,
     IonLabel,
-    IonThumbnail,
+    Avatar,
   },
   props: {
     clearInputs: {
@@ -287,11 +281,9 @@ export default defineComponent({
     const phoneInput = ref(null);
     const passwordInput = ref(null);
     const passwordConfirmInput = ref(null);
-    const avatarDisplay = ref(null);
     const loading = ref(false);
     const showPasswordEdit = ref(false);
     const { clearInputs } = toRefs(props);
-    const avatar = ref(null);
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -301,7 +293,7 @@ export default defineComponent({
       user.email = authUser.value.email;
       user.bday = authUser.value.bday;
       user.phone = authUser.value.phone;
-      avatar.value = authUser.value.avatar;
+      user.avatar = authUser.value.avatar;
     });
 
     /* Composables */
@@ -370,14 +362,12 @@ export default defineComponent({
         showPasswordConfirm.value = false;
         clearPasswordInputs();
 
-        delete user.avatar;
+        user.avatar = authUser.value.avatar;
       }
     });
     watch(photo, () => {
       if(photo?.value) {
         user.avatar = photo.value;
-
-        avatarDisplay.value.src = photo.value;
       }
     });
     return {
@@ -399,10 +389,8 @@ export default defineComponent({
       emailInput,
       passwordInput,
       passwordConfirmInput,
-      avatarDisplay,
       loading,
       showPasswordEdit,
-      avatar,
 
       /* Event handlers  */
       update,
