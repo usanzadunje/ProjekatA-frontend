@@ -31,7 +31,7 @@ const
           </ion-button>
         </ion-item>
         <ion-item class="ion-item-padding-right">
-          <p class="settings-item-text">{{ $t('notifications') }}</p>
+          <p class="settings-item-text">{{ $t('notification', 2) }}</p>
           <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pull-right">
             <ion-label class="settings-fade-text">{{ areNotificationsOn ? 'ON' : 'OFF' }}</ion-label>
             <ion-toggle
@@ -111,8 +111,8 @@ import { useFCM }                from '@/composables/useFCM';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import { chevronForward, flash, rocket } from 'ionicons/icons';
-import { Keyboard, KeyboardStyle }       from '@capacitor/keyboard';
-import { Capacitor }                     from '@capacitor/core';
+
+import { Capacitor } from '@capacitor/core';
 
 export default defineComponent({
   name: 'Settings',
@@ -151,16 +151,8 @@ export default defineComponent({
       try {
         if(e.target.checked) {
           await store.dispatch('user/setDarkMode', false);
-
-          Keyboard?.setStyle({
-            style: KeyboardStyle.Light,
-          });
         }else {
           await store.dispatch('user/setDarkMode', true);
-
-          Keyboard?.setStyle({
-            style: KeyboardStyle.Dark,
-          });
         }
       }catch(error) {
         showErrorToast(error);

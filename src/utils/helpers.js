@@ -1,6 +1,8 @@
 import router from "@/router";
 
-import { i18n } from '@/i18n';
+import { i18n }                    from '@/i18n';
+import { Capacitor }               from '@capacitor/core';
+import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
 
 // Returning array of errors from backend
 export function getError(error) {
@@ -55,6 +57,7 @@ export function loadLocaleMessages(locales) {
 export function calculatePxFromPercent(percent, parentWidth) {
     return Math.round((percent * (parentWidth - 24)) / 100);
 }
+
 // Since vuex is getting populated with tables that are stored in DB
 // these cloned ones will still stay and be duplicated with ones returned
 // to avoid this we remove cloned tables and keep only fresh ones from real DB
@@ -63,6 +66,7 @@ export function removeClonedTableElements() {
         document.querySelector("#dropzone").removeChild(clonedTable);
     });
 }
+
 // Since vuex is getting populated with tables that are stored in DB
 // these cloned ones will still stay and be duplicated with ones returned
 // to avoid this we remove cloned tables and keep only fresh ones from real DB
@@ -70,4 +74,22 @@ export function increaseAccordionMaxHeight(id, additionalHeight) {
     const accordionPanel = document.getElementById(id);
     const panelCurrentMaxHeight = parseInt(getComputedStyle(accordionPanel).getPropertyValue('max-height'));
     accordionPanel.style.setProperty('max-height', `${panelCurrentMaxHeight + additionalHeight}px`);
+}
+
+export async function setKeyboardStyle(dark = false) {
+    try {
+        if(Capacitor.isNativePlatform()) {
+            if(dark) {
+                await Keyboard?.setStyle({
+                    style: KeyboardStyle.Dark,
+                });
+            }else {
+                await Keyboard?.setStyle({
+                    style: KeyboardStyle.Light,
+                });
+            }
+        }
+    }catch(e) {
+        return;
+    }
 }

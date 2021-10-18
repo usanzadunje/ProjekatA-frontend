@@ -6,7 +6,7 @@
         class="mt-4"
     >
       <StaffCard
-          :member="staff"
+          :staff="staff"
           :button="false"
       />
     </div>

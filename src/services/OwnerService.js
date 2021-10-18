@@ -33,7 +33,7 @@ export default {
         return API.apiClient.post(`/owner/place/images/logo/${id}`);
     },
     allTables() {
-        return API.apiClient.get(`/owner/place/tables`);
+        return API.apiClient.get(`/staff/place/tables`);
     },
     updateTables(tables) {
         return API.apiClient.post(`/owner/place/tables`, tables);

@@ -19,12 +19,13 @@ export function usePlaceManipulation() {
     const { t } = useI18n();
 
     /* Methods */
-    const toggle = async(available) => {
+    const randomToggle = async(available) => {
         toggling.value = true;
         try {
-            const response = await StaffService.toggleAvailability(available);
+            const response = await StaffService.randomToggleAvailability(available);
 
             store.commit('staff/SET_AVAILABILITY_RATIO', response.data?.availability_ratio);
+            store.dispatch('owner/getTables');
         }catch(e) {
             showErrorToast(
                 null,
@@ -36,11 +37,28 @@ export function usePlaceManipulation() {
         }
     };
 
+    const toggle = async(tableId) => {
+        try {
+            const response = await StaffService.toggleAvailability(tableId);
+
+            store.commit('owner/TOGGLE_TABLE_AVAILABILITY', {
+                tableId,
+            });
+            store.commit('staff/SET_AVAILABILITY_RATIO', response.data?.availability_ratio);
+        }catch(e) {
+            showErrorToast(
+                null,
+                {
+                    toggleAvailabilityError: t('dataFetchingError'),
+                });
+        }
+    };
     return {
         /* Component properties */
         toggling,
 
         /* Methods */
+        randomToggle,
         toggle,
     };
 }

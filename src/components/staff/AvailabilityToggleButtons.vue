@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between mt-10">
     <ion-button
-        @click="toggle(true)"
+        @click="randomToggle(true)"
         :disabled="isPlaceEmpty || toggling"
         class="w-full h-32"
     >
@@ -9,7 +9,7 @@
       <ion-icon :icon="addOutline" class="text-2xl text-white-400"></ion-icon>
     </ion-button>
     <ion-button
-        @click="toggle(false)"
+        @click="randomToggle(false)"
         :disabled="isPlaceFull || toggling"
         class="w-full h-32 btn-bg-danger"
     >
@@ -64,7 +64,7 @@ export default defineComponent({
 
 
     /* Composables */
-    const { toggle, toggling } = usePlaceManipulation();
+    const { randomToggle, toggling } = usePlaceManipulation();
 
 
     return {
@@ -74,7 +74,7 @@ export default defineComponent({
       toggling,
 
       /* Event handlers */
-      toggle,
+      randomToggle,
 
       /* Icons */
       removeOutline,

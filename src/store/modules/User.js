@@ -1,8 +1,8 @@
-import { Capacitor }               from "@capacitor/core";
-import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
-import { i18n }                    from "@/i18n";
+import { i18n } from "@/i18n";
 
 import { StorageService } from '@/services/StorageService';
+
+import { setKeyboardStyle } from '@/utils/helpers';
 
 export const namespaced = true;
 
@@ -66,19 +66,7 @@ export const actions = {
         commit("SET_LOCALIZATION", storedLocalization);
         commit("SET_NOTIFICATIONS_PERMISSION", storedNotifications);
 
-        if(Capacitor.isNativePlatform()) {
-            if(storedDarkMode) {
-                Keyboard.setStyle({
-                    style: KeyboardStyle.Dark,
-                });
-            }else {
-                Keyboard.setStyle({
-                    style: KeyboardStyle.Light,
-                });
-            }
-        }
-
-
+        await setKeyboardStyle(storedDarkMode);
     },
 
     async setDarkMode({ commit, rootGetters }, value) {
@@ -88,6 +76,8 @@ export const actions = {
         commit("SET_DARKMODE", value);
 
         document.body.classList.toggle('dark', value);
+
+        await setKeyboardStyle(value);
     },
 
     async setLocalization({ commit, rootGetters }, value) {

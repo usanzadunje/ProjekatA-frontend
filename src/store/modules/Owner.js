@@ -80,6 +80,20 @@ export const mutations = {
     REMOVE_CLONED_TABLES(state) {
         state.tables = state.tables.filter(table => !table.clone);
     },
+    TOGGLE_TABLE_AVAILABILITY(state, { tableId, value = null }) {
+        let table = state.tables.find(table => {
+            return table.id === Number(tableId);
+        });
+
+        let empty = false;
+
+        if(value == null) {
+            empty = table.empty ? 0 : 1;
+        }else {
+            empty = value === 'true' ? 1 : 0;
+        }
+        table.empty = empty;
+    },
 
     /* CATEGORIES */
     SET_CATEGORIES(state, value) {
@@ -216,7 +230,7 @@ export const actions = {
         commit('CLEAN_DIRTY_TABLES');
 
         removeClonedTableElements();
-        
+
         response.data.forEach(table => {
             table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth);
 

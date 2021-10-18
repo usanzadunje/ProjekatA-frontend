@@ -4,7 +4,7 @@
       <div class="h-full flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-center">
-            <Table/>
+            <Table v-if="ready"/>
             <span class="ml-2 secondary-heading">-pick a table and drag</span>
           </div>
 
@@ -14,6 +14,7 @@
               <Table
                   v-for="table in tables"
                   :key="table.id"
+                  @click="showTableModal"
                   :draggable="true"
                   :data-id="table.id"
                   :style="
@@ -52,21 +53,20 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from 'vue';
-import { useStore }                       from 'vuex';
-import { useI18n }                        from 'vue-i18n';
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { useStore }                                  from 'vuex';
+import { useI18n }                                   from 'vue-i18n';
 import {
   IonPage,
   IonContent,
   IonButton,
   onIonViewWillLeave,
-}                                         from '@ionic/vue';
+}                                                    from '@ionic/vue';
 
 import TableContainer from '@/components/TableContainer';
 import Table          from '@/components/Table';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useFetchCondition }     from '@/composables/useFetchCondition';
 
 import { removeClonedTableElements } from '@/utils/helpers';
 
@@ -86,16 +86,18 @@ export default defineComponent({
     /* Component properties */
     const tables = computed(() => store.getters['owner/tables'].filter(table => !table.clone));
     const loading = ref(-1);
+    const ready = ref(false);
 
     /* Composables */
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
-    const { getPlaceTables } = useFetchCondition();
 
     /* Lifecycle hooks */
-    (async() => {
-      await getPlaceTables();
-    })();
+    onMounted(() => {
+      setTimeout(() => {
+        ready.value = true;
+      }, 200);
+    });
     onIonViewWillLeave(() => {
       removeClonedTableElements();
       store.commit('owner/REMOVE_CLONED_TABLES');
@@ -125,15 +127,20 @@ export default defineComponent({
         loading.value = -1;
       }
     };
+    const showTableModal = async() => {
+      alert('das');
+    };
 
     return {
       /* Component properties */
       tables,
       loading,
+      ready,
 
       /* Event handlers */
       updateTables,
       resetTables,
+      showTableModal,
     };
   },
 

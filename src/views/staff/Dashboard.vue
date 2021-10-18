@@ -10,6 +10,23 @@
       <div class="wrap">
         <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentAvailabilitySituation') }}</h1>
 
+        <div class="mt-4">
+          <TableContainer class="mt-2">
+            <Table
+                v-for="table in tables"
+                :key="table.id"
+                @click="toggle(table.id)"
+                :empty="table.empty"
+                :draggable="false"
+                :style="
+                      `position: absolute;
+                      top: 0; left: 0;
+                      transform:translate(${table.position.left}px, ${table.position.top}px)
+                      `
+                    "
+            />
+          </TableContainer>
+        </div>
         <div
             :class="`
           flex ${ isOwner ? 'flex-col-reverse' : 'flex-col' } md:flex-row
@@ -46,9 +63,13 @@ import {
   onIonViewWillEnter,
 }                                               from '@ionic/vue';
 
+import TableContainer            from '@/components/TableContainer';
+import Table                     from '@/components/Table';
 import ActiveStaffMembers        from '@/components/staff/ActiveStaffMembers';
 import PlaceAvailabilityChart    from '@/components/staff/charts/PlaceAvailabilityChart';
 import AvailabilityToggleButtons from '@/components/staff/AvailabilityToggleButtons';
+
+import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -59,15 +80,28 @@ export default defineComponent({
     IonContent,
     IonRefresher,
     IonRefresherContent,
+    TableContainer,
+    Table,
     ActiveStaffMembers,
     AvailabilityToggleButtons,
     PlaceAvailabilityChart,
   },
   setup() {
-    /* Component properties */
+    /* Global properties */
     const store = useStore();
 
+    /* Component properties */
+    const tables = computed(() => store.getters['owner/tables']);
+    const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
+    const isOwner = computed(() => store.getters['auth/isOwner']);
+
+    /* Composables */
+    const { toggle } = usePlaceManipulation();
+
     /* Lifecycle hooks */
+    (async() => {
+      await store.dispatch('owner/getTables');
+    })();
     onMounted(async() => {
       await store.dispatch('staff/updatePlaceAvailability');
     });
@@ -77,12 +111,10 @@ export default defineComponent({
       }
     });
 
-    /* Computed properties */
-    const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
-    const isOwner = computed(() => store.getters['auth/isOwner']);
 
     /* Event handlers */
     const refresh = async(event) => {
+      await store.dispatch('owner/getTables');
       await store.dispatch('staff/updatePlaceAvailability');
 
       if(isOwner.value) {
@@ -96,11 +128,13 @@ export default defineComponent({
 
 
     return {
-      /* Computed properties */
+      /* Component properties */
+      tables,
       availabilityRatio,
       isOwner,
 
       /* Event handlers */
+      toggle,
       refresh,
     };
   },

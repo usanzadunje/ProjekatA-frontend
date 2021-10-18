@@ -25,7 +25,7 @@ export function useFCM() {
 
     /* Methods */
     const initPush = async() => {
-        if(Capacitor.getPlatform() !== 'web') {
+        if(Capacitor.isNativePlatform()) {
             await registerListeners();
         }
     };
@@ -97,6 +97,7 @@ export function useFCM() {
         }
         try {
             const permission = await PushNotifications.requestPermissions();
+
             if(permission.receive === 'granted') {
                 await LocalNotifications.requestPermissions();
 
@@ -144,6 +145,10 @@ export function useFCM() {
             (store.getters['auth/isStaff'] || store.getters['auth/isOwner'])
         ) {
             store.commit('staff/SET_AVAILABILITY_RATIO', notification.data.availability_ratio);
+            store.commit('owner/TOGGLE_TABLE_AVAILABILITY', {
+                tableId: notification.data.table_id,
+                value: notification.data.empty,
+            });
         }
     };
 

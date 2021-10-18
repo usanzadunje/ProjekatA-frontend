@@ -53,8 +53,6 @@ import LanguagePicker  from '@/components/LanguagePicker';
 import { useMenu }    from '@/composables/useMenu';
 import { usePopover } from '@/composables/usePopover';
 
-import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
-
 import {
   filterOutline,
 } from 'ionicons/icons';
@@ -90,17 +88,8 @@ export default defineComponent({
     const toggleDarkMode = async(e) => {
       if(!e.target.checked) {
         await store.dispatch('user/setDarkMode', false);
-
-        Keyboard?.setStyle({
-          style: KeyboardStyle.Light,
-        });
-
       }else {
         await store.dispatch('user/setDarkMode', true);
-
-        Keyboard?.setStyle({
-          style: KeyboardStyle.Dark,
-        });
       }
     };
 

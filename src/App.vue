@@ -37,6 +37,7 @@ export default defineComponent({
       store.commit("global/SET_WIDTH", window.innerWidth);
     })();
 
+
     return {};
   },
 });

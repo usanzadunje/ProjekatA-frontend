@@ -4,7 +4,7 @@
       <h1 class="main-toolbar-heading text-xl">{{ place.name }}</h1>
     </div>
 
-    <div ref="map" id="map" class="mt-4 relative w-full">
+    <div ref="map" id="map" class="mt-4 w-full">
     </div>
 
     <div class="mt-4 mb-2 text-center">
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, onBeforeUnmount, ref, toRefs } from 'vue';
+import { defineComponent, onBeforeUnmount, onMounted, ref, toRefs } from 'vue';
 import { useStore }                                                 from 'vuex';
 import { useI18n }                                                  from 'vue-i18n';
 import { loadingController }                                        from '@ionic/vue';
@@ -50,24 +50,10 @@ export default defineComponent({
     /* Composables */
     const { tryGettingLocation } = useGeolocation();
     const { showErrorToast } = useToastNotifications();
-
-    /* Methods */
     const { t } = useI18n({ useScope: 'global' });
 
-    /* Lifecycle hooks */
-    onMounted(async() => {
-      await tryGettingLocation();
-
-      const loading = await loadingController
-          .create({
-            cssClass: 'custom-loading',
-            message: t('loading'),
-            spinner: 'crescent',
-            mode: 'ios',
-          });
-      await loading.present();
-      await sleep(400);
-
+    /* Methods */
+    const createMap = async() => {
       mapContainerBoundingRect = map.value?.getBoundingClientRect();
 
       try {
@@ -79,13 +65,9 @@ export default defineComponent({
           latitude: Number(place.latitude) || 43.317862492567,
           longitude: Number(place.longitude) || 21.895785976058143,
           zoom: 16,
-          liteMode: true,
-
         });
 
         CapacitorGoogleMaps.addListener("onMapReady", async function() {
-          distance.value = `${Math.round(PlaceService.getDistance(place.latitude, place.longitude))}m`;
-
           await CapacitorGoogleMaps.settings({
             indoorPicker: true,
             zoomGestures: true,
@@ -109,6 +91,8 @@ export default defineComponent({
           await CapacitorGoogleMaps.setMapType({
             "type": "normal",
           });
+
+
         });
 
       }catch(e) {
@@ -117,11 +101,30 @@ export default defineComponent({
             {
               pushNotificationPermission: t('warningGoogleMapsError'),
             });
-      }finally {
-        await loading.dismiss();
-
       }
+    };
 
+    /* Lifecycle hooks */
+    onMounted(async() => {
+      await tryGettingLocation();
+
+      const loading = await loadingController
+          .create({
+            cssClass: 'custom-loading',
+            message: t('loading'),
+            spinner: 'crescent',
+            mode: 'ios',
+          });
+
+      await loading.present();
+
+      distance.value = `${Math.round(PlaceService.getDistance(place.latitude, place.longitude))}m`;
+
+      await sleep(400);
+
+      await createMap();
+
+      await loading.dismiss();
     });
     onBeforeUnmount(() => {
       CapacitorGoogleMaps.close();
