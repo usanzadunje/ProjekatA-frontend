@@ -31,7 +31,7 @@
         <InfinitePlaceScroll
             :place-search-term="placeSearchTerm"
             :sort-by="sortBy"
-            @scroll-to-top="scrollToTop"
+            @scroll-to-top="scrollToTop(this.$refs.content)"
             @open-place-modal="openModal(true, $event)"
             @infinite-scroll-toggle="infiniteScrollLoading = !infiniteScrollLoading"
             :refresher="refresher"
@@ -97,6 +97,7 @@ export default defineComponent({
     const router = useRouter();
 
     /* Component properties */
+    const content = ref();
     const placeSearchTerm = ref('');
     const sortBy = ref('distance');
     // const scrollTopOffset = ref(0);
@@ -110,7 +111,7 @@ export default defineComponent({
 
     /* Composables */
     const { isModalOpen, modalData, openModal, hideModal } = useModal();
-    const { content, scrollToTop } = useContent();
+    const { scrollToTop } = useContent();
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {

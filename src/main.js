@@ -31,6 +31,9 @@ import "tailwindcss/tailwind.css";
 /* Custom css */
 import "@/assets/css/style.css";
 
+/* Swiper css imports */
+import 'swiper/swiper.min.css';
+
 /* Vuex */
 import store                    from './store';
 

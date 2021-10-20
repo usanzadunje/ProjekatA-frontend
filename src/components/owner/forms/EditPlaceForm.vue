@@ -226,7 +226,7 @@ import AddPlaceImagesModal from '@/components/owner/modals/AddPlaceImagesModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import { getError, sleep } from "@/utils/helpers";
+import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 
 import {
   createOutline,
@@ -235,8 +235,6 @@ import {
   mailOutline,
   callOutline,
 } from 'ionicons/icons';
-
-import { Keyboard } from '@capacitor/keyboard';
 
 export default defineComponent({
   name: "EditPlaceForm",
@@ -324,7 +322,7 @@ export default defineComponent({
     /* Event handlers */
     const update = async() => {
       loading.value = true;
-      Keyboard.hide();
+      await hideNativeKeyboard()
       try {
         await store.dispatch("owner/updatePlaceInfo", place);
 

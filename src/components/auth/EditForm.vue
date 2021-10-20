@@ -226,9 +226,7 @@ import Avatar from '@/components/Avatar';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { usePhotos }             from '@/composables/usePhotos';
 
-import { Keyboard } from '@capacitor/keyboard';
-
-import { getError, sleep } from "@/utils/helpers";
+import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 
 import {
   mailOutline,
@@ -317,7 +315,7 @@ export default defineComponent({
         clearPasswordInputs();
       }
       loading.value = true;
-      Keyboard.hide();
+      await hideNativeKeyboard()
       try {
         await store.dispatch("auth/updateAuthUser", user);
 

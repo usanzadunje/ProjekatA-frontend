@@ -93,3 +93,13 @@ export async function setKeyboardStyle(dark = false) {
         return;
     }
 }
+
+export async function hideNativeKeyboard() {
+    if(Capacitor.isNativePlatform()) {
+        try {
+            await Keyboard?.hide();
+        }catch(e) {
+            return;
+        }
+    }
+}

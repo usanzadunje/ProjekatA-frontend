@@ -96,10 +96,9 @@ import SocialIcons from '@/components/social/SocialIcons';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import { getError, sleep } from "@/utils/helpers";
+import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 
 import { Device }   from '@capacitor/device';
-import { Keyboard } from '@capacitor/keyboard';
 
 import {
   personOutline,
@@ -145,7 +144,7 @@ export default defineComponent({
     /* Event handlers */
     const register = async() => {
       loading.value = true;
-      Keyboard.hide();
+      await hideNativeKeyboard()
       try {
         await store.dispatch("auth/register", newUser);
 

@@ -46,7 +46,7 @@ import { IonHeader, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
 
 import NotificationsPreview from '@/components/user/NotificationsPreview';
 
-import { Keyboard } from '@capacitor/keyboard';
+import { hideNativeKeyboard } from '@/utils/helpers';
 
 export default defineComponent({
   name: 'UserHeader',
@@ -74,7 +74,7 @@ export default defineComponent({
       emit('searchFilterChanged', e.target.value);
     };
     const searchEnterPressed = (e) => {
-      Keyboard.hide();
+      hideNativeKeyboard();
       emit('searchEnterPressed', e);
     };
 
@@ -100,5 +100,4 @@ ion-button {
 ion-toolbar::part(open) {
   padding: 0 !important;
 }
-
 </style>

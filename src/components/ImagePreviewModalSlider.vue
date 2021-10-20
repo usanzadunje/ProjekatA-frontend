@@ -29,10 +29,6 @@
 <script>
 import { defineComponent, onMounted, onUpdated, ref } from 'vue';
 import { Swiper, SwiperSlide }                        from 'swiper/vue';
-// Importing styles for swiper and modules
-import 'swiper/swiper.min.css';
-import 'swiper/components/zoom/zoom.min.css';
-import 'swiper/components/navigation/navigation.min.css';
 // Installing Swiper modules
 import SwiperCore, {
   Zoom, Navigation,

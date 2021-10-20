@@ -131,9 +131,7 @@ import {
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import { Keyboard } from '@capacitor/keyboard';
-
-import { getError, sleep } from "@/utils/helpers";
+import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 
 import {
   mailOutline,
@@ -194,7 +192,7 @@ export default defineComponent({
     /* Event handlers */
     const createOrUpdate = async() => {
       loading.value = true;
-      Keyboard.hide();
+      await hideNativeKeyboard()
       try {
         if(staff?.value) {
           await store.dispatch("owner/updateStaff", { staffId: staff.value.id, user });

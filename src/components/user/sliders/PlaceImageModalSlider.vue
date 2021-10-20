@@ -46,7 +46,6 @@ import {
   modalController,
 }                              from '@ionic/vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import 'swiper/swiper.min.css';
 
 import ImagePreviewModal from '@/components/user/modals/ImagePreviewModal';
 
