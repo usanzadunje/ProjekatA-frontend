@@ -4,18 +4,18 @@
       <div class="flex items-center">
         <ion-icon
             :icon="icon"
-            class="primary-icon-color"
             :style="`font-size:${iconSize}`"
+            class="primary-icon-color"
         ></ion-icon>
         <p
-            class="inline-block ml-1 cafe-show-menu-headers"
             :style="`font-size:${titleSize}`"
+            class="inline-block ml-1 cafe-show-menu-headers"
         >{{ title }}</p>
       </div>
       <ion-icon
           :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline"
-          class="primary-icon-color"
           :style="`font-size:${iconSize}`"
+          class="primary-icon-color"
       ></ion-icon>
     </div>
     <div :id="panelId" class="panel">

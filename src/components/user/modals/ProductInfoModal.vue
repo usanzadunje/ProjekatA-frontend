@@ -58,10 +58,10 @@
     <div class="mt-4">
       <ion-button
           fill="clear"
-          @click="$emit('dismiss')"
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
+          @click="$emit('dismiss')"
       >
         {{ $t('close') }}
       </ion-button>

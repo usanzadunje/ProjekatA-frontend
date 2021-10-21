@@ -6,8 +6,8 @@
             :icon="hasNotifications
             ? (unreadNotificationsCount > 0 ? notifications : notificationsOutline)
             : notificationsOffOutline"
-            class="primary-icon-color flex"
             slot="icon-only"
+            class="primary-icon-color flex"
         ></ion-icon>
         <div id="badge-container" v-if="unreadNotificationsCount > 0" class="absolute z-40 top-0">
           <div class="w-4 h-4 rounded-full">

@@ -8,7 +8,6 @@
       <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           v-model.lazy="newUser.email"
-          @keyup.enter="passwordInput.$el?.setFocus()"
           autocomplete="email"
           type="email"
           inputmode="email"
@@ -16,6 +15,7 @@
           :placeholder="$t('emailAddress')"
           :autofocus="true"
           required
+          @keyup.enter="passwordInput.$el?.setFocus()"
       ></ion-input>
     </ion-item>
     <ion-item
@@ -27,11 +27,11 @@
       <ion-input
           ref="passwordInput"
           v-model="newUser.password"
-          @keyup.enter="passwordConfirmInput.$el?.setFocus()"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
           :placeholder="$t('password')"
           required
+          @keyup.enter="passwordConfirmInput.$el?.setFocus()"
       ></ion-input>
       <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
                 @click="togglePasswordShow(false)"
@@ -49,11 +49,11 @@
       <ion-input
           ref="passwordConfirmInput"
           v-model="newUser.password_confirmation"
-          @keyup.enter="register"
           inputmode="password"
           :type="showPasswordConfirm ? 'text' : 'password'"
           :placeholder="$t('passwordConfirm')"
           required
+          @keyup.enter="register"
       ></ion-input>
       <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
                 @click="togglePasswordShow(true)"
@@ -92,13 +92,13 @@ import { useRouter }                                         from 'vue-router';
 import { useStore }                                          from 'vuex';
 import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
 
-import SocialIcons from '@/components/social/SocialIcons';
+import SocialIcons from '@/components/auth/SocialIcons';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 
-import { Device }   from '@capacitor/device';
+import { Device } from '@capacitor/device';
 
 import {
   personOutline,
@@ -144,7 +144,7 @@ export default defineComponent({
     /* Event handlers */
     const register = async() => {
       loading.value = true;
-      await hideNativeKeyboard()
+      await hideNativeKeyboard();
       try {
         await store.dispatch("auth/register", newUser);
 

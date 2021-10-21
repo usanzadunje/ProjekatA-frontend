@@ -9,7 +9,6 @@
       <ion-input
           ref="emailInput"
           v-model.lazy="user.login"
-          @keyup.enter="passwordInput.$el?.setFocus()"
           autocomplete="email"
           type="text"
           inputmode="text"
@@ -17,6 +16,7 @@
           :placeholder="`E-mail ${$t('or')} ${$t('username').toLowerCase()}`"
           :autofocus="true"
           required
+          @keyup.enter="passwordInput.$el?.setFocus()"
       ></ion-input>
     </ion-item>
     <ion-item
@@ -28,15 +28,16 @@
       <ion-input
           ref="passwordInput"
           v-model="user.password"
-          @keyup.enter="login"
           inputmode="password"
           :type="showPassword ? 'text' : 'password'"
           placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
           required
+          @keyup.enter="login"
       ></ion-input>
-      <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
-                @click="togglePasswordShow"
-                class="text-xl text-gray-500"
+      <ion-icon
+          :icon="showPassword ? eyeOutline : eyeOffOutline"
+          class="text-xl text-gray-500"
+          @click="togglePasswordShow"
       ></ion-icon>
     </ion-item>
     <!--    <div class="relative flex justify-between items-center mt-3.5 px-4 utility-text">-->
@@ -93,14 +94,13 @@ import {
 }
                                                      from "@ionic/vue";
 
-import SocialIcons from '@/components/social/SocialIcons';
+import SocialIcons from '@/components/auth/SocialIcons';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
-import { getError, sleep } from "@/utils/helpers";
+import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 
-import { Device }   from '@capacitor/device';
-import { Keyboard } from '@capacitor/keyboard';
+import { Device } from '@capacitor/device';
 
 import {
   mailOutline,
@@ -147,7 +147,7 @@ export default defineComponent({
     /* Event handlers */
     const login = async() => {
       loading.value = true;
-      Keyboard?.hide();
+      await hideNativeKeyboard();
       try {
         const role = await store.dispatch("auth/login", user);
 

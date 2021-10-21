@@ -1,10 +1,10 @@
 <template>
   <ion-page>
     <ion-header class="ion-no-border">
-      <StaffHeader/>
+      <TheStaffHeader/>
     </ion-header>
 
-    <AdminMenu/>
+    <TheStaffSideMenu/>
 
     <ion-router-outlet id="admin-outlet" class="mt-12">
 
@@ -23,12 +23,12 @@ import {
   IonHeader,
 }                          from '@ionic/vue';
 
-import StaffHeader from '@/components/staff/StaffHeader';
-import AdminMenu   from '@/components/staff/AdminMenu';
+import TheStaffHeader from '@/components/staff/TheStaffHeader';
+import TheStaffSideMenu   from '@/components/staff/TheStaffSideMenu';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useFCM }                from '@/composables/useFCM';
-import { useFetchCondition }     from '@/composables/useFetchCondition';
+import { useCache }     from '@/composables/useCache';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -39,8 +39,8 @@ export default defineComponent({
     IonPage,
     IonRouterOutlet,
     IonHeader,
-    StaffHeader,
-    AdminMenu,
+    TheStaffHeader,
+    TheStaffSideMenu,
   },
   setup() {
     /* Global properties */
@@ -51,13 +51,13 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { registerToken } = useFCM();
-    const { getPlaceInfo } = useFetchCondition();
+    const { getCachedOrFetchPlaceInfo } = useCache();
 
     /* Lifecycle hooks */
     (async() => {
       try {
         if(store.getters['auth/isOwner']) {
-          await getPlaceInfo();
+          await getCachedOrFetchPlaceInfo();
           await store.dispatch('owner/getStaffInfo');
         }
         if(Capacitor.isNativePlatform()) {

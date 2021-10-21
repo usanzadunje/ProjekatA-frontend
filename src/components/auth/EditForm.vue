@@ -4,7 +4,7 @@
       <div
           class="flex justify-center mb-6"
       >
-        <Avatar
+        <AppAvatar
             :avatar-path="user.avatar"
             :avatar-img-classes="{ 'error-border' : errorNames.hasOwnProperty('avatar'), 'edit-avatar': true }"
             @click="selectImageSource"
@@ -19,12 +19,12 @@
         <ion-input
             v-capitalize
             v-model.lazy="user.fname"
-            @keyup.enter="lnameInput.$el?.setFocus()"
             type="text"
             debounce="100"
             :placeholder="$t('fname')"
             :autofocus="true"
             required
+            @keyup.enter="lnameInput.$el?.setFocus()"
         ></ion-input>
       </ion-item>
       <ion-item
@@ -34,14 +34,14 @@
       >
         <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
         <ion-input
-            v-capitalize
             ref="lnameInput"
-            v-model="user.lname"
+            v-capitalize
             @keyup.enter="usernameInput.$el?.setFocus()"
             type="text"
             debounce="100"
             :placeholder="$t('lname')"
             required
+            v-model="user.lname"
         ></ion-input>
       </ion-item>
       <ion-item
@@ -53,11 +53,11 @@
         <ion-input
             ref="usernameInput"
             v-model="user.username"
-            @keyup.enter="emailInput.$el?.setFocus()"
             type="text"
             debounce="100"
             :placeholder="$t('username')"
             required
+            @keyup.enter="emailInput.$el?.setFocus()"
         ></ion-input>
       </ion-item>
       <ion-item
@@ -69,11 +69,11 @@
         <ion-input
             ref="emailInput"
             v-model="user.email"
-            @keyup.enter="phoneInput.$el?.setFocus()"
             type="email"
             debounce="100"
             :placeholder="$t('email')"
             required
+            @keyup.enter="phoneInput.$el?.setFocus()"
         ></ion-input>
       </ion-item>
       <ion-item
@@ -100,19 +100,19 @@
         <ion-input
             ref="phoneInput"
             v-model="user.phone"
-            @keyup.enter="update"
             type="tel"
             debounce="100"
             :placeholder="$t('phone')"
             required
+            @keyup.enter="update"
         ></ion-input>
       </ion-item>
       <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
         <ion-label class="settings-fade-text">{{ $t('passwordChange') }}</ion-label>
         <ion-toggle
             :checked="showPasswordEdit"
-            @ionChange="togglePasswordShow(0, $event)"
             mode="md"
+            @ionChange="togglePasswordShow(0, $event)"
         ></ion-toggle>
       </ion-item>
       <div v-show="showPasswordEdit">
@@ -124,15 +124,16 @@
           <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
           <ion-input
               v-model="user.old_password"
-              @keyup.enter="passwordInput.$el?.setFocus()"
               inputmode="password"
               :type="showOldPassword ? 'text' : 'password'"
               :placeholder="$t('passwordOld')"
               required
+              @keyup.enter="passwordInput.$el?.setFocus()"
           ></ion-input>
-          <ion-icon :icon="showOldPassword ? eyeOutline : eyeOffOutline"
-                    @click="togglePasswordShow(1)"
-                    class="text-xl text-gray-500"
+          <ion-icon
+              :icon="showOldPassword ? eyeOutline : eyeOffOutline"
+              class="text-xl text-gray-500"
+              @click="togglePasswordShow(1)"
           >
 
           </ion-icon>
@@ -146,15 +147,16 @@
           <ion-input
               ref="passwordInput"
               v-model="user.password"
-              @keyup.enter="passwordConfirmInput.$el?.setFocus()"
               inputmode="password"
               :type="showPassword ? 'text' : 'password'"
               :placeholder="$t('passwordNew')"
               required
+              @keyup.enter="passwordConfirmInput.$el?.setFocus()"
           ></ion-input>
-          <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
-                    @click="togglePasswordShow(2)"
-                    class="text-xl text-gray-500"
+          <ion-icon
+              :icon="showPassword ? eyeOutline : eyeOffOutline"
+              class="text-xl text-gray-500"
+              @click="togglePasswordShow(2)"
           >
           </ion-icon>
         </ion-item>
@@ -167,11 +169,11 @@
           <ion-input
               ref="passwordConfirmInput"
               v-model="user.password_confirmation"
-              @keyup.enter="update"
               inputmode="password"
               :type="showPasswordConfirm ? 'text' : 'password'"
               :placeholder="$t('passwordConfirm')"
               required
+              @keyup.enter="update"
           ></ion-input>
           <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
                     @click="togglePasswordShow(3)"
@@ -195,10 +197,10 @@
       <ion-button
           :disabled="loading"
           fill="clear"
-          @click="$router.back()"
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
+          @click="$router.back()"
       >
         {{ $t('cancel') }}
       </ion-button>
@@ -221,7 +223,7 @@ import {
   IonToggle,
 }                                                                             from "@ionic/vue";
 
-import Avatar from '@/components/Avatar';
+import AppAvatar from '@/components/AppAvatar';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { usePhotos }             from '@/composables/usePhotos';
@@ -248,7 +250,7 @@ export default defineComponent({
     IonDatetime,
     IonToggle,
     IonLabel,
-    Avatar,
+    AppAvatar,
   },
   props: {
     clearInputs: {
@@ -315,7 +317,7 @@ export default defineComponent({
         clearPasswordInputs();
       }
       loading.value = true;
-      await hideNativeKeyboard()
+      await hideNativeKeyboard();
       try {
         await store.dispatch("auth/updateAuthUser", user);
 

@@ -8,8 +8,8 @@
       <span class="modal-cafe-text-medium lowercase">{{ freeSeats }} - {{ $t('availableSeats') }}</span>
     </div>
     <ion-skeleton-text
-        animated
         v-show="showSkeleton"
+        animated
         class="h-6 w-48 rounded-md mt-2"
     ></ion-skeleton-text>
     <hr class="card-horizontal-ruler mt-1">
@@ -30,8 +30,8 @@
           <p class="modal-cafe-text-regular lowercase">{{ place.working_hours?.mon_fri }}</p>
         </div>
         <ion-skeleton-text
-            animated
             v-show="showSkeleton"
+            animated
             class="h-8 w-28 rounded-md"
         ></ion-skeleton-text>
       </div>
@@ -41,8 +41,8 @@
           <p class="modal-cafe-text-regular lowercase">{{ place.working_hours?.saturday }}</p>
         </div>
         <ion-skeleton-text
-            animated
             v-show="showSkeleton"
+            animated
             class="h-8 w-28 rounded-md ml-2"
         ></ion-skeleton-text>
       </div>
@@ -52,20 +52,20 @@
           <p class="modal-cafe-text-regular">{{ place.working_hours?.sunday }}</p>
         </div>
         <ion-skeleton-text
-            animated
             v-show="showSkeleton"
+            animated
             class="h-8 w-28 rounded-md ml-2"
         ></ion-skeleton-text>
       </div>
     </div>
     <hr class="card-horizontal-ruler mt-3.5">
-    <Modal
+    <AppModal
         :is-open="isModalOpen"
         css-class="custom-map-modal"
         @didDismiss="openModal(false);"
     >
-      <GoogleMap :place="place"/>
-    </Modal>
+      <MapModal :place="place"/>
+    </AppModal>
   </div>
 </template>
 
@@ -78,8 +78,8 @@ import {
   IonSkeletonText,
 }                                            from '@ionic/vue';
 
-import Modal     from '@/components/Modal';
-import GoogleMap from '@/components/user/modals/GoogleMap';
+import AppModal from '@/components/AppModal';
+import MapModal from '@/components/user/modals/MapModal';
 
 import { useModal } from '@/composables/useModal';
 
@@ -97,8 +97,8 @@ export default defineComponent({
     IonIcon,
     IonButton,
     IonSkeletonText,
-    Modal,
-    GoogleMap,
+    AppModal,
+    MapModal,
   },
   props: {
     place: {

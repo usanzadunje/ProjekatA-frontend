@@ -13,14 +13,14 @@
     >
       <div class="px-4 py-3 flex items-center justify-between rounded-md">
         <p
-            @click="notificationRead(notification.id)"
             class="main-toolbar-fade-text"
             :class="{ 'notification-read': notification.read }"
+            @click="notificationRead(notification.id)"
         >{{ notification.body }}</p>
         <ion-icon
-            @click="removeNotification(notification.id)"
             :icon="close"
             class="primary-icon-color flex-shrink-0"
+            @click="removeNotification(notification.id)"
         ></ion-icon>
       </div>
     </div>

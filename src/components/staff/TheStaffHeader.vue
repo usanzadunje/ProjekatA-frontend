@@ -1,0 +1,117 @@
+<template>
+  <div class="sticky top-0 z-40">
+    <div class="w-full h-12 bg-gray-100 flex items-center justify-between">
+      <ion-button fill="clear" @click="toggleMenu">
+        <ion-icon :icon="filterOutline" class="text-2xl text-black"></ion-icon>
+      </ion-button>
+
+      <div class="flex items-center">
+        <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'Dark' : 'Light' }}</ion-label>
+        <ion-toggle
+            :checked="isDarkModeOn"
+            mode="md"
+            class="dark-toggle-checked"
+            @ionChange="toggleDarkMode($event)"
+        ></ion-toggle>
+
+        <LanguagePicker class="ml-3"/>
+      </div>
+
+      <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
+        <ion-avatar class="flex-shrink-0">
+          <img
+              :src="this.$store.getters['auth/authUser']?.avatar ?? backendStorageURL + '/users/default_avatar.png'"
+              alt="Profile picture"
+              class="w-full h-full object-cover"
+          >
+        </ion-avatar>
+        <ion-label class="break-all">
+          {{
+            this.$store.getters['auth/authUser']?.username || this.$store.getters['auth/authUser']?.fname
+          }}
+        </ion-label>
+      </ion-chip>
+    </div>
+  </div>
+</template>
+
+<script>
+import { computed, defineComponent } from 'vue';
+import { useStore }                  from 'vuex';
+import {
+  IonButton,
+  IonIcon,
+  IonChip,
+  IonAvatar,
+  IonLabel,
+  IonToggle,
+}                                    from '@ionic/vue';
+
+import SettingsPopover from '@/components/staff/popovers/SettingsPopover';
+import LanguagePicker  from '@/components/LanguagePicker';
+
+import { useMenu }    from '@/composables/useMenu';
+import { usePopover } from '@/composables/usePopover';
+
+import {
+  filterOutline,
+} from 'ionicons/icons';
+
+
+export default defineComponent({
+  name: 'TheStaffHeader',
+  components: {
+    IonButton,
+    IonIcon,
+    IonChip,
+    IonAvatar,
+    IonLabel,
+    IonToggle,
+    LanguagePicker,
+  },
+  props: {},
+  setup() {
+    /* Global properties */
+    const store = useStore();
+
+    /* Component properties */
+    const isDarkModeOn = computed(() => store.getters['user/darkMode']);
+
+    /* Composables */
+    const { toggleMenu } = useMenu();
+    const { openPopover } = usePopover();
+
+    /* Event handlers */
+    const openSettingsPopover = (event) => {
+      openPopover(SettingsPopover, event, 'staff-settings-popover');
+    };
+    const toggleDarkMode = async(e) => {
+      if(!e.target.checked) {
+        await store.dispatch('user/setDarkMode', false);
+      }else {
+        await store.dispatch('user/setDarkMode', true);
+      }
+    };
+
+
+    return {
+      /* Component properties */
+      isDarkModeOn,
+
+      /* Event handlers */
+      toggleMenu,
+      openSettingsPopover,
+      toggleDarkMode,
+
+      /* Icons */
+      filterOutline,
+    };
+  },
+});
+
+</script>
+<style scoped>
+ion-item {
+  --background: #F3F4F6 !important;
+}
+</style>

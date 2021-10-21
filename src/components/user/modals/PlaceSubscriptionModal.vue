@@ -12,20 +12,20 @@
     </ion-item>
     <ion-item class="ion-no-padding mt-4">
       <ion-toggle
-          class="pl-4"
-          @ionChange="indefiniteTimerToggle($event)"
           mode="md"
           :disabled="isUserSubscribed"
+          class="pl-4"
+          @ionChange="indefiniteTimerToggle($event)"
       ></ion-toggle>
       <ion-label class="margin-left-1 submodal-fade-text">{{ $t('indefinitely') }}</ion-label>
     </ion-item>
     <ion-item class="ion-no-padding">
       <ion-range
+          v-model="notificationTime"
           min="5"
           max="60"
           step="5"
           color="primary"
-          v-model="notificationTime"
           :disabled="indefiniteTimerActive || isUserSubscribed"
       ></ion-range>
       <ion-label class="ml-1 margin-left-1 submodal-alert-time">
@@ -40,9 +40,9 @@
         {{ $t('cancel') }}
       </ion-button>
       <ion-button
+          :disabled="isSubButtonDisabled"
           class="uppercase button-confirm modal-button-border"
           @click="toggleSubscription(place.id)"
-          :disabled="isSubButtonDisabled"
       >
         <ion-icon
             slot="start"
@@ -154,16 +154,16 @@ export default defineComponent({
     /* Lifecycle hooks */
     //When users lands on page check if he is already subscribed to place
     PlaceService.isUserSubscribed(place.value.id)
-               .then((response) => {
-                 isUserSubscribed.value = !!response.data.subscribed;
-               })
-               .catch(() => {
-                 showErrorToast(
-                     null,
-                     {
-                       generalError: t('generalAlertError'),
-                     });
-               });
+                .then((response) => {
+                  isUserSubscribed.value = !!response.data.subscribed;
+                })
+                .catch(() => {
+                  showErrorToast(
+                      null,
+                      {
+                        generalError: t('generalAlertError'),
+                      });
+                });
 
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {

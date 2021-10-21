@@ -13,7 +13,7 @@ import owner                   from '@/middleware/owner';
 /* Layouts */
 import UserLayout              from '@/views/user/layouts/UserLayout';
 import StaffLayout             from '@/views/staff/layouts/StaffLayout';
-import OwnerPlaceLayout        from '@/views/staff/layouts/OwnerPlaceLayout';
+import OwnerLayout        from '@/views/staff/layouts/OwnerLayout';
 
 const routes = [
     /* =============================================
@@ -84,39 +84,39 @@ const routes = [
                 path: "home",
                 name: "home",
                 meta: { middleware: [] },
-                component: () => import(/* webpackChunkName: "Home" */ "@/views/user/Home"),
+                component: () => import(/* webpackChunkName: "UserHome" */ "@/views/user/UserHome"),
             },
             {
                 path: "places/:id",
                 name: "place.show",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "ShowPlace" */ "@/views/user/ShowPlace"),
+                    import(/* webpackChunkName: "PlaceShow" */ "@/views/user/PlaceShow"),
             },
             {
                 path: "search",
                 name: "search",
                 meta: { middleware: [] },
-                component: () => import(/* webpackChunkName: "Search" */ "@/views/user/Search"),
+                component: () => import(/* webpackChunkName: "PlaceSearch" */ "@/views/user/PlaceSearch"),
                 props: true,
             },
             {
                 path: "dashboard",
                 name: "dashboard",
                 meta: { middleware: [auth] },
-                component: () => import(/* webpackChunkName: "Dashboard" */ "@/views/user/Dashboard"),
+                component: () => import(/* webpackChunkName: "UserDashboard" */ "@/views/user/UserDashboard"),
             },
             {
                 path: "settings",
                 name: "settings",
                 meta: { middleware: [auth] },
-                component: () => import(/* webpackChunkName: "Settings" */ "@/views/user/Settings"),
+                component: () => import(/* webpackChunkName: "UserSettings" */ "@/views/user/UserSettings"),
             },
             {
                 path: "edit",
                 name: "edit",
                 meta: { middleware: [auth] },
-                component: () => import(/* webpackChunkName: "Edit" */ "@/views/user/Edit"),
+                component: () => import(/* webpackChunkName: "UserEdit" */ "@/views/user/UserEdit"),
             },
         ],
     },
@@ -138,25 +138,25 @@ const routes = [
                 path: "dashboard",
                 name: "staff.dashboard",
                 meta: { middleware: [] },
-                component: () => import(/* webpackChunkName: "StaffDashboard" */ "@/views/staff/Dashboard"),
+                component: () => import(/* webpackChunkName: "StaffDashboard" */ "@/views/staff/StaffDashboard"),
             },
             {
                 path: "settings",
                 name: "staff.settings",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "StaffEdit" */ "@/views/staff/Edit"),
+                    import(/* webpackChunkName: "StaffEdit" */ "@/views/staff/StaffEdit"),
             },
             {
                 path: "/owner/staff",
                 name: "owner.staff",
                 meta: { middleware: [owner] },
                 component: () =>
-                    import(/* webpackChunkName: "OwnerStaffInfo" */ "@/views/staff/owner/StaffInfo"),
+                    import(/* webpackChunkName: "OwnerStaffIndex" */ "@/views/staff/owner/StaffIndex"),
             },
             {
                 path: "/owner/place",
-                component: OwnerPlaceLayout,
+                component: OwnerLayout,
                 name: "owner.place",
                 meta: { middleware: [owner] },
                 redirect: '/owner/place/info',
@@ -164,17 +164,17 @@ const routes = [
                     {
                         path: "info",
                         name: "owner.place.info",
-                        component: () => import(/* webpackChunkName: "PlaceInfo" */ "@/views/staff/owner/place/PlaceInfo"),
+                        component: () => import(/* webpackChunkName: "PlaceEdit" */ "@/views/staff/owner/place/PlaceEdit"),
                     },
                     {
                         path: "tables",
                         name: "owner.place.tables",
-                        component: () => import(/* webpackChunkName: "PlaceTables" */ "@/views/staff/owner/place/PlaceTables"),
+                        component: () => import(/* webpackChunkName: "TableIndex" */ "@/views/staff/owner/place/TableIndex"),
                     },
                     {
                         path: "menu",
                         name: "owner.place.menu",
-                        component: () => import(/* webpackChunkName: "PlaceMenu" */ "@/views/staff/owner/place/PlaceMenu"),
+                        component: () => import(/* webpackChunkName: "MenuIndex" */ "@/views/staff/owner/place/MenuIndex"),
                     },
                 ],
             },

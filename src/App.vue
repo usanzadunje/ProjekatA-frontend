@@ -10,7 +10,7 @@ import { useStore }                from 'vuex';
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 
 import { useFCM }            from '@/composables/useFCM';
-import { useFetchCondition } from '@/composables/useFetchCondition';
+import { useCache } from '@/composables/useCache';
 
 export default defineComponent({
   name: 'App',
@@ -26,11 +26,11 @@ export default defineComponent({
 
     /* Composables */
     const { initPush } = useFCM();
-    const { getAuthUser } = useFetchCondition();
+    const { getCachedOrFetchAuthUser } = useCache();
 
     /* Lifecycle hooks */
     (async() => {
-      await getAuthUser();
+      await getCachedOrFetchAuthUser();
       await store.dispatch("user/getSettings");
       await initPush();
 

@@ -19,7 +19,7 @@
     <div
         class="mt-6 ion-no-padding"
     >
-      <PlaceImageModalSlider
+      <PlaceInfoModalImageSlider
           :images="placeAdditionalInfo?.images?.filter(img => !img.is_logo)"
           :show-skeleton="showSkeleton"
       />
@@ -27,15 +27,15 @@
 
     <div class="mt-5 mb-3 flex justify-around">
       <ion-button
-          class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
           :routerLink="`/places/${place.id}?redirect=${$route.path + '?openModal=true'}`"
+          class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
           @click="$emit('dismissPlaceInfoModal')"
       >
         {{ $t('more') }}
       </ion-button>
       <ion-button
-          class="flex-shrink uppercase button-subscribe modal-button-border"
           @click="openModal(true);$emit('subModalOpened');"
+          class="flex-shrink uppercase button-subscribe modal-button-border"
           :disabled="isSubButtonDisabled"
       >
         <ion-icon slot="start"
@@ -47,7 +47,7 @@
       </ion-button>
     </div>
   </div>
-  <Modal
+  <AppModal
       :is-open="isModalOpen"
       css-class="custom-map-modal"
       @didDismiss="openModal(false);$emit('dismissPlaceInfoModal')"
@@ -57,7 +57,7 @@
         @dismiss-subscription-modal="openModal(false);"
         @user-toggled-subscription="$emit('userToggledSubscription')"
     />
-  </Modal>
+  </AppModal>
 </template>
 
 <script>
@@ -71,8 +71,8 @@ import {
 }                                                      from '@ionic/vue';
 
 import PlaceInfoBody          from '@/components/place/PlaceInfoBody';
-import PlaceImageModalSlider  from '@/components/user/sliders/PlaceImageModalSlider';
-import Modal                  from '@/components/Modal';
+import PlaceInfoModalImageSlider  from '@/components/user/sliders/PlaceInfoModalImageSlider';
+import AppModal                  from '@/components/AppModal';
 import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
 
 import PlaceService from '@/services/PlaceService';
@@ -84,7 +84,7 @@ import {
   notificationsOutline,
 
 }                            from 'ionicons/icons';
-import { useFetchCondition } from '@/composables/useFetchCondition';
+import { useCache } from '@/composables/useCache';
 
 export default defineComponent({
   name: 'PlaceInfoModal',
@@ -92,8 +92,8 @@ export default defineComponent({
     IonIcon,
     IonButton,
     PlaceInfoBody,
-    PlaceImageModalSlider,
-    Modal,
+    PlaceInfoModalImageSlider,
+    AppModal,
     PlaceSubscriptionModal,
   },
   props: {
@@ -125,11 +125,11 @@ export default defineComponent({
 
     /* Composables */
     const { isModalOpen, openModal } = useModal();
-    const { getPlaceAdditionalInfo } = useFetchCondition();
+    const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
 
     /* Lifecycle hooks */
     (async() => {
-      await getPlaceAdditionalInfo(props.place.id);
+      await getCachedOrFetchPlaceAdditionalInfo(props.place.id);
       if(store.getters['auth/loggedIn']) {
         try {
           const response = await PlaceService.isUserSubscribed(props.place.id);

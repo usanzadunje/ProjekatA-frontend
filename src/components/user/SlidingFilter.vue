@@ -7,9 +7,9 @@
     >
       <swiper-slide>
         <ion-button
+            data-sliding-filter="distance"
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'distance' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="distance"
             @click="sortButtonActivated"
         >
           {{ $t('closest') }}
@@ -18,9 +18,9 @@
       </swiper-slide>
       <swiper-slide>
         <ion-button
+            data-sliding-filter="availability"
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'availability' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="availability"
             @click="sortButtonActivated"
         >
           {{ $t('available') }}
@@ -29,9 +29,9 @@
       </swiper-slide>
       <swiper-slide>
         <ion-button
+            data-sliding-filter="food"
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="food"
             @click="sortButtonActivated"
         >
           {{ $t('food') }}
@@ -40,9 +40,9 @@
       </swiper-slide>
       <swiper-slide>
         <ion-button
+            data-sliding-filter="popular"
             class="sliding-filter-button sliding-filter-button-text uppercase"
             :class="activeSlidingButton === 'popular' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
-            data-sliding-filter="popular"
             @click="sortButtonActivated"
         >
           {{ $t('popular') }}

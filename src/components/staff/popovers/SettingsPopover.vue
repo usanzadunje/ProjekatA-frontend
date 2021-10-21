@@ -35,11 +35,11 @@
       <span class="text-sm ml-3">{{ $t('profile') }}</span>
     </div>
 
-    <ActivityToggle
+    <StaffActivityToggle
         v-if="this.$store.getters['auth/isStaff']"
-        class="h-12 text-black w-full px-3 bg-gray-200"
         :icon-classes="'icon-popover-size'"
         :text-classes="'text-sm ml-3'"
+        class="h-12 text-black w-full px-3 bg-gray-200"
     />
     <div
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-gray-300"
@@ -61,7 +61,7 @@ import {
   popoverController,
 }                                    from '@ionic/vue';
 
-import ActivityToggle from '@/components/staff/ActivityToggle';
+import StaffActivityToggle from '@/components/staff/StaffActivityToggle';
 
 import {
   statsChartOutline,
@@ -76,7 +76,7 @@ export default defineComponent({
   components: {
     IonContent,
     IonIcon,
-    ActivityToggle,
+    StaffActivityToggle,
   },
   setup() {
     /* Global properties */

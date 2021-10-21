@@ -7,9 +7,9 @@
       <input
           ref="colorPicker"
           v-model="color"
-          @change="colorChanged"
           type="color"
           class="hidden"
+          @change="colorChanged"
       >
     </ion-button>
   </ion-item>

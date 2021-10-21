@@ -8,7 +8,7 @@
       <slot></slot>
       <ion-card-header>
         <div class="flex items-center justify-center">
-          <Avatar
+          <AppAvatar
               :avatar-path="staff.avatar"
               :avatar-img-classes="'profile-avatar'"
           />
@@ -30,14 +30,14 @@ import {
   IonCardHeader,
 }                                    from '@ionic/vue';
 
-import Avatar from '@/components/Avatar';
+import AppAvatar from '@/components/AppAvatar';
 
 export default defineComponent({
   name: "StaffCard",
   components: {
     IonCard,
     IonCardHeader,
-    Avatar,
+    AppAvatar,
   },
   props: {
     staff: {

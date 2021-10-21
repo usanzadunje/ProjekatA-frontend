@@ -1,11 +1,11 @@
 <template>
   <swiper
-      :id="id"
+      v-if="images?.length > 0"
       ref="swiperRef"
+      :id="id"
       :zoom="true"
       :navigation="true"
       v-update-swiper
-      v-if="images?.length > 0"
   >
     <swiper-slide
         v-for="image in images"
