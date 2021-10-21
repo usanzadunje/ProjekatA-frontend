@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div v-if="!showSkeleton">
     <swiper
-        v-if="!showSkeleton"
+        v-if="images?.length !== 0"
         :slides-per-view="2.5"
         :space-between="10"
     >
@@ -17,24 +17,24 @@
         >
       </swiper-slide>
     </swiper>
-    <div
-        v-if="showSkeleton !== null"
-        v-show="showSkeleton"
-        class="flex"
-    >
-      <ion-skeleton-text
-          animated
-          class="slider-images h-20"
-      ></ion-skeleton-text>
-      <ion-skeleton-text
-          animated
-          class="slider-images h-20 ml-2"
-      ></ion-skeleton-text>
-      <ion-skeleton-text
-          animated
-          class="half-skeleton h-20 w-1/2 ml-2"
-      ></ion-skeleton-text>
-    </div>
+  </div>
+  <div
+      v-if="showSkeleton !== null"
+      v-show="showSkeleton"
+      class="flex"
+  >
+    <ion-skeleton-text
+        animated
+        class="slider-images h-20"
+    ></ion-skeleton-text>
+    <ion-skeleton-text
+        animated
+        class="slider-images h-20 ml-2"
+    ></ion-skeleton-text>
+    <ion-skeleton-text
+        animated
+        class="half-skeleton h-20 w-1/2 ml-2"
+    ></ion-skeleton-text>
   </div>
 </template>
 

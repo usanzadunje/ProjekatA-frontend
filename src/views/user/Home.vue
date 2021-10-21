@@ -14,80 +14,26 @@
       />
       <div class="ion-padding">
         <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
-        <swiper
-            v-if="!showSkeleton"
-            :slides-per-view="1.1"
-        >
-          <swiper-slide>
-            <SlidingCards
-                :places="places.closestToUser?.slice(0, 2)"
-                @open-place-modal="openModal(true, $event)"
-                class="pr-3"
-            />
-          </swiper-slide>
-          <swiper-slide>
-            <SlidingCards
-                :places="places.closestToUser?.slice(2, 4)"
-                @open-place-modal="openModal(true, $event)"
-                class="pr-3"
-            />
-          </swiper-slide>
-        </swiper>
-
-
-        <div v-show="showSkeleton">
-          <SkeletonPlaceCard class="mb-2"></SkeletonPlaceCard>
-          <SkeletonPlaceCard class="mb-2"></SkeletonPlaceCard>
-        </div>
+        <SlidingCards
+            :places="places.closestToUser?.slice(0, 4)"
+            :show-skeleton="showSkeleton"
+            @open-place-modal="openModal(true, $event)"
+        />
 
         <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
-        <swiper
-            v-if="!showSkeleton"
-            :slides-per-view="1.1"
-        >
-          <swiper-slide>
-            <SlidingCards
-                :places="places.currentlyAvailable?.slice(0, 2)"
-                @open-place-modal="openModal(true, $event)"
-                class="pr-3"
-            />
-          </swiper-slide>
-          <swiper-slide>
-            <SlidingCards
-                :places="places.currentlyAvailable?.slice(2, 4)"
-                @open-place-modal="openModal(true, $event)"
-                class="pr-3"
-            />
-          </swiper-slide>
-        </swiper>
+        <SlidingCards
+            :places="places.currentlyAvailable?.slice(0, 4)"
+            :show-skeleton="showSkeleton"
+            @open-place-modal="openModal(true, $event)"
+        />
 
         <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
-        <swiper
-            v-if="!showSkeleton"
-            :slides-per-view="1.1"
-        >
-          <swiper-slide>
-            <SlidingCards
-                :places="places.haveFood?.slice(0, 2)"
-                @open-place-modal="openModal(true, $event)"
-                class="pr-3"
-            />
-          </swiper-slide>
-          <swiper-slide>
-            <SlidingCards
-                :places="places.haveFood?.slice(2, 4)"
-                @open-place-modal="openModal(true, $event)"
-                class="pr-3"
-            />
-          </swiper-slide>
-        </swiper>
-
-        <div v-show="showSkeleton">
-          <SkeletonPlaceCard class="mb-2"></SkeletonPlaceCard>
-          <SkeletonPlaceCard></SkeletonPlaceCard>
-        </div>
+        <SlidingCards
+            :places="places.haveFood?.slice(0, 4)"
+            :show-skeleton="showSkeleton"
+            @open-place-modal="openModal(true, $event)"
+        />
       </div>
-
 
       <Modal
           :is-open="isModalOpen"
@@ -116,14 +62,12 @@ import {
   IonRefresherContent,
   onIonViewDidEnter,
 }                                                    from '@ionic/vue';
-import { Swiper, SwiperSlide }                       from 'swiper/vue';
 
 import PlaceService from '@/services/PlaceService';
 
 import UserHeader            from '@/components/user/headers/UserHeader';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import SlidingCards          from '@/components/place/SlidingCards';
-import SkeletonPlaceCard     from '@/components/place/SkeletonPlaceCard';
 import Modal                 from '@/components/Modal';
 import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
 
@@ -138,14 +82,11 @@ export default defineComponent({
     IonPage,
     IonRefresher,
     IonRefresherContent,
-    Swiper,
-    SwiperSlide,
     UserHeader,
     FilterCategoryHeading,
     SlidingCards,
     Modal,
     PlaceInfoModal,
-    SkeletonPlaceCard,
   },
   beforeRouteEnter(to) {
     // Before entering route remove query params
@@ -265,11 +206,13 @@ export default defineComponent({
       e.target.value = null;
     };
     const refresh = async(event) => {
+      showSkeleton.value = true;
       await checkForLocationPermission();
       await tryGettingLocation();
 
       await getFilteredPlaces();
       event.target.complete();
+      showSkeleton.value = false;
     };
 
     return {

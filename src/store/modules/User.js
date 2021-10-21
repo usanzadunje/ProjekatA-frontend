@@ -9,6 +9,7 @@ export const namespaced = true;
 export const state = {
     settings: {},
     notifications: [],
+    placesAdditionalInfo: [],
 };
 
 export const mutations = {
@@ -39,6 +40,14 @@ export const mutations = {
     },
     CLEAR_NOTIFICATIONS(state) {
         state.notifications = [];
+    },
+
+    /* PLACES */
+    SET_PLACE_ADDITIONAL_INFO(state, value) {
+        state.placesAdditionalInfo.push(value);
+    },
+    PURGE_PLACE_ADDITIONAL_INFO(state) {
+        state.placesAdditionalInfo = [];
     },
 };
 
@@ -122,18 +131,22 @@ export const getters = {
     areSettingsPresent: (state) => {
         return state.settings;
     },
+
     darkMode: (state) => {
         return !!state.settings?.darkMode;
     },
+
     localization: (state) => {
         return state.settings?.localization || {
             text: 'SRB',
             value: 'sr',
         };
     },
+
     notifications: (state) => {
         return !!state.settings?.notifications;
     },
+
     pushNotifications: (state) => {
         return state.notifications;
     },
@@ -149,5 +162,12 @@ export const getters = {
         });
 
         return unreadNotificationCount;
+    },
+
+    hasMoreThanPlaces: (state) => (amount) => {
+        return state.placesAdditionalInfo.length >= amount;
+    },
+    getPlaceAdditionInfo: (state) => (id) => {
+        return state.placesAdditionalInfo.find(place => place.id === id);
     },
 };

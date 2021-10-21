@@ -1,4 +1,5 @@
 import { useStore } from 'vuex';
+import PlaceService from '@/services/PlaceService';
 
 export function useFetchCondition() {
     /* Global properties */
@@ -13,6 +14,32 @@ export function useFetchCondition() {
     };
 
     /* End-user related */
+    const getPlaceAdditionalInfo = async(id) => {
+        if(!store.getters['user/getPlaceAdditionInfo'](id)) {
+            try {
+                if(store.getters['user/hasMoreThanPlaces'](100)) {
+                    store.commit('user/PURGE_PLACE_ADDITIONAL_INFO');
+                }
+
+                const response = await Promise.all([
+                    PlaceService.images(id),
+                    PlaceService.workingHours(id),
+                ]);
+
+                store.commit('user/SET_PLACE_ADDITIONAL_INFO', {
+                    id: id,
+                    images: response[0].data,
+                    working_hours: response[1].data,
+                });
+            }catch(e) {
+                store.commit('user/SET_PLACE_ADDITIONAL_INFO', {
+                    id: id,
+                    images: null,
+                    working_hours: null,
+                });
+            }
+        }
+    };
 
     /* Owner/Staff related */
     const getPlaceInfo = async() => {
@@ -35,9 +62,13 @@ export function useFetchCondition() {
         /* Component properties */
 
         /* Methods */
+        //General
         getAuthUser,
+        //Staff
         getPlaceInfo,
         getPlaceTables,
         getPlaceCategories,
+        //End user
+        getPlaceAdditionalInfo,
     };
 }
