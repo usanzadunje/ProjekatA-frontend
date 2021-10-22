@@ -58,7 +58,11 @@
               <ion-skeleton-text animated class="rounded-md" style="height: 180px;"></ion-skeleton-text>
             </div>
 
-            <ProductMenu :place-info="place"/>
+            <ProductMenu
+                :place="place"
+                :loading-products="loadingProducts"
+                @load-more-products="loadMoreProducts($event)"
+            />
           </div>
 
           <div>
@@ -136,6 +140,7 @@ import {
 
 import { calculatePxFromPercent } from '@/utils/helpers';
 import { useCache }               from '@/composables/useCache';
+import ProductService             from '@/services/ProductService';
 
 export default defineComponent({
   name: "PlaceShow",
@@ -170,6 +175,7 @@ export default defineComponent({
     let searchTab = null;
     const platformIsWeb = Capacitor.getPlatform() === 'web';
     const showSkeleton = ref(true);
+    const loadingProducts = ref(false);
     const dropzoneWidth = computed(() => {
       return store.getters['global/width'] - ((2.25 * parseFloat(getComputedStyle(document.documentElement).fontSize)) + 4);
     });
@@ -217,6 +223,32 @@ export default defineComponent({
             {
               generalError: t('dataFetchingError'),
             });
+      }
+    };
+    const loadMoreProducts = async({ categoryId, offset, event }) => {
+      loadingProducts.value = true;
+      try {
+        const response = await ProductService.indexByCategory(Number(route.params.id), categoryId, offset, 10);
+
+        if(!response.data) {
+          event.target.style.display = 'none';
+          return;
+        }
+        if(response.data.length < 10) {
+          event.target.style.display = 'none';
+        }
+
+        let category = place.value.categories.find(category => category.id === categoryId);
+
+        category.products = category.products.concat(response.data);
+      }catch(error) {
+        showErrorToast(
+            null,
+            {
+              generalError: t('dataFetchingError'),
+            });
+      }finally {
+        loadingProducts.value = false;
       }
     };
 
@@ -276,6 +308,7 @@ export default defineComponent({
       isUserSubscribed,
       platformIsWeb,
       showSkeleton,
+      loadingProducts,
 
       /* Computed properties */
       loggedIn,
@@ -284,6 +317,7 @@ export default defineComponent({
       openModal,
       openPreview,
       refresh,
+      loadMoreProducts,
 
       /* Icons */
       notifications,

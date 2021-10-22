@@ -30,13 +30,13 @@ export default {
         );
     },
     // Getting only one specific place
-    show(id, products = null, showScreen = null) {
+    show(id, categories = null, showScreen = null) {
         // Only getting
         return API.apiClient.get(
             `/places/${id}`,
             {
                 params: {
-                    products,
+                    categories,
                     showScreen,
                 },
             },

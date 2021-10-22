@@ -13,6 +13,17 @@ export default {
             },
         );
     },
+    indexByCategory(placeId, categoryId, offset = null, limit = null) {
+        return API.apiClient.get(
+            `/places/${placeId}/category/${categoryId}/products`,
+            {
+                params: {
+                    offset,
+                    limit,
+                },
+            },
+        );
+    },
     show(id) {
         return API.apiClient.get(`/owner/menu/product/${id}`);
     },
