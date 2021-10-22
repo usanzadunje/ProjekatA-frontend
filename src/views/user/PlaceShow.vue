@@ -124,8 +124,7 @@ import PlaceService from '@/services/PlaceService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useModal }              from '@/composables/useModal';
-
-import { calculatePxFromPercent } from '@/utils/helpers';
+import { useContent }            from '@/composables/useContent';
 
 import {
   notifications,
@@ -135,8 +134,8 @@ import {
 }
   from 'ionicons/icons';
 
-import TableService   from '@/services/TableService';
-import { useContent } from '@/composables/useContent';
+import { calculatePxFromPercent } from '@/utils/helpers';
+import { useCache }               from '@/composables/useCache';
 
 export default defineComponent({
   name: "PlaceShow",
@@ -190,16 +189,18 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
     const { isModalOpen, openModal } = useModal();
     const { scrollToTop } = useContent();
+    const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
 
     /* Methods */
     const getPlace = async() => {
       showSkeleton.value = true;
       try {
-        const response = await PlaceService.show(route.params.id, '?products=true');
-        const tablesResponse = await TableService.index(route.params.id);
+        const response = await PlaceService.show(route.params.id, true, true);
+        await getCachedOrFetchPlaceAdditionalInfo(Number(route.params.id));
 
         place.value = response.data;
-        place.value.tables = tablesResponse.data;
+        place.value.images = store.getters['user/getPlaceAdditionInfo'](Number(route.params.id)).images;
+        place.value.working_hours = store.getters['user/getPlaceAdditionInfo'](Number(route.params.id)).working_hours;
 
         place.value.tables?.forEach(table => {
           table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth.value);

@@ -5,7 +5,7 @@
           class="flex justify-center mb-6"
       >
         <AppAvatar
-            :avatar-path="user.avatar"
+            :avatar-path="user.avatar ?? authUser.avatar"
             :avatar-img-classes="{ 'error-border' : errorNames.hasOwnProperty('avatar'), 'edit-avatar': true }"
             @click="selectImageSource"
         />
@@ -293,7 +293,6 @@ export default defineComponent({
       user.email = authUser.value.email;
       user.bday = authUser.value.bday;
       user.phone = authUser.value.phone;
-      user.avatar = authUser.value.avatar;
     });
 
     /* Composables */

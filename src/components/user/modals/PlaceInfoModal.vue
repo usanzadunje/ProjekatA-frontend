@@ -70,10 +70,10 @@ import {
   IonButton,
 }                                                      from '@ionic/vue';
 
-import PlaceInfoBody          from '@/components/place/PlaceInfoBody';
-import PlaceInfoModalImageSlider  from '@/components/user/sliders/PlaceInfoModalImageSlider';
+import PlaceInfoBody             from '@/components/place/PlaceInfoBody';
+import PlaceInfoModalImageSlider from '@/components/user/sliders/PlaceInfoModalImageSlider';
 import AppModal                  from '@/components/AppModal';
-import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
+import PlaceSubscriptionModal    from '@/components/user/modals/PlaceSubscriptionModal';
 
 import PlaceService from '@/services/PlaceService';
 
@@ -83,7 +83,7 @@ import {
   notifications,
   notificationsOutline,
 
-}                            from 'ionicons/icons';
+}                   from 'ionicons/icons';
 import { useCache } from '@/composables/useCache';
 
 export default defineComponent({
@@ -137,9 +137,14 @@ export default defineComponent({
         }catch(e) {
           isUserSubscribed.value = false;
         }
+        showSkeleton.value = false;
+      }else {
+        // Without some delay whether from API response above or this timeout, swiper is mounted
+        // but doesn't apply styles, there is problem with async loading which is resolved with this "hack"
+        setTimeout(() => {
+          showSkeleton.value = false;
+        }, 50);
       }
-
-      showSkeleton.value = false;
     })();
     isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
 
