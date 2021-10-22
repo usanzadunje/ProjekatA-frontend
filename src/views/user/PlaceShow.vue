@@ -42,7 +42,7 @@
                 <Table
                     v-for="table in place.tables"
                     :key="table.id"
-                    :empty="table.empty"
+                    :empty="Number(table.empty)"
                     :draggable="false"
                     :style="
                       `position: absolute;
@@ -116,7 +116,7 @@ import FilterCategoryHeading  from '@/components/user/FilterCategoryHeading';
 import TableContainer         from '@/components/TableContainer';
 import Table                  from '@/components/Table';
 import ProductMenu            from '@/components/user/ProductMenu';
-import AppModal                  from '@/components/AppModal';
+import AppModal               from '@/components/AppModal';
 import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
 import ImagePreviewModal      from '@/components/user/modals/ImagePreviewModal';
 

@@ -17,7 +17,7 @@ export function useCache() {
     const getCachedOrFetchPlaceAdditionalInfo = async(id, forceFetch = false) => {
         if(!store.getters['user/getPlaceAdditionInfo'](id) || forceFetch) {
             try {
-                if(store.getters['user/hasMoreThanPlaces'](100)) {
+                if(store.getters['user/hasMoreThanPlacesInfo'](100)) {
                     store.commit('user/PURGE_PLACE_ADDITIONAL_INFO');
                 }
 

@@ -164,7 +164,7 @@ export const getters = {
         return unreadNotificationCount;
     },
 
-    hasMoreThanPlaces: (state) => (amount) => {
+    hasMoreThanPlacesInfo: (state) => (amount) => {
         return state.placesAdditionalInfo.length >= amount;
     },
     getPlaceAdditionInfo: (state) => (id) => {

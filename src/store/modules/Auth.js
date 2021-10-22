@@ -119,11 +119,18 @@ export const actions = {
     },
 
     // Getting authenticated users info and saving it to store
-    async getToken() {
+    async getToken({ getters, commit, dispatch }) {
         const { get } = StorageService();
         try {
-            return await get('projekata_token');
+            const token = await get('projekata_token');
+
+            if(token && getters.token) {
+                dispatch("setToken", token);
+            }
+
+            return token;
         }catch(error) {
+            commit("SET_USER", null);
             return null;
         }
     },

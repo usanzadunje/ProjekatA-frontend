@@ -15,7 +15,7 @@
             <Table
                 v-for="table in tables"
                 :key="table.id"
-                :empty="table.empty"
+                :empty="Number(table.empty)"
                 :draggable="false"
                 :style="
                       `position: absolute;
