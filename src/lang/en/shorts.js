@@ -57,6 +57,7 @@ export default {
     "subscribedPlaces": "Places i am subscribed to",
     "findAvailablePlace": "Find available place",
     "loading": "Loading...",
+    "loadingMore": "Load more",
     "yes": "Yes",
     "no": "No",
     "agree": "Agree",
@@ -153,5 +154,8 @@ export default {
     "createProductImagesAlert": "Create product in order to add images.",
     "searchPlaceholder": "Type place name...",
     "searchProductPlaceholder": "Type product name...",
-
+    "is": "Is",
+    "isNot": "Is not",
+    "empty": "Empty",
+    "taken": "Taken",
 };

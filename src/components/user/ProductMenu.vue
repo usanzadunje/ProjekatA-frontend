@@ -16,12 +16,20 @@
           @click="showProductModal(product, category.name)"
           class="py-1"
       />
-      <button
-          class="w-full flex justify-center bg-red-500"
-          @click="loadMoreProducts(category.id, $event)"
-      >
-        {{ loadingProducts ? 'LOADING...' : 'LOAD MORE' }}
-      </button>
+      <div class="w-full flex justify-center py-2">
+        <ion-button
+            v-show="!loadingProducts"
+            size="default"
+            @click="loadMoreProducts(category.id, $event)"
+        >
+          {{ $t('loadMore') }}
+        </ion-button>
+        <ion-spinner
+            v-show="loadingProducts"
+            name="dots"
+            class="my-2 scale2x"
+        ></ion-spinner>
+      </div>
     </AccordionList>
 
     <AppModal
@@ -40,14 +48,13 @@
 </template>
 <script>
 import { defineComponent, reactive } from 'vue';
-import {}                            from '@ionic/vue';
+import { IonButton, IonSpinner }     from '@ionic/vue';
 
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import AccordionList         from '@/components/user/AccordionList';
 import ProductCard           from '@/components/ProductCard';
 import AppModal              from '@/components/AppModal';
 import ProductInfoModal      from '@/components/user/modals/ProductInfoModal';
-
 
 import {
   bookOutline,
@@ -60,6 +67,8 @@ import { increaseAccordionMaxHeight } from '@/utils/helpers';
 export default defineComponent({
   name: 'Menu',
   components: {
+    IonButton,
+    IonSpinner,
     FilterCategoryHeading,
     AccordionList,
     ProductCard,
@@ -126,3 +135,8 @@ export default defineComponent({
 });
 
 </script>
+<style scoped>
+ion-button {
+  --background: var(--user-selected-color);
+}
+</style>

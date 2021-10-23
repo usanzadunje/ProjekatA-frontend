@@ -50,6 +50,7 @@
                       transform:translate(${table.position.left}px, ${table.position.top}px)
                       `
                     "
+                    @click="showTableTooltip($event, table)"
                 />
               </TableContainer>
             </div>
@@ -67,7 +68,7 @@
 
           <div>
             <ion-button
-                class="uppercase button-subscribe-wide"
+                class="uppercase button-subscribe-wide mb-6"
                 expand="block"
                 :disabled="!loggedIn || platformIsWeb"
                 @click="openModal(true)"
@@ -119,6 +120,7 @@ import PlaceInfoBody          from '@/components/place/PlaceInfoBody';
 import FilterCategoryHeading  from '@/components/user/FilterCategoryHeading';
 import TableContainer         from '@/components/TableContainer';
 import Table                  from '@/components/Table';
+import TableTooltipPopover    from '@/components/user/popovers/TableTooltipPopover';
 import ProductMenu            from '@/components/user/ProductMenu';
 import AppModal               from '@/components/AppModal';
 import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
@@ -132,6 +134,7 @@ import { useModal }              from '@/composables/useModal';
 import { useContent }            from '@/composables/useContent';
 import { useCache }              from '@/composables/useCache';
 import { useRefresher }          from '@/composables/useRefresher';
+import { usePopover }            from '@/composables/usePopover';
 
 import {
   notifications,
@@ -198,6 +201,7 @@ export default defineComponent({
     const { scrollToTop } = useContent();
     const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
     const { forceStopRefresherAfter } = useRefresher();
+    const { openPopover } = usePopover();
 
     /* Methods */
     const getPlace = async() => {
@@ -293,6 +297,16 @@ export default defineComponent({
 
       event.target.complete();
     };
+    const showTableTooltip = async(event, table) => {
+      await openPopover(
+          TableTooltipPopover,
+          event,
+          'table-tooltip-popover',
+          {
+            table,
+          },
+      );
+    };
 
     /* Watchers */
     // Watching for changes of id parameter in place show route and fetching right data
@@ -322,6 +336,7 @@ export default defineComponent({
       openPreview,
       refresh,
       loadMoreProducts,
+      showTableTooltip,
 
       /* Icons */
       notifications,

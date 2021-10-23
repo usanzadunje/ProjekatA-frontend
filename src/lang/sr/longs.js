@@ -14,4 +14,6 @@ export default {
     "freeSpotNotification": "Došlo je do oslobađanja mesta u {place}.",
     "owner.currentAvailabilitySituation": "Trenutno stanje u vašem objektu",
     "owner.currentActiveStaff": "Trenutno aktivni zaposleni",
+    "currentTableAvailability": "Sto je trenutno {availability}.",
+    "currentTableSmokingAllowed": "Pušenje {isAllowed} dozvoljeno za ovim stolom.",
 };

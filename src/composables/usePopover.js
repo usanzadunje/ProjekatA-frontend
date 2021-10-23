@@ -9,10 +9,11 @@ export function usePopover() {
 
 
     /* Methods */
-    const openPopover = async(component, event, cssClass = '') => {
+    const openPopover = async(component, event, cssClass = '', componentProps = null) => {
         const popover = await popoverController
             .create({
                 component: component,
+                componentProps,
                 cssClass: cssClass,
                 event: event,
                 translucent: true,

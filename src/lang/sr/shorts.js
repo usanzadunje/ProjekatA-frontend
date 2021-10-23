@@ -58,6 +58,7 @@ export default {
     "subscribedPlaces": "Mesta koja pratim",
     "findAvailablePlace": "Pronađi slobodno mesto",
     "loading": "Učitava se...",
+    "loadMore": "Učitaj još",
     "yes": "Da",
     "no": "Ne",
     "agree": "Potvrdi",
@@ -154,6 +155,9 @@ export default {
     "createProductImagesAlert": "Kreirajte proizvod kako biste dodali fotografije.",
     "searchPlaceholder": "Unesite naziv objekta...",
     "searchProductPlaceholder": "Unesite naziv proizvoda...",
-
+    "is": "Je",
+    "isNot": "Nije",
+    "empty": "Slobodan",
+    "taken": "Zauzet",
 };
 

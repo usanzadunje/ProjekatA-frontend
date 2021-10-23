@@ -109,6 +109,7 @@ ion-modal ion-item {
     --border-style: none;
 }
 
+
 .auto-height {
     --height: auto;
 }
@@ -168,8 +169,16 @@ ion-modal ion-item {
     --max-width: 170px;
 }
 
+.settings-popover .popover-arrow::after {
+    background: #E5E7EB !important;
+}
+
 .staff-settings-popover {
     --max-width: 185px;
+}
+
+.staff-settings-popover .popover-arrow::after {
+    background: #E5E7EB !important;
 }
 
 .notifications-popover {
@@ -177,6 +186,21 @@ ion-modal ion-item {
     --height: auto;
     --max-height: 35vh;
 }
+
+.notifications-popover .popover-arrow::after {
+    background: #E5E7EB !important;
+}
+
+.table-tooltip-popover {
+    --max-width: 65vw;
+    --width: auto;
+    --height: auto;
+}
+
+.table-tooltip-popover .popover-arrow::after {
+    background: #E5E7EB !important;
+}
+
 
 .undo-toast {
     --color: #FFF;
@@ -352,6 +376,10 @@ ion-toggle.dark-toggle-checked {
 
 .icon-popover-size {
     font-size: 1.4rem;
+}
+
+.scale2x {
+    transform: scale(2);
 }
 
 /*

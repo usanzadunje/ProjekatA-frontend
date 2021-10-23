@@ -13,4 +13,6 @@ export default {
     "freeSpotNotification": "There is a free spot at {place} now.",
     "owner.currentAvailabilitySituation": "Current availability situation in your place",
     "owner.currentActiveStaff": "Currently active staff",
+    "currentTableAvailability": "Table is currently {availability}.",
+    "currentTableSmokingAllowed": "Smoking {isAllowed} allowed at this table.",
 };
