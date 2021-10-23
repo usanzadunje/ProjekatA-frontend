@@ -21,7 +21,7 @@
                     transform:translate(${table.position?.left}px, ${table.position.top}px)
                     `
                   "
-                  @click="showTableModal"
+                  @click="showTableModal(table)"
               />
             </TableContainer>
           </div>
@@ -47,6 +47,19 @@
           </ion-button>
         </div>
       </div>
+
+      <AppModal
+          :is-open="isModalOpen"
+          css-class="custom-edit-table-modal"
+          :swipe-to-close="false"
+          width="80%"
+          @didDismiss="openModal(false);"
+      >
+        <TableEditModal
+            :table-prop="modalData"
+            @dismiss="openModal(false)"
+        />
+      </AppModal>
     </ion-content>
   </ion-page>
 </template>
@@ -64,10 +77,13 @@ import {
 
 import TableContainer from '@/components/TableContainer';
 import Table          from '@/components/Table';
+import AppModal       from '@/components/AppModal';
+import TableEditModal from '@/components/owner/modals/TableEditModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import { removeClonedTableElements } from '@/utils/helpers';
+import { useModal }                  from '@/composables/useModal';
 
 export default defineComponent({
   name: "TableIndex",
@@ -77,6 +93,8 @@ export default defineComponent({
     IonButton,
     TableContainer,
     Table,
+    AppModal,
+    TableEditModal,
   },
   setup() {
     /* Global properties */
@@ -89,6 +107,7 @@ export default defineComponent({
     /* Composables */
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { isModalOpen, modalData, openModal } = useModal();
 
     /* Lifecycle hooks */
     onIonViewWillLeave(() => {
@@ -120,19 +139,23 @@ export default defineComponent({
         loading.value = -1;
       }
     };
-    const showTableModal = async() => {
-      alert('das');
+    const showTableModal = async(table) => {
+      openModal(true, table);
     };
 
     return {
       /* Component properties */
       tables,
       loading,
+      isModalOpen,
+      modalData,
 
       /* Event handlers */
       updateTables,
       resetTables,
       showTableModal,
+      openModal,
+
     };
   },
 

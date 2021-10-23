@@ -35,7 +35,4 @@ export default {
     allTables() {
         return API.apiClient.get(`/staff/place/tables`);
     },
-    updateTables(tables) {
-        return API.apiClient.post(`/owner/place/tables`, tables);
-    },
 };

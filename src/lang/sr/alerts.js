@@ -27,5 +27,6 @@ export default {
     "successImageRemove": "Uspešno ste uklonili fotografiju!",
     "successImageMain": "Uspešno ste postavili fotografiju kao glavnu!",
     "successImageLogo": "Uspešno ste postavili fotografiju kao logo!",
-
+    "owner.alertRemoveTableHeader": "Uklanjate sto",
+    "owner.removeTableMessage": "Da li ste sigurni da želite da nastavite sa uklanjanjem stola?",
 };

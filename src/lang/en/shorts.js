@@ -107,6 +107,8 @@ export default {
     "owner.createStaff": "Create new staff member",
     "owner.createdStaff": "Successfully created new staff member!",
     "owner.updateTables": "Successfully updated table position!",
+    "owner.updateTable": "Successfully updated table!",
+    "owner.removeTable": "Successfully removed table!",
     "owner.createCategory": "Successfully created new product category!",
     "owner.updateCategory": "Successfully updated category!",
     "owner.removeCategory": "Successfully removed product category!",
@@ -117,6 +119,7 @@ export default {
     "inactive": "Inactive",
     "timeLeft": "{time} minute | {time} minutes",
     "basic": "Basic info",
+    "table": "Table | Tables",
     "tables": "Table setup",
     "owner.noImage": "Please select at least 1 image.",
     "uploadSelectedImages": "Upload",
@@ -158,4 +161,6 @@ export default {
     "isNot": "Is not",
     "empty": "Empty",
     "taken": "Taken",
+    "allowed": "Allowed",
+    "forbidden": "Forbidden",
 };

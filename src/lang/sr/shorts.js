@@ -108,8 +108,10 @@ export default {
     "owner.createStaff": "Kreirajte novog zaposlenog",
     "owner.createdStaff": "Uspešno ste kreirali novog zaposlenog!",
     "owner.updateTables": "Uspešno ste ažurirali pozicije stolova!",
+    "owner.updateTable": "Uspešno ste izmenili sto!",
+    "owner.removeTable": "Uspešno ste uklonili sto!",
     "owner.createCategory": "Uspešno ste kreirali novu kategoriju!",
-    "owner.updateCategory": "Uspešno ste izmenilikategoriju!",
+    "owner.updateCategory": "Uspešno ste izmenili kategoriju!",
     "owner.removeCategory": "Uspešno ste uklonili kategoriju proizvoda!",
     "owner.createProduct": "Uspešno ste dodali novi proizvod u meni!",
     "owner.updateProduct": "Uspešno ste izmenili proizvod!",
@@ -118,6 +120,7 @@ export default {
     "inactive": "Neaktivan",
     "timeLeft": "{time} minut | {time} minuta",
     "basic": "Osnovno",
+    "table": "Sto | Stolovi",
     "tables": "Stolovi",
     "owner.noImage": "Izaberite najmanje 1 fotografiju.",
     "uploadSelectedImages": "Sačuvaj",
@@ -159,5 +162,8 @@ export default {
     "isNot": "Nije",
     "empty": "Slobodan",
     "taken": "Zauzet",
+    "smoking": "Pušenje",
+    "allowed": "Dozvoljeno",
+    "forbidden": "Zabranjeno",
 };
 

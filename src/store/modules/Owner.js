@@ -1,9 +1,11 @@
 import OwnerService from '@/services/OwnerService';
 
+import CategoryService from '@/services/CategoryService';
+import ProductService  from '@/services/ProductService';
+import PlaceService    from '@/services/PlaceService';
+import TableService    from '@/services/TableService';
+
 import { calculatePxFromPercent, removeClonedTableElements } from '@/utils/helpers';
-import CategoryService                                       from '@/services/CategoryService';
-import ProductService                                        from '@/services/ProductService';
-import PlaceService                                          from '@/services/PlaceService';
 
 const fontSize = getComputedStyle(document.documentElement).fontSize;
 
@@ -60,7 +62,7 @@ export const mutations = {
             table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth);
         });
     },
-    UPDATE_TABLE(state, value) {
+    UPDATE_TABLE_POSITION(state, value) {
         let existingTable = state.tables.find(table => table.id === value.id);
 
         if(existingTable) {
@@ -94,7 +96,16 @@ export const mutations = {
         }
         table.empty = empty;
     },
+    UPDATE_TABLE(state, { tableId, payload }) {
+        let table = state.tables.find(table => table.id === tableId);
 
+        Object.keys(payload).forEach(key => {
+            table[key] = payload[key];
+        });
+    },
+    REMOVE_TABLE(state, value) {
+        state.tables = state.tables.filter(table => table.id !== value);
+    },
     /* CATEGORIES */
     SET_CATEGORIES(state, value) {
         state.categories = value;
@@ -223,7 +234,7 @@ export const actions = {
         const dropzoneWidth = rootGetters['global/width'] - ((2.25 * parseFloat(fontSize) + 4));
         const dirtyTables = getters.tables.filter(table => table.dirty);
 
-        const response = await OwnerService.updateTables(dirtyTables);
+        const response = await TableService.updateMany(dirtyTables);
 
 
         commit('REMOVE_CLONED_TABLES');
@@ -237,6 +248,17 @@ export const actions = {
             commit('CREATE_TABLE', table);
         });
     },
+    async updateTable({ commit }, { tableId, payload }) {
+        await TableService.update(tableId, payload);
+
+        commit('UPDATE_TABLE', { tableId, payload });
+    },
+    async deleteTable({ commit }, tableId) {
+        await TableService.destroy(tableId);
+
+        commit('REMOVE_TABLE', tableId);
+    },
+
 
     /* CATEGORIES */
     async getCategories({ commit }) {

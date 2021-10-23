@@ -126,7 +126,7 @@ export default defineComponent({
         end(event) {
           event.target.classList.remove('opacity-60');
 
-          store.commit('owner/UPDATE_TABLE', {
+          store.commit('owner/UPDATE_TABLE_POSITION', {
             id: Number(event.target.getAttribute('data-id')),
             position: {
               top: position.y,

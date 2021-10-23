@@ -164,6 +164,11 @@ ion-modal ion-item {
     background: var(--staff-modal-paint) !important;
 }
 
+.custom-edit-table-modal {
+    --border-radius: 20px;
+    --background: var(--secondary-paint) !important;
+}
+
 
 .settings-popover {
     --max-width: 170px;
@@ -346,6 +351,11 @@ ion-toggle.dark-toggle-checked {
 .full-size {
     width: 100vw;
     height: 100vh;
+}
+
+.item-bg {
+    --background: var(--input-bg);
+    background: var(--input-bg);
 }
 
 .user-selected-color {

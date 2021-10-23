@@ -27,5 +27,6 @@ export default {
     "successImageRemove": "Successfully removed image!",
     "successImageMain": "Successfully set new image as main!",
     "successImageLogo": "Successfully set new image as logo!",
-
+    "owner.alertRemoveTableHeader": "Removing table",
+    "owner.removeTableMessage": "Are you sure you want to remove proceed with removing table?",
 };
