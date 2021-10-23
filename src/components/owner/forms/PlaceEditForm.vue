@@ -229,6 +229,7 @@ import MainImagePreview    from '@/components/MainImagePreview';
 import PlaceImagesAddModal from '@/components/owner/modals/PlaceImagesAddModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useRefresher }          from '@/composables/useRefresher';
 
 import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 
@@ -300,6 +301,7 @@ export default defineComponent({
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { forceStopRefresherAfter } = useRefresher();
 
 
     /* Methods */
@@ -364,6 +366,8 @@ export default defineComponent({
         await store.dispatch("owner/getPlaceInfo");
 
         resetInput();
+
+        forceStopRefresherAfter(props.refresher.event);
 
         props.refresher.event.target.complete();
       }

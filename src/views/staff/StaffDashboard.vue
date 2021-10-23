@@ -76,6 +76,7 @@ import PlaceAvailabilityChart         from '@/components/staff/charts/PlaceAvail
 import StaffAvailabilityToggleButtons from '@/components/staff/StaffAvailabilityToggleButtons';
 
 import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
+import { useRefresher }         from '@/composables/useRefresher';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -104,6 +105,7 @@ export default defineComponent({
 
     /* Composables */
     const { toggle } = usePlaceManipulation();
+    const { forceStopRefresherAfter } = useRefresher();
 
     /* Lifecycle hooks */
     (async() => {
@@ -127,6 +129,8 @@ export default defineComponent({
       if(isOwner.value) {
         await store.dispatch('owner/getStaffInfo');
       }
+
+      forceStopRefresherAfter(event);
 
       event.target.complete();
     };

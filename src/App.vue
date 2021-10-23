@@ -9,7 +9,7 @@ import { defineComponent }         from 'vue';
 import { useStore }                from 'vuex';
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 
-import { useFCM }            from '@/composables/useFCM';
+import { useFCM }   from '@/composables/useFCM';
 import { useCache } from '@/composables/useCache';
 
 export default defineComponent({
@@ -35,6 +35,7 @@ export default defineComponent({
       await initPush();
 
       store.commit("global/SET_WIDTH", window.innerWidth);
+      store.commit("global/SET_HEIGHT", window.innerHeight);
     })();
 
 

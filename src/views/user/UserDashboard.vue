@@ -1,5 +1,13 @@
 <template>
   <ion-page>
+    <div>
+      <TheUserProfileHeader/>
+      <SlidingFilter
+          v-if="!showSkeleton"
+          class="mt-2 px-4"
+          @sort-has-changed="sortHasChanged"
+      />
+    </div>
 
     <ion-content>
       <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
@@ -8,10 +16,6 @@
         >
         </ion-refresher-content>
       </ion-refresher>
-
-      <TheUserProfileHeader/>
-
-      <SlidingFilter v-if="!showSkeleton" @sort-has-changed="sortHasChanged" class="mt-2 px-4"/>
 
       <div class="px-4 pb-4 mt-3">
         <FilterCategoryHeading :title="$t('subscribedPlaces')" class="mb-2"/>
@@ -93,13 +97,13 @@ import {
   onIonViewDidEnter,
 }                               from '@ionic/vue';
 
-import TheUserProfileHeader from '@/components/user/headers/TheUserProfileHeader';
-import SlidingFilter     from '@/components/user/SlidingFilter';
+import TheUserProfileHeader  from '@/components/user/headers/TheUserProfileHeader';
+import SlidingFilter         from '@/components/user/SlidingFilter';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import Timer                 from '@/components/Timer';
 import PlaceCard             from '@/components/place/PlaceCard';
 import PlaceCardSkeleton     from '@/components/place/PlaceCardSkeleton';
-import AppModal                 from '@/components/AppModal';
+import AppModal              from '@/components/AppModal';
 import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
 
 import PlaceService from '@/services/PlaceService';
@@ -108,6 +112,7 @@ import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useModal }              from '@/composables/useModal';
 import { useSlidingItem }        from '@/composables/useSlidingItem';
+import { useRefresher }          from '@/composables/useRefresher';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
@@ -155,6 +160,7 @@ export default defineComponent({
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal, hideModal } = useModal();
     const { slidingItem, closeOpenItems } = useSlidingItem();
+    const { forceStopRefresherAfter } = useRefresher();
 
     /* Lifecycle hooks */
     onIonViewDidEnter(async() => {
@@ -177,18 +183,28 @@ export default defineComponent({
         showErrorToast(
             null,
             {
-              pushNotificationPermission: t('dataFetchingError'),
+              dataFetchingError: t('dataFetchingError'),
             });
       }
     };
     const refresh = async(event) => {
-      if(sortBy.value === 'distance') {
-        await checkForLocationPermission();
-      }
-      await tryGettingLocation();
+      try {
+        if(sortBy.value === 'distance') {
+          await checkForLocationPermission();
+        }
+        await tryGettingLocation();
 
-      await getSubscriptions();
-      event.target.complete();
+        await getSubscriptions();
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }finally {
+        forceStopRefresherAfter(event);
+        event.target.complete();
+      }
     };
 
     /* Event handlers */
@@ -233,7 +249,7 @@ export default defineComponent({
         showErrorToast(
             null,
             {
-              pushNotificationPermission: t('generalAlertError'),
+              generalAlertError: t('generalAlertError'),
             });
       }
     };

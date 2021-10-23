@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 pt-4">
     <ion-item>
-      <h1 class="submodal-heading">{{ $t('notifications') }}</h1>
+      <h1 class="submodal-heading">{{ $t('notification', 2) }}</h1>
     </ion-item>
     <ion-item>
       <p class="submodal-paragraph">

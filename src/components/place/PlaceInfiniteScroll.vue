@@ -1,7 +1,10 @@
 <template>
   <div>
     <FilterCategoryHeading :title="$t('searchResults')" class="mb-2"/>
-    <div v-show="!showSkeleton">
+    <div
+        v-show="!showSkeleton"
+        :class="{ 'pb-6' : isInfiniteScrollDisabled }"
+    >
       <div v-for="place in places" :key="place.id" class="mb-5">
         <PlaceCard
             :place="place"
@@ -48,6 +51,7 @@ import PlaceService from '@/services/PlaceService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
+import { useRefresher }          from '@/composables/useRefresher';
 
 export default defineComponent({
   name: "PlaceInfiniteScroll",
@@ -98,6 +102,7 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const { forceStopRefresherAfter } = useRefresher();
 
     /* Methods */
     const getPlaces = async(concat = false) => {
@@ -129,24 +134,33 @@ export default defineComponent({
         showErrorToast(
             null,
             {
-              pushNotificationPermission: t('dataFetchingError'),
+              dataFetchingError: t('dataFetchingError'),
             });
       }
     };
     const refresh = async(event) => {
-      if(sortBy.value === 'distance') {
-        await checkForLocationPermission();
+      try {
+        if(sortBy.value === 'distance') {
+          await checkForLocationPermission();
+        }
+        await tryGettingLocation();
+
+        await getPlaces();
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }finally {
+        forceStopRefresherAfter(event);
+
+        event.target.complete();
+
+        placeOffset = 0;
+        isInfiniteScrollDisabled.value = false;
       }
-      await tryGettingLocation();
 
-      document.querySelector('#header').classList.remove('hide-header');
-
-      await getPlaces();
-
-      event.target.complete();
-
-      placeOffset = 0;
-      isInfiniteScrollDisabled.value = false;
     };
 
     /* Event handlers */

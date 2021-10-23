@@ -1,6 +1,18 @@
 <template>
   <ion-page>
-    <ion-content>
+    <AppSlideUpWrapper>
+      <TheUserHeader
+          id="homeHeader"
+          v-show="showElement"
+          :main-heading="$t('findAvailablePlace')"
+          @search-enter-pressed="switchToSearch"
+      />
+    </AppSlideUpWrapper>
+    <ion-content
+        :fullscreen="true"
+        :scroll-events="true"
+        @ionScroll="pullAnimation($event)"
+    >
       <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
@@ -8,32 +20,30 @@
         </ion-refresher-content>
       </ion-refresher>
 
-      <TheUserHeader
-          :main-heading="$t('findAvailablePlace')"
-          @search-enter-pressed="switchToSearch"
-      />
 
       <div class="ion-padding">
-        <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
-        <PlaceCardSlider
-            :places="places.closestToUser?.slice(0, 4)"
-            :show-skeleton="showSkeleton"
-            @open-place-modal="openModal(true, $event)"
-        />
+        <div class="pb-6">
+          <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
+          <PlaceCardSlider
+              :places="places.closestToUser?.slice(0, 4)"
+              :show-skeleton="showSkeleton"
+              @open-place-modal="openModal(true, $event)"
+          />
 
-        <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
-        <PlaceCardSlider
-            :places="places.currentlyAvailable?.slice(0, 4)"
-            :show-skeleton="showSkeleton"
-            @open-place-modal="openModal(true, $event)"
-        />
+          <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
+          <PlaceCardSlider
+              :places="places.currentlyAvailable?.slice(0, 4)"
+              :show-skeleton="showSkeleton"
+              @open-place-modal="openModal(true, $event)"
+          />
 
-        <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
-        <PlaceCardSlider
-            :places="places.haveFood?.slice(0, 4)"
-            :show-skeleton="showSkeleton"
-            @open-place-modal="openModal(true, $event)"
-        />
+          <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
+          <PlaceCardSlider
+              :places="places.haveFood?.slice(0, 4)"
+              :show-skeleton="showSkeleton"
+              @open-place-modal="openModal(true, $event)"
+          />
+        </div>
       </div>
 
       <AppModal
@@ -66,15 +76,18 @@ import {
 
 import PlaceService from '@/services/PlaceService';
 
-import TheUserHeader            from '@/components/user/headers/TheUserHeader';
+import AppSlideUpWrapper     from '@/components/AppSlideUpWrapper';
+import TheUserHeader         from '@/components/user/headers/TheUserHeader';
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import PlaceCardSlider          from '@/components/place/PlaceCardSlider';
-import AppModal                 from '@/components/AppModal';
+import PlaceCardSlider       from '@/components/place/PlaceCardSlider';
+import AppModal              from '@/components/AppModal';
 import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useModal }              from '@/composables/useModal';
+import { useRefresher }          from '@/composables/useRefresher';
+import { slideUp }               from '@/composables/useAnimations';
 
 export default defineComponent({
   name: 'UserHome',
@@ -83,6 +96,7 @@ export default defineComponent({
     IonPage,
     IonRefresher,
     IonRefresherContent,
+    AppSlideUpWrapper,
     TheUserHeader,
     FilterCategoryHeading,
     PlaceCardSlider,
@@ -114,6 +128,8 @@ export default defineComponent({
     const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal, hideModal } = useModal();
+    const { forceStopRefresherAfter } = useRefresher();
+    const { showElement, pullAnimation } = slideUp('homeHeader');
 
     /* Lifecycle hooks */
     // Because getting lat and lng takes long tame wait for it to happen and then hit API with correct lat and lng values
@@ -138,7 +154,7 @@ export default defineComponent({
             showErrorToast(
                 null,
                 {
-                  pushNotificationPermission: t('dataFetchingError'),
+                  dataFetchingError: t('dataFetchingError'),
                 });
           }
         },
@@ -195,7 +211,7 @@ export default defineComponent({
         showErrorToast(
             null,
             {
-              pushNotificationPermission: t('dataFetchingError'),
+              dataFetchingError: t('dataFetchingError'),
             });
       }
     };
@@ -208,12 +224,23 @@ export default defineComponent({
     };
     const refresh = async(event) => {
       showSkeleton.value = true;
-      await checkForLocationPermission();
-      await tryGettingLocation();
+      try {
+        await checkForLocationPermission();
+        await tryGettingLocation();
 
-      await getFilteredPlaces();
-      event.target.complete();
-      showSkeleton.value = false;
+        await getFilteredPlaces();
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }finally {
+        forceStopRefresherAfter(event);
+
+        event.target.complete();
+        showSkeleton.value = false;
+      }
     };
 
     return {
@@ -223,12 +250,14 @@ export default defineComponent({
       isModalOpen,
       modalData,
       showSkeleton,
+      showElement,
 
       /* Event handlers */
       openModal,
       hideModal,
       switchToSearch,
       refresh,
+      pullAnimation,
 
       /* Methods */
 

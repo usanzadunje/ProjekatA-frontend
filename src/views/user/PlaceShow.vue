@@ -124,11 +124,14 @@ import AppModal               from '@/components/AppModal';
 import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
 import ImagePreviewModal      from '@/components/user/modals/ImagePreviewModal';
 
-import PlaceService from '@/services/PlaceService';
+import PlaceService   from '@/services/PlaceService';
+import ProductService from '@/services/ProductService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useModal }              from '@/composables/useModal';
 import { useContent }            from '@/composables/useContent';
+import { useCache }              from '@/composables/useCache';
+import { useRefresher }          from '@/composables/useRefresher';
 
 import {
   notifications,
@@ -139,8 +142,6 @@ import {
   from 'ionicons/icons';
 
 import { calculatePxFromPercent } from '@/utils/helpers';
-import { useCache }               from '@/composables/useCache';
-import ProductService             from '@/services/ProductService';
 
 export default defineComponent({
   name: "PlaceShow",
@@ -196,6 +197,7 @@ export default defineComponent({
     const { isModalOpen, openModal } = useModal();
     const { scrollToTop } = useContent();
     const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
+    const { forceStopRefresherAfter } = useRefresher();
 
     /* Methods */
     const getPlace = async() => {
@@ -286,6 +288,8 @@ export default defineComponent({
     };
     const refresh = async(event) => {
       await getPlace();
+
+      forceStopRefresherAfter(event);
 
       event.target.complete();
     };

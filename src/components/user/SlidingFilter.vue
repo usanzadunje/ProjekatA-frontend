@@ -3,6 +3,7 @@
     <p v-if="hasTitle" class="sliding-filter-title uppercase ml-1">{{ $t('filter', 5) }}</p>
     <swiper
         id="slidingFilterSwiper"
+        ref="swiper"
         :slides-per-view="this.$store.getters['global/width'] <= 335 ? 2.1 : 2.6"
     >
       <swiper-slide>
@@ -54,12 +55,12 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import {
   IonIcon,
   IonButton,
-}                               from '@ionic/vue';
-import { Swiper, SwiperSlide }  from 'swiper/vue';
+}                                          from '@ionic/vue';
+import { Swiper, SwiperSlide }             from 'swiper/vue';
 
 import {
   locationOutline,
@@ -84,8 +85,14 @@ export default defineComponent({
   setup(props, { emit }) {
     /* Component properties */
     let activeSlidingButton = ref('distance');
+    const swiper = ref();
 
     /* Lifecycle hooks */
+    onMounted(() => {
+      setTimeout(() => {
+        swiper.value?.$el?.swiper?.update();
+      }, 301);
+    });
 
     /* Event handlers */
     const sortButtonActivated = (event) => {
@@ -96,6 +103,7 @@ export default defineComponent({
     return {
       /* Component properties */
       activeSlidingButton,
+      swiper,
 
       /* Event listeners */
       sortButtonActivated,

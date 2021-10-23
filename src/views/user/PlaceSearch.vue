@@ -1,8 +1,9 @@
 <template>
   <ion-page>
-    <transition name="slide">
+    <AppSlideUpWrapper>
       <TheUserHeader
-          v-if="showHeader"
+          id="searchHeader"
+          v-show="showElement"
           :main-heading="$t('search')"
           :search-term="placeSearchTerm"
           @search-filter-changed="searchFilterChanged"
@@ -13,12 +14,13 @@
             @sort-has-changed="sortHasChanged"
         />
       </TheUserHeader>
-    </transition>
+    </AppSlideUpWrapper>
 
     <ion-content
         ref="content"
         :scroll-events="true"
         @ionScroll="pullAnimation($event)"
+        :fullscreen="true"
     >
       <ion-refresher pull-max="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
@@ -68,14 +70,16 @@ import {
 }
                                 from '@ionic/vue';
 
-import TheUserHeader          from '@/components/user/headers/TheUserHeader';
+import AppSlideUpWrapper   from '@/components/AppSlideUpWrapper';
+import TheUserHeader       from '@/components/user/headers/TheUserHeader';
 import SlidingFilter       from '@/components/user/SlidingFilter';
 import PlaceInfiniteScroll from '@/components/place/PlaceInfiniteScroll';
-import AppModal               from '@/components/AppModal';
+import AppModal            from '@/components/AppModal';
 import PlaceInfoModal      from '@/components/user/modals/PlaceInfoModal';
 
 import { useModal }   from '@/composables/useModal';
 import { useContent } from '@/composables/useContent';
+import { slideUp }    from '@/composables/useAnimations';
 
 
 export default defineComponent({
@@ -85,6 +89,7 @@ export default defineComponent({
     IonPage,
     IonRefresher,
     IonRefresherContent,
+    AppSlideUpWrapper,
     TheUserHeader,
     SlidingFilter,
     PlaceInfiniteScroll,
@@ -100,19 +105,17 @@ export default defineComponent({
     const content = ref();
     const placeSearchTerm = ref('');
     const sortBy = ref('distance');
-    const scrollTopOffset = ref(0);
-    const prevScrollDirectionDown = ref(false);
     const infiniteScrollLoading = ref(false);
     const refresher = ref({
       isActive: false,
       event: null,
     });
     const showSwiper = ref(false);
-    const showHeader = ref(true);
 
     /* Composables */
     const { isModalOpen, modalData, openModal, hideModal } = useModal();
     const { scrollToTop } = useContent();
+    const { showElement, pullAnimation } = slideUp('searchHeader');
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
@@ -141,35 +144,11 @@ export default defineComponent({
     const sortHasChanged = async(sortValue) => {
       sortBy.value = sortValue;
     };
-    const pullAnimation = async(event) => {
-      if(infiniteScrollLoading.value) {
-        return;
-      }
-      let currentScrollDirectionDown = event.detail.currentY > scrollTopOffset.value;
-      if(
-          event.detail.currentY <= 0 ||
-          event.detail.currentY === scrollTopOffset.value ||
-          currentScrollDirectionDown === prevScrollDirectionDown.value
-      ) {
-        scrollTopOffset.value = event.detail.currentY;
-
-        return;
-      }
-      if(event.detail.currentY > scrollTopOffset.value) {
-        showHeader.value = false;
-        // header.value.classList.add('hide-header');
-      }else {
-        showHeader.value = true;
-        // header.value.classList.remove('hide-header');
-      }
-
-      scrollTopOffset.value = event.detail.currentY;
-      prevScrollDirectionDown.value = currentScrollDirectionDown;
-    };
     const refresh = async(event) => {
       refresher.value.isActive = true;
       refresher.value.event = event;
     };
+
     const renderSwiper = () => {
       showSwiper.value = true;
     };
@@ -187,16 +166,16 @@ export default defineComponent({
       infiniteScrollLoading,
       refresher,
       showSwiper,
-      showHeader,
+      showElement,
 
       /* Event handlers */
       searchFilterChanged,
       sortHasChanged,
-      pullAnimation,
       openModal,
       hideModal,
       refresh,
       renderSwiper,
+      pullAnimation,
 
       /* Methods */
       scrollToTop,
@@ -210,19 +189,4 @@ export default defineComponent({
 /*.hide-header {*/
 /*  display: none;*/
 /*}*/
-
-.slide-enter-active {
-  transition: all 0.5s ease-out, margin-top 0.3s ease-out;
-}
-
-.slide-leave-active {
-  transition: all 0.6s ease-in, margin-top 0.3s ease-in;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  margin-top: -180px;
-  transform: translate3d(0, -100%, 0);
-  opacity: 0;
-}
 </style>

@@ -49,7 +49,8 @@ import AccordionList from '@/components/user/AccordionList';
 import CategoryIndex from '@/components/owner/CategoryIndex';
 import ProductIndex  from '@/components/owner/ProductIndex';
 
-import { useCache } from '@/composables/useCache';
+import { useCache }     from '@/composables/useCache';
+import { useRefresher } from '@/composables/useRefresher';
 
 import {
   pricetagOutline,
@@ -76,6 +77,7 @@ export default defineComponent({
 
     /* Composables */
     const { getCachedOrFetchPlaceCategories } = useCache();
+    const { forceStopRefresherAfter } = useRefresher();
 
     /* Methods */
     const getMenuData = async() => {
@@ -93,6 +95,8 @@ export default defineComponent({
       enableInfiniteScroll.value = true;
 
       await getMenuData();
+
+      forceStopRefresherAfter(event);
 
       event.target.complete();
 
