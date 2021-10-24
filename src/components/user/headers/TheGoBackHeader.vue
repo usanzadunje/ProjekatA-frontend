@@ -1,14 +1,15 @@
 <template>
   <div id="goHeader">
     <div class="flex justify-between mt-1 md margin-top-reset">
-      <ion-button fill="clear" :routerLink="$route.query.redirect || '/home'" class="h-auto">
+      <ion-button fill="clear" :routerLink="$route.query.redirect || '/home'" class="reset-button-size">
         <ion-icon
+            slot="icon-only"
             :icon="arrowBackOutline"
             class="text-gray-400"
         ></ion-icon>
       </ion-button>
 
-      <NotificationsPreview/>
+      <NotificationsPreview v-if="this.$store.getters['auth/loggedIn']"/>
     </div>
   </div>
 </template>

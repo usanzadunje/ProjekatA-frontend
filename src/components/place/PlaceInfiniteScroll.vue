@@ -28,8 +28,8 @@
   >
     <ion-infinite-scroll-content
         class="mt-6"
-        loading-spinner="crescent"
-        :loading-text="$t('refresherText')">
+        loading-spinner="dots"
+    >
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </template>
@@ -213,8 +213,12 @@ export default defineComponent({
       refresh,
 
       /* Icons */
+      // @ionInfinite="loadMorePlaces($event)"
 
     };
   },
 });
 </script>
+<style scoped>
+
+</style>

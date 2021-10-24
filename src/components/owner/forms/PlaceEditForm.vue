@@ -330,10 +330,16 @@ export default defineComponent({
       loading.value = true;
       await hideNativeKeyboard();
       try {
+        place.working_hours = {};
+        place.working_hours.mon_fri = `${place.mon_fri_start}-${place.mon_fri_end}`;
+        place.working_hours.saturday = `${place.saturday_start}-${place.saturday_end}`;
+        place.working_hours.sunday = `${place.sunday_start}-${place.sunday_end}`;
+
         await store.dispatch("owner/updatePlaceInfo", place);
 
         showSuccessToast(t('successUpdate'));
       }catch(errors) {
+        console.log(errors);
         errorNames.value = getError(errors);
         await showErrorToast(errors);
         await sleep(Object.keys(errorNames.value).length * 900);

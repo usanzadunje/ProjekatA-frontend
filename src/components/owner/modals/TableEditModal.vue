@@ -1,5 +1,5 @@
 <template>
-  <div class="px-10 py-4 staff-modal-bg">
+  <div class="px-10 pt-6 pb-4 staff-modal-bg">
     <h2 class="secondary-heading text-center">
       {{ `${$t('update')} ${$t('or')} ${$t('remove').toLowerCase()}` }}
     </h2>

@@ -2,7 +2,7 @@
   <ion-header class="ion-no-border">
     <ion-toolbar>
       <div class="px-4 pt-3 pb-2 md header-padding-bottom">
-        <div v-show="loggedIn" class="flex items-center justify-between">
+        <div v-if="loggedIn" class="flex items-center justify-between">
           <p class="main-toolbar-fade-text">
             {{ $t('hello') }}
             <span>
@@ -12,7 +12,7 @@
 
           <NotificationsPreview/>
         </div>
-        <div v-show="!loggedIn" class="flex justify-around">
+        <div v-if="!loggedIn" class="flex justify-around">
           <ion-button fill="clear" routerLink="/login">
             <p class="main-toolbar-fade-text uppercase">{{ $t('login') }}</p>
           </ion-button>

@@ -79,14 +79,13 @@
   </div>
 
   <ion-infinite-scroll
-      @ionInfinite="loadMoreProducts($event)"
       threshold="100px"
       :disabled="isInfiniteScrollDisabled"
+      @ionInfinite="loadMoreProducts($event)"
   >
     <ion-infinite-scroll-content
-        class="mt-6"
-        loading-spinner="crescent"
-        :loading-text="$t('refresherText')">
+        loading-spinner="dots"
+    >
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </template>
@@ -281,19 +280,18 @@ ion-item {
 ion-item-options {
   --border-style: none;
   background-color: #E01B43 !important;
-  border-top-right-radius: 1rem !important;
-  border-bottom-right-radius: 1rem !important;
+  border-radius: 1.2rem !important;
 }
 
 ion-item-option {
   --border-style: none;
   --background: #e01b43;
-  border-top-right-radius: 1rem !important;
-  border-bottom-right-radius: 1rem !important;
+  background: #e01b43;
+  border-radius: 1.1rem !important;
 }
 
 ion-item-option:active {
-  --background: #E01B43;
+  background: #d95c75;
 }
 
 ion-searchbar {
@@ -303,5 +301,9 @@ ion-searchbar {
   --background: #F6F7FB !important;
   --placeholder-color: #9EAAB7 !important;
   --icon-color: #000000 !important;
+}
+
+ion-infinite-scroll {
+  margin-bottom: -32px !important;
 }
 </style>

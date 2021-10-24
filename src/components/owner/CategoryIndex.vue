@@ -24,12 +24,10 @@
             <span>{{ category.name }}</span>
             <div>
               <ion-icon
-                  slot="icon-only"
                   :icon="createOutline"
                   class="text-2xl text-blue"
               ></ion-icon>
               <ion-icon
-                  slot="icon-only"
                   :icon="trashOutline"
                   class="text-2xl text-danger ml-2"
                   @click="showAlert(category, false, $event)"
@@ -77,7 +75,7 @@ import {
   IonItemOption, alertController,
 }                                    from '@ionic/vue';
 
-import AppModal                   from '@/components/AppModal';
+import AppModal                from '@/components/AppModal';
 import CategoryCreateEditModal from '@/components/owner/modals/CategoryCreateEditModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
@@ -208,16 +206,17 @@ ion-item {
 ion-item-options {
   --border-style: none;
   background-color: #E01B43 !important;
-  border-top-right-radius: 15px !important;
-  border-bottom-right-radius: 15px !important;
+  border-radius: 30px !important;
 }
 
 ion-item-option {
   --border-style: none;
   --background: #e01b43;
+  background: #e01b43;
 }
 
 ion-item-option:active {
-  --background: #E01B43;
+  background: #d95c75;
 }
+
 </style>

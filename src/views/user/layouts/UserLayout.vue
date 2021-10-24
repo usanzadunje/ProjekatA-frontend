@@ -34,7 +34,7 @@
 <script>
 import { defineComponent, onMounted } from 'vue';
 import { useRoute, useRouter }        from 'vue-router';
-import { mapGetters }                 from 'vuex';
+import { mapGetters, useStore }       from 'vuex';
 import {
   IonIcon,
   IonPage,
@@ -70,14 +70,17 @@ export default defineComponent({
     /* Global properties */
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
 
     /* Composables */
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
 
     /* Lifecycle hooks */
     onMounted(async() => {
-      await checkForLocationPermission();
-      await tryGettingLocation();
+      if(store.getters['permission/location'] === null) {
+        await checkForLocationPermission();
+        await tryGettingLocation();
+      }
     });
 
     /* Event handlers */

@@ -34,13 +34,14 @@
     </ion-item>
     <div class="mt-2 mb-3 flex justify-around">
       <ion-button
+          :disabled="loading"
           class="mr-2.5 uppercase button-cancel modal-button-border"
           @click="$emit('dismissSubscriptionModal')"
       >
         {{ $t('cancel') }}
       </ion-button>
       <ion-button
-          :disabled="isSubButtonDisabled"
+          :disabled="loading"
           class="uppercase button-confirm modal-button-border"
           @click="toggleSubscription(place.id)"
       >
@@ -105,7 +106,7 @@ export default defineComponent({
     const indefiniteTimerActive = ref(false);
     const isUserSubscribed = ref(false);
     const place = toRef(props, 'place');
-    const isSubButtonDisabled = ref(false);
+    const loading = ref(false);
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
@@ -137,13 +138,26 @@ export default defineComponent({
               {
                 text: t('no'),
                 role: 'cancel',
+                handler: () => {
+                  loading.value = false;
+                },
               },
               {
                 text: t('yes'),
                 handler: async() => {
-                  await registerToken();
-                  await subscribe(placeId);
-                  await store.dispatch('user/setNotifications', true);
+                  try {
+                    await registerToken();
+                    await subscribe(placeId);
+                    await store.dispatch('user/setNotifications', true);
+                  }catch(e) {
+                    showErrorToast(
+                        null,
+                        {
+                          generalError: t('generalAlertError'),
+                        });
+                  }finally {
+                    loading.value = false;
+                  }
                 },
               },
             ],
@@ -171,7 +185,7 @@ export default defineComponent({
     };
     /* Adding pair of users/place in database corresponding to authenticated users subscribed to certain place */
     const toggleSubscription = async(placeId) => {
-      isSubButtonDisabled.value = true;
+      loading.value = true;
 
       if(indefiniteTimerActive.value) {
         notificationTime.value = 15;
@@ -193,12 +207,12 @@ export default defineComponent({
       }else {
         if(!store.getters['user/notifications']) {
           await showAlert(placeId);
-          isSubButtonDisabled.value = false;
           return;
         }
         await subscribe(placeId);
       }
-      isSubButtonDisabled.value = false;
+
+      loading.value = false;
     };
 
 
@@ -207,7 +221,7 @@ export default defineComponent({
       notificationTime,
       indefiniteTimerActive,
       isUserSubscribed,
-      isSubButtonDisabled,
+      loading,
 
       /* Event handlers */
       indefiniteTimerToggle,

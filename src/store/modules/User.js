@@ -25,6 +25,9 @@ export const mutations = {
     SET_NOTIFICATIONS_PERMISSION(state, value) {
         state.settings.notifications = value;
     },
+    SET_NOTIFICATIONS(state, value) {
+        state.notifications = value;
+    },
     ADD_NOTIFICATIONS(state, value) {
         state.notifications.unshift(value);
     },
@@ -63,6 +66,7 @@ export const actions = {
         };
         const storedDarkMode = await get(`isDarkModeOn.${rootGetters['auth/authUser']?.id}`) || false;
         const storedNotifications = await get(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`) || false;
+        const storedUserNotifications = await get(`notifications.${rootGetters['auth/authUser']?.id}`) || [];
         const storedColor = await get(`color.${rootGetters['auth/authUser']?.id}`);
 
         document.body.classList.toggle('dark', storedDarkMode);
@@ -73,6 +77,7 @@ export const actions = {
 
         commit("SET_DARKMODE", storedDarkMode);
         commit("SET_LOCALIZATION", storedLocalization);
+        commit("SET_NOTIFICATIONS", storedUserNotifications);
         commit("SET_NOTIFICATIONS_PERMISSION", storedNotifications);
 
         await setKeyboardStyle(storedDarkMode);
@@ -103,6 +108,11 @@ export const actions = {
 
         await set(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`, value);
         commit("SET_NOTIFICATIONS_PERMISSION", value);
+    },
+    async persistPushNotifications({ state, rootGetters }) {
+        const { set } = StorageService();
+
+        await set(`notifications.${rootGetters['auth/authUser']?.id}`, state.notifications);
     },
 
     async setGlobalColor({ rootGetters }, value) {
@@ -151,11 +161,11 @@ export const getters = {
         return state.notifications;
     },
     hasNotifications: (state) => {
-        return state.notifications.length > 0;
+        return state.notifications?.length > 0;
     },
     unreadNotificationsCount: (state, getters) => {
         let unreadNotificationCount = 0;
-        getters.pushNotifications.forEach(notification => {
+        getters.pushNotifications?.forEach(notification => {
             if(!notification.read) {
                 unreadNotificationCount++;
             }
@@ -165,9 +175,9 @@ export const getters = {
     },
 
     hasMoreThanPlacesInfo: (state) => (amount) => {
-        return state.placesAdditionalInfo.length >= amount;
+        return state.placesAdditionalInfo?.length >= amount;
     },
     getPlaceAdditionInfo: (state) => (id) => {
-        return state.placesAdditionalInfo.find(place => place.id === id);
+        return state.placesAdditionalInfo?.find(place => place.id === id);
     },
 };

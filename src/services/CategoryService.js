@@ -2,7 +2,7 @@ import * as API from "@/services/API";
 
 export default {
     index(placeId = null) {
-        return API.apiClient.get(`/owner/menu/category/place/${placeId ?? ''}`);
+        return API.apiClient.get(`/owner/menu/category/place${placeId ?? ''}`);
     },
     show(id) {
         return API.apiClient.get(`/owner/menu/category/${id}`);

@@ -47,8 +47,8 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from 'vue';
-import { IonButton, IonSpinner }     from '@ionic/vue';
+import { defineComponent, reactive, toRefs, watch } from 'vue';
+import { IonButton, IonSpinner }                    from '@ionic/vue';
 
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
 import AccordionList         from '@/components/user/AccordionList';
@@ -84,12 +84,17 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    resetProductOffset: {
+      type: Boolean,
+      default: null,
+    },
   },
   setup(props, { emit }) {
     /* Global properties */
 
     /* Component properties */
-    const offset = reactive({});
+    let offset = reactive({});
+    const { resetProductOffset } = toRefs(props);
 
     /* Composables */
     const { isModalOpen, modalData, openModal } = useModal();
@@ -117,6 +122,13 @@ export default defineComponent({
       emit('loadMoreProducts', { categoryId, offset: getOffset(categoryId), event });
     };
 
+    /* Watchers */
+    watch(resetProductOffset, () => {
+      if(resetProductOffset.value) {
+        offset = {};
+      }
+    });
+
     return {
       /* Component properties */
       isModalOpen,
@@ -138,5 +150,6 @@ export default defineComponent({
 <style scoped>
 ion-button {
   --background: var(--user-selected-color);
+  --border-radius: 1rem;
 }
 </style>

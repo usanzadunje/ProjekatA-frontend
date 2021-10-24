@@ -73,7 +73,7 @@ export default defineComponent({
               data: [1, 2],
               backgroundColor: [
                 '#e01b43',
-                '#1B6DE0',
+                '#10B981',
               ],
               hoverOffset: 4,
             },

@@ -2,7 +2,7 @@
   <div
       class="rounded-full"
       :class="{
-        'draggable' : draggable, 'bg-green-500' : empty === 1, 'bg-red-500' : empty === 0, 'bg-yellow-800' : empty === null
+        'draggable' : draggable, 'bg-green-500' : empty === 1, 'bg-danger' : empty === 0, 'bg-yellow-800' : empty === null
       }"
   >
   </div>

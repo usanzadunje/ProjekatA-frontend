@@ -62,15 +62,16 @@
             <ProductMenu
                 :place="place"
                 :loading-products="loadingProducts"
+                :reset-product-offset="resetProductOffset"
                 @load-more-products="loadMoreProducts($event)"
             />
           </div>
 
           <div>
             <ion-button
-                class="uppercase button-subscribe-wide mb-6"
                 expand="block"
                 :disabled="!loggedIn || platformIsWeb"
+                class="uppercase button-subscribe-wide mb-6"
                 @click="openModal(true)"
             >
               <ion-icon slot="start"
@@ -180,6 +181,7 @@ export default defineComponent({
     const platformIsWeb = Capacitor.getPlatform() === 'web';
     const showSkeleton = ref(true);
     const loadingProducts = ref(false);
+    const resetProductOffset = ref(false);
     const dropzoneWidth = computed(() => {
       return store.getters['global/width'] - ((2.25 * parseFloat(getComputedStyle(document.documentElement).fontSize)) + 4);
     });
@@ -205,21 +207,25 @@ export default defineComponent({
 
     /* Methods */
     const getPlace = async() => {
+      const placeId = Number(route.params.id);
+
+      resetProductOffset.value = true;
       showSkeleton.value = true;
+
       try {
-        const response = await PlaceService.show(route.params.id, true, true);
-        await getCachedOrFetchPlaceAdditionalInfo(Number(route.params.id));
+        const response = await PlaceService.show(placeId, true, true);
+        await getCachedOrFetchPlaceAdditionalInfo(placeId);
 
         place.value = response.data;
-        place.value.images = store.getters['user/getPlaceAdditionInfo'](Number(route.params.id)).images;
-        place.value.working_hours = store.getters['user/getPlaceAdditionInfo'](Number(route.params.id)).working_hours;
+        place.value.images = store.getters['user/getPlaceAdditionInfo'](placeId).images;
+        place.value.working_hours = store.getters['user/getPlaceAdditionInfo'](placeId).working_hours;
 
         place.value.tables?.forEach(table => {
           table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth.value);
         });
 
         if(loggedIn.value) {
-          const subscriptionResponse = await PlaceService.isUserSubscribed(route.params.id);
+          const subscriptionResponse = await PlaceService.isUserSubscribed(placeId);
           isUserSubscribed.value = !!subscriptionResponse.data.subscribed;
         }
         showSkeleton.value = false;
@@ -230,6 +236,7 @@ export default defineComponent({
               generalError: t('dataFetchingError'),
             });
       }
+      resetProductOffset.value = false;
     };
     const loadMoreProducts = async({ categoryId, offset, event }) => {
       loadingProducts.value = true;
@@ -237,11 +244,11 @@ export default defineComponent({
         const response = await ProductService.indexByCategory(Number(route.params.id), categoryId, offset, 10);
 
         if(!response.data) {
-          event.target.style.display = 'none';
+          event.target.classList.add('hidden');
           return;
         }
         if(response.data.length < 10) {
-          event.target.style.display = 'none';
+          event.target.classList.add('hidden');
         }
 
         let category = place.value.categories.find(category => category.id === categoryId);
@@ -311,8 +318,11 @@ export default defineComponent({
     /* Watchers */
     // Watching for changes of id parameter in place show route and fetching right data
     watch(route, async() => {
-      if(route.name === 'place.show' && route.params.id) {
+      if(route.name === 'place.show' && route.params.id && route.params.id != place.value.id) {
         await getPlace();
+      }
+      if(route.params.id == place.value.id) {
+        showSkeleton.value = false;
       }
     });
 
@@ -327,6 +337,7 @@ export default defineComponent({
       platformIsWeb,
       showSkeleton,
       loadingProducts,
+      resetProductOffset,
 
       /* Computed properties */
       loggedIn,

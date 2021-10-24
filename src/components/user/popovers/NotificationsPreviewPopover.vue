@@ -62,12 +62,15 @@ export default defineComponent({
     /* Event handlers */
     const removeNotification = (id) => {
       store.commit('user/REMOVE_NOTIFICATION', id);
+      store.dispatch("user/persistPushNotifications");
     };
     const notificationRead = (id) => {
       store.commit('user/MARK_NOTIFICATION_AS_READ', id);
+      store.dispatch("user/persistPushNotifications");
     };
     const clearNotifications = () => {
       store.commit('user/CLEAR_NOTIFICATIONS');
+      store.dispatch("user/persistPushNotifications");
     };
 
     return {

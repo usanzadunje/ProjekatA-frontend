@@ -2,18 +2,22 @@
   <ion-header class="ion-no-border">
     <div class="user-header-bg">
       <ion-toolbar>
-        <div class="px-4 py-3 mt-3 mb-3 relative">
-          <div class="flex justify-between">
+        <div class="px-4 py-3 mb-3 relative">
+          <div class="flex justify-between items-center mt-2">
             <p class="user-profile-header-heading mt-1">{{ $t('profile') }}</p>
-            <ion-button fill="clear" @click="openSettingsPopover($event)">
+            <ion-button
+                fill="clear"
+                class="reset-button-size"
+                @click="openSettingsPopover($event)"
+            >
               <ion-icon
                   slot="icon-only"
                   :icon="settingsOutline"
-                  class="text-white"
+                  class="text-white flex"
               ></ion-icon>
             </ion-button>
           </div>
-          <div class="mt-5 flex justify-start">
+          <div class="mt-7 flex justify-start">
             <AppAvatar
                 :avatar-path="authUser?.avatar"
                 :avatar-img-classes="'profile-avatar'"
@@ -48,7 +52,7 @@ import {
 }                                    from '@ionic/vue';
 
 import UserSettingsPopover from '@/components/user/popovers/UserSettingsPopover';
-import AppAvatar          from '@/components/AppAvatar';
+import AppAvatar           from '@/components/AppAvatar';
 
 import {
   settingsOutline,
@@ -109,11 +113,6 @@ ion-header {
 
 ion-toolbar {
   --background: transparent;
-}
-
-ion-button {
-  padding: 0 0 0.625rem 0 !important;
-  margin: 0 -1rem 0 0 !important;
 }
 
 .user-header-bg {

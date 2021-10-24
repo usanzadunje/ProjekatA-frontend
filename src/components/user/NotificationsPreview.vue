@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <ion-button fill="clear" @click="showNotifications($event)" class="h-auto">
+    <ion-button fill="clear" @click="showNotifications($event)" class="reset-button-size">
       <div class="relative">
         <ion-icon
             :icon="hasNotifications
@@ -79,11 +79,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-button {
-  --padding-start: 0 !important;
-  --padding-end: 0 !important;
-  margin: 0 !important;
-}
 
 ion-icon {
   font-size: 1.6rem !important;

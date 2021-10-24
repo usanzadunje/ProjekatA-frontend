@@ -54,6 +54,10 @@ ion-searchbar {
 /*    transform: translateY(-15%) translateX(15%);*/
 /*}*/
 
+ion-infinite-scroll-content div.infinite-loading div.infinite-loading-spinner ion-spinner {
+    transform: scale(2);
+}
+
 ion-toolbar {
     border-bottom-left-radius: 0.875rem !important;
     border-bottom-right-radius: 0.875rem !important;
@@ -318,17 +322,38 @@ ion-toggle {
     width: 15px;
 }
 
+.bg-danger {
+    background: #e01b43;
+}
+
 .btn-bg-danger {
     --background: #e01b43;
     --background-activated: #d90e34;
+}
+
+.bg-empty {
+    background: #10B981;
+}
+
+.btn-bg-empty {
+    --background: #10B981;
+    --background-activated: #0ea572;
 }
 
 .text-blue {
     color: #1b6de0;
 }
 
+.text-blue:active {
+    color: #5991e0;
+}
+
 .text-danger {
     color: #e01b43;
+}
+
+.text-danger:active {
+    color: #d95c75;
 }
 
 .my-auto {
@@ -338,6 +363,13 @@ ion-toggle {
 
 .bg-transparent {
     --background: transparent !important;
+}
+
+.reset-button-size {
+    --padding-start: 0 !important;
+    --padding-end: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
 }
 
 .radius-11px {

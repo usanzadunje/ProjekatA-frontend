@@ -1,7 +1,7 @@
 export const namespaced = true;
 
 export const state = {
-    location: false,
+    location: null,
 };
 
 export const mutations = {
@@ -10,9 +10,7 @@ export const mutations = {
     },
 };
 
-export const actions = {
-
-};
+export const actions = {};
 
 export const getters = {
     location: (state) => {

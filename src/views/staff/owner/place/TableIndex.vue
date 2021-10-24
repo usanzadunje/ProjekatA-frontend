@@ -52,7 +52,7 @@
           :is-open="isModalOpen"
           css-class="custom-edit-table-modal"
           :swipe-to-close="false"
-          width="80%"
+          width="90%"
           @didDismiss="openModal(false);"
       >
         <TableEditModal

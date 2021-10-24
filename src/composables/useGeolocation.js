@@ -1,7 +1,7 @@
 import { ref }       from 'vue';
 import { useStore }  from 'vuex';
 import { Capacitor } from "@capacitor/core";
-import { useI18n } from 'vue-i18n';
+import { useI18n }   from 'vue-i18n';
 
 import LocationService from '@/services/LocationService';
 
@@ -33,14 +33,15 @@ export function useGeolocation() {
         }
     };
 
-    const checkForLocationPermission = async () => {
+    const checkForLocationPermission = async() => {
         if(!store.getters['permission/location']) {
             await getPermission();
         }
-    }
+    };
 
     const getPermission = async() => {
         const hasPermission = await LocationService.checkGPSPermission();
+
         if(hasPermission) {
             if(Capacitor.getPlatform() !== 'web') {
                 const canUseGPS = await LocationService.askToTurnOnGPS();

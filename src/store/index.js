@@ -26,7 +26,8 @@ export default createStore({
             storage: window.localStorage,
             paths: [
                 'auth',
-                'user',
+                'user.settings',
+                'user.placesAdditionalInfo',
                 'global',
                 'permission',
                 'staff',

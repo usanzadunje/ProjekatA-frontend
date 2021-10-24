@@ -2,11 +2,15 @@
   <div class="flex justify-between mt-10">
     <ion-button
         :disabled="isPlaceEmpty || toggling"
-        class="w-full h-32"
+        class="w-full h-32 btn-bg-empty"
         @click="randomToggle(true)"
     >
       {{ toggling ? `${$t('toggling')}...` : $t('release') }}
-      <ion-icon :icon="addOutline" class="text-2xl text-white-400"></ion-icon>
+      <ion-icon
+          v-show="!toggling"
+          :icon="addOutline"
+          class="text-2xl text-white-400"
+      ></ion-icon>
     </ion-button>
     <ion-button
         :disabled="isPlaceFull || toggling"
@@ -14,7 +18,11 @@
         @click="randomToggle(false)"
     >
       {{ toggling ? `${$t('toggling')}...` : $t('occupy') }}
-      <ion-icon :icon="removeOutline" class="text-2xl text-white-400"></ion-icon>
+      <ion-icon
+          v-show="!toggling"
+          :icon="removeOutline"
+          class="text-2xl text-white-400"
+      ></ion-icon>
     </ion-button>
   </div>
 </template>
@@ -85,7 +93,5 @@ export default defineComponent({
 
 </script>
 <style scoped>
-ion-toggle {
-  --background-checked: #1F1C2B;
-}
+
 </style>

@@ -44,7 +44,7 @@
             </ion-item>
 
             <ion-item-options side="end" @ionSwipe="unsubscribeSwiping(place.id)">
-              <ion-item-option type="button" :expandable="true" @click="showAlert(place.id)">
+              <ion-item-option type="button" :expandable="true" @click="showAlert(place.id, $event)">
                 <ion-icon
                     slot="icon-only"
                     :icon="trashOutline"
@@ -216,7 +216,9 @@ export default defineComponent({
       await tryGettingLocation();
       await getSubscriptions();
     };
-    const showAlert = async(placeId) => {
+    const showAlert = async(placeId, event) => {
+      event?.stopPropagation();
+
       const alert = await alertController
           .create({
             header: t('alertUnsubscribeHeader'),
@@ -318,18 +320,17 @@ ion-item {
 ion-item-options {
   --border-style: none;
   background-color: #E01B43 !important;
-  border-top-right-radius: 15px !important;
-  border-bottom-right-radius: 15px !important;
+  border-radius: 20px !important;
 }
 
 ion-item-option {
   --border-style: none;
   --background: #e01b43;
-  border-top-right-radius: 15px !important;
-  border-bottom-right-radius: 15px !important;
+  background: #e01b43;
+  border-radius: 17px !important;
 }
 
 ion-item-option:active {
-  --background: #E01B43;
+  background: #d95c75;
 }
 </style>
