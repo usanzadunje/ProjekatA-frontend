@@ -3,8 +3,7 @@
     <MainImagePreview
         :path="mainImagePath"
         :label="$t('gallery', 2)"
-        :show-skeleton="showSkeleton"
-        @click="openPreview(images)"
+        @click="openPreview(product.images)"
     />
 
     <div class="mt-4">
@@ -70,18 +69,16 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref, toRefs } from 'vue';
+import { computed, defineComponent, toRefs } from 'vue';
 import {
   IonItem,
   IonInput,
   IonIcon,
   IonButton, modalController,
-}                                                 from '@ionic/vue';
+}                                            from '@ionic/vue';
 
 import MainImagePreview  from '@/components/MainImagePreview';
 import ImagePreviewModal from '@/components/user/modals/ImagePreviewModal';
-
-import ProductService from '@/services/ProductService';
 
 import {
   createOutline,
@@ -119,19 +116,7 @@ export default defineComponent({
         return '/places/default_place_product_logo.png';
       }
     });
-    const images = ref(null);
-    const showSkeleton = ref(true);
-
     /* Lifecycle hooks */
-    ProductService.images(product.value.id)
-                  .then((response) => {
-                    images.value = response.data;
-
-                    showSkeleton.value = false;
-                  })
-                  .catch(() => {
-                    images.value = null;
-                  });
 
     /* Composables */
 
@@ -155,8 +140,6 @@ export default defineComponent({
     return {
       /* Component properties */
       mainImagePath,
-      images,
-      showSkeleton,
 
       /* Event handlers */
       openPreview,

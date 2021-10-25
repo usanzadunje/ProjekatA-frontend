@@ -9,7 +9,7 @@
         v-if="product"
         :path="mainImagePath"
         :label="$t('image', 2)"
-        @click="openPreview"
+        @click="openPreview(product)"
     />
     <div
         v-else
@@ -69,13 +69,13 @@ export default defineComponent({
     const dismiss = () => {
       emit('dismiss');
     };
-    const openPreview = async() => {
+    const openPreview = async(product) => {
       const modal = await modalController
           .create({
             component: ProductImagesAddModal,
             cssClass: 'custom-gallery-modal',
             componentProps: {
-              productId: product.value?.id,
+              product,
             },
           });
 

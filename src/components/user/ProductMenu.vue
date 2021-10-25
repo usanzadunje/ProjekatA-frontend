@@ -18,6 +18,7 @@
       />
       <div class="w-full flex justify-center py-2">
         <ion-button
+            v-if="category.products.length >= 7"
             v-show="!loadingProducts"
             size="default"
             @click="loadMoreProducts(category.id, $event)"

@@ -33,7 +33,7 @@
             fill="clear"
             color="light"
             slot="end"
-            :disabled="!imagesReady || productImages?.length === 0"
+            :disabled="productImages?.length === 0"
             class="text-lg uppercase"
             @click="removeImage"
         >
@@ -46,19 +46,11 @@
     </div>
 
     <ImagePreviewModalSlider
-        v-if="imagesReady"
         :id="'productImageSlider'"
         :images="productImages"
         @mounted="setSliderRef"
         @updated="setSliderRef"
     />
-    <div v-show="!imagesReady" class="h-full flex items-center justify-center">
-      <div class="snippet" data-title=".dot-pulse">
-        <div class="stage">
-          <div class="dot-pulse"></div>
-        </div>
-      </div>
-    </div>
 
     <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
       <ion-button
@@ -109,8 +101,8 @@ export default defineComponent({
     ImagePreviewModalSlider,
   },
   props: {
-    productId: {
-      type: Number,
+    product: {
+      type: Object,
       default: null,
     },
   },
@@ -120,28 +112,18 @@ export default defineComponent({
 
     /* Component properties */
     const imagePreviewSlider = ref();
-    const { productId } = toRefs(props);
+    const { product } = toRefs(props);
     const productImages = ref([]);
     const imagesInput = ref();
     const images = ref();
     const loading = ref();
-    const imagesReady = ref(false);
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { t } = useI18n();
 
     /* Lifecycle hooks */
-    if(productId.value) {
-      ProductService.images(productId.value)
-                    .then((response) => {
-                      productImages.value = response.data;
-                      imagesReady.value = true;
-                    })
-                    .catch(() => {
-                      productImages.value = null;
-                    });
-    }
+    productImages.value = product.value.images;
 
     /* Event handlers */
     const dismiss = () => {
@@ -173,7 +155,7 @@ export default defineComponent({
           formData.append(`images[${i}]`, images.value[i]);
         }
 
-        const response = await ProductService.uploadImages(productId.value, formData);
+        const response = await ProductService.uploadImages(product.value.id, formData);
 
         productImages.value = productImages.value.concat(response.data);
 
@@ -195,7 +177,7 @@ export default defineComponent({
         await OwnerService.removePlaceImage(image.id);
 
         if(image.is_main) {
-          store.commit('owner/REMOVE_PRODUCT_MAIN_IMAGE', productId.value);
+          store.commit('owner/REMOVE_PRODUCT_MAIN_IMAGE', product.value.id);
         }
 
         productImages.value = productImages.value.filter(img => img.id !== image.id);
@@ -220,7 +202,7 @@ export default defineComponent({
         });
 
         store.commit('owner/SET_NEW_PRODUCT_IMAGE_AS_MAIN', {
-          productId: productId.value,
+          productId: product.value.id,
           image,
         });
 
@@ -245,7 +227,6 @@ export default defineComponent({
       imagesInput,
       images,
       loading,
-      imagesReady,
 
       /* Event handlers */
       dismiss,
@@ -293,81 +274,4 @@ ion-button {
 #removeButton {
   margin-right: 1rem !important;
 }
-
-.dot-pulse {
-  position: relative;
-  left: -9999px;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: #f4f5f8;
-  color: #f4f5f8;
-  box-shadow: 9999px 0 0 -5px #f4f5f8;
-  animation: dotPulse 1.5s infinite linear;
-  animation-delay: .25s;
-}
-
-.dot-pulse::before, .dot-pulse::after {
-  content: '';
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: #f4f5f8;
-  color: #f4f5f8;
-}
-
-.dot-pulse::before {
-  box-shadow: 9984px 0 0 -5px #f4f5f8;
-  animation: dotPulseBefore 1.5s infinite linear;
-  animation-delay: 0s;
-}
-
-.dot-pulse::after {
-  box-shadow: 10014px 0 0 -5px #f4f5f8;
-  animation: dotPulseAfter 1.5s infinite linear;
-  animation-delay: .5s;
-}
-
-@keyframes dotPulseBefore {
-  0% {
-    box-shadow: 9984px 0 0 -5px #f4f5f8;
-  }
-  30% {
-    box-shadow: 9984px 0 0 2px #f4f5f8;
-  }
-  60%,
-  100% {
-    box-shadow: 9984px 0 0 -5px #f4f5f8;
-  }
-}
-
-@keyframes dotPulse {
-  0% {
-    box-shadow: 9999px 0 0 -5px #f4f5f8;
-  }
-  30% {
-    box-shadow: 9999px 0 0 2px #f4f5f8;
-  }
-  60%,
-  100% {
-    box-shadow: 9999px 0 0 -5px #f4f5f8;
-  }
-}
-
-@keyframes dotPulseAfter {
-  0% {
-    box-shadow: 10014px 0 0 -5px #f4f5f8;
-  }
-  30% {
-    box-shadow: 10014px 0 0 2px #f4f5f8;
-  }
-  60%,
-  100% {
-    box-shadow: 10014px 0 0 -5px #f4f5f8;
-  }
-}
-
 </style>
