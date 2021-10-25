@@ -1,5 +1,8 @@
 import { useStore } from 'vuex';
+
 import PlaceService from '@/services/PlaceService';
+
+import { didCacheExpire, getExpirationDate } from '@/utils/helpers';
 
 export function useCache() {
     /* Global properties */
@@ -15,6 +18,15 @@ export function useCache() {
 
     /* End-user related */
     const getCachedOrFetchPlaceAdditionalInfo = async(id, forceFetch = false) => {
+        if(didCacheExpire('placeInfoCacheExpirationDate')) {
+            store.commit('user/PURGE_PLACE_ADDITIONAL_INFO');
+
+            store.commit(
+                'global/SET_PLACE_INFO_CACHE_EXPIRATION_DATE',
+                getExpirationDate('d', 3),
+            );
+        }
+
         if(!store.getters['user/getPlaceAdditionInfo'](id) || forceFetch) {
             try {
                 if(store.getters['user/hasMoreThanPlacesInfo'](100)) {

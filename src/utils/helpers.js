@@ -1,6 +1,7 @@
 import router from "@/router";
 
 import { i18n }                    from '@/i18n';
+import store                       from '@/store';
 import { Capacitor }               from '@capacitor/core';
 import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
 
@@ -102,4 +103,29 @@ export async function hideNativeKeyboard() {
             return;
         }
     }
+}
+
+export function getExpirationDate(intervalType = 'd', intervalLength = 1) {
+    if(intervalLength > 0) {
+        switch(intervalType) {
+            case 's' :
+                return Date.now() + 1000 * intervalLength;
+            case 'm' :
+                return Date.now() + 1000 * 60 * intervalLength;
+            case 'h' :
+                return Date.now() + 1000 * 60 * 60 * intervalLength;
+            case 'd' :
+                return Date.now() + 1000 * 60 * 60 * 24 * intervalLength;
+            default:
+                throw new Error('Unknown time type. Choose from seconds(s), minutes(m), hours(h) or days(d).');
+        }
+    }else {
+        throw new Error('You cannot provide 0 or negative values as time amount.');
+    }
+}
+
+export function didCacheExpire(getter) {
+    const expirationTime = store.getters[`global/${getter}`] || Date.now();
+
+    return Date.now() >= expirationTime;
 }

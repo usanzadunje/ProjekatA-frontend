@@ -4,6 +4,7 @@ export const state = {
     position: null,
     width: null,
     height: null,
+    placeInfoCacheExpirationDate: null,
 };
 
 export const mutations = {
@@ -18,6 +19,9 @@ export const mutations = {
         state.height = payload;
     },
 
+    SET_PLACE_INFO_CACHE_EXPIRATION_DATE(state, payload) {
+        state.placeInfoCacheExpirationDate = payload;
+    },
 };
 
 export const actions = {};
@@ -34,5 +38,9 @@ export const getters = {
     },
     height: (state) => {
         return state.height;
+    },
+
+    placeInfoCacheExpirationDate: (state) => {
+        return state.placeInfoCacheExpirationDate;
     },
 };

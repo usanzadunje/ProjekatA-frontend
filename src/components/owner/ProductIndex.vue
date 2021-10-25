@@ -295,6 +295,7 @@ ion-item-option:active {
 }
 
 ion-searchbar {
+  color: #000 !important;
   width: 100% !important;
   padding: 0 !important;
   margin-left: 0 !important;
