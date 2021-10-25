@@ -7,15 +7,15 @@ export const state = {
 };
 
 export const mutations = {
-    SET_POSITION(state, value) {
-        state.position = value;
+    SET_POSITION(state, payload) {
+        state.position = payload;
     },
 
-    SET_WIDTH(state, value) {
-        state.width = value;
+    SET_WIDTH(state, payload) {
+        state.width = payload;
     },
-    SET_HEIGHT(state, value) {
-        state.height = value;
+    SET_HEIGHT(state, payload) {
+        state.height = payload;
     },
 
 };

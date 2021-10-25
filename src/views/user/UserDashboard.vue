@@ -69,8 +69,7 @@
       >
         <PlaceInfoModal
             :place="modalData"
-            @dismiss-place-info-modal="openModal(false)"
-            @sub-modal-opened="hideModal('custom-modal')"
+            @dismiss="openModal(false)"
             @user-toggled-subscription="getSubscriptions"
         />
       </AppModal>
@@ -158,7 +157,7 @@ export default defineComponent({
     /* Composables */
     const { showUndoToast, showSuccessToast, showErrorToast } = useToastNotifications();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
-    const { isModalOpen, modalData, openModal, hideModal } = useModal();
+    const { isModalOpen, modalData, openModal } = useModal();
     const { slidingItem, closeOpenItems } = useSlidingItem();
     const { forceStopRefresherAfter } = useRefresher();
 
@@ -247,6 +246,8 @@ export default defineComponent({
         placesUserSubscribedTo.value = placesUserSubscribedTo.value.filter((place) => {
           return place.id !== placeId;
         });
+
+        store.commit("user/REMOVE_SUBSCRIPTION", placeId);
       }catch(error) {
         showErrorToast(
             null,
@@ -265,6 +266,8 @@ export default defineComponent({
           const notifyIn = timeLeftText?.length > 0 ? timeLeftText[0] : null;
 
           await PlaceService.subscribe(placeId, notifyIn);
+
+          store.commit("user/ADD_SUBSCRIPTION", placeId);
         }catch(e) {
           showErrorToast(
               null,
@@ -294,7 +297,6 @@ export default defineComponent({
       showAlert,
       openModal,
       getSubscriptions,
-      hideModal,
       refresh,
       unsubscribeSwiping,
       removeExpiredSubscription,

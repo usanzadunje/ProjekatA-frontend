@@ -88,8 +88,7 @@
       >
         <PlaceSubscriptionModal
             :place="{'id': place.id, 'name': place.name}"
-            @dismiss-subscription-modal="openModal(false);"
-            @user-toggled-subscription="isUserSubscribed = !isUserSubscribed"
+            @dismiss="openModal(false);"
         />
       </AppModal>
     </ion-content>
@@ -176,7 +175,7 @@ export default defineComponent({
     /* Component properties */
     const content = ref();
     const place = ref({});
-    const isUserSubscribed = ref(false);
+    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](place.value.id));
     let searchTab = null;
     const platformIsWeb = Capacitor.getPlatform() === 'web';
     const showSkeleton = ref(true);
@@ -224,10 +223,6 @@ export default defineComponent({
           table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth.value);
         });
 
-        if(loggedIn.value) {
-          const subscriptionResponse = await PlaceService.isUserSubscribed(placeId);
-          isUserSubscribed.value = !!subscriptionResponse.data.subscribed;
-        }
         showSkeleton.value = false;
       }catch(error) {
         showErrorToast(

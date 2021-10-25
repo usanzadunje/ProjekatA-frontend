@@ -32,7 +32,7 @@ export default defineComponent({
         }, 60000);
       }
 
-      if(timeLeft.value === 0) {
+      if(timeLeft.value <= 0 && timeLeft.value !== -1) {
         emit('subscriptionExpired');
       }
     }, {

@@ -132,7 +132,7 @@ export function useFCM() {
             await Haptics.vibrate({ duration: 250 });
             showSuccessToast(t('freeSpotNotification', { place: notification.data?.place_name }));
 
-            store.commit("user/ADD_NOTIFICATIONS", {
+            store.commit("user/ADD_NOTIFICATION", {
                 id: notification?.data.id,
                 read: false,
                 body: t('freeSpotNotification', { place: notification.data?.place_name }),

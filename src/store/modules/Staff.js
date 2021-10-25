@@ -8,12 +8,12 @@ export const state = {
 };
 
 export const mutations = {
-    SET_AVAILABILITY_RATIO(state, value) {
-        state.availabilityRatio = value;
+    SET_AVAILABILITY_RATIO(state, payload) {
+        state.availabilityRatio = payload;
     },
 
-    SET_ACTIVITY(state, value) {
-        state.active = value;
+    SET_ACTIVITY(state, payload) {
+        state.active = payload;
     },
 };
 
@@ -24,13 +24,13 @@ export const actions = {
         commit('SET_AVAILABILITY_RATIO', response.data?.availability_ratio ?? '0/0');
     },
 
-    async toggleActivity({ commit }, value) {
-        const payload = {
-            active: value,
+    async toggleActivity({ commit }, payload) {
+        const requestPayload = {
+            active: payload,
         };
-        await StaffService.toggleActivity(payload);
+        await StaffService.toggleActivity(requestPayload);
 
-        commit('SET_ACTIVITY', value);
+        commit('SET_ACTIVITY', payload);
     },
 };
 

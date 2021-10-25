@@ -81,6 +81,10 @@ export default defineComponent({
         await checkForLocationPermission();
         await tryGettingLocation();
       }
+
+      if(store.getters['auth/loggedIn']) {
+        store.dispatch("user/getSubscriptions");
+      }
     });
 
     /* Event handlers */

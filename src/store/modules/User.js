@@ -3,6 +3,7 @@ import { i18n } from "@/i18n";
 import { StorageService } from '@/services/StorageService';
 
 import { setKeyboardStyle } from '@/utils/helpers';
+import PlaceService         from '@/services/PlaceService';
 
 export const namespaced = true;
 
@@ -10,26 +11,27 @@ export const state = {
     settings: {},
     notifications: [],
     placesAdditionalInfo: [],
+    subscriptions: [],
 };
 
 export const mutations = {
-    SET_DARKMODE(state, value) {
-        state.settings.darkMode = value;
+    SET_DARKMODE(state, payload) {
+        state.settings.darkMode = payload;
     },
 
-    SET_LOCALIZATION(state, value) {
-        state.settings.localization = value;
+    SET_LOCALIZATION(state, payload) {
+        state.settings.localization = payload;
     },
 
     /* NOTIFICATIONS */
-    SET_NOTIFICATIONS_PERMISSION(state, value) {
-        state.settings.notifications = value;
+    SET_NOTIFICATIONS_PERMISSION(state, payload) {
+        state.settings.notifications = payload;
     },
-    SET_NOTIFICATIONS(state, value) {
-        state.notifications = value;
+    SET_NOTIFICATIONS(state, payload) {
+        state.notifications = payload;
     },
-    ADD_NOTIFICATIONS(state, value) {
-        state.notifications.unshift(value);
+    ADD_NOTIFICATION(state, payload) {
+        state.notifications.unshift(payload);
     },
     MARK_NOTIFICATION_AS_READ(state, id) {
         state.notifications.find(notification => {
@@ -46,11 +48,24 @@ export const mutations = {
     },
 
     /* PLACES */
-    SET_PLACE_ADDITIONAL_INFO(state, value) {
-        state.placesAdditionalInfo.push(value);
+    SET_PLACE_ADDITIONAL_INFO(state, payload) {
+        state.placesAdditionalInfo.push(payload);
     },
     PURGE_PLACE_ADDITIONAL_INFO(state) {
         state.placesAdditionalInfo = [];
+    },
+    /* SUBSCRIPTIONS */
+    SET_SUBSCRIPTIONS(state, payload) {
+        state.subscriptions = payload;
+    },
+    ADD_SUBSCRIPTION(state, payload) {
+        state.subscriptions.push(payload);
+    },
+    REMOVE_SUBSCRIPTION(state, id) {
+        state.subscriptions = state.subscriptions.filter(placeId => placeId !== id);
+    },
+    PURGE_SUBSCRIPTION_DATA(state) {
+        state.subscriptions = [];
     },
 };
 
@@ -83,31 +98,31 @@ export const actions = {
         await setKeyboardStyle(storedDarkMode);
     },
 
-    async setDarkMode({ commit, rootGetters }, value) {
+    async setDarkMode({ commit, rootGetters }, payload) {
         const { set } = StorageService();
 
-        await set(`isDarkModeOn.${rootGetters['auth/authUser']?.id}`, value);
-        commit("SET_DARKMODE", value);
+        await set(`isDarkModeOn.${rootGetters['auth/authUser']?.id}`, payload);
+        commit("SET_DARKMODE", payload);
 
-        document.body.classList.toggle('dark', value);
+        document.body.classList.toggle('dark', payload);
 
-        await setKeyboardStyle(value);
+        await setKeyboardStyle(payload);
     },
 
-    async setLocalization({ commit, rootGetters }, value) {
+    async setLocalization({ commit, rootGetters }, payload) {
         const { set } = StorageService();
 
-        await set(`localization.${rootGetters['auth/authUser']?.id}`, value);
-        commit("SET_LOCALIZATION", value);
+        await set(`localization.${rootGetters['auth/authUser']?.id}`, payload);
+        commit("SET_LOCALIZATION", payload);
 
-        i18n.global.locale.value = value.value;
+        i18n.global.locale.value = payload.value;
     },
 
-    async setNotifications({ commit, rootGetters }, value) {
+    async setNotifications({ commit, rootGetters }, payload) {
         const { set } = StorageService();
 
-        await set(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`, value);
-        commit("SET_NOTIFICATIONS_PERMISSION", value);
+        await set(`areNotificationsOn.${rootGetters['auth/authUser']?.id}`, payload);
+        commit("SET_NOTIFICATIONS_PERMISSION", payload);
     },
     async persistPushNotifications({ state, rootGetters }) {
         const { set } = StorageService();
@@ -115,15 +130,15 @@ export const actions = {
         await set(`notifications.${rootGetters['auth/authUser']?.id}`, state.notifications);
     },
 
-    async setGlobalColor({ rootGetters }, value) {
+    async setGlobalColor({ rootGetters }, payload) {
         const root = document.documentElement;
 
         const { set } = StorageService();
 
-        await set(`color.${rootGetters['auth/authUser']?.id}`, value);
+        await set(`color.${rootGetters['auth/authUser']?.id}`, payload);
 
-        root.style.setProperty('--user-selected-color', value);
-        root.style.setProperty('--primary-button', value);
+        root.style.setProperty('--user-selected-color', payload);
+        root.style.setProperty('--primary-button', payload);
     },
     async resetGlobalColor({ rootGetters }) {
         const root = document.documentElement;
@@ -134,6 +149,12 @@ export const actions = {
 
         root.style.setProperty('--user-selected-color', '#207DFF');
         root.style.setProperty('--primary-button', '#1b6de0');
+    },
+
+    async getSubscriptions({ commit }) {
+        const response = await PlaceService.userSubscriptionIds();
+
+        commit("SET_SUBSCRIPTIONS", response.data.subscriptions);
     },
 };
 
@@ -179,5 +200,9 @@ export const getters = {
     },
     getPlaceAdditionInfo: (state) => (id) => {
         return state.placesAdditionalInfo?.find(place => place.id === id);
+    },
+
+    isSubscribedTo: (state) => (id) => {
+        return !!state.subscriptions?.find(placeId => placeId === id);
     },
 };

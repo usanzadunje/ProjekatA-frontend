@@ -53,8 +53,7 @@
       >
         <PlaceInfoModal
             :place="modalData"
-            @dismiss-place-info-modal="openModal(false)"
-            @sub-modal-opened="hideModal('custom-modal')"
+            @dismiss="openModal(false)"
         />
       </AppModal>
     </ion-content>
@@ -127,7 +126,7 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
-    const { isModalOpen, modalData, openModal, hideModal } = useModal();
+    const { isModalOpen, modalData, openModal } = useModal();
     const { forceStopRefresherAfter } = useRefresher();
     const { showElement, pullAnimation } = slideUp('homeHeader');
 
@@ -254,7 +253,6 @@ export default defineComponent({
 
       /* Event handlers */
       openModal,
-      hideModal,
       switchToSearch,
       refresh,
       pullAnimation,

@@ -48,8 +48,7 @@
       >
         <PlaceInfoModal
             :place="modalData"
-            @dismiss-place-info-modal="openModal(false)"
-            @sub-modal-opened="hideModal('custom-modal')"
+            @dismiss="openModal(false)"
         />
       </AppModal>
     </ion-content>
@@ -113,7 +112,7 @@ export default defineComponent({
     const showSwiper = ref(false);
 
     /* Composables */
-    const { isModalOpen, modalData, openModal, hideModal } = useModal();
+    const { isModalOpen, modalData, openModal } = useModal();
     const { scrollToTop } = useContent();
     const { showElement, pullAnimation } = slideUp('searchHeader');
 
@@ -172,7 +171,6 @@ export default defineComponent({
       searchFilterChanged,
       sortHasChanged,
       openModal,
-      hideModal,
       refresh,
       renderSwiper,
       pullAnimation,

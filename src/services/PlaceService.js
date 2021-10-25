@@ -63,8 +63,8 @@ export default {
     },
     // Subscribing users to specific place
     // Checking whether users is subscribed to specific place
-    isUserSubscribed(placeId) {
-        return API.apiClient.get(`/user/subscriptions/place/${placeId}`);
+    userSubscriptionIds() {
+        return API.apiClient.get(`/user/subscriptions/place/ids`);
     },
     subscribe(placeId, notificationTime = null) {
         return API.apiClient.post(`/user/subscriptions/place/${placeId}/notify-in-next/${notificationTime || ''}`);

@@ -14,31 +14,35 @@ export const state = {
 };
 
 export const mutations = {
-    SET_USER(state, user) {
-        state.user = user;
+    SET_USER(state, payload) {
+        state.user = payload;
     },
-    UPDATE_USER(state, user) {
-        Object.keys(user).forEach(key => {
-            state.user[key] = user[key];
+    UPDATE_USER(state, payload) {
+        Object.keys(payload).forEach(key => {
+            state.user[key] = payload[key];
         });
     },
 
-    SET_TOKEN(state, token) {
-        state.token = token;
+    SET_TOKEN(state, payload) {
+        state.token = payload;
     },
-    SET_ROLE(state, role) {
-        state.role = role;
+    SET_ROLE(state, payload) {
+        state.role = payload;
     },
 };
 
 export const actions = {
-    async login({ getters, commit, dispatch }, user) {
-        const response = await AuthService.login(user);
+    async login({ getters, commit, dispatch }, payload) {
+        const response = await AuthService.login(payload);
 
         await dispatch("setToken", response.data?.token);
         await dispatch("getAuthUser");
         dispatch("user/getSettings", null, { root: true });
         commit("SET_ROLE", response.data?.role);
+
+        if(!getters.isStaff && !getters.isOwner) {
+            dispatch('user/getSubscriptions', null, { root: true });
+        }
 
         if(getters.isStaff) {
             commit('staff/SET_ACTIVITY', true, { root: true });
@@ -46,8 +50,8 @@ export const actions = {
 
         return response.data?.role;
     },
-    async register({ commit, dispatch }, user) {
-        const response = await AuthService.register(user);
+    async register({ commit, dispatch }, payload) {
+        const response = await AuthService.register(payload);
 
         await dispatch("setToken", response.data?.token);
         await dispatch("getAuthUser");
@@ -92,13 +96,15 @@ export const actions = {
             commit("SET_ROLE", null);
             commit('user/SET_DARKMODE', false, { root: true });
             commit('user/SET_LOCALIZATION', { text: "SRB", value: "sr" }, { root: true });
-            await router.replace({ name: 'login' });
-            await loading?.dismiss();
+            commit('user/PURGE_SUBSCRIPTION_DATA', null, { root: true });
 
             i18n.global.locale.value = 'sr';
             document.body.classList.toggle('dark', false);
             root.style.setProperty('--user-selected-color', '#207DFF');
             root.style.setProperty('--primary-button', '#1b6de0');
+
+            await router.replace({ name: 'login' });
+            await loading?.dismiss();
         }
     },
 
@@ -112,10 +118,10 @@ export const actions = {
             return false;
         }
     },
-    async updateAuthUser({ commit }, user) {
-        await AuthService.updateUser(user);
+    async updateAuthUser({ commit }, payload) {
+        await AuthService.updateUser(payload);
 
-        commit("UPDATE_USER", user);
+        commit("UPDATE_USER", payload);
     },
 
     // Getting authenticated users info and saving it to store
@@ -134,12 +140,12 @@ export const actions = {
             return null;
         }
     },
-    async setToken({ commit }, value) {
+    async setToken({ commit }, payload) {
         const { set } = StorageService();
         try {
-            await set('projekata_token', value);
+            await set('projekata_token', payload);
 
-            commit("SET_TOKEN", value);
+            commit("SET_TOKEN", payload);
         }catch(error) {
             commit("SET_TOKEN", null);
         }

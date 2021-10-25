@@ -15,10 +15,17 @@ export function useModal() {
         }
         isModalOpen.value = state;
     };
-    const hideModal = (cssClass) => {
-        const modal = document.querySelector(`.${cssClass} > .modal-wrapper`);
+    const hideModal = (selector) => {
+        const modal = document.querySelector(`${selector}`);
 
-        modal.style.height = 0;
+        modal.style.transition = 'opacity 0.25s ease-in';
+        modal.style.opacity = 0;
+    };
+    const showModal = (selector) => {
+        const modal = document.querySelector(`${selector}`);
+
+        modal.style.transition = 'opacity 0.1s ease-out';
+        modal.style.opacity = 1;
     };
 
 
@@ -30,5 +37,6 @@ export function useModal() {
         /* Methods */
         openModal,
         hideModal,
+        showModal,
     };
 }

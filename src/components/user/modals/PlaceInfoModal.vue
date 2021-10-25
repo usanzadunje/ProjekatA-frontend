@@ -14,7 +14,6 @@
 
     <PlaceInfoBody
         :place="{...place, working_hours: placeAdditionalInfo?.working_hours}"
-        :show-skeleton="showSkeleton"
     />
     <div
         class="mt-6 ion-no-padding"
@@ -29,14 +28,14 @@
       <ion-button
           :routerLink="`/places/${place.id}?redirect=${$route.path + '?openModal=true'}`"
           class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
-          @click="$emit('dismissPlaceInfoModal')"
+          @click="$emit('dismiss')"
       >
         {{ $t('more') }}
       </ion-button>
       <ion-button
-          @click="openModal(true);$emit('subModalOpened');"
+          @click="openModal(true);hideModal('.custom-modal > .modal-wrapper')"
           class="flex-shrink uppercase button-subscribe modal-button-border"
-          :disabled="isSubButtonDisabled"
+          :disabled="false"
       >
         <ion-icon slot="start"
                   :icon="isUserSubscribed ? notifications : notificationsOutline"
@@ -50,11 +49,11 @@
   <AppModal
       :is-open="isModalOpen"
       css-class="custom-map-modal"
-      @didDismiss="openModal(false);$emit('dismissPlaceInfoModal')"
+      @didDismiss="openModal(false);showModal('.custom-modal > .modal-wrapper')"
   >
     <PlaceSubscriptionModal
         :place="{'id': place.id, 'name': place.name}"
-        @dismiss-subscription-modal="openModal(false);"
+        @dismiss="openModal(false);"
         @user-toggled-subscription="$emit('userToggledSubscription')"
     />
   </AppModal>
@@ -74,8 +73,6 @@ import PlaceInfoBody             from '@/components/place/PlaceInfoBody';
 import PlaceInfoModalImageSlider from '@/components/user/sliders/PlaceInfoModalImageSlider';
 import AppModal                  from '@/components/AppModal';
 import PlaceSubscriptionModal    from '@/components/user/modals/PlaceSubscriptionModal';
-
-import PlaceService from '@/services/PlaceService';
 
 import { useModal } from '@/composables/useModal';
 
@@ -102,7 +99,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissPlaceInfoModal', 'subModalOpened', 'userToggledSubscription'],
+  emits: ['dismiss', 'closed', 'userToggledSubscription'],
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
@@ -110,8 +107,9 @@ export default defineComponent({
     const router = useRouter();
 
     /* Component properties */
+    const showSkeleton = ref(true);
 
-    const isUserSubscribed = ref(false);
+    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](props.place.id));
     const placeAdditionalInfo = computed(() => store.getters['user/getPlaceAdditionInfo'](props.place.id));
     const isSubButtonDisabled = ref(true);
     const logoPath = computed(() => {
@@ -121,30 +119,18 @@ export default defineComponent({
         return '/places/default_place_logo.png';
       }
     });
-    const showSkeleton = ref(true);
 
     /* Composables */
-    const { isModalOpen, openModal } = useModal();
+    const { isModalOpen, openModal, showModal, hideModal } = useModal();
     const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
 
     /* Lifecycle hooks */
     (async() => {
       await getCachedOrFetchPlaceAdditionalInfo(props.place.id);
-      if(store.getters['auth/loggedIn']) {
-        try {
-          const response = await PlaceService.isUserSubscribed(props.place.id);
-          isUserSubscribed.value = !!response.data.subscribed;
-        }catch(e) {
-          isUserSubscribed.value = false;
-        }
+
+      setTimeout(() => {
         showSkeleton.value = false;
-      }else {
-        // Without some delay whether from API response above or this timeout, swiper is mounted
-        // but doesn't apply styles, there is problem with async loading which is resolved with this "hack"
-        setTimeout(() => {
-          showSkeleton.value = false;
-        }, 50);
-      }
+      }, 50);
     })();
     isSubButtonDisabled.value = Capacitor.getPlatform() === 'web' || !store.getters['auth/loggedIn'];
 
@@ -170,6 +156,8 @@ export default defineComponent({
 
       /* Event handlers */
       openModal,
+      showModal,
+      hideModal,
 
       /* Icons from */
       notifications,

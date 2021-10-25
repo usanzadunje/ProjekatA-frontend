@@ -5,7 +5,7 @@
         class="flex rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('login') }"
     >
-      <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           ref="emailInput"
           v-model.lazy="user.login"
@@ -103,7 +103,7 @@ import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 import { Device } from '@capacitor/device';
 
 import {
-  mailOutline,
+  personOutline,
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
@@ -184,7 +184,7 @@ export default defineComponent({
       togglePasswordShow,
 
       /* Icons */
-      mailOutline,
+      personOutline,
       lockOpenOutline,
       eyeOutline,
       eyeOffOutline,

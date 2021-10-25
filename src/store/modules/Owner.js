@@ -21,9 +21,9 @@ export const state = {
 
 export const mutations = {
     /* PLACE */
-    SET_PLACE_INFO(state, value) {
-        Object.keys(value).forEach(key => {
-            state.place[key] = value[key];
+    SET_PLACE_INFO(state, payload) {
+        Object.keys(payload).forEach(key => {
+            state.place[key] = payload[key];
         });
     },
     SET_PLACE_IMAGE_TYPE(state, { id, type }) {
@@ -33,11 +33,11 @@ export const mutations = {
     },
 
     /* STAFF */
-    SET_STAFF_MEMBERS(state, value) {
-        state.staff = value;
+    SET_STAFF_MEMBERS(state, payload) {
+        state.staff = payload;
     },
-    CREATE_STAFF(state, value) {
-        state.staff.push(value);
+    CREATE_STAFF(state, payload) {
+        state.staff.push(payload);
     },
     UPDATE_STAFF_MEMBER(state, { staffId, user }) {
         let staff = state.staff.find(staff => staff.id === staffId);
@@ -51,25 +51,25 @@ export const mutations = {
     },
 
     /* TABLES */
-    SET_TABLES(state, value) {
-        state.tables = value;
+    SET_TABLES(state, payload) {
+        state.tables = payload;
     },
-    CREATE_TABLE(state, value) {
-        state.tables.push(value);
+    CREATE_TABLE(state, payload) {
+        state.tables.push(payload);
     },
     SET_ALL_TABLES_LEFT_POSITION(state, dropzoneWidth) {
         state.tables.forEach(table => {
             table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth);
         });
     },
-    UPDATE_TABLE_POSITION(state, value) {
-        let existingTable = state.tables.find(table => table.id === value.id);
+    UPDATE_TABLE_POSITION(state, payload) {
+        let existingTable = state.tables.find(table => table.id === payload.id);
 
         if(existingTable) {
-            existingTable.position = value.position;
-            existingTable.dirty = value.dirty;
+            existingTable.position = payload.position;
+            existingTable.dirty = payload.dirty;
         }else {
-            state.tables.push(value);
+            state.tables.push(payload);
         }
     },
     CLEAN_DIRTY_TABLES(state) {
@@ -103,15 +103,15 @@ export const mutations = {
             table[key] = payload[key];
         });
     },
-    REMOVE_TABLE(state, value) {
-        state.tables = state.tables.filter(table => table.id !== value);
+    REMOVE_TABLE(state, payload) {
+        state.tables = state.tables.filter(table => table.id !== payload);
     },
     /* CATEGORIES */
-    SET_CATEGORIES(state, value) {
-        state.categories = value;
+    SET_CATEGORIES(state, payload) {
+        state.categories = payload;
     },
-    CREATE_CATEGORY(state, value) {
-        state.categories.push(value);
+    CREATE_CATEGORY(state, payload) {
+        state.categories.push(payload);
     },
     UPDATE_CATEGORY(state, { id, value }) {
         let category = state.categories.find(category => category.id === id);
@@ -123,14 +123,14 @@ export const mutations = {
     },
 
     /* PRODUCTS */
-    SET_PRODUCTS(state, value) {
-        state.products = value;
+    SET_PRODUCTS(state, payload) {
+        state.products = payload;
     },
-    LOAD_MORE_PRODUCTS(state, value) {
-        state.products = state.products.concat(value);
+    LOAD_MORE_PRODUCTS(state, payload) {
+        state.products = state.products.concat(payload);
     },
-    CREATE_PRODUCT(state, value) {
-        state.products.unshift(value);
+    CREATE_PRODUCT(state, payload) {
+        state.products.unshift(payload);
     },
     UPDATE_PRODUCT(state, { id, value }) {
         let product = state.products.find(product => product.id === id);
@@ -173,20 +173,20 @@ export const actions = {
 
         commit('SET_PLACE_INFO', place);
     },
-    async setPlaceImageType({ commit }, value) {
-        if(value.type === 'is_main') {
-            await OwnerService.setImageAsMain(value.id);
+    async setPlaceImageType({ commit }, payload) {
+        if(payload.type === 'is_main') {
+            await OwnerService.setImageAsMain(payload.id);
         }
-        if(value.type === 'is_logo') {
-            await OwnerService.setImageAsLogo(value.id);
+        if(payload.type === 'is_logo') {
+            await OwnerService.setImageAsLogo(payload.id);
         }
 
-        if(!value.product) {
-            commit('SET_PLACE_IMAGE_TYPE', value);
+        if(!payload.product) {
+            commit('SET_PLACE_IMAGE_TYPE', payload);
         }
     },
-    async uploadPlaceImages({ state, commit }, value) {
-        const response = await OwnerService.uploadPlaceImages(value);
+    async uploadPlaceImages({ state, commit }, payload) {
+        const response = await OwnerService.uploadPlaceImages(payload);
 
         const place = {
             images: state.place.images.concat(response.data),
@@ -266,12 +266,12 @@ export const actions = {
 
         commit('SET_CATEGORIES', response.data);
     },
-    async createCategory({ commit }, value) {
-        const payload = {
-            category: value,
+    async createCategory({ commit }, payload) {
+        const requestPayload = {
+            category: payload,
         };
 
-        const response = await CategoryService.create(payload);
+        const response = await CategoryService.create(requestPayload);
 
         commit('CREATE_CATEGORY', response.data);
     },

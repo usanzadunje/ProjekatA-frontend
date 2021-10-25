@@ -36,7 +36,7 @@
       <ion-button
           :disabled="loading"
           class="mr-2.5 uppercase button-cancel modal-button-border"
-          @click="$emit('dismissSubscriptionModal')"
+          @click="$emit('dismiss')"
       >
         {{ $t('cancel') }}
       </ion-button>
@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, toRef } from 'vue';
-import { useStore }                    from 'vuex';
-import { useI18n }                     from 'vue-i18n';
+import { computed, defineComponent, ref } from 'vue';
+import { useStore }                       from 'vuex';
+import { useI18n }                        from 'vue-i18n';
 import {
   IonItem,
   IonIcon,
@@ -67,7 +67,7 @@ import {
   IonRange,
   IonLabel,
   alertController,
-}                                      from '@ionic/vue';
+}                                         from '@ionic/vue';
 
 import PlaceService from '@/services/PlaceService';
 
@@ -95,8 +95,8 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['dismissSubscriptionModal', 'userToggledSubscription'],
-  setup(props, { emit }) {
+  emits: ['dismiss'],
+  setup(props) {
     /* Global properties */
     const store = useStore();
     const { t } = useI18n();
@@ -104,8 +104,7 @@ export default defineComponent({
     /* Component properties */
     const notificationTime = ref(15);
     const indefiniteTimerActive = ref(false);
-    const isUserSubscribed = ref(false);
-    const place = toRef(props, 'place');
+    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](props.place.id));
     const loading = ref(false);
 
     /* Composables */
@@ -117,8 +116,9 @@ export default defineComponent({
       const notifyIn = indefiniteTimerActive.value ? '' : notificationTime.value;
       try {
         await PlaceService.subscribe(placeId, notifyIn);
-        isUserSubscribed.value = true;
-        emit('userToggledSubscription');
+
+        store.commit("user/ADD_SUBSCRIPTION", placeId);
+
         await showSuccessToast(t('successSubscribe'));
       }catch(error) {
         showErrorToast(
@@ -166,18 +166,6 @@ export default defineComponent({
     };
 
     /* Lifecycle hooks */
-    //When users lands on page check if he is already subscribed to place
-    PlaceService.isUserSubscribed(place.value.id)
-                .then((response) => {
-                  isUserSubscribed.value = !!response.data.subscribed;
-                })
-                .catch(() => {
-                  showErrorToast(
-                      null,
-                      {
-                        generalError: t('generalAlertError'),
-                      });
-                });
 
     /* Event Handlers */
     const indefiniteTimerToggle = (e) => {
@@ -194,8 +182,9 @@ export default defineComponent({
       if(isUserSubscribed.value) {
         try {
           await PlaceService.unsubscribe(placeId);
-          isUserSubscribed.value = false;
-          emit('userToggledSubscription');
+
+          store.commit("user/REMOVE_SUBSCRIPTION", placeId);
+
           await showSuccessToast(t('successUnsubscribe'));
         }catch(error) {
           showErrorToast(

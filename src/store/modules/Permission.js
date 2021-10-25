@@ -5,8 +5,8 @@ export const state = {
 };
 
 export const mutations = {
-    SET_LOCATION_PERMISSIONS(state, permission) {
-        state.location = permission;
+    SET_LOCATION_PERMISSIONS(state, payload) {
+        state.location = payload;
     },
 };
 
