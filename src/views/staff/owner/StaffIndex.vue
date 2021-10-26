@@ -73,7 +73,6 @@ import StaffCreateEditModal from '@/components/staff/modals/StaffCreateEditModal
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useModal }              from '@/composables/useModal';
-import { useRefresher }          from '@/composables/useRefresher';
 
 import {
   close,
@@ -103,7 +102,6 @@ export default defineComponent({
     const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { isModalOpen, modalData, openModal } = useModal();
-    const { forceStopRefresherAfter } = useRefresher();
 
     /* Lifecycle hooks */
 
@@ -159,8 +157,6 @@ export default defineComponent({
               pushNotificationPermission: t('dataFetchingError'),
             });
       }finally {
-        forceStopRefresherAfter(event);
-
         event.target.complete();
       }
     };

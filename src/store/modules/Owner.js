@@ -308,7 +308,7 @@ export const actions = {
             commit('SET_PRODUCTS', response.data);
         }
 
-        // Returning false so infinite scroll can be disabled in components
+        // Returning true so infinite scroll can be disabled in components
         // When there is no more data or backend returned less data than required
         // which means there is no more data to be returned
         if(!response.data || response.data.length < limit) {

@@ -38,6 +38,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { useStore }             from 'vuex';
+import { useI18n }              from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -49,8 +50,8 @@ import AccordionList from '@/components/user/AccordionList';
 import CategoryIndex from '@/components/owner/CategoryIndex';
 import ProductIndex  from '@/components/owner/ProductIndex';
 
-import { useCache }     from '@/composables/useCache';
-import { useRefresher } from '@/composables/useRefresher';
+import { useCache }              from '@/composables/useCache';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
   pricetagOutline,
@@ -77,12 +78,21 @@ export default defineComponent({
 
     /* Composables */
     const { getCachedOrFetchPlaceCategories } = useCache();
-    const { forceStopRefresherAfter } = useRefresher();
+    const { t } = useI18n();
+    const { showErrorToast } = useToastNotifications();
 
     /* Methods */
-    const getMenuData = async() => {
-      await getCachedOrFetchPlaceCategories();
-      await store.dispatch("owner/getProducts", {});
+    const getMenuData = async(forceFetch = false) => {
+      try {
+        await getCachedOrFetchPlaceCategories(forceFetch);
+        await store.dispatch("owner/getProducts", {});
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }
     };
 
     /* Lifecycle hooks */
@@ -94,9 +104,7 @@ export default defineComponent({
     const refresh = async(event) => {
       enableInfiniteScroll.value = true;
 
-      await getMenuData();
-
-      forceStopRefresherAfter(event);
+      await getMenuData(true);
 
       event.target.complete();
 

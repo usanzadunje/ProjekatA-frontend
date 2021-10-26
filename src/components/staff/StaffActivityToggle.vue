@@ -19,10 +19,13 @@
 <script>
 import { computed, defineComponent } from 'vue';
 import { useStore }                  from 'vuex';
+import { useI18n }                   from 'vue-i18n';
 import {
   IonIcon,
   IonToggle,
 }                                    from '@ionic/vue';
+
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
   checkmarkOutline,
@@ -53,13 +56,23 @@ export default defineComponent({
     const isStaffActive = computed(() => store.getters['staff/active']);
 
     /* Composables */
+    const { t } = useI18n();
+    const { showErrorToast } = useToastNotifications();
 
     /* Event handlers */
     const toggleActivity = async(e) => {
-      if(e.target.checked) {
-        await store.dispatch('staff/toggleActivity', false);
-      }else {
-        await store.dispatch('staff/toggleActivity', true);
+      try {
+        if(e.target.checked) {
+          await store.dispatch('staff/toggleActivity', false);
+        }else {
+          await store.dispatch('staff/toggleActivity', true);
+        }
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
       }
     };
 

@@ -109,9 +109,9 @@ export default defineComponent({
     /* Component properties */
     const categories = computed(() => store.getters['owner/createdCategories']);
 
+    /* Lifecycle hooks */
     /* Composables */
     const { slidingItem, closeOpenItems } = useSlidingItem();
-    /* Lifecycle hooks */
     const { t } = useI18n();
     const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { isModalOpen, modalData, openModal } = useModal();

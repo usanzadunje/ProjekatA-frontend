@@ -57,9 +57,9 @@ export default defineComponent({
 
     /* Event handlers */
     const login = async(driver) => {
-      const deviceInfo = await Device.getInfo();
 
       try {
+        const deviceInfo = await Device.getInfo();
         const payload = await SocialAuthService.getUserFromProvider(driver);
         payload.device_name = deviceInfo.name || deviceInfo.model;
         const response = await AuthService.authenticateSocial(payload);

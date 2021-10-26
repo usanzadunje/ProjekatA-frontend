@@ -14,7 +14,7 @@
             @ionChange="toggleDarkMode($event)"
         ></ion-toggle>
 
-        <LanguagePicker class="ml-3"/>
+        <AppLanguagePicker class="ml-3"/>
       </div>
 
       <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
@@ -48,7 +48,7 @@ import {
 }                                    from '@ionic/vue';
 
 import SettingsPopover from '@/components/staff/popovers/SettingsPopover';
-import LanguagePicker  from '@/components/LanguagePicker';
+import AppLanguagePicker  from '@/components/AppLanguagePicker';
 
 import { useMenu }    from '@/composables/useMenu';
 import { usePopover } from '@/composables/usePopover';
@@ -67,7 +67,7 @@ export default defineComponent({
     IonAvatar,
     IonLabel,
     IonToggle,
-    LanguagePicker,
+    AppLanguagePicker,
   },
   props: {},
   setup() {

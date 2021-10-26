@@ -229,7 +229,6 @@ import MainImagePreview    from '@/components/MainImagePreview';
 import PlaceImagesAddModal from '@/components/owner/modals/PlaceImagesAddModal';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useRefresher }          from '@/composables/useRefresher';
 
 import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
 
@@ -301,7 +300,6 @@ export default defineComponent({
 
     /* Composables */
     const { showSuccessToast, showErrorToast } = useToastNotifications();
-    const { forceStopRefresherAfter } = useRefresher();
 
 
     /* Methods */
@@ -339,7 +337,6 @@ export default defineComponent({
 
         showSuccessToast(t('successUpdate'));
       }catch(errors) {
-        console.log(errors);
         errorNames.value = getError(errors);
         await showErrorToast(errors);
         await sleep(Object.keys(errorNames.value).length * 900);
@@ -369,13 +366,19 @@ export default defineComponent({
     });
     watch(props.refresher, async() => {
       if(props.refresher.isActive) {
-        await store.dispatch("owner/getPlaceInfo");
+        try {
+          await store.dispatch("owner/getPlaceInfo");
+        }catch(e) {
+          showErrorToast(
+              null,
+              {
+                dataFetchingError: t('dataFetchingError'),
+              });
+        }finally {
+          resetInput();
 
-        resetInput();
-
-        forceStopRefresherAfter(props.refresher.event);
-
-        props.refresher.event.target.complete();
+          props.refresher.event.target.complete();
+        }
       }
     });
 

@@ -92,6 +92,7 @@ export default defineComponent({
         updatePositionFromTransform(currentTarget);
       }
 
+      console.log(element);
       // Start the drag event
       interaction.start({ name: "drag" }, event.interactable, element);
     };

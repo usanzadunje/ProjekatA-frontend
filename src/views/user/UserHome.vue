@@ -85,7 +85,6 @@ import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
 import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useModal }              from '@/composables/useModal';
-import { useRefresher }          from '@/composables/useRefresher';
 import { slideUp }               from '@/composables/useAnimations';
 
 export default defineComponent({
@@ -127,7 +126,6 @@ export default defineComponent({
     const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal } = useModal();
-    const { forceStopRefresherAfter } = useRefresher();
     const { showElement, pullAnimation } = slideUp('homeHeader');
 
     /* Lifecycle hooks */
@@ -223,23 +221,14 @@ export default defineComponent({
     };
     const refresh = async(event) => {
       showSkeleton.value = true;
-      try {
-        await checkForLocationPermission();
-        await tryGettingLocation();
 
-        await getFilteredPlaces();
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }finally {
-        forceStopRefresherAfter(event);
+      await checkForLocationPermission();
+      await tryGettingLocation();
 
-        event.target.complete();
-        showSkeleton.value = false;
-      }
+      await getFilteredPlaces();
+
+      event.target.complete();
+      showSkeleton.value = false;
     };
 
     return {

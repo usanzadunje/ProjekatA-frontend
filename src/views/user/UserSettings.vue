@@ -43,7 +43,7 @@
         </ion-item>
         <ion-item class="ion-item-padding-right">
           <p class="settings-item-text">{{ $t('language') }}</p>
-          <LanguagePicker class="lang-pl"/>
+          <AppLanguagePicker class="lang-pl"/>
         </ion-item>
         <ion-item class="ion-item-padding-right">
           <p class="settings-item-text">{{ $t('primaryColor') }}</p>
@@ -101,8 +101,8 @@ import {
   IonToggle,
 }                                         from '@ionic/vue';
 
-import LanguagePicker from '@/components/LanguagePicker';
-import ColorPicker    from '@/components/ColorPicker';
+import AppLanguagePicker from '@/components/AppLanguagePicker';
+import ColorPicker       from '@/components/ColorPicker';
 
 import AuthService from '@/services/AuthService';
 
@@ -123,7 +123,7 @@ export default defineComponent({
     IonLabel,
     IonToggle,
     IonButton,
-    LanguagePicker,
+    AppLanguagePicker,
     ColorPicker,
   },
   setup() {

@@ -35,6 +35,7 @@
 import { defineComponent, onMounted } from 'vue';
 import { useRoute, useRouter }        from 'vue-router';
 import { mapGetters, useStore }       from 'vuex';
+import { useI18n }                    from 'vue-i18n';
 import {
   IonIcon,
   IonPage,
@@ -44,7 +45,8 @@ import {
   IonRouterOutlet,
 }                                     from '@ionic/vue';
 
-import { useGeolocation } from '@/composables/useGeolocation';
+import { useGeolocation }        from '@/composables/useGeolocation';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
   homeOutline,
@@ -74,6 +76,8 @@ export default defineComponent({
 
     /* Composables */
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const { t } = useI18n();
+    const { showErrorToast } = useToastNotifications();
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -82,8 +86,16 @@ export default defineComponent({
         await tryGettingLocation();
       }
 
-      if(store.getters['auth/loggedIn']) {
-        store.dispatch("user/getSubscriptions");
+      try {
+        if(store.getters['auth/loggedIn']) {
+          store.dispatch("user/getSubscriptions");
+        }
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
       }
     });
 

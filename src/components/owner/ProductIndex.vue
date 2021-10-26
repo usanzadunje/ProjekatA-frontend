@@ -175,12 +175,20 @@ export default defineComponent({
       }
     };
     const getProducts = async(load) => {
-      isInfiniteScrollDisabled.value = await store.dispatch("owner/getProducts", {
-        filter: searchTerm.value,
-        offset,
-        limit: 15,
-        load,
-      });
+      try {
+        isInfiniteScrollDisabled.value = await store.dispatch("owner/getProducts", {
+          filter: searchTerm.value,
+          offset,
+          limit: 15,
+          load,
+        });
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }
     };
 
     /* Event handlers */

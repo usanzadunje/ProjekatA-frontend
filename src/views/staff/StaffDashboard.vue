@@ -61,6 +61,7 @@
 <script>
 import { computed, defineComponent, onMounted } from 'vue';
 import { useStore }                             from 'vuex';
+import { useI18n }                              from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -75,8 +76,8 @@ import StaffCard                      from '@/components/staff/cards/StaffCard';
 import PlaceAvailabilityChart         from '@/components/staff/charts/PlaceAvailabilityChart';
 import StaffAvailabilityToggleButtons from '@/components/staff/StaffAvailabilityToggleButtons';
 
-import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
-import { useRefresher }         from '@/composables/useRefresher';
+import { usePlaceManipulation }  from '@/composables/usePlaceManipulation';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -105,34 +106,61 @@ export default defineComponent({
 
     /* Composables */
     const { toggle } = usePlaceManipulation();
-    const { forceStopRefresherAfter } = useRefresher();
+    const { t } = useI18n();
+    const { showErrorToast } = useToastNotifications();
 
+    /* Methods */
+    const getPlaceAvailability = async() => {
+      try {
+        await store.dispatch('staff/updatePlaceAvailability');
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }
+    };
     /* Lifecycle hooks */
     (async() => {
-      await store.dispatch('owner/getTables');
+      try {
+        await store.dispatch('owner/getTables');
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }
     })();
     onMounted(async() => {
-      await store.dispatch('staff/updatePlaceAvailability');
+      await getPlaceAvailability();
     });
     onIonViewWillEnter(async() => {
       if(!Capacitor.isNativePlatform()) {
-        await store.dispatch('staff/updatePlaceAvailability');
+        await getPlaceAvailability;
       }
     });
 
 
     /* Event handlers */
     const refresh = async(event) => {
-      await store.dispatch('owner/getTables');
-      await store.dispatch('staff/updatePlaceAvailability');
+      try {
+        await store.dispatch('owner/getTables');
+        await store.dispatch('staff/updatePlaceAvailability');
 
-      if(isOwner.value) {
-        await store.dispatch('owner/getStaffInfo');
+        if(isOwner.value) {
+          await store.dispatch('owner/getStaffInfo');
+        }
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }finally {
+        event.target.complete();
       }
-
-      forceStopRefresherAfter(event);
-
-      event.target.complete();
     };
 
     /* Methods */

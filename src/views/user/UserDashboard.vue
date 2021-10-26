@@ -111,7 +111,6 @@ import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useModal }              from '@/composables/useModal';
 import { useSlidingItem }        from '@/composables/useSlidingItem';
-import { useRefresher }          from '@/composables/useRefresher';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
@@ -159,7 +158,6 @@ export default defineComponent({
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal } = useModal();
     const { slidingItem, closeOpenItems } = useSlidingItem();
-    const { forceStopRefresherAfter } = useRefresher();
 
     /* Lifecycle hooks */
     onIonViewDidEnter(async() => {
@@ -187,23 +185,14 @@ export default defineComponent({
       }
     };
     const refresh = async(event) => {
-      try {
-        if(sortBy.value === 'distance') {
-          await checkForLocationPermission();
-        }
-        await tryGettingLocation();
-
-        await getSubscriptions();
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }finally {
-        forceStopRefresherAfter(event);
-        event.target.complete();
+      if(sortBy.value === 'distance') {
+        await checkForLocationPermission();
       }
+      await tryGettingLocation();
+
+      await getSubscriptions();
+
+      event.target.complete();
     };
 
     /* Event handlers */

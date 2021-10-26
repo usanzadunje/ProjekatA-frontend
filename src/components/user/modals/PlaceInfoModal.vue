@@ -63,7 +63,7 @@
 import { defineComponent, ref, computed, onUnmounted } from 'vue';
 import { useRoute, useRouter }                         from 'vue-router';
 import { useStore }                                    from 'vuex';
-import { Capacitor }                                   from '@capacitor/core';
+import { useI18n }                                     from 'vue-i18n';
 import {
   IonIcon,
   IonButton,
@@ -74,14 +74,17 @@ import PlaceInfoModalImageSlider from '@/components/user/sliders/PlaceInfoModalI
 import AppModal                  from '@/components/AppModal';
 import PlaceSubscriptionModal    from '@/components/user/modals/PlaceSubscriptionModal';
 
-import { useModal } from '@/composables/useModal';
+import { useModal }              from '@/composables/useModal';
+import { useCache }              from '@/composables/useCache';
+import { useToastNotifications } from '@/composables/useToastNotifications';
 
 import {
   notifications,
   notificationsOutline,
 
-}                   from 'ionicons/icons';
-import { useCache } from '@/composables/useCache';
+} from 'ionicons/icons';
+
+import { Capacitor } from '@capacitor/core';
 
 export default defineComponent({
   name: 'PlaceInfoModal',
@@ -123,10 +126,20 @@ export default defineComponent({
     /* Composables */
     const { isModalOpen, openModal, showModal, hideModal } = useModal();
     const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
+    const { showErrorToast } = useToastNotifications();
+    const { t } = useI18n();
 
     /* Lifecycle hooks */
     (async() => {
-      await getCachedOrFetchPlaceAdditionalInfo(props.place.id);
+      try {
+        await getCachedOrFetchPlaceAdditionalInfo(props.place.id);
+      }catch(e) {
+        showErrorToast(
+            null,
+            {
+              dataFetchingError: t('dataFetchingError'),
+            });
+      }
 
       setTimeout(() => {
         showSkeleton.value = false;

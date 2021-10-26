@@ -133,7 +133,6 @@ import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useModal }              from '@/composables/useModal';
 import { useContent }            from '@/composables/useContent';
 import { useCache }              from '@/composables/useCache';
-import { useRefresher }          from '@/composables/useRefresher';
 import { usePopover }            from '@/composables/usePopover';
 
 import {
@@ -201,7 +200,6 @@ export default defineComponent({
     const { isModalOpen, openModal } = useModal();
     const { scrollToTop } = useContent();
     const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
-    const { forceStopRefresherAfter } = useRefresher();
     const { openPopover } = usePopover();
 
     /* Methods */
@@ -294,8 +292,6 @@ export default defineComponent({
     };
     const refresh = async(event) => {
       await getPlace();
-
-      forceStopRefresherAfter(event);
 
       event.target.complete();
     };
