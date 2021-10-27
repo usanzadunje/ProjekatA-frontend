@@ -66,8 +66,7 @@ import {
   alertController,
 }                                       from '@ionic/vue';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { getError, sleep }       from '@/utils/helpers';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: 'TableEditModal',
@@ -91,11 +90,10 @@ export default defineComponent({
     const table = ref({});
     const { tableProp } = toRefs(props);
     const loading = ref(-1);
-    const errorNames = ref({});
 
     /* Composables */
     const { t } = useI18n();
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { errorNames, tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
     table.value.smoking_allowed = tableProp.value.smoking_allowed;
@@ -104,18 +102,14 @@ export default defineComponent({
     const updateTable = async(id) => {
       loading.value = 0;
 
-      try {
-        await store.dispatch("owner/updateTable", { tableId: id, payload: table.value });
+      await tryCatch(
+          async() => {
+            await store.dispatch("owner/updateTable", { tableId: id, payload: table.value });
+          },
+          'owner.updateTable',
+      );
 
-        showSuccessToast(t('owner.updateTable'));
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }finally {
-        loading.value = -1;
-      }
+      loading.value = -1;
 
     };
     const deleteTable = async(id) => {
@@ -137,20 +131,16 @@ export default defineComponent({
               {
                 text: t('agree'),
                 handler: async() => {
-                  try {
-                    await store.dispatch("owner/deleteTable", id);
+                  await tryCatch(
+                      async() => {
+                        await store.dispatch("owner/deleteTable", id);
+                      },
+                      'owner.removeTable',
+                      'generalAlertError',
+                  );
 
-                    showSuccessToast(t('owner.removeTable'));
-                  }catch(errors) {
-                    showErrorToast(
-                        null,
-                        {
-                          pushNotificationPermission: t('generalAlertError'),
-                        });
-                  }finally {
-                    emit('dismiss');
-                    loading.value = -1;
-                  }
+                  emit('dismiss');
+                  loading.value = -1;
                 },
               },
             ],

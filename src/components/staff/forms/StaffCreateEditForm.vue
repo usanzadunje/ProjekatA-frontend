@@ -120,7 +120,6 @@
 <script>
 import { defineComponent, ref, reactive, onMounted, toRefs } from 'vue';
 import { useStore }                                          from 'vuex';
-import { useI18n }                                           from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -129,9 +128,9 @@ import {
   IonSpinner,
 }                                                            from "@ionic/vue";
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
-import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
+import { hideNativeKeyboard } from "@/utils/helpers";
 
 import {
   mailOutline,
@@ -160,13 +159,11 @@ export default defineComponent({
   setup(props, { emit }) {
     /* Global properties and methods */
     const store = useStore();
-    const { t } = useI18n();
 
     /* Component properties */
     const { staff } = toRefs(props);
     const user = reactive({});
     const showPassword = ref(false);
-    const errorNames = ref({});
 
     const fnameInput = ref(null);
     const lnameInput = ref(null);
@@ -186,31 +183,27 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
-
+    const { errorNames, tryCatch } = useErrorHandling();
 
     /* Event handlers */
     const createOrUpdate = async() => {
       loading.value = true;
       await hideNativeKeyboard();
-      try {
-        if(staff?.value) {
-          await store.dispatch("owner/updateStaff", { staffId: staff.value.id, user });
-          showSuccessToast(t('owner.updatedStaff'));
-        }else {
-          await store.dispatch("owner/createStaff", user);
-          showSuccessToast(t('owner.createdStaff'));
-        }
 
-        emit('dismiss');
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }finally {
-        loading.value = false;
-      }
+      await tryCatch(
+          async() => {
+            if(staff?.value) {
+              await store.dispatch("owner/updateStaff", { staffId: staff.value.id, user });
+            }else {
+              await store.dispatch("owner/createStaff", user);
+            }
+
+            emit('dismiss');
+          },
+          staff?.value ? 'owner.updatedStaff' : 'owner.createdStaff',
+      );
+
+      loading.value = false;
     };
     const togglePasswordShow = () => {
       showPassword.value = !showPassword.value;

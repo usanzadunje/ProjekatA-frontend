@@ -211,7 +211,6 @@
 <script>
 import { defineComponent, ref, reactive, onMounted, toRefs, watch, computed } from 'vue';
 import { useStore }                                                           from 'vuex';
-import { useI18n }                                                            from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -225,10 +224,9 @@ import {
 
 import AppAvatar from '@/components/AppAvatar';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { usePhotos }             from '@/composables/usePhotos';
+import { usePhotos } from '@/composables/usePhotos';
 
-import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
+import { hideNativeKeyboard } from "@/utils/helpers";
 
 import {
   mailOutline,
@@ -237,7 +235,8 @@ import {
   eyeOffOutline,
   personOutline,
   callOutline,
-} from 'ionicons/icons';
+}                           from 'ionicons/icons';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: "EditForm",
@@ -261,8 +260,6 @@ export default defineComponent({
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
-    const { t } = useI18n();
-    //Authenticated users
     const authUser = computed(() => {
       return store.getters['auth/authUser'];
     });
@@ -272,7 +269,6 @@ export default defineComponent({
     const showOldPassword = ref(false);
     const showPassword = ref(false);
     const showPasswordConfirm = ref(false);
-    const errorNames = ref({});
     const fnameInput = ref(null);
     const lnameInput = ref(null);
     const usernameInput = ref(null);
@@ -296,8 +292,8 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { photo, selectImageSource } = usePhotos();
+    const { errorNames, tryCatch } = useErrorHandling();
 
 
     /* Methods */
@@ -317,18 +313,15 @@ export default defineComponent({
       }
       loading.value = true;
       await hideNativeKeyboard();
-      try {
-        await store.dispatch("auth/updateAuthUser", user);
 
-        showSuccessToast(t('successUpdate'));
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }finally {
-        loading.value = false;
-      }
+      await tryCatch(
+          async() => {
+            await store.dispatch("auth/updateAuthUser", user);
+          },
+          'successUpdate',
+      );
+
+      loading.value = false;
     };
     const togglePasswordShow = (input, e = null) => {
       switch(input) {

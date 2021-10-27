@@ -65,6 +65,7 @@ export default defineComponent({
     });
 
     /* Lifecycle hooks */
+
     /* Event handlers */
     const dismiss = () => {
       emit('dismiss');

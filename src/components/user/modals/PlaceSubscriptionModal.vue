@@ -71,8 +71,8 @@ import {
 
 import PlaceService from '@/services/PlaceService';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useFCM }                from '@/composables/useFCM';
+import { useFCM }           from '@/composables/useFCM';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   notifications,
@@ -108,25 +108,22 @@ export default defineComponent({
     const loading = ref(false);
 
     /* Composables */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { registerToken } = useFCM();
+    const { tryCatch } = useErrorHandling();
 
     /* Methods */
     const subscribe = async(placeId) => {
       const notifyIn = indefiniteTimerActive.value ? '' : notificationTime.value;
-      try {
-        await PlaceService.subscribe(placeId, notifyIn);
 
-        store.commit("user/ADD_SUBSCRIPTION", placeId);
+      await tryCatch(
+          async() => {
+            await PlaceService.subscribe(placeId, notifyIn);
 
-        await showSuccessToast(t('successSubscribe'));
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              generalError: t('generalAlertError'),
-            });
-      }
+            store.commit("user/ADD_SUBSCRIPTION", placeId);
+          },
+          'successSubscribe',
+          'generalAlertError',
+      );
     };
     const showAlert = async(placeId) => {
       const alert = await alertController
@@ -145,19 +142,16 @@ export default defineComponent({
               {
                 text: t('yes'),
                 handler: async() => {
-                  try {
-                    await registerToken();
-                    await subscribe(placeId);
-                    await store.dispatch('user/setNotifications', true);
-                  }catch(e) {
-                    showErrorToast(
-                        null,
-                        {
-                          generalError: t('generalAlertError'),
-                        });
-                  }finally {
-                    loading.value = false;
-                  }
+                  await tryCatch(
+                      async() => {
+                        await registerToken();
+                        await subscribe(placeId);
+                        await store.dispatch('user/setNotifications', true);
+                      },
+                      null,
+                      'generalAlertError',
+                  );
+                  loading.value = false;
                 },
               },
             ],
@@ -180,19 +174,15 @@ export default defineComponent({
       }
 
       if(isUserSubscribed.value) {
-        try {
-          await PlaceService.unsubscribe(placeId);
+        await tryCatch(
+            async() => {
+              await PlaceService.unsubscribe(placeId);
 
-          store.commit("user/REMOVE_SUBSCRIPTION", placeId);
-
-          await showSuccessToast(t('successUnsubscribe'));
-        }catch(error) {
-          showErrorToast(
-              null,
-              {
-                generalError: t('generalAlertError'),
-              });
-        }
+              store.commit("user/REMOVE_SUBSCRIPTION", placeId);
+            },
+            'successUnsubscribe',
+            'generalAlertError',
+        );
       }else {
         if(!store.getters['user/notifications']) {
           await showAlert(placeId);

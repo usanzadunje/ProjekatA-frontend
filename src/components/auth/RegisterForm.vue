@@ -75,7 +75,7 @@
       <ion-button
           :disabled="loading"
           fill="clear"
-          routerLink="/login"
+          @click="$router.replace({ name: 'login' })"
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
@@ -94,9 +94,7 @@ import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
 
 import SocialIcons from '@/components/auth/SocialIcons';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-
-import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
+import { hideNativeKeyboard } from "@/utils/helpers";
 
 import { Device } from '@capacitor/device';
 
@@ -106,7 +104,8 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-} from 'ionicons/icons';
+}                           from 'ionicons/icons';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: "RegisterForm",
@@ -127,7 +126,6 @@ export default defineComponent({
     const newUser = reactive({});
     const showPassword = ref(false);
     const showPasswordConfirm = ref(false);
-    const errorNames = ref({});
     const passwordInput = ref(null);
     const passwordConfirmInput = ref(null);
     const loading = ref(false);
@@ -139,28 +137,27 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { showErrorToast } = useToastNotifications();
+    const { errorNames, tryCatch } = useErrorHandling();
 
     /* Event handlers */
     const register = async() => {
       loading.value = true;
       await hideNativeKeyboard();
-      try {
-        await store.dispatch("auth/register", newUser);
 
-        await router.replace({ name: 'onboarding' });
+      await tryCatch(
+          async() => {
+            await store.dispatch("auth/register", newUser);
 
-        loading.value = false;
-        Object.assign(newUser, {});
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        loading.value = false;
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }
+            await router.replace({ name: 'onboarding' });
+
+            Object.assign(newUser, {});
+          },
+      );
+
+      loading.value = false;
     };
     let togglePasswordShow = (passwordConfirm = false) => {
+
       if(passwordConfirm) {
         showPasswordConfirm.value = !showPasswordConfirm.value;
       }else {

@@ -41,6 +41,7 @@ export default defineComponent({
     onMounted(() => {
       dropzone = document.querySelector("#dropzone");
     });
+
     /* Composables */
     /* Interact.js event handlers */
     const onMove = (event) => {
@@ -63,6 +64,9 @@ export default defineComponent({
       ) {
         element = currentTarget.cloneNode(true);
 
+        // Adding object inside parent container element
+        dropzone && dropzone.appendChild(element);
+
         // Making clone absolute so we can position it it top left corner of container
         // element which will be the rect that represents places room
         element.style.position = "absolute";
@@ -77,9 +81,6 @@ export default defineComponent({
         // Marking cloned tables  so we are not showing them double from vuex store
         element.setAttribute('data-cloned', true);
 
-        // Adding object inside parent container element
-        dropzone && dropzone.appendChild(element);
-
         position.x = 0;
         position.y = 0;
 
@@ -92,7 +93,6 @@ export default defineComponent({
         updatePositionFromTransform(currentTarget);
       }
 
-      console.log(element);
       // Start the drag event
       interaction.start({ name: "drag" }, event.interactable, element);
     };

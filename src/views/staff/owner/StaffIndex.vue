@@ -70,9 +70,8 @@ import StaffCard            from '@/components/staff/cards/StaffCard';
 import AppModal             from '@/components/AppModal';
 import StaffCreateEditModal from '@/components/staff/modals/StaffCreateEditModal';
 
-
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useModal }              from '@/composables/useModal';
+import { useModal }         from '@/composables/useModal';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   close,
@@ -99,9 +98,9 @@ export default defineComponent({
     const staff = computed(() => store.getters['owner/staff']);
 
     /* Composables */
-    const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
     const { isModalOpen, modalData, openModal } = useModal();
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
 
@@ -132,15 +131,13 @@ export default defineComponent({
               {
                 text: t('agree'),
                 handler: async() => {
-                  try {
-                    await store.dispatch('owner/deleteStaff', staffMember.id);
-                  }catch(errors) {
-                    showErrorToast(
-                        null,
-                        {
-                          pushNotificationPermission: t('generalAlertError'),
-                        });
-                  }
+                  await tryCatch(
+                      async() => {
+                        await store.dispatch('owner/deleteStaff', staffMember.id);
+                      },
+                      null,
+                      'generalAlertError',
+                  );
                 },
               },
             ],
@@ -148,17 +145,15 @@ export default defineComponent({
       await alert.present();
     };
     const refresh = async(event) => {
-      try {
-        await store.dispatch('owner/getStaffInfo');
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              pushNotificationPermission: t('dataFetchingError'),
-            });
-      }finally {
-        event.target.complete();
-      }
+      await tryCatch(
+          async() => {
+            await store.dispatch('owner/getStaffInfo');
+          },
+          null,
+          'dataFetchingError',
+      );
+
+      event.target.complete();
     };
 
     return {

@@ -93,6 +93,7 @@ import ImagePreviewModalSlider from '@/components/ImagePreviewModalSlider';
 import OwnerService from '@/services/OwnerService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling }      from '@/composables/useErrorHandling';
 
 import {
   close,
@@ -121,8 +122,9 @@ export default defineComponent({
     const place = computed(() => store.getters['owner/place']);
 
     /* Composables */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
+    const { tryCatch } = useErrorHandling();
 
     /* Methods */
     const setSliderRef = () => {
@@ -159,73 +161,74 @@ export default defineComponent({
         return;
       }
 
-      try {
-        const formData = new FormData;
+      await tryCatch(
+          async() => {
+            const formData = new FormData;
 
-        for(let i = 0; i < images.value.length; i++) {
-          formData.append(`images[${i}]`, images.value[i]);
-        }
+            for(let i = 0; i < images.value.length; i++) {
+              formData.append(`images[${i}]`, images.value[i]);
+            }
 
-        await store.dispatch('owner/uploadPlaceImages', formData);
+            await store.dispatch('owner/uploadPlaceImages', formData);
+          },
+          'successImageUpload',
+          null,
+          () => {
+            images.value = null;
+          },
+      );
 
-        showSuccessToast(t('successImageUpload'));
-      }catch(errors) {
-        images.value = null;
-
-        await showErrorToast(errors);
-      }finally {
-        loading.value = null;
-      }
+      loading.value = null;
     };
     const removeImage = async() => {
       loading.value = -1;
-      try {
-        const imageIndex = imagePreviewSlider.value.activeIndex;
 
-        await OwnerService.removePlaceImage(place.value.images[imageIndex].id);
+      await tryCatch(
+          async() => {
+            const imageIndex = imagePreviewSlider.value.activeIndex;
 
-        await store.dispatch('owner/getPlaceInfo');
+            await OwnerService.removePlaceImage(place.value.images[imageIndex].id);
 
-        showSuccessToast(t('successImageRemove'));
-      }catch(errors) {
-        await showErrorToast(errors);
-      }finally {
-        loading.value = null;
-      }
+            await store.dispatch('owner/getPlaceInfo');
+          },
+          'successImageRemove',
+      );
+
+      loading.value = null;
     };
     const setAsMainImage = async() => {
       loading.value = 0;
-      try {
-        const imageIndex = imagePreviewSlider.value.activeIndex;
 
-        await store.dispatch('owner/setPlaceImageType', {
-          id: place.value.images[imageIndex].id,
-          type: 'is_main',
-        });
+      await tryCatch(
+          async() => {
+            const imageIndex = imagePreviewSlider.value.activeIndex;
 
-        showSuccessToast(t('successImageMain'));
-      }catch(errors) {
-        await showErrorToast(errors);
-      }finally {
-        loading.value = null;
-      }
+            await store.dispatch('owner/setPlaceImageType', {
+              id: place.value.images[imageIndex].id,
+              type: 'is_main',
+            });
+          },
+          'successImageMain',
+      );
+
+      loading.value = null;
     };
     const setAsLogo = async() => {
       loading.value = 0;
-      try {
-        const imageIndex = imagePreviewSlider.value.activeIndex;
 
-        await store.dispatch('owner/setPlaceImageType', {
-          id: place.value.images[imageIndex].id,
-          type: 'is_logo',
-        });
+      await tryCatch(
+          async() => {
+            const imageIndex = imagePreviewSlider.value.activeIndex;
 
-        showSuccessToast(t('successImageLogo'));
-      }catch(errors) {
-        await showErrorToast(errors);
-      }finally {
-        loading.value = null;
-      }
+            await store.dispatch('owner/setPlaceImageType', {
+              id: place.value.images[imageIndex].id,
+              type: 'is_logo',
+            });
+          },
+          'successImageLogo',
+      );
+
+      loading.value = null;
     };
 
     /* Watchers */

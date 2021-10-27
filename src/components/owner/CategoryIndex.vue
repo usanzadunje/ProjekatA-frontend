@@ -78,8 +78,9 @@ import {
 import AppModal                from '@/components/AppModal';
 import CategoryCreateEditModal from '@/components/owner/modals/CategoryCreateEditModal';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useModal }              from '@/composables/useModal';
+import { useModal }         from '@/composables/useModal';
+import { useSlidingItem }   from '@/composables/useSlidingItem';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   createOutline,
@@ -87,7 +88,6 @@ import {
 } from 'ionicons/icons';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { useSlidingItem }       from '@/composables/useSlidingItem';
 
 export default defineComponent({
   name: 'Categories',
@@ -113,18 +113,17 @@ export default defineComponent({
     /* Composables */
     const { slidingItem, closeOpenItems } = useSlidingItem();
     const { t } = useI18n();
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { isModalOpen, modalData, openModal } = useModal();
+    const { tryCatch } = useErrorHandling();
 
     /* Methods */
     const removeCategory = async(id) => {
-      try {
-        await store.dispatch("owner/deleteCategory", id);
-
-        showSuccessToast(t('owner.removeCategory'));
-      }catch(errors) {
-        await showErrorToast(errors);
-      }
+      await tryCatch(
+          async() => {
+            await store.dispatch("owner/deleteCategory", id);
+          },
+          'owner.removeCategory',
+      );
     };
     /* Event handlers */
     const createCategory = async() => {

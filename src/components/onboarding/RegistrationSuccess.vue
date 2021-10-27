@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center full-size bg">
+  <div class="flex flex-col justify-center text-center full-size bg">
     <h1 class="text-4xl onboarding-headings text-white">
       Uspesno ste se registrovali!
     </h1>

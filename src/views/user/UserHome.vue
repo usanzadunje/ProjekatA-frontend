@@ -64,7 +64,6 @@
 import { defineComponent, ref, reactive, onMounted } from 'vue';
 import { useRouter, useRoute }                       from 'vue-router';
 import { useStore }                                  from 'vuex';
-import { useI18n }                                   from 'vue-i18n';
 import {
   IonContent,
   IonPage,
@@ -82,10 +81,10 @@ import PlaceCardSlider       from '@/components/place/PlaceCardSlider';
 import AppModal              from '@/components/AppModal';
 import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useGeolocation }        from '@/composables/useGeolocation';
-import { useModal }              from '@/composables/useModal';
-import { slideUp }               from '@/composables/useAnimations';
+import { useGeolocation }   from '@/composables/useGeolocation';
+import { useModal }         from '@/composables/useModal';
+import { slideUp }          from '@/composables/useAnimations';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: 'UserHome',
@@ -122,38 +121,35 @@ export default defineComponent({
     const showSkeleton = ref(true);
 
     /* Composables */
-    const { showErrorToast } = useToastNotifications();
-    const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal } = useModal();
     const { showElement, pullAnimation } = slideUp('homeHeader');
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
     // Because getting lat and lng takes long tame wait for it to happen and then hit API with correct lat and lng values
     const unwatch = store.watch(
         (state, getters) => getters['global/position'],
         async() => {
-          try {
-            const response = await PlaceService.index(
-                true,
-                'distance',
-                '',
-                0,
-                4,
-                store.getters['global/position'].latitude,
-                store.getters['global/position'].longitude,
-            );
+          await tryCatch(
+              async() => {
+                const response = await PlaceService.index(
+                    true,
+                    'distance',
+                    '',
+                    0,
+                    4,
+                    store.getters['global/position'].latitude,
+                    store.getters['global/position'].longitude,
+                );
 
-            places.closestToUser = response.data;
+                places.closestToUser = response.data;
 
-            unwatch();
-          }catch(error) {
-            showErrorToast(
-                null,
-                {
-                  dataFetchingError: t('dataFetchingError'),
-                });
-          }
+                unwatch();
+              },
+              null,
+              'dataFetchingError',
+          );
         },
     );
 
@@ -168,49 +164,47 @@ export default defineComponent({
 
     /* Methods */
     const getFilteredPlaces = async() => {
-      try {
-        const response = await Promise.all([
-          PlaceService.index(
-              true,
-              'distance',
-              '',
-              0,
-              4,
-              store.getters['global/position'].latitude,
-              store.getters['global/position'].longitude,
-          ),
+      await tryCatch(
+          async() => {
+            const response = await Promise.all([
+              PlaceService.index(
+                  true,
+                  'distance',
+                  '',
+                  0,
+                  4,
+                  store.getters['global/position'].latitude,
+                  store.getters['global/position'].longitude,
+              ),
 
-          PlaceService.index(
-              true,
-              'availability',
-              '',
-              0,
-              4,
-              store.getters['global/position'].latitude,
-              store.getters['global/position'].longitude,
-          ),
+              PlaceService.index(
+                  true,
+                  'availability',
+                  '',
+                  0,
+                  4,
+                  store.getters['global/position'].latitude,
+                  store.getters['global/position'].longitude,
+              ),
 
-          PlaceService.index(
-              true,
-              'food',
-              '',
-              0,
-              4,
-              store.getters['global/position'].latitude,
-              store.getters['global/position'].longitude,
-          ),
-        ]);
+              PlaceService.index(
+                  true,
+                  'food',
+                  '',
+                  0,
+                  4,
+                  store.getters['global/position'].latitude,
+                  store.getters['global/position'].longitude,
+              ),
+            ]);
 
-        places.closestToUser = response[0].data;
-        places.currentlyAvailable = response[1].data;
-        places.haveFood = response[2].data;
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }
+            places.closestToUser = response[0].data;
+            places.currentlyAvailable = response[1].data;
+            places.haveFood = response[2].data;
+          },
+          null,
+          'dataFetchingError',
+      );
     };
 
     /* Event handlers */

@@ -1,32 +1,35 @@
 <template>
   <ion-page>
     <ion-content>
-      <ion-slides :options="slideOpts" ref="slides">
-        <ion-slide>
+      <swiper
+          ref="slides"
+          v-update-swiper
+      >
+        <swiper-slide>
           <div class="relative">
             <RegistrationSuccess/>
             <OnboardingButton @next-slide="slideNext"/>
           </div>
-        </ion-slide>
-        <ion-slide>
+        </swiper-slide>
+        <swiper-slide>
           <div class="relative">
             <SearchingExample/>
             <OnboardingButton @next-slide="slideNext"/>
           </div>
-        </ion-slide>
-        <ion-slide>
+        </swiper-slide>
+        <swiper-slide>
           <div class="relative">
             <PlacePreviewExample/>
             <OnboardingButton @next-slide="slideNext"/>
           </div>
-        </ion-slide>
-        <ion-slide>
+        </swiper-slide>
+        <swiper-slide>
           <div class="relative">
             <ActivatingNotificationExample/>
             <OnboardingButton @next-slide="$router.replace({ name: 'home' })"/>
           </div>
-        </ion-slide>
-      </ion-slides>
+        </swiper-slide>
+      </swiper>
     </ion-content>
   </ion-page>
 </template>
@@ -38,21 +41,21 @@ import { defineComponent, ref } from 'vue';
 import {
   IonPage,
   IonContent,
-  IonSlides,
-  IonSlide,
 } from '@ionic/vue';
 
 import OnboardingButton              from '@/components/onboarding/OnboardingButton';
 import RegistrationSuccess           from '@/components/onboarding/RegistrationSuccess';
 import SearchingExample              from '@/components/onboarding/SearchingExample';
-import PlacePreviewExample            from '@/components/onboarding/PlacePreviewExample';
+import PlacePreviewExample           from '@/components/onboarding/PlacePreviewExample';
 import ActivatingNotificationExample from '@/components/onboarding/ActivatingNotificationExample';
+import { Swiper, SwiperSlide }       from 'swiper/vue';
+
 
 export default defineComponent({
   name: 'Onboarding',
   components: {
-    IonSlides,
-    IonSlide,
+    Swiper,
+    SwiperSlide,
     IonPage,
     IonContent,
     OnboardingButton,
@@ -66,14 +69,9 @@ export default defineComponent({
     const slides = ref(null);
 
     /* Component properties */
-    const slideOpts = {
-      initialSlide: 0,
-      speed: 500,
-    };
-
     /* Event handlers */
     const slideNext = async() => {
-      const swiper = await slides?.value?.$el.getSwiper();
+      const swiper = await slides?.value?.$el.swiper;
       await swiper.slideNext();
     };
 
@@ -82,7 +80,6 @@ export default defineComponent({
       slides,
 
       /* Component properties */
-      slideOpts,
 
       /* Event handlers */
       slideNext,

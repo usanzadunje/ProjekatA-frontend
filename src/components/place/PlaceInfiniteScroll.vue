@@ -37,7 +37,6 @@
 <script>
 import { defineComponent, ref, watch, toRefs, onMounted } from 'vue';
 import { useStore }                                       from 'vuex';
-import { useI18n }                                        from 'vue-i18n';
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
@@ -49,8 +48,8 @@ import PlaceCardSkeleton     from '@/components/place/PlaceCardSkeleton';
 
 import PlaceService from '@/services/PlaceService';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useGeolocation }        from '@/composables/useGeolocation';
+import { useGeolocation }   from '@/composables/useGeolocation';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: "PlaceInfiniteScroll",
@@ -98,43 +97,40 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { showErrorToast } = useToastNotifications();
-    const { t } = useI18n();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const { tryCatch } = useErrorHandling();
 
     /* Methods */
     const getPlaces = async(concat = false) => {
-      try {
-        const response = await PlaceService.index(
-            true,
-            sortBy.value,
-            placeSearchTerm.value,
-            placeOffset,
-            10,
-            store.getters['global/position'].latitude,
-            store.getters['global/position'].longitude,
-        );
+      await tryCatch(
+          async() => {
+            const response = await PlaceService.index(
+                true,
+                sortBy.value,
+                placeSearchTerm.value,
+                placeOffset,
+                10,
+                store.getters['global/position'].latitude,
+                store.getters['global/position'].longitude,
+            );
 
-        if(!response.data) {
-          isInfiniteScrollDisabled.value = true;
-          return;
-        }
-        if(response.data.length < 10) {
-          isInfiniteScrollDisabled.value = true;
-        }
+            if(!response.data) {
+              isInfiniteScrollDisabled.value = true;
+              return;
+            }
+            if(response.data.length < 10) {
+              isInfiniteScrollDisabled.value = true;
+            }
 
-        if(concat) {
-          places.value = places.value.concat(response.data);
-        }else {
-          places.value = response.data;
-        }
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }
+            if(concat) {
+              places.value = places.value.concat(response.data);
+            }else {
+              places.value = response.data;
+            }
+          },
+          null,
+          'dataFetchingError',
+      );
     };
     const refresh = async(event) => {
       if(sortBy.value === 'distance') {

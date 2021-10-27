@@ -41,7 +41,6 @@
 <script>
 import { defineComponent }     from 'vue';
 import {
-
   IonSkeletonText,
   modalController,
 }                              from '@ionic/vue';

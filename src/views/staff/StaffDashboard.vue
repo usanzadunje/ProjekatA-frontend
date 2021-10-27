@@ -61,7 +61,6 @@
 <script>
 import { computed, defineComponent, onMounted } from 'vue';
 import { useStore }                             from 'vuex';
-import { useI18n }                              from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -76,8 +75,8 @@ import StaffCard                      from '@/components/staff/cards/StaffCard';
 import PlaceAvailabilityChart         from '@/components/staff/charts/PlaceAvailabilityChart';
 import StaffAvailabilityToggleButtons from '@/components/staff/StaffAvailabilityToggleButtons';
 
-import { usePlaceManipulation }  from '@/composables/usePlaceManipulation';
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
+import { useErrorHandling }     from '@/composables/useErrorHandling';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -106,32 +105,28 @@ export default defineComponent({
 
     /* Composables */
     const { toggle } = usePlaceManipulation();
-    const { t } = useI18n();
-    const { showErrorToast } = useToastNotifications();
+    const { tryCatch } = useErrorHandling();
+
 
     /* Methods */
     const getPlaceAvailability = async() => {
-      try {
-        await store.dispatch('staff/updatePlaceAvailability');
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }
+      await tryCatch(
+          async() => {
+            await store.dispatch('staff/updatePlaceAvailability');
+          },
+          null,
+          'dataFetchingError',
+      );
     };
     /* Lifecycle hooks */
     (async() => {
-      try {
-        await store.dispatch('owner/getTables');
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }
+      await tryCatch(
+          async() => {
+            await store.dispatch('owner/getTables');
+          },
+          null,
+          'dataFetchingError',
+      );
     })();
     onMounted(async() => {
       await getPlaceAvailability();
@@ -145,22 +140,20 @@ export default defineComponent({
 
     /* Event handlers */
     const refresh = async(event) => {
-      try {
-        await store.dispatch('owner/getTables');
-        await store.dispatch('staff/updatePlaceAvailability');
+      await tryCatch(
+          async() => {
+            await store.dispatch('owner/getTables');
+            await store.dispatch('staff/updatePlaceAvailability');
 
-        if(isOwner.value) {
-          await store.dispatch('owner/getStaffInfo');
-        }
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }finally {
-        event.target.complete();
-      }
+            if(isOwner.value) {
+              await store.dispatch('owner/getStaffInfo');
+            }
+          },
+          null,
+          'dataFetchingError',
+      );
+
+      event.target.complete();
     };
 
     /* Methods */

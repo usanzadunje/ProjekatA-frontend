@@ -1,5 +1,5 @@
 <template>
-  <div class="full-size flex items-center bg">
+  <div class="full-size flex items-center text-center bg">
     <div class="mt-20">
       <h1 class="text-4xl onboarding-headings">
         {{ $t('onboardingFind') }}

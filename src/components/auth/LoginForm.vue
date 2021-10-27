@@ -67,7 +67,7 @@
       <ion-button
           :disabled="loading"
           fill="clear"
-          routerLink="/register"
+          @click="$router.replace({ name: 'register' })"
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
@@ -82,7 +82,6 @@
 import { defineComponent, ref, reactive, onMounted } from 'vue';
 import { useRouter }                                 from 'vue-router';
 import { useStore }                                  from 'vuex';
-import { useI18n }                                   from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -96,9 +95,7 @@ import {
 
 import SocialIcons from '@/components/auth/SocialIcons';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-
-import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
+import { hideNativeKeyboard } from "@/utils/helpers";
 
 import { Device } from '@capacitor/device';
 
@@ -107,7 +104,8 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-} from 'ionicons/icons';
+}                           from 'ionicons/icons';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: "LoginForm",
@@ -125,12 +123,10 @@ export default defineComponent({
     /* Global properties and methods */
     const router = useRouter();
     const store = useStore();
-    const { t } = useI18n();
 
     /* Component properties */
     const user = reactive({});
     const showPassword = ref(false);
-    const errorNames = ref({});
     const passwordInput = ref(null);
     const emailInput = ref(null);
     const loading = ref(false);
@@ -142,29 +138,27 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { errorNames, tryCatch } = useErrorHandling();
 
     /* Event handlers */
     const login = async() => {
       loading.value = true;
       await hideNativeKeyboard();
-      try {
-        const role = await store.dispatch("auth/login", user);
 
-        const homeRoute = role ? { name: 'staff.dashboard' } : { name: 'home' };
-        await router.replace(homeRoute);
+      await tryCatch(
+          async() => {
+            const role = await store.dispatch("auth/login", user);
 
-        showSuccessToast(t('successLogin'));
-        loading.value = false;
-        user.login = '';
-        user.password = '';
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        loading.value = false;
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }
+            const homeRoute = role ? { name: 'staff.dashboard' } : { name: 'home' };
+            await router.replace(homeRoute);
+
+            user.login = '';
+            user.password = '';
+          },
+          'successLogin',
+      );
+
+      loading.value = false;
     };
     const togglePasswordShow = () => {
       showPassword.value = !showPassword.value;

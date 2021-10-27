@@ -1,5 +1,5 @@
 <template>
-  <div class="full-size flex items-center bg">
+  <div class="full-size flex items-center text-center bg">
     <div id="container" class="mt-44">
       <h1 id="heading" class="text-4xl onboarding-headings px-1">{{ $t('onboardingNotification') }}</h1>
       <p class="onboarding-paragraphs mt-3.5">

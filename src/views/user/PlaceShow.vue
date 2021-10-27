@@ -99,7 +99,6 @@
 import { defineComponent, ref, computed, watch } from 'vue';
 import { useStore }                              from 'vuex';
 import { useRoute }                              from 'vue-router';
-import { useI18n }                               from 'vue-i18n';
 import { Capacitor }                             from '@capacitor/core';
 import {
   IonPage,
@@ -129,11 +128,11 @@ import ImagePreviewModal      from '@/components/user/modals/ImagePreviewModal';
 import PlaceService   from '@/services/PlaceService';
 import ProductService from '@/services/ProductService';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useModal }              from '@/composables/useModal';
-import { useContent }            from '@/composables/useContent';
-import { useCache }              from '@/composables/useCache';
-import { usePopover }            from '@/composables/usePopover';
+import { useModal }         from '@/composables/useModal';
+import { useContent }       from '@/composables/useContent';
+import { useCache }         from '@/composables/useCache';
+import { usePopover }       from '@/composables/usePopover';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   notifications,
@@ -169,7 +168,6 @@ export default defineComponent({
     /* Global properties */
     const route = useRoute();
     const store = useStore();
-    const { t } = useI18n();
 
     /* Component properties */
     const content = ref();
@@ -196,11 +194,11 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { showErrorToast } = useToastNotifications();
     const { isModalOpen, openModal } = useModal();
     const { scrollToTop } = useContent();
     const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
     const { openPopover } = usePopover();
+    const { tryCatch } = useErrorHandling();
 
     /* Methods */
     const getPlace = async() => {
@@ -209,53 +207,51 @@ export default defineComponent({
       resetProductOffset.value = true;
       showSkeleton.value = true;
 
-      try {
-        const response = await PlaceService.show(placeId, true, true);
-        await getCachedOrFetchPlaceAdditionalInfo(placeId);
+      await tryCatch(
+          async() => {
+            const response = await PlaceService.show(placeId, true, true);
+            await getCachedOrFetchPlaceAdditionalInfo(placeId);
 
-        place.value = response.data;
-        place.value.images = store.getters['user/getPlaceAdditionInfo'](placeId).images;
-        place.value.working_hours = store.getters['user/getPlaceAdditionInfo'](placeId).working_hours;
+            place.value = response.data;
+            place.value.images = store.getters['user/getPlaceAdditionInfo'](placeId).images;
+            place.value.working_hours = store.getters['user/getPlaceAdditionInfo'](placeId).working_hours;
 
-        place.value.tables?.forEach(table => {
-          table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth.value);
-        });
-
-        showSkeleton.value = false;
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              generalError: t('dataFetchingError'),
+            place.value.tables?.forEach(table => {
+              table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth.value);
             });
-      }
+
+            showSkeleton.value = false;
+          },
+          null,
+          'dataFetchingError',
+      );
+
       resetProductOffset.value = false;
     };
     const loadMoreProducts = async({ categoryId, offset, event }) => {
       loadingProducts.value = true;
-      try {
-        const response = await ProductService.indexByCategory(Number(route.params.id), categoryId, offset, 10);
 
-        if(!response.data) {
-          event.target.classList.add('hidden');
-          return;
-        }
-        if(response.data.length < 10) {
-          event.target.classList.add('hidden');
-        }
+      await tryCatch(
+          async() => {
+            const response = await ProductService.indexByCategory(Number(route.params.id), categoryId, offset, 10);
 
-        let category = place.value.categories.find(category => category.id === categoryId);
+            if(!response.data) {
+              event.target.classList.add('hidden');
+              return;
+            }
+            if(response.data.length < 10) {
+              event.target.classList.add('hidden');
+            }
 
-        category.products = category.products.concat(response.data);
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              generalError: t('dataFetchingError'),
-            });
-      }finally {
-        loadingProducts.value = false;
-      }
+            let category = place.value.categories.find(category => category.id === categoryId);
+
+            category.products = category.products.concat(response.data);
+          },
+          null,
+          'dataFetchingError',
+      );
+
+      loadingProducts.value = false;
     };
 
     /* Lifecycle hooks */

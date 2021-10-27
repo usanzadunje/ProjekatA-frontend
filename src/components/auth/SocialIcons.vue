@@ -16,23 +16,19 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
-import { useRouter }                       from 'vue-router';
-import { useStore }                        from 'vuex';
-import { useI18n }                         from 'vue-i18n';
-import { IonIcon }                         from '@ionic/vue';
+import { defineComponent, onMounted } from 'vue';
+import { useRouter }                  from 'vue-router';
+import { useStore }                   from 'vuex';
+import { IonIcon }                    from '@ionic/vue';
 
 import AuthService       from '@/services/AuthService';
 import SocialAuthService from '@/services/SocialAuthService';
-
-import { useToastNotifications } from '@/composables/useToastNotifications';
-
-import { getError, sleep } from '@/utils/helpers';
 
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Device }     from '@capacitor/device';
 
 import { logoFacebook, logoGoogle } from 'ionicons/icons';
+import { useErrorHandling }         from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: "SocialIcons",
@@ -43,38 +39,31 @@ export default defineComponent({
     /* Global properties and methods */
     const router = useRouter();
     const store = useStore();
-    const { t } = useI18n();
 
     /* Component properties */
-    const errorNames = ref({});
-
     /* Composables */
     onMounted(async() => {
       GoogleAuth.init();
     });
     /* Composables */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { tryCatch } = useErrorHandling();
 
     /* Event handlers */
     const login = async(driver) => {
+      await tryCatch(
+          async() => {
+            const deviceInfo = await Device.getInfo();
+            const payload = await SocialAuthService.getUserFromProvider(driver);
+            payload.device_name = deviceInfo.name || deviceInfo.model;
+            const response = await AuthService.authenticateSocial(payload);
 
-      try {
-        const deviceInfo = await Device.getInfo();
-        const payload = await SocialAuthService.getUserFromProvider(driver);
-        payload.device_name = deviceInfo.name || deviceInfo.model;
-        const response = await AuthService.authenticateSocial(payload);
+            await store.dispatch("auth/setToken", response.data.token);
+            await store.dispatch("user/getSettings");
 
-        await store.dispatch("auth/setToken", response.data.token);
-        await store.dispatch("user/getSettings");
-
-        await router.replace({ name: 'home' });
-        showSuccessToast(t('successLogin'));
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }
+            await router.replace({ name: 'home' });
+          }
+          , 'successLogin',
+      );
     };
 
     return {

@@ -22,11 +22,11 @@ import { loadingController }                                        from '@ionic
 import PlaceService from '@/services/PlaceService';
 
 import { useGeolocation }        from '@/composables/useGeolocation';
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-native';
 
-import { sleep } from '@/utils/helpers';
+import { sleep }            from '@/utils/helpers';
 
 export default defineComponent({
   name: "MapModal",
@@ -49,59 +49,57 @@ export default defineComponent({
 
     /* Composables */
     const { tryGettingLocation } = useGeolocation();
-    const { showErrorToast } = useToastNotifications();
     const { t } = useI18n({ useScope: 'global' });
+    const { tryCatch } = useErrorHandling();
 
     /* Methods */
     const createMap = async() => {
       mapContainerBoundingRect = map.value?.getBoundingClientRect();
-
-      try {
-        await CapacitorGoogleMaps.create({
-          width: Math.round(mapContainerBoundingRect.width),
-          height: Math.round(mapContainerBoundingRect.height),
-          x: Math.round(mapContainerBoundingRect.x),
-          y: Math.round(mapContainerBoundingRect.y),
-          latitude: Number(place.latitude) || 43.317862492567,
-          longitude: Number(place.longitude) || 21.895785976058143,
-          zoom: 16,
-        });
-
-        CapacitorGoogleMaps.addListener("onMapReady", async function() {
-          await CapacitorGoogleMaps.settings({
-            indoorPicker: true,
-            zoomGestures: true,
-          });
-
-          await CapacitorGoogleMaps.addMarker({
-            latitude: Number(place.latitude) || 43.317862492567,
-            longitude: Number(place.longitude) || 21.895785976058143,
-            title: place.value.name,
-            snippet: place.value.address,
-          });
-
-          await CapacitorGoogleMaps.addMarker({
-            latitude: store.getters['global/position'].latitude,
-            longitude: store.getters['global/position'].longitude,
-            title: t('me'),
-            snippet: t('currentPosition'),
-            opacity: 2.5,
-          });
-
-          await CapacitorGoogleMaps.setMapType({
-            "type": "normal",
-          });
-
-
-        });
-
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              pushNotificationPermission: t('warningGoogleMapsError'),
+      await tryCatch(
+          async() => {
+            await CapacitorGoogleMaps.create({
+              width: Math.round(mapContainerBoundingRect.width),
+              height: Math.round(mapContainerBoundingRect.height),
+              x: Math.round(mapContainerBoundingRect.x),
+              y: Math.round(mapContainerBoundingRect.y),
+              latitude: Number(place.latitude) || 43.317862492567,
+              longitude: Number(place.longitude) || 21.895785976058143,
+              zoom: 16,
             });
-      }
+
+            CapacitorGoogleMaps.addListener("onMapReady", async function() {
+              await CapacitorGoogleMaps.settings({
+                indoorPicker: true,
+                zoomGestures: true,
+              });
+
+              await CapacitorGoogleMaps.addMarker({
+                latitude: Number(place.latitude) || 43.317862492567,
+                longitude: Number(place.longitude) || 21.895785976058143,
+                title: place.value.name,
+                snippet: place.value.address,
+              });
+
+              await CapacitorGoogleMaps.addMarker({
+                latitude: store.getters['global/position'].latitude,
+                longitude: store.getters['global/position'].longitude,
+                title: t('me'),
+                snippet: t('currentPosition'),
+                opacity: 2.5,
+              });
+
+              await CapacitorGoogleMaps.setMapType({
+                "type": "normal",
+              });
+
+
+            });
+
+          },
+          null,
+          'warningGoogleMapsError',
+      );
+
     };
 
     /* Lifecycle hooks */

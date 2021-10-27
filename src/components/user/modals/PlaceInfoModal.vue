@@ -63,7 +63,6 @@
 import { defineComponent, ref, computed, onUnmounted } from 'vue';
 import { useRoute, useRouter }                         from 'vue-router';
 import { useStore }                                    from 'vuex';
-import { useI18n }                                     from 'vue-i18n';
 import {
   IonIcon,
   IonButton,
@@ -76,7 +75,7 @@ import PlaceSubscriptionModal    from '@/components/user/modals/PlaceSubscriptio
 
 import { useModal }              from '@/composables/useModal';
 import { useCache }              from '@/composables/useCache';
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   notifications,
@@ -84,7 +83,7 @@ import {
 
 } from 'ionicons/icons';
 
-import { Capacitor } from '@capacitor/core';
+import { Capacitor }        from '@capacitor/core';
 
 export default defineComponent({
   name: 'PlaceInfoModal',
@@ -126,20 +125,17 @@ export default defineComponent({
     /* Composables */
     const { isModalOpen, openModal, showModal, hideModal } = useModal();
     const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
-    const { showErrorToast } = useToastNotifications();
-    const { t } = useI18n();
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
     (async() => {
-      try {
-        await getCachedOrFetchPlaceAdditionalInfo(props.place.id);
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }
+      await tryCatch(
+          async() => {
+            await getCachedOrFetchPlaceAdditionalInfo(props.place.id);
+          },
+          null,
+          'dataFetchingError'
+      )
 
       setTimeout(() => {
         showSkeleton.value = false;

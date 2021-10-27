@@ -1,8 +1,17 @@
 <template>
   <div class="sticky top-0 z-40">
     <div class="w-full h-12 bg-gray-100 flex items-center justify-between">
-      <ion-button fill="clear" @click="toggleMenu">
-        <ion-icon :icon="filterOutline" class="text-2xl text-black"></ion-icon>
+      <ion-button
+          class="reset-button-size pl-4"
+          slot="icon-only"
+          fill="clear"
+          @click="toggleMenu"
+      >
+        <ion-icon
+            slot="icon-only"
+            :icon="filterOutline"
+            class="text-2xl text-black"
+        ></ion-icon>
       </ion-button>
 
       <div class="flex items-center">
@@ -47,8 +56,8 @@ import {
   IonToggle,
 }                                    from '@ionic/vue';
 
-import SettingsPopover from '@/components/staff/popovers/SettingsPopover';
-import AppLanguagePicker  from '@/components/AppLanguagePicker';
+import SettingsPopover   from '@/components/staff/popovers/SettingsPopover';
+import AppLanguagePicker from '@/components/AppLanguagePicker';
 
 import { useMenu }    from '@/composables/useMenu';
 import { usePopover } from '@/composables/usePopover';

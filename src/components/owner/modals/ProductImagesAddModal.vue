@@ -84,6 +84,7 @@ import OwnerService   from '@/services/OwnerService';
 import ProductService from '@/services/ProductService';
 
 import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling }      from '@/composables/useErrorHandling';
 
 import {
   close,
@@ -119,8 +120,9 @@ export default defineComponent({
     const loading = ref();
 
     /* Composables */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { showErrorToast } = useToastNotifications();
     const { t } = useI18n();
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
     productImages.value = product.value.images;
@@ -148,70 +150,70 @@ export default defineComponent({
         return;
       }
 
-      try {
-        const formData = new FormData;
+      await tryCatch(
+          async() => {
+            const formData = new FormData;
 
-        for(let i = 0; i < images.value.length; i++) {
-          formData.append(`images[${i}]`, images.value[i]);
-        }
+            for(let i = 0; i < images.value.length; i++) {
+              formData.append(`images[${i}]`, images.value[i]);
+            }
 
-        const response = await ProductService.uploadImages(product.value.id, formData);
+            const response = await ProductService.uploadImages(product.value.id, formData);
 
-        productImages.value = productImages.value.concat(response.data);
+            productImages.value = productImages.value.concat(response.data);
+          },
+          'successImageUpload',
+          null,
+          () => {
+            images.value = null;
+          },
+      );
 
-        showSuccessToast(t('successImageUpload'));
-      }catch(errors) {
-        images.value = null;
-
-        await showErrorToast(errors);
-      }finally {
-        loading.value = null;
-      }
+      loading.value = null;
     };
     const removeImage = async() => {
       loading.value = -1;
-      try {
-        const imageIndex = imagePreviewSlider.value.activeIndex;
-        const image = productImages.value[imageIndex];
+      await tryCatch(
+          async() => {
+            const imageIndex = imagePreviewSlider.value.activeIndex;
+            const image = productImages.value[imageIndex];
 
-        await OwnerService.removePlaceImage(image.id);
+            await OwnerService.removePlaceImage(image.id);
 
-        if(image.is_main) {
-          store.commit('owner/REMOVE_PRODUCT_MAIN_IMAGE', product.value.id);
-        }
+            if(image.is_main) {
+              store.commit('owner/REMOVE_PRODUCT_MAIN_IMAGE', product.value.id);
+            }
 
-        productImages.value = productImages.value.filter(img => img.id !== image.id);
+            productImages.value = productImages.value.filter(img => img.id !== image.id);
+          },
+          'successImageRemove',
+      );
 
-        showSuccessToast(t('successImageRemove'));
-      }catch(errors) {
-        await showErrorToast(errors);
-      }finally {
-        loading.value = null;
-      }
+      loading.value = null;
     };
     const setAsMainImage = async() => {
       loading.value = 0;
-      try {
-        const imageIndex = imagePreviewSlider.value.activeIndex;
-        const image = productImages.value[imageIndex];
 
-        await store.dispatch('owner/setPlaceImageType', {
-          id: image.id,
-          type: 'is_main',
-          product: true,
-        });
+      await tryCatch(
+          async() => {
+            const imageIndex = imagePreviewSlider.value.activeIndex;
+            const image = productImages.value[imageIndex];
 
-        store.commit('owner/SET_NEW_PRODUCT_IMAGE_AS_MAIN', {
-          productId: product.value.id,
-          image,
-        });
+            await store.dispatch('owner/setPlaceImageType', {
+              id: image.id,
+              type: 'is_main',
+              product: true,
+            });
 
-        showSuccessToast(t('successImageMain'));
-      }catch(errors) {
-        await showErrorToast(errors);
-      }finally {
-        loading.value = null;
-      }
+            store.commit('owner/SET_NEW_PRODUCT_IMAGE_AS_MAIN', {
+              productId: product.value.id,
+              image,
+            });
+          },
+          'successImageMain',
+      );
+
+      loading.value = null;
     };
     const setSliderRef = () => {
       if(!imagePreviewSlider.value || imagePreviewSlider.value.destroyed) {

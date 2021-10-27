@@ -16,19 +16,18 @@
 <script>
 import { defineComponent } from 'vue';
 import { useStore }        from 'vuex';
-import { useI18n }         from 'vue-i18n';
 import {
   IonPage,
   IonRouterOutlet,
   IonHeader,
 }                          from '@ionic/vue';
 
-import TheStaffHeader from '@/components/staff/TheStaffHeader';
-import TheStaffSideMenu   from '@/components/staff/TheStaffSideMenu';
+import TheStaffHeader   from '@/components/staff/TheStaffHeader';
+import TheStaffSideMenu from '@/components/staff/TheStaffSideMenu';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useFCM }                from '@/composables/useFCM';
-import { useCache }     from '@/composables/useCache';
+import { useFCM }           from '@/composables/useFCM';
+import { useCache }         from '@/composables/useCache';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -48,28 +47,25 @@ export default defineComponent({
     /* Component properties */
 
     /* Composables */
-    const { showErrorToast } = useToastNotifications();
-    const { t } = useI18n();
     const { registerToken } = useFCM();
     const { getCachedOrFetchPlaceInfo } = useCache();
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
     (async() => {
-      try {
-        if(store.getters['auth/isOwner']) {
-          await getCachedOrFetchPlaceInfo();
-          await store.dispatch('owner/getStaffInfo');
-        }
-        if(Capacitor.isNativePlatform()) {
-          await registerToken();
-        }
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              toggleAvailabilityError: t('dataFetchingError'),
-            });
-      }
+      await tryCatch(
+          async() => {
+            if(store.getters['auth/isOwner']) {
+              await getCachedOrFetchPlaceInfo();
+              await store.dispatch('owner/getStaffInfo');
+            }
+            if(Capacitor.isNativePlatform()) {
+              await registerToken();
+            }
+          },
+          null,
+          'dataFetchingError',
+      );
     })();
 
 

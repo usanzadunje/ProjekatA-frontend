@@ -16,11 +16,11 @@
                   :draggable="true"
                   :data-id="table.id"
                   :style="
-                    `position: absolute;
-                    top: 0; left: 0;
-                    transform:translate(${table.position?.left}px, ${table.position.top}px)
-                    `
-                  "
+                                  `position: absolute;
+                                  top: 0; left: 0;
+                                  transform:translate(${table.position?.left}px, ${table.position.top}px)
+                                  `
+                                "
                   @click="showTableModal(table)"
               />
             </TableContainer>
@@ -67,7 +67,6 @@
 <script>
 import { computed, defineComponent, ref } from 'vue';
 import { useStore }                       from 'vuex';
-import { useI18n }                        from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -80,10 +79,11 @@ import Table          from '@/components/Table';
 import AppModal       from '@/components/AppModal';
 import TableEditModal from '@/components/owner/modals/TableEditModal';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
+
+import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useModal }         from '@/composables/useModal';
 
 import { removeClonedTableElements } from '@/utils/helpers';
-import { useModal }                  from '@/composables/useModal';
 
 export default defineComponent({
   name: "TableIndex",
@@ -105,9 +105,8 @@ export default defineComponent({
     const loading = ref(-1);
 
     /* Composables */
-    const { t } = useI18n();
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { isModalOpen, modalData, openModal } = useModal();
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
     onIonViewWillLeave(() => {
@@ -119,25 +118,25 @@ export default defineComponent({
     /* Event handlers */
     const updateTables = async() => {
       loading.value = 0;
-      try {
-        await store.dispatch("owner/updateTables");
 
-        showSuccessToast(t('owner.updateTables'));
-      }catch(errors) {
-        await showErrorToast(errors);
-      }finally {
-        loading.value = -1;
-      }
+      await tryCatch(
+          async() => {
+            await store.dispatch("owner/updateTables");
+          },
+          'owner.updateTables',
+      );
+
+      loading.value = -1;
     };
     const resetTables = async() => {
       loading.value = 1;
-      try {
-        await store.dispatch("owner/getTables");
-      }catch(errors) {
-        await showErrorToast(errors);
-      }finally {
-        loading.value = -1;
-      }
+
+      await tryCatch(
+          async() => {
+            await store.dispatch("owner/getTables");
+          },
+      );
+      loading.value = -1;
     };
     const showTableModal = async(table) => {
       openModal(true, table);

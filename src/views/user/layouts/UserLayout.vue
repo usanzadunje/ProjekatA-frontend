@@ -35,7 +35,6 @@
 import { defineComponent, onMounted } from 'vue';
 import { useRoute, useRouter }        from 'vue-router';
 import { mapGetters, useStore }       from 'vuex';
-import { useI18n }                    from 'vue-i18n';
 import {
   IonIcon,
   IonPage,
@@ -45,15 +44,15 @@ import {
   IonRouterOutlet,
 }                                     from '@ionic/vue';
 
-import { useGeolocation }        from '@/composables/useGeolocation';
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useGeolocation } from '@/composables/useGeolocation';
 
 import {
   homeOutline,
   searchOutline,
   personOutline,
   settingsOutline,
-} from 'ionicons/icons';
+}                           from 'ionicons/icons';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: 'UserLayout',
@@ -76,8 +75,7 @@ export default defineComponent({
 
     /* Composables */
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
-    const { t } = useI18n();
-    const { showErrorToast } = useToastNotifications();
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -86,17 +84,15 @@ export default defineComponent({
         await tryGettingLocation();
       }
 
-      try {
-        if(store.getters['auth/loggedIn']) {
-          store.dispatch("user/getSubscriptions");
-        }
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }
+      await tryCatch(
+          async() => {
+            if(store.getters['auth/loggedIn']) {
+              store.dispatch("user/getSubscriptions");
+            }
+          },
+          null,
+          'dataFetchingError',
+      );
     });
 
     /* Event handlers */

@@ -107,11 +107,11 @@ import ColorPicker       from '@/components/ColorPicker';
 import AuthService from '@/services/AuthService';
 
 import { useFCM }                from '@/composables/useFCM';
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import { chevronForward, flash, rocket } from 'ionicons/icons';
 
-import { Capacitor } from '@capacitor/core';
+import { Capacitor }        from '@capacitor/core';
 
 export default defineComponent({
   name: 'UserSettings',
@@ -140,41 +140,37 @@ export default defineComponent({
       areNotificationsDisabled.value = true;
     }
 
-    /* Methods */
+    /* Composables */
     const { registerToken } = useFCM();
-    const { showErrorToast } = useToastNotifications();
+    const { tryCatch } = useErrorHandling();
 
     /* Event handlers */
     const toggleDarkMode = async(e) => {
       isDarkModeDisabled.value = true;
-      try {
-        if(e.target.checked) {
-          await store.dispatch('user/setDarkMode', false);
-        }else {
-          await store.dispatch('user/setDarkMode', true);
-        }
-      }catch(error) {
-        showErrorToast(error);
-      }finally {
-        isDarkModeDisabled.value = false;
+
+      if(e.target.checked) {
+        await store.dispatch('user/setDarkMode', false);
+      }else {
+        await store.dispatch('user/setDarkMode', true);
       }
+
+      isDarkModeDisabled.value = false;
     };
     const toggleNotifications = async(e) => {
-      try {
-        if(e.target.checked) {
-          /* Remove FCM token thus disabling notifications */
-          await store.dispatch('user/setNotifications', false);
-          await AuthService.removeFcmToken();
-        }else {
-          await store.dispatch('user/setNotifications', true);
+      await tryCatch(
+          async() => {
+            if(e.target.checked) {
+              /* Remove FCM token thus disabling notifications */
+              await store.dispatch('user/setNotifications', false);
+              await AuthService.removeFcmToken();
+            }else {
+              await store.dispatch('user/setNotifications', true);
 
-          await registerToken();
-        }
-      }catch(error) {
-        showErrorToast(error);
-      }finally {
-        areNotificationsDisabled.value = false;
-      }
+              await registerToken();
+            }
+          },
+      );
+      areNotificationsDisabled.value = false;
     };
     const showPrivacyPolicy = () => {
       alert('Privacy policy');

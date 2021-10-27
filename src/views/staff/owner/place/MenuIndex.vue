@@ -38,7 +38,6 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { useStore }             from 'vuex';
-import { useI18n }              from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -50,8 +49,8 @@ import AccordionList from '@/components/user/AccordionList';
 import CategoryIndex from '@/components/owner/CategoryIndex';
 import ProductIndex  from '@/components/owner/ProductIndex';
 
-import { useCache }              from '@/composables/useCache';
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useCache }         from '@/composables/useCache';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   pricetagOutline,
@@ -78,21 +77,18 @@ export default defineComponent({
 
     /* Composables */
     const { getCachedOrFetchPlaceCategories } = useCache();
-    const { t } = useI18n();
-    const { showErrorToast } = useToastNotifications();
+    const { tryCatch } = useErrorHandling();
 
     /* Methods */
     const getMenuData = async(forceFetch = false) => {
-      try {
-        await getCachedOrFetchPlaceCategories(forceFetch);
-        await store.dispatch("owner/getProducts", {});
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }
+      await tryCatch(
+          async() => {
+            await getCachedOrFetchPlaceCategories(forceFetch);
+            await store.dispatch("owner/getProducts", {});
+          },
+          null,
+          'dataFetchingError',
+      );
     };
 
     /* Lifecycle hooks */

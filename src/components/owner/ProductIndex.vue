@@ -112,15 +112,15 @@ import ProductCard            from '@/components/ProductCard';
 import AppModal               from '@/components/AppModal';
 import ProductCreateEditModal from '@/components/owner/modals/ProductCreateEditModal';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
-import { useModal }              from '@/composables/useModal';
+import { useModal }         from '@/composables/useModal';
+import { useSlidingItem }   from '@/composables/useSlidingItem';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import { createOutline, trashOutline } from 'ionicons/icons';
 
 import { increaseAccordionMaxHeight } from '@/utils/helpers';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { useSlidingItem }       from '@/composables/useSlidingItem';
 
 export default defineComponent({
   name: 'Products',
@@ -158,37 +158,35 @@ export default defineComponent({
 
     /* Composables */
     const { t } = useI18n();
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
     const { isModalOpen, modalData, openModal } = useModal();
     const { slidingItem, closeOpenItems } = useSlidingItem();
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
 
     /* Methods */
     const removeProduct = async(id) => {
-      try {
-        await store.dispatch("owner/deleteProduct", id);
+      await tryCatch(
+          async() => {
+            await store.dispatch("owner/deleteProduct", id);
 
-        showSuccessToast(t('owner.removeProduct'));
-      }catch(errors) {
-        await showErrorToast(errors);
-      }
+          },
+          'owner.removeProduct',
+      );
     };
     const getProducts = async(load) => {
-      try {
-        isInfiniteScrollDisabled.value = await store.dispatch("owner/getProducts", {
-          filter: searchTerm.value,
-          offset,
-          limit: 15,
-          load,
-        });
-      }catch(e) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
+      await tryCatch(
+          async() => {
+            isInfiniteScrollDisabled.value = await store.dispatch("owner/getProducts", {
+              filter: searchTerm.value,
+              offset,
+              limit: 15,
+              load,
             });
-      }
+          },
+          null,
+          'dataFetchingError',
+      );
     };
 
     /* Event handlers */

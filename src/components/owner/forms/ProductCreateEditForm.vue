@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <div>
       <ion-item
           lines="none"
@@ -116,7 +116,7 @@ import {
   IonSpinner,
 }                                                                      from '@ionic/vue';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   pricetagOutline,
@@ -125,7 +125,7 @@ import {
 
 } from 'ionicons/icons';
 
-import { getError, hideNativeKeyboard, increaseAccordionMaxHeight, sleep } from '@/utils/helpers';
+import { hideNativeKeyboard, increaseAccordionMaxHeight } from '@/utils/helpers';
 
 export default defineComponent({
   name: "ProductCreateEditForm",
@@ -153,14 +153,13 @@ export default defineComponent({
 
     /* Composables */
     const { t } = useI18n();
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { errorNames, tryCatch } = useErrorHandling();
 
     /* Component properties */
     const categories = computed(() => store.getters['owner/categories']);
     const { product } = toRefs(props);
     const newProduct = reactive({});
     const productCategory = ref();
-    const errorNames = ref({});
     const loading = ref(false);
     const customAlertOptions = {
       header: t('category', 2),
@@ -186,31 +185,25 @@ export default defineComponent({
     const createOrUpdateProduct = async() => {
       loading.value = true;
       await hideNativeKeyboard();
-      try {
-        if(product?.value) {
-          await store.dispatch("owner/updateProduct", {
-            id: product.value.id,
-            payload: newProduct,
-          });
+      await tryCatch(
+          async() => {
+            if(product?.value) {
+              await store.dispatch("owner/updateProduct", {
+                id: product.value.id,
+                payload: newProduct,
+              });
+            }else {
+              await store.dispatch("owner/createProduct", newProduct);
 
-          showSuccessToast(t('owner.updateProduct'));
-        }else {
-          await store.dispatch("owner/createProduct", newProduct);
+              increaseAccordionMaxHeight('productPanel', 100);
+            }
 
-          showSuccessToast(t('owner.createProduct'));
+            emit('dismiss');
+          },
+          product?.value ? 'owner.updateProduct' : 'owner.createProduct',
+      );
 
-          increaseAccordionMaxHeight('productPanel', 100);
-        }
-
-        emit('dismiss');
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }finally {
-        loading.value = false;
-      }
+      loading.value = false;
     };
 
     /* Watchers */

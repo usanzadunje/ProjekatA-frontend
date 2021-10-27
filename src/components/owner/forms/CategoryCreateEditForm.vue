@@ -45,7 +45,6 @@
 <script>
 import { defineComponent, onMounted, ref, toRefs } from 'vue';
 import { useStore }                                from 'vuex';
-import { useI18n }                                 from 'vue-i18n';
 import {
   IonItem,
   IonIcon,
@@ -54,13 +53,13 @@ import {
   IonSpinner,
 }                                                  from '@ionic/vue';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   pricetagOutline,
 } from 'ionicons/icons';
 
-import { getError, hideNativeKeyboard, sleep } from '@/utils/helpers';
+import { hideNativeKeyboard } from '@/utils/helpers';
 
 export default defineComponent({
   name: "CategoryCreateEditForm",
@@ -83,13 +82,11 @@ export default defineComponent({
     const store = useStore();
 
     /* Composables */
-    const { t } = useI18n();
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
+    const { errorNames, tryCatch } = useErrorHandling();
 
     /* Component properties */
     const { category } = toRefs(props);
     const categoryName = ref(null);
-    const errorNames = ref({});
     const loading = ref(false);
 
     /* Computed properties */
@@ -111,31 +108,26 @@ export default defineComponent({
     const createOrUpdateCategory = async() => {
       loading.value = true;
       await hideNativeKeyboard();
-      try {
-        if(category?.value) {
-          await store.dispatch("owner/updateCategory", {
-            id: category.value.id,
-            value: categoryName.value,
-          });
 
-          showSuccessToast(t('owner.updateCategory'));
-        }else {
-          await store.dispatch("owner/createCategory", categoryName.value);
+      await tryCatch(
+          async() => {
+            if(category?.value) {
+              await store.dispatch("owner/updateCategory", {
+                id: category.value.id,
+                value: categoryName.value,
+              });
+            }else {
+              await store.dispatch("owner/createCategory", categoryName.value);
 
-          showSuccessToast(t('owner.createCategory'));
+              increaseParentHeight(55);
+            }
 
-          increaseParentHeight(55);
-        }
+            emit('dismiss');
+          },
+          category?.value ? 'owner.updateCategory' : 'owner.createCategory',
+      );
 
-        emit('dismiss');
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }finally {
-        loading.value = false;
-      }
+      loading.value = false;
     };
 
     /* Watchers */

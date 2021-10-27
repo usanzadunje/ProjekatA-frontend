@@ -211,7 +211,6 @@
 <script>
 import { defineComponent, ref, reactive, onMounted, computed, watch, toRefs } from 'vue';
 import { useStore }                                                           from 'vuex';
-import { useI18n }                                                            from 'vue-i18n';
 import {
   IonItem,
   IonInput,
@@ -228,9 +227,9 @@ import {
 import MainImagePreview    from '@/components/MainImagePreview';
 import PlaceImagesAddModal from '@/components/owner/modals/PlaceImagesAddModal';
 
-import { useToastNotifications } from '@/composables/useToastNotifications';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
-import { getError, hideNativeKeyboard, sleep } from "@/utils/helpers";
+import { hideNativeKeyboard } from "@/utils/helpers";
 
 import {
   createOutline,
@@ -265,7 +264,6 @@ export default defineComponent({
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
-    const { t } = useI18n();
 
     /* Computed properties */
     const placeInfo = computed(() => {
@@ -282,7 +280,6 @@ export default defineComponent({
 
     /* Component properties */
     const place = reactive({});
-    const errorNames = ref({});
     const cityInput = ref(null);
     const addressInput = ref(null);
     const emailInput = ref(null);
@@ -293,14 +290,12 @@ export default defineComponent({
 
 
     /* Lifecycle hooks */
-
     onMounted(async() => {
       resetInput();
     });
 
     /* Composables */
-    const { showSuccessToast, showErrorToast } = useToastNotifications();
-
+    const { errorNames, tryCatch } = useErrorHandling();
 
     /* Methods */
     const resetInput = () => {
@@ -327,23 +322,21 @@ export default defineComponent({
     const update = async() => {
       loading.value = true;
       await hideNativeKeyboard();
-      try {
-        place.working_hours = {};
-        place.working_hours.mon_fri = `${place.mon_fri_start}-${place.mon_fri_end}`;
-        place.working_hours.saturday = `${place.saturday_start}-${place.saturday_end}`;
-        place.working_hours.sunday = `${place.sunday_start}-${place.sunday_end}`;
 
-        await store.dispatch("owner/updatePlaceInfo", place);
+      await tryCatch(
+          async() => {
+            place.working_hours = {};
+            place.working_hours.mon_fri = `${place.mon_fri_start}-${place.mon_fri_end}`;
+            place.working_hours.saturday = `${place.saturday_start}-${place.saturday_end}`;
+            place.working_hours.sunday = `${place.sunday_start}-${place.sunday_end}`;
 
-        showSuccessToast(t('successUpdate'));
-      }catch(errors) {
-        errorNames.value = getError(errors);
-        await showErrorToast(errors);
-        await sleep(Object.keys(errorNames.value).length * 900);
-        errorNames.value = {};
-      }finally {
-        loading.value = false;
-      }
+            await store.dispatch("owner/updatePlaceInfo", place);
+
+          },
+          'successUpdate',
+      );
+
+      loading.value = false;
     };
     const openPreview = async() => {
       const modal = await modalController
@@ -366,19 +359,17 @@ export default defineComponent({
     });
     watch(props.refresher, async() => {
       if(props.refresher.isActive) {
-        try {
-          await store.dispatch("owner/getPlaceInfo");
-        }catch(e) {
-          showErrorToast(
-              null,
-              {
-                dataFetchingError: t('dataFetchingError'),
-              });
-        }finally {
-          resetInput();
+        await tryCatch(
+            async() => {
+              await store.dispatch("owner/getPlaceInfo");
+            },
+            null,
+            'dataFetchingError',
+        );
 
-          props.refresher.event.target.complete();
-        }
+        resetInput();
+
+        props.refresher.event.target.complete();
       }
     });
 

@@ -111,6 +111,7 @@ import { useToastNotifications } from '@/composables/useToastNotifications';
 import { useGeolocation }        from '@/composables/useGeolocation';
 import { useModal }              from '@/composables/useModal';
 import { useSlidingItem }        from '@/composables/useSlidingItem';
+import { useErrorHandling }      from '@/composables/useErrorHandling';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
@@ -154,10 +155,11 @@ export default defineComponent({
     let timeLeftText = null;
 
     /* Composables */
-    const { showUndoToast, showSuccessToast, showErrorToast } = useToastNotifications();
+    const { showUndoToast, showSuccessToast } = useToastNotifications();
     const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal } = useModal();
     const { slidingItem, closeOpenItems } = useSlidingItem();
+    const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
     onIonViewDidEnter(async() => {
@@ -169,20 +171,18 @@ export default defineComponent({
 
     /* Methods */
     const getSubscriptions = async() => {
-      try {
-        const response = await PlaceService.userSubscriptions(
-            sortBy.value,
-            store.getters['global/position'].latitude,
-            store.getters['global/position'].longitude,
-        );
-        placesUserSubscribedTo.value = response.data;
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              dataFetchingError: t('dataFetchingError'),
-            });
-      }
+      await tryCatch(
+          async() => {
+            const response = await PlaceService.userSubscriptions(
+                sortBy.value,
+                store.getters['global/position'].latitude,
+                store.getters['global/position'].longitude,
+            );
+            placesUserSubscribedTo.value = response.data;
+          },
+          null,
+          'dataFetchingError',
+      );
     };
     const refresh = async(event) => {
       if(sortBy.value === 'distance') {
@@ -230,20 +230,18 @@ export default defineComponent({
     };
 
     const unsubscribe = async(placeId) => {
-      try {
-        await PlaceService.unsubscribe(placeId);
-        placesUserSubscribedTo.value = placesUserSubscribedTo.value.filter((place) => {
-          return place.id !== placeId;
-        });
-
-        store.commit("user/REMOVE_SUBSCRIPTION", placeId);
-      }catch(error) {
-        showErrorToast(
-            null,
-            {
-              generalAlertError: t('generalAlertError'),
+      await tryCatch(
+          async() => {
+            await PlaceService.unsubscribe(placeId);
+            placesUserSubscribedTo.value = placesUserSubscribedTo.value.filter((place) => {
+              return place.id !== placeId;
             });
-      }
+
+            store.commit("user/REMOVE_SUBSCRIPTION", placeId);
+          },
+          null,
+          'generalAlertError',
+      );
     };
     const unsubscribeSwiping = (placeId) => {
       timeLeftText = document.getElementById('expiryText' + placeId)?.innerHTML.split(' ');
@@ -251,21 +249,20 @@ export default defineComponent({
       unsubscribe(placeId);
       Haptics.impact({ style: ImpactStyle.Heavy });
       showUndoToast(t('successUnsubscribe'), async() => {
-        try {
-          const notifyIn = timeLeftText?.length > 0 ? timeLeftText[0] : null;
 
-          await PlaceService.subscribe(placeId, notifyIn);
+        await tryCatch(
+            async() => {
+              const notifyIn = timeLeftText?.length > 0 ? timeLeftText[0] : null;
 
-          store.commit("user/ADD_SUBSCRIPTION", placeId);
-        }catch(e) {
-          showErrorToast(
-              null,
-              {
-                generalError: t('generalAlertError'),
-              });
-        }finally {
-          await getSubscriptions();
-        }
+              await PlaceService.subscribe(placeId, notifyIn);
+
+              store.commit("user/ADD_SUBSCRIPTION", placeId);
+            },
+            null,
+            'generalAlertError',
+        );
+
+        await getSubscriptions();
       });
     };
     const removeExpiredSubscription = (placeId) => {

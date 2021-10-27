@@ -63,7 +63,13 @@ app.directive('update-swiper', {
         swiper.update();
         setTimeout(() => {
             swiper.update();
-        }, 200);
+        }, 250);
+        setTimeout(() => {
+            swiper.update();
+        }, 500);
+        setTimeout(() => {
+            swiper.update();
+        }, 1000);
     },
 });
 

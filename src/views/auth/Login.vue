@@ -16,13 +16,14 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
-import { useRouter, useRoute }             from 'vue-router';
+import { defineComponent, onMounted } from 'vue';
+import { useRouter, useRoute }        from 'vue-router';
+import { useStore }                   from 'vuex';
 import {
   IonPage,
   IonContent,
   useBackButton,
-}                                          from '@ionic/vue';
+}                                     from '@ionic/vue';
 
 import LoginForm from '@/components/auth/LoginForm';
 
@@ -37,9 +38,9 @@ export default defineComponent({
     /* Global properties */
     const router = useRouter();
     const route = useRoute();
+    const store = useStore();
 
     /* Component properties */
-    const clientHeight = ref(700);
 
     /* Composables */
 
@@ -53,15 +54,13 @@ export default defineComponent({
     });
     onMounted(async() => {
       setTimeout(() => {
-        clientHeight.value = document.querySelector('#login').offsetHeight;
-        document.querySelector('#login').style.height = `${clientHeight.value}px`;
+        document.querySelector('#login').style.height = `${store.getters['global/height']}px`;
       }, 500);
     });
 
 
     return {
       /* Component properties */
-      clientHeight,
     };
   },
 });
