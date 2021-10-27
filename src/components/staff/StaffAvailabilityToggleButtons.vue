@@ -28,12 +28,11 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue';
-import { useStore }                  from 'vuex';
+import { defineComponent } from 'vue';
 import {
   IonButton,
   IonIcon,
-}                                    from '@ionic/vue';
+}                          from '@ionic/vue';
 
 import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 
@@ -51,28 +50,10 @@ export default defineComponent({
   },
   setup() {
     /* Global properties */
-    const store = useStore();
-
 
     /* Computed properties */
-    const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
-    const isPlaceFull = computed(() => {
-      const ratio = availabilityRatio.value.split('/');
-
-      //Returned value compares number of tables that are empty to
-      //number of tables that are taken and if they are even it
-      //returns true indicating place is full with space.
-      return ratio[0] === ratio[1];
-    });
-    const isPlaceEmpty = computed(() => {
-      const ratio = availabilityRatio.value.split('/');
-
-      return ratio[0] === '0';
-    });
-
-
     /* Composables */
-    const { randomToggle, toggling } = usePlaceManipulation();
+    const { isPlaceFull, isPlaceEmpty, randomToggle, toggling } = usePlaceManipulation();
 
 
     return {

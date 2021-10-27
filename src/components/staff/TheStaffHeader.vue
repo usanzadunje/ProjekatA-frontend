@@ -29,15 +29,13 @@
       <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
         <ion-avatar class="flex-shrink-0">
           <img
-              :src="this.$store.getters['auth/authUser']?.avatar ?? backendStorageURL + '/users/default_avatar.png'"
+              :src="authUser?.avatar ?? backendStorageURL + '/users/default_avatar.png'"
               alt="Profile picture"
               class="w-full h-full object-cover"
           >
         </ion-avatar>
         <ion-label class="break-all">
-          {{
-            this.$store.getters['auth/authUser']?.username || this.$store.getters['auth/authUser']?.fname
-          }}
+          {{ authUser?.username || authUser.fname }}
         </ion-label>
       </ion-chip>
     </div>
@@ -64,7 +62,8 @@ import { usePopover } from '@/composables/usePopover';
 
 import {
   filterOutline,
-} from 'ionicons/icons';
+}                         from 'ionicons/icons';
+import { useCurrentUser } from '@/composables/useCurrentUser';
 
 
 export default defineComponent({
@@ -89,6 +88,7 @@ export default defineComponent({
     /* Composables */
     const { toggleMenu } = useMenu();
     const { openPopover } = usePopover();
+    const { authUser } = useCurrentUser();
 
     /* Event handlers */
     const openSettingsPopover = (event) => {
@@ -106,6 +106,7 @@ export default defineComponent({
     return {
       /* Component properties */
       isDarkModeOn,
+      authUser,
 
       /* Event handlers */
       toggleMenu,

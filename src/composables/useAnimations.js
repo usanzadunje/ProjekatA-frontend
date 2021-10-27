@@ -1,9 +1,9 @@
-import { ref }      from 'vue';
-import { useStore } from 'vuex';
+import { ref } from 'vue';
+
+import { deviceHeight } from '@/composables/useDevice';
 
 export function slideUp(elementId) {
     /* Global properties */
-    const store = useStore();
 
     /* Component properties */
     const showElement = ref(true);
@@ -21,7 +21,7 @@ export function slideUp(elementId) {
 
         if(
             event.detail.currentY <= 0 ||
-            (event.detail.currentY <= Math.round(store.getters['global/height'] * 1.2) && currentScrollDirectionDown) ||
+            (event.detail.currentY <= Math.round(deviceHeight.value * 1.2) && currentScrollDirectionDown) ||
             event.detail.currentY === scrollTopOffset.value ||
             event.detail.currentY - scrollTopOffset.value === elementHeight.value ||
             scrollTopOffset.value - event.detail.currentY === elementHeight.value ||

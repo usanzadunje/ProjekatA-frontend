@@ -149,7 +149,7 @@ export function useFCM() {
             store.commit('staff/SET_AVAILABILITY_RATIO', notification.data.availability_ratio);
             store.commit('owner/TOGGLE_TABLE_AVAILABILITY', {
                 tableId: notification.data.table_id,
-                value: notification.data.empty,
+                value: notification.data.empty === 'true',
             });
         }
     };

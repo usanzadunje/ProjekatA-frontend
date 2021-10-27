@@ -1,6 +1,6 @@
-import { AndroidPermissions }    from '@ionic-native/android-permissions';
-import { LocationAccuracy }      from '@ionic-native/location-accuracy';
-import { Capacitor }             from "@capacitor/core";
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { LocationAccuracy }   from '@ionic-native/location-accuracy';
+import { Capacitor }          from "@capacitor/core";
 
 const LocationService = {
     // Checks if application has permissions to use GPS
@@ -46,7 +46,7 @@ const LocationService = {
                                           },
                                           () => {
                                               // Show alert if users click on 'No Thanks'
-                                              alert('Location features might not work correctly.')
+                                              alert('Location features might not work correctly.');
                                           },
                                       );
                 }

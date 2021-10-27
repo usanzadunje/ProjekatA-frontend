@@ -121,7 +121,7 @@ export default defineComponent({
     const showSkeleton = ref(true);
 
     /* Composables */
-    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const { position, checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal } = useModal();
     const { showElement, pullAnimation } = slideUp('homeHeader');
     const { tryCatch } = useErrorHandling();
@@ -139,8 +139,8 @@ export default defineComponent({
                     '',
                     0,
                     4,
-                    store.getters['global/position'].latitude,
-                    store.getters['global/position'].longitude,
+                    position.value.latitude,
+                    position.value.longitude,
                 );
 
                 places.closestToUser = response.data;
@@ -173,8 +173,8 @@ export default defineComponent({
                   '',
                   0,
                   4,
-                  store.getters['global/position'].latitude,
-                  store.getters['global/position'].longitude,
+                  position.value.latitude,
+                  position.value.longitude,
               ),
 
               PlaceService.index(
@@ -183,8 +183,8 @@ export default defineComponent({
                   '',
                   0,
                   4,
-                  store.getters['global/position'].latitude,
-                  store.getters['global/position'].longitude,
+                  position.value.latitude,
+                  position.value.longitude,
               ),
 
               PlaceService.index(
@@ -193,8 +193,8 @@ export default defineComponent({
                   '',
                   0,
                   4,
-                  store.getters['global/position'].latitude,
-                  store.getters['global/position'].longitude,
+                  position.value.latitude,
+                  position.value.longitude,
               ),
             ]);
 

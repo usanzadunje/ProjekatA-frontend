@@ -129,8 +129,7 @@ import {
 }                                                            from "@ionic/vue";
 
 import { useErrorHandling } from '@/composables/useErrorHandling';
-
-import { hideNativeKeyboard } from "@/utils/helpers";
+import { hideNativeKeyboard } from '@/composables/useDevice';
 
 import {
   mailOutline,

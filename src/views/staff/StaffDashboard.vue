@@ -11,7 +11,10 @@
         <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentAvailabilitySituation') }}</h1>
 
         <div class="mt-4">
-          <TableContainer class="mt-2">
+          <TableContainer
+              v-show="!showSkeleton"
+              class="mt-2"
+          >
             <Table
                 v-for="table in tables"
                 :key="table.id"
@@ -26,6 +29,11 @@
                 @click="toggle(table.id)"
             />
           </TableContainer>
+          <ion-skeleton-text
+              v-show="showSkeleton"
+              animated="true"
+              class="tableSkeleton rounded-md"
+          ></ion-skeleton-text>
         </div>
         <div
             :class="`
@@ -34,7 +42,7 @@
           `"
         >
           <div
-              v-if="this.$store.getters['auth/isOwner']"
+              v-if="isOwner"
               class="mt-10"
           >
             <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentActiveStaff') }}</h1>
@@ -50,7 +58,26 @@
 
           <StaffAvailabilityToggleButtons class="md:self-center md:w-1/2"/>
 
-          <PlaceAvailabilityChart/>
+          <PlaceAvailabilityChart v-show="!showSkeleton"/>
+          <div class="flex justify-start items-center mt-8">
+            <ion-skeleton-text
+                v-show="showSkeleton"
+                animated="true"
+                class="chartSkeleton rounded-full flex-shrink-0"
+            ></ion-skeleton-text>
+            <div class="ml-2">
+              <ion-skeleton-text
+                  v-show="showSkeleton"
+                  animated="true"
+                  class="w-20 h-4"
+              ></ion-skeleton-text>
+              <ion-skeleton-text
+                  v-show="showSkeleton"
+                  animated="true"
+                  class="w-20 h-4"
+              ></ion-skeleton-text>
+            </div>
+          </div>
 
         </div>
       </div>
@@ -59,15 +86,16 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted } from 'vue';
-import { useStore }                             from 'vuex';
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { useStore }                                  from 'vuex';
 import {
   IonPage,
   IonContent,
   IonRefresher,
   IonRefresherContent,
+  IonSkeletonText,
   onIonViewWillEnter,
-}                                               from '@ionic/vue';
+}                                                    from '@ionic/vue';
 
 import TableContainer                 from '@/components/TableContainer';
 import Table                          from '@/components/Table';
@@ -87,6 +115,7 @@ export default defineComponent({
     IonContent,
     IonRefresher,
     IonRefresherContent,
+    IonSkeletonText,
     TableContainer,
     Table,
     StaffCard,
@@ -100,16 +129,17 @@ export default defineComponent({
     /* Component properties */
     const tables = computed(() => store.getters['owner/tables']);
     const activeStaff = computed(() => store.getters['owner/staff'].filter(staff => staff.active));
-    const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
     const isOwner = computed(() => store.getters['auth/isOwner']);
+    const showSkeleton = ref(true);
 
     /* Composables */
     const { toggle } = usePlaceManipulation();
     const { tryCatch } = useErrorHandling();
 
-
     /* Methods */
     const getPlaceAvailability = async() => {
+      showSkeleton.value = true;
+
       await tryCatch(
           async() => {
             await store.dispatch('staff/updatePlaceAvailability');
@@ -117,6 +147,8 @@ export default defineComponent({
           null,
           'dataFetchingError',
       );
+
+      showSkeleton.value = false;
     };
     /* Lifecycle hooks */
     (async() => {
@@ -140,6 +172,8 @@ export default defineComponent({
 
     /* Event handlers */
     const refresh = async(event) => {
+      showSkeleton.value = true;
+
       await tryCatch(
           async() => {
             await store.dispatch('owner/getTables');
@@ -153,6 +187,8 @@ export default defineComponent({
           'dataFetchingError',
       );
 
+      showSkeleton.value = false;
+
       event.target.complete();
     };
 
@@ -163,8 +199,8 @@ export default defineComponent({
       /* Component properties */
       tables,
       activeStaff,
-      availabilityRatio,
       isOwner,
+      showSkeleton,
 
       /* Event handlers */
       toggle,
@@ -178,5 +214,14 @@ export default defineComponent({
 ion-content {
   --background: var(--show-paint);
   background: var(--show-paint);
+}
+
+.tableSkeleton {
+  height: 174px;
+}
+
+.chartSkeleton {
+  width: 70vw;
+  height: 70vw;
 }
 </style>

@@ -79,9 +79,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted } from 'vue';
-import { useRouter }                                 from 'vue-router';
-import { useStore }                                  from 'vuex';
+import { defineComponent, ref, reactive } from 'vue';
+import { useRouter }                      from 'vue-router';
+import { useStore }                       from 'vuex';
 import {
   IonItem,
   IonInput,
@@ -91,13 +91,11 @@ import {
   // IonCheckbox,
   IonSpinner,
 }
-                                                     from "@ionic/vue";
+                                          from "@ionic/vue";
 
 import SocialIcons from '@/components/auth/SocialIcons';
 
-import { hideNativeKeyboard } from "@/utils/helpers";
-
-import { Device } from '@capacitor/device';
+import { deviceInfo, hideNativeKeyboard } from '@/composables/useDevice';
 
 import {
   personOutline,
@@ -131,19 +129,15 @@ export default defineComponent({
     const emailInput = ref(null);
     const loading = ref(false);
 
-    /* Lifecycle hooks */
-    onMounted(async() => {
-      const deviceInfo = await Device.getInfo();
-      user.device_name = deviceInfo.name || deviceInfo.model;
-    });
-
     /* Composables */
     const { errorNames, tryCatch } = useErrorHandling();
 
+    /* Lifecycle hooks */
     /* Event handlers */
     const login = async() => {
       loading.value = true;
       await hideNativeKeyboard();
+      user.device_name = (deviceInfo?.value?.name || deviceInfo?.value?.model) || `${user?.username} Phone`;
 
       await tryCatch(
           async() => {

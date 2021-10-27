@@ -117,6 +117,7 @@ import {
 }                                                                      from '@ionic/vue';
 
 import { useErrorHandling } from '@/composables/useErrorHandling';
+import { hideNativeKeyboard } from '@/composables/useDevice';
 
 import {
   pricetagOutline,
@@ -125,7 +126,7 @@ import {
 
 } from 'ionicons/icons';
 
-import { hideNativeKeyboard, increaseAccordionMaxHeight } from '@/utils/helpers';
+import { increaseAccordionMaxHeight } from '@/utils/helpers';
 
 export default defineComponent({
   name: "ProductCreateEditForm",

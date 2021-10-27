@@ -87,16 +87,15 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, ref }         from 'vue';
+import { defineComponent, reactive, ref }                    from 'vue';
 import { useRouter }                                         from 'vue-router';
 import { useStore }                                          from 'vuex';
 import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
 
 import SocialIcons from '@/components/auth/SocialIcons';
 
-import { hideNativeKeyboard } from "@/utils/helpers";
-
-import { Device } from '@capacitor/device';
+import { deviceInfo, hideNativeKeyboard } from '@/composables/useDevice';
+import { useErrorHandling }              from '@/composables/useErrorHandling';
 
 import {
   personOutline,
@@ -104,8 +103,7 @@ import {
   lockOpenOutline,
   eyeOutline,
   eyeOffOutline,
-}                           from 'ionicons/icons';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "RegisterForm",
@@ -130,19 +128,15 @@ export default defineComponent({
     const passwordConfirmInput = ref(null);
     const loading = ref(false);
 
-    /* Lifecycle hooks */
-    onMounted(async() => {
-      const deviceInfo = await Device.getInfo();
-      newUser.device_name = (deviceInfo.name || deviceInfo.model) || 'random';
-    });
-
     /* Composables */
     const { errorNames, tryCatch } = useErrorHandling();
 
+    /* Lifecycle hooks */
     /* Event handlers */
     const register = async() => {
       loading.value = true;
       await hideNativeKeyboard();
+      newUser.device_name = (deviceInfo?.value?.name || deviceInfo?.value?.model) || `${newUser?.email} Phone`;
 
       await tryCatch(
           async() => {

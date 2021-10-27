@@ -4,7 +4,7 @@
     <swiper
         id="slidingFilterSwiper"
         ref="swiper"
-        :slides-per-view="this.$store.getters['global/width'] <= 335 ? 2.1 : 2.6"
+        :slides-per-view="deviceWidth <= 335 ? 2.1 : 2.6"
     >
       <swiper-slide>
         <ion-button
@@ -62,6 +62,8 @@ import {
 }                                          from '@ionic/vue';
 import { Swiper, SwiperSlide }             from 'swiper/vue';
 
+import { deviceWidth } from '@/composables/useDevice';
+
 import {
   locationOutline,
   pieChart,
@@ -104,6 +106,7 @@ export default defineComponent({
       /* Component properties */
       activeSlidingButton,
       swiper,
+      deviceWidth,
 
       /* Event listeners */
       sortButtonActivated,

@@ -9,27 +9,41 @@
       </ion-refresher>
 
       <div class="px-4 pb-4">
-        <AccordionList
-            :panel-id="'categoryPanel'"
-            :title="$t('category', 2)"
-            :title-size="'1.125rem'"
-            :icon-size="'1.25rem'"
-            :icon="pricetagOutline"
-            class="accordion-list-border-top"
-        >
-          <CategoryIndex class="mb-4"/>
-        </AccordionList>
-        <AccordionList
-            :panel-id="'productPanel'"
-            :title="$t('product', 2)"
-            :title-size="'1.125rem'"
-            :icon-size="'1.25rem'"
-            :open="true"
-            :icon="fastFoodOutline"
-            class="accordion-list-border-top accordion-list-border-bottom"
-        >
-          <ProductIndex :enable-infinite-scroll="enableInfiniteScroll"/>
-        </AccordionList>
+        <div v-show="!showSkeleton">
+          <AccordionList
+              :panel-id="'categoryPanel'"
+              :title="$t('category', 2)"
+              :title-size="'1.125rem'"
+              :icon-size="'1.25rem'"
+              :icon="pricetagOutline"
+              class="accordion-list-border-top"
+          >
+            <CategoryIndex class="mb-4"/>
+          </AccordionList>
+          <AccordionList
+              :panel-id="'productPanel'"
+              :title="$t('product', 2)"
+              :title-size="'1.125rem'"
+              :icon-size="'1.25rem'"
+              :open="true"
+              :icon="fastFoodOutline"
+              class="accordion-list-border-top accordion-list-border-bottom"
+          >
+            <ProductIndex :enable-infinite-scroll="enableInfiniteScroll"/>
+          </AccordionList>
+        </div>
+        <div>
+          <ion-skeleton-text
+              v-show="showSkeleton"
+              animated="true"
+              class="w-ful h-12 mb-0.5"
+          ></ion-skeleton-text>
+          <ion-skeleton-text
+              v-show="showSkeleton"
+              animated="true"
+              class="w-ful h-12"
+          ></ion-skeleton-text>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -43,6 +57,7 @@ import {
   IonContent,
   IonRefresher,
   IonRefresherContent,
+  IonSkeletonText,
 }                               from '@ionic/vue';
 
 import AccordionList from '@/components/user/AccordionList';
@@ -64,6 +79,7 @@ export default defineComponent({
     IonContent,
     IonRefresher,
     IonRefresherContent,
+    IonSkeletonText,
     AccordionList,
     CategoryIndex,
     ProductIndex,
@@ -74,6 +90,7 @@ export default defineComponent({
 
     /* Component properties */
     const enableInfiniteScroll = ref();
+    const showSkeleton = ref(true);
 
     /* Composables */
     const { getCachedOrFetchPlaceCategories } = useCache();
@@ -81,6 +98,8 @@ export default defineComponent({
 
     /* Methods */
     const getMenuData = async(forceFetch = false) => {
+      showSkeleton.value = true;
+
       await tryCatch(
           async() => {
             await getCachedOrFetchPlaceCategories(forceFetch);
@@ -89,6 +108,8 @@ export default defineComponent({
           null,
           'dataFetchingError',
       );
+
+      showSkeleton.value = false;
     };
 
     /* Lifecycle hooks */
@@ -110,6 +131,7 @@ export default defineComponent({
     return {
       /* Component properties */
       enableInfiniteScroll,
+      showSkeleton,
 
       /* Event handlers */
       refresh,

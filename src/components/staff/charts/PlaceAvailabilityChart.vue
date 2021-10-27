@@ -9,7 +9,8 @@ import { defineComponent, onMounted, onUnmounted, reactive } from 'vue';
 import { useStore }                                          from 'vuex';
 import { useI18n }                                           from 'vue-i18n';
 
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useErrorHandling }     from '@/composables/useErrorHandling';
+import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 
 import {
   Chart,
@@ -34,6 +35,7 @@ export default defineComponent({
     /* Composables */
     const { t } = useI18n();
     const { tryCatch } = useErrorHandling();
+    const { emptyTables, takenTables } = usePlaceManipulation();
 
 
     /* Watchers */
@@ -58,6 +60,21 @@ export default defineComponent({
         }
         chart.update();
       }
+      if(mutation.type === 'user/SET_LOCALIZATION') {
+        if(mutation.payload.value === 'en') {
+          chart.config.data.labels = [
+            'Taken',
+            'Empty',
+          ];
+        }else {
+          chart.config.data.labels = [
+            'Zauzeti',
+            'Slobodni',
+          ];
+        }
+
+        chart.update();
+      }
     });
 
     /* Lifecycle hooks */
@@ -75,7 +92,7 @@ export default defineComponent({
                 ],
                 datasets: [
                   {
-                    data: [1, 2],
+                    data: [emptyTables.value, takenTables.value],
                     backgroundColor: [
                       '#e01b43',
                       '#10B981',

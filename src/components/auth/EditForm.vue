@@ -209,8 +209,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted, toRefs, watch, computed } from 'vue';
-import { useStore }                                                           from 'vuex';
+import { defineComponent, ref, reactive, onMounted, toRefs, watch } from 'vue';
+import { useStore }                                                 from 'vuex';
 import {
   IonItem,
   IonInput,
@@ -220,13 +220,14 @@ import {
   IonDatetime,
   IonLabel,
   IonToggle,
-}                                                                             from "@ionic/vue";
+}                                                                   from "@ionic/vue";
 
 import AppAvatar from '@/components/AppAvatar';
 
-import { usePhotos } from '@/composables/usePhotos';
-
-import { hideNativeKeyboard } from "@/utils/helpers";
+import { usePhotos }          from '@/composables/usePhotos';
+import { hideNativeKeyboard } from '@/composables/useDevice';
+import { useErrorHandling }   from '@/composables/useErrorHandling';
+import { useCurrentUser }     from '@/composables/useCurrentUser';
 
 import {
   mailOutline,
@@ -235,8 +236,7 @@ import {
   eyeOffOutline,
   personOutline,
   callOutline,
-}                           from 'ionicons/icons';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "EditForm",
@@ -260,9 +260,7 @@ export default defineComponent({
   setup(props) {
     /* Global properties and methods */
     const store = useStore();
-    const authUser = computed(() => {
-      return store.getters['auth/authUser'];
-    });
+    const { authUser } = useCurrentUser();
 
     /* Component properties */
     const user = reactive({});

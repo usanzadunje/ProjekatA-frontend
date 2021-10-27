@@ -54,12 +54,11 @@ import {
 }                                                  from '@ionic/vue';
 
 import { useErrorHandling } from '@/composables/useErrorHandling';
+import { hideNativeKeyboard } from '@/composables/useDevice';
 
 import {
   pricetagOutline,
 } from 'ionicons/icons';
-
-import { hideNativeKeyboard } from '@/utils/helpers';
 
 export default defineComponent({
   name: "CategoryCreateEditForm",

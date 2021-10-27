@@ -2,16 +2,19 @@ import { useStore } from 'vuex';
 
 import PlaceService from '@/services/PlaceService';
 
+import { useCurrentUser } from '@/composables/useCurrentUser';
+
 import { didCacheExpire, getExpirationDate } from '@/utils/helpers';
 
 export function useCache() {
     /* Global properties */
     const store = useStore();
+    const { authUser } = useCurrentUser();
 
     /* Methods */
     /* General user related */
     const getCachedOrFetchAuthUser = async(forceFetch = false) => {
-        if(Object.keys(store.getters['auth/authUser'] ?? {}).length === 0 || forceFetch) {
+        if(Object.keys(authUser.value ?? {}).length === 0 || forceFetch) {
             await store.dispatch("auth/getAuthUser");
         }
     };

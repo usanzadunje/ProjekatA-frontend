@@ -36,7 +36,6 @@
 
 <script>
 import { defineComponent, ref, watch, toRefs, onMounted } from 'vue';
-import { useStore }                                       from 'vuex';
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
@@ -76,8 +75,6 @@ export default defineComponent({
   emits: ['mounted', 'scrollToTop', 'openPlaceModal', 'infiniteScrollToggle'],
   setup(props, { emit }) {
     /* Global properties */
-    const store = useStore();
-
     /* Component properties */
     const places = ref([]);
     const { placeSearchTerm } = toRefs(props);
@@ -97,7 +94,7 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const { position, checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { tryCatch } = useErrorHandling();
 
     /* Methods */
@@ -110,8 +107,8 @@ export default defineComponent({
                 placeSearchTerm.value,
                 placeOffset,
                 10,
-                store.getters['global/position'].latitude,
-                store.getters['global/position'].longitude,
+                position.value.latitude,
+                position.value.longitude,
             );
 
             if(!response.data) {

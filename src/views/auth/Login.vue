@@ -18,7 +18,6 @@
 <script>
 import { defineComponent, onMounted } from 'vue';
 import { useRouter, useRoute }        from 'vue-router';
-import { useStore }                   from 'vuex';
 import {
   IonPage,
   IonContent,
@@ -26,6 +25,8 @@ import {
 }                                     from '@ionic/vue';
 
 import LoginForm from '@/components/auth/LoginForm';
+
+import { deviceHeight } from '@/composables/useDevice';
 
 export default defineComponent({
   name: "Login",
@@ -38,7 +39,6 @@ export default defineComponent({
     /* Global properties */
     const router = useRouter();
     const route = useRoute();
-    const store = useStore();
 
     /* Component properties */
 
@@ -54,7 +54,7 @@ export default defineComponent({
     });
     onMounted(async() => {
       setTimeout(() => {
-        document.querySelector('#login').style.height = `${store.getters['global/height']}px`;
+        document.querySelector('#login').style.height = `${deviceHeight.value}px`;
       }, 500);
     });
 

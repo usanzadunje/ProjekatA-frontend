@@ -133,6 +133,7 @@ import { useContent }       from '@/composables/useContent';
 import { useCache }         from '@/composables/useCache';
 import { usePopover }       from '@/composables/usePopover';
 import { useErrorHandling } from '@/composables/useErrorHandling';
+import { deviceWidth }      from '@/composables/useDevice';
 
 import {
   notifications,
@@ -179,7 +180,7 @@ export default defineComponent({
     const loadingProducts = ref(false);
     const resetProductOffset = ref(false);
     const dropzoneWidth = computed(() => {
-      return store.getters['global/width'] - ((2.25 * parseFloat(getComputedStyle(document.documentElement).fontSize)) + 4);
+      return deviceWidth.value - ((2.25 * parseFloat(getComputedStyle(document.documentElement).fontSize)) + 4);
     });
 
     /* Computed properties */
@@ -304,7 +305,7 @@ export default defineComponent({
 
     /* Watchers */
     // Watching for changes of id parameter in place show route and fetching right data
-    watch(route, async() => {
+    watch(() => route.params.id, async() => {
       if(route.name === 'place.show' && route.params.id && route.params.id != place.value.id) {
         await getPlace();
       }

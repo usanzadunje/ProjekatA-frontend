@@ -228,8 +228,7 @@ import MainImagePreview    from '@/components/MainImagePreview';
 import PlaceImagesAddModal from '@/components/owner/modals/PlaceImagesAddModal';
 
 import { useErrorHandling } from '@/composables/useErrorHandling';
-
-import { hideNativeKeyboard } from "@/utils/helpers";
+import { hideNativeKeyboard } from '@/composables/useDevice';
 
 import {
   createOutline,

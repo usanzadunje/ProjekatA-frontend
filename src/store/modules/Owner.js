@@ -5,6 +5,8 @@ import ProductService  from '@/services/ProductService';
 import PlaceService    from '@/services/PlaceService';
 import TableService    from '@/services/TableService';
 
+import { deviceWidth } from '@/composables/useDevice';
+
 import { calculatePxFromPercent, removeClonedTableElements } from '@/utils/helpers';
 
 const fontSize = getComputedStyle(document.documentElement).fontSize;
@@ -57,9 +59,12 @@ export const mutations = {
     CREATE_TABLE(state, payload) {
         state.tables.push(payload);
     },
-    SET_ALL_TABLES_LEFT_POSITION(state, dropzoneWidth) {
+    SET_ALL_TABLES_LEFT_POSITION(state) {
         state.tables.forEach(table => {
-            table.position.left = calculatePxFromPercent(table.position.left, dropzoneWidth);
+            table.position.left = calculatePxFromPercent(
+                table.position.left,
+                deviceWidth.value - ((2.25 * parseFloat(fontSize) + 4)),
+            );
         });
     },
     UPDATE_TABLE_POSITION(state, payload) {
@@ -92,7 +97,7 @@ export const mutations = {
         if(value == null) {
             empty = table.empty ? 0 : 1;
         }else {
-            empty = value === 'true' ? 1 : 0;
+            empty = value ? 1 : 0;
         }
         table.empty = empty;
     },
@@ -218,20 +223,17 @@ export const actions = {
     },
 
     /* TABLES */
-    async getTables({ commit, rootGetters }) {
+    async getTables({ commit }) {
         const response = await OwnerService.allTables();
 
         commit('SET_TABLES', response.data);
 
         removeClonedTableElements();
 
-        commit(
-            'SET_ALL_TABLES_LEFT_POSITION',
-            rootGetters['global/width'] - ((2.25 * parseFloat(fontSize) + 4)),
-        );
+        commit('SET_ALL_TABLES_LEFT_POSITION');
     },
-    async updateTables({ getters, rootGetters, commit }) {
-        const dropzoneWidth = rootGetters['global/width'] - ((2.25 * parseFloat(fontSize) + 4));
+    async updateTables({ getters, commit }) {
+        const dropzoneWidth = deviceWidth.value - ((2.25 * parseFloat(fontSize) + 4));
         const dirtyTables = getters.tables.filter(table => table.dirty);
 
         const response = await TableService.updateMany(dirtyTables);

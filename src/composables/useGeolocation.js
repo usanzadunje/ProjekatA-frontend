@@ -1,14 +1,14 @@
-import { ref }       from 'vue';
-import { useStore }  from 'vuex';
-import { Capacitor } from "@capacitor/core";
-import { useI18n }   from 'vue-i18n';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { useI18n }  from 'vue-i18n';
 
 import LocationService from '@/services/LocationService';
 
-import { Geolocation } from '@capacitor/geolocation';
-
 import { useToastNotifications } from '@/composables/useToastNotifications';
 
+import { Geolocation } from '@capacitor/geolocation';
+
+import { Capacitor } from "@capacitor/core";
 
 export function useGeolocation() {
     /* Component properties */
@@ -18,8 +18,7 @@ export function useGeolocation() {
         timeout: 5000,
     };
     let watchId = null;
-    let latitude = ref(0);
-    let longitude = ref(0);
+    const position = computed(() => store.getters['global/position']);
 
 
     /* Lifecycle hooks */
@@ -108,8 +107,7 @@ export function useGeolocation() {
 
     return {
         /* Component properties */
-        latitude,
-        longitude,
+        position,
 
         /* Methods */
         checkForLocationPermission,

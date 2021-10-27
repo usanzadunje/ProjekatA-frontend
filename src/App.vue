@@ -37,9 +37,6 @@ export default defineComponent({
             await getCachedOrFetchAuthUser();
             await store.dispatch("user/getSettings");
             await initPush();
-
-            store.commit("global/SET_WIDTH", window.innerWidth);
-            store.commit("global/SET_HEIGHT", window.innerHeight);
           },
           null,
           'dataFetchingError',

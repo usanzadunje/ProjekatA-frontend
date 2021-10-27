@@ -46,7 +46,7 @@ import { IonHeader, IonSearchbar, IonToolbar, IonButton } from '@ionic/vue';
 
 import NotificationsPreview from '@/components/user/NotificationsPreview';
 
-import { hideNativeKeyboard } from '@/utils/helpers';
+import { hideNativeKeyboard } from '@/composables/useDevice';
 
 export default defineComponent({
   name: 'TheUserHeader',

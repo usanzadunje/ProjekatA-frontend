@@ -1,9 +1,7 @@
 import router from "@/router";
 
-import { i18n }                    from '@/i18n';
-import store                       from '@/store';
-import { Capacitor }               from '@capacitor/core';
-import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
+import { i18n } from '@/i18n';
+import store    from '@/store';
 
 // Returning array of errors from backend
 export function getError(error) {
@@ -75,34 +73,6 @@ export function increaseAccordionMaxHeight(id, additionalHeight) {
     const accordionPanel = document.getElementById(id);
     const panelCurrentMaxHeight = parseInt(getComputedStyle(accordionPanel).getPropertyValue('max-height'));
     accordionPanel.style.setProperty('max-height', `${panelCurrentMaxHeight + additionalHeight}px`);
-}
-
-export async function setKeyboardStyle(dark = false) {
-    try {
-        if(Capacitor.isNativePlatform()) {
-            if(dark) {
-                await Keyboard?.setStyle({
-                    style: KeyboardStyle.Dark,
-                });
-            }else {
-                await Keyboard?.setStyle({
-                    style: KeyboardStyle.Light,
-                });
-            }
-        }
-    }catch(e) {
-        return;
-    }
-}
-
-export async function hideNativeKeyboard() {
-    if(Capacitor.isNativePlatform()) {
-        try {
-            await Keyboard?.hide();
-        }catch(e) {
-            return;
-        }
-    }
 }
 
 export function getExpirationDate(intervalType = 'd', intervalLength = 1) {

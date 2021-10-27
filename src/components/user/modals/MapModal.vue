@@ -15,18 +15,17 @@
 
 <script>
 import { defineComponent, onBeforeUnmount, onMounted, ref, toRefs } from 'vue';
-import { useStore }                                                 from 'vuex';
 import { useI18n }                                                  from 'vue-i18n';
 import { loadingController }                                        from '@ionic/vue';
 
 import PlaceService from '@/services/PlaceService';
 
-import { useGeolocation }        from '@/composables/useGeolocation';
+import { useGeolocation }   from '@/composables/useGeolocation';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-native';
 
-import { sleep }            from '@/utils/helpers';
+import { sleep } from '@/utils/helpers';
 
 export default defineComponent({
   name: "MapModal",
@@ -38,8 +37,6 @@ export default defineComponent({
   },
   setup(props) {
     /* Global properties */
-    const store = useStore();
-
     /* Component properties */
     let mapContainerBoundingRect = null;
     const distance = ref('N/A');
@@ -48,7 +45,7 @@ export default defineComponent({
     const { place } = toRefs(props);
 
     /* Composables */
-    const { tryGettingLocation } = useGeolocation();
+    const { position, tryGettingLocation } = useGeolocation();
     const { t } = useI18n({ useScope: 'global' });
     const { tryCatch } = useErrorHandling();
 
@@ -81,8 +78,8 @@ export default defineComponent({
               });
 
               await CapacitorGoogleMaps.addMarker({
-                latitude: store.getters['global/position'].latitude,
-                longitude: store.getters['global/position'].longitude,
+                latitude: position.value.latitude,
+                longitude: position.value.longitude,
                 title: t('me'),
                 snippet: t('currentPosition'),
                 opacity: 2.5,

@@ -156,7 +156,7 @@ export default defineComponent({
 
     /* Composables */
     const { showUndoToast, showSuccessToast } = useToastNotifications();
-    const { checkForLocationPermission, tryGettingLocation } = useGeolocation();
+    const { position, checkForLocationPermission, tryGettingLocation } = useGeolocation();
     const { isModalOpen, modalData, openModal } = useModal();
     const { slidingItem, closeOpenItems } = useSlidingItem();
     const { tryCatch } = useErrorHandling();
@@ -175,8 +175,8 @@ export default defineComponent({
           async() => {
             const response = await PlaceService.userSubscriptions(
                 sortBy.value,
-                store.getters['global/position'].latitude,
-                store.getters['global/position'].longitude,
+                position.value.latitude,
+                position.value.longitude,
             );
             placesUserSubscribedTo.value = response.data;
           },

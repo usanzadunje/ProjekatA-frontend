@@ -42,8 +42,7 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue';
-import { useStore }                  from 'vuex';
+import { defineComponent } from 'vue';
 import {
   IonHeader,
   IonIcon,
@@ -56,8 +55,9 @@ import AppAvatar           from '@/components/AppAvatar';
 
 import {
   settingsOutline,
-}                     from 'ionicons/icons';
-import { usePopover } from '@/composables/usePopover';
+}                         from 'ionicons/icons';
+import { usePopover }     from '@/composables/usePopover';
+import { useCurrentUser } from '@/composables/useCurrentUser';
 
 export default defineComponent({
   name: 'TheUserProfileHeader',
@@ -71,14 +71,10 @@ export default defineComponent({
   emits: ['searchFilterChanged'],
   setup(props, { emit }) {
     /* Global properties */
-    const store = useStore();
-    //Authenticated users
-    const authUser = computed(() => {
-      return store.getters['auth/authUser'];
-    });
-
-    /* Component properties */
+    /* Composables */
     const { openPopover } = usePopover();
+    const { authUser } = useCurrentUser();
+
     /* Component properties */
 
     /* Event handlers */

@@ -2,7 +2,7 @@ import { i18n } from "@/i18n";
 
 import { StorageService } from '@/services/StorageService';
 
-import { setKeyboardStyle } from '@/utils/helpers';
+import { setKeyboardStyle } from '@/composables/useDevice';
 import PlaceService         from '@/services/PlaceService';
 
 export const namespaced = true;

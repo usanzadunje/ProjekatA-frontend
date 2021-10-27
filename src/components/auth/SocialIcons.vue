@@ -24,11 +24,12 @@ import { IonIcon }                    from '@ionic/vue';
 import AuthService       from '@/services/AuthService';
 import SocialAuthService from '@/services/SocialAuthService';
 
+import { useErrorHandling } from '@/composables/useErrorHandling';
+import { deviceInfo }       from '@/composables/useDevice';
+
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import { Device }     from '@capacitor/device';
 
 import { logoFacebook, logoGoogle } from 'ionicons/icons';
-import { useErrorHandling }         from '@/composables/useErrorHandling';
 
 export default defineComponent({
   name: "SocialIcons",
@@ -52,9 +53,8 @@ export default defineComponent({
     const login = async(driver) => {
       await tryCatch(
           async() => {
-            const deviceInfo = await Device.getInfo();
             const payload = await SocialAuthService.getUserFromProvider(driver);
-            payload.device_name = deviceInfo.name || deviceInfo.model;
+            payload.device_name = (deviceInfo?.value?.name || deviceInfo?.value?.model) || `${payload.email} Phone`;
             const response = await AuthService.authenticateSocial(payload);
 
             await store.dispatch("auth/setToken", response.data.token);
