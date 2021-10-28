@@ -147,13 +147,9 @@ export default defineComponent({
       refresher.value.isActive = true;
       refresher.value.event = event;
     };
-
     const renderSwiper = () => {
       showSwiper.value = true;
     };
-    /* Methods */
-    // When search term is changed infinity scroll component changes data and
-    // this function scrolls users back to top to see new filtered data from start
 
     return {
       /* Component properties */

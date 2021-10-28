@@ -16,4 +16,6 @@ export default {
     "owner.currentActiveStaff": "Trenutno aktivni zaposleni",
     "currentTableAvailability": "Sto je trenutno {availability}.",
     "currentTableSmokingAllowed": "Pušenje {isAllowed} dozvoljeno za ovim stolom.",
+    "noFavoritePlaces1": "Trenutno nemate omiljenih objekata. Možete kliknuti na ",
+    "noFavoritePlaces2": " kako biste dodali jedan.",
 };

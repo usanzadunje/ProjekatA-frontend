@@ -61,17 +61,23 @@ export default {
             },
         );
     },
-    // Subscribing users to specific place
-    // Checking whether users is subscribed to specific place
     userSubscriptionIds() {
         return API.apiClient.get(`/user/subscriptions/place/ids`);
     },
     subscribe(placeId, notificationTime = null) {
         return API.apiClient.post(`/user/subscriptions/place/${placeId}/notify-in-next/${notificationTime || ''}`);
     },
-    // Unsubscribing users to specific place
     unsubscribe(placeId) {
         return API.apiClient.delete(`/user/subscriptions/place/${placeId}`);
+    },
+    userFavoritePlaceIds() {
+        return API.apiClient.get(`/user/favorites/place/ids`);
+    },
+    favorite(placeId) {
+        return API.apiClient.post(`/user/favorites/place/${placeId}`);
+    },
+    unfavorite(placeId) {
+        return API.apiClient.delete(`/user/favorites/place/${placeId}`);
     },
     getDistance(placeLatitude = 0, placeLongitude = 0) {
         const latitude = store.getters['global/position'].latitude;

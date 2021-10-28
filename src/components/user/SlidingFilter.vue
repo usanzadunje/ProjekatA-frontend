@@ -17,6 +17,17 @@
           <ion-icon slot="start" :icon="locationOutline"></ion-icon>
         </ion-button>
       </swiper-slide>
+      <swiper-slide v-if="this.$store.getters['auth/loggedIn']">
+        <ion-button
+            data-sliding-filter="favorites"
+            class="sliding-filter-button sliding-filter-button-text uppercase"
+            :class="activeSlidingButton === 'favorites' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
+            @click="sortButtonActivated"
+        >
+          {{ $t('favorite', 2) }}
+          <ion-icon slot="start" :icon="pieChart"></ion-icon>
+        </ion-button>
+      </swiper-slide>
       <swiper-slide>
         <ion-button
             data-sliding-filter="availability"

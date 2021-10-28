@@ -25,21 +25,42 @@
         <div class="pb-6">
           <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
           <PlaceCardSlider
-              :places="places.closestToUser?.slice(0, 4)"
+              :places="places.closestToUser"
               :show-skeleton="showSkeleton"
               @open-place-modal="openModal(true, $event)"
           />
 
+          <div v-if="this.$store.getters['auth/loggedIn']">
+            <FilterCategoryHeading class="mb-2" :title="$t('favorite', 2)"/>
+            <PlaceCardSlider
+                v-if="places.favorites.length !== 0"
+                :places="places.favorites"
+                :show-skeleton="showSkeleton"
+                @open-place-modal="openModal(true, $event)"
+            />
+            <div
+                v-else
+                class="primary-text-color text-xs mb-2"
+            >
+              {{ $t('noFavoritePlaces1') }}
+              <ion-icon
+                  :icon="starOutline"
+                  class="text-yellow-400"
+              ></ion-icon>
+              {{ $t('noFavoritePlaces2') }}
+            </div>
+          </div>
+
           <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
           <PlaceCardSlider
-              :places="places.currentlyAvailable?.slice(0, 4)"
+              :places="places.currentlyAvailable"
               :show-skeleton="showSkeleton"
               @open-place-modal="openModal(true, $event)"
           />
 
           <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
           <PlaceCardSlider
-              :places="places.haveFood?.slice(0, 4)"
+              :places="places.haveFood"
               :show-skeleton="showSkeleton"
               @open-place-modal="openModal(true, $event)"
           />
@@ -61,16 +82,17 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted } from 'vue';
-import { useRouter, useRoute }                       from 'vue-router';
-import { useStore }                                  from 'vuex';
+import { defineComponent, ref, reactive, onMounted, computed, watch } from 'vue';
+import { useRouter, useRoute }                                        from 'vue-router';
+import { useStore }                                                   from 'vuex';
 import {
   IonContent,
   IonPage,
+  IonIcon,
   IonRefresher,
   IonRefresherContent,
   onIonViewDidEnter,
-}                                                    from '@ionic/vue';
+}                                                                     from '@ionic/vue';
 
 import PlaceService from '@/services/PlaceService';
 
@@ -86,11 +108,16 @@ import { useModal }         from '@/composables/useModal';
 import { slideUp }          from '@/composables/useAnimations';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 
+import {
+  starOutline,
+} from 'ionicons/icons';
+
 export default defineComponent({
   name: 'UserHome',
   components: {
     IonContent,
     IonPage,
+    IonIcon,
     IonRefresher,
     IonRefresherContent,
     AppSlideUpWrapper,
@@ -115,10 +142,12 @@ export default defineComponent({
     /* Component properties */
     const places = reactive({
       closestToUser: [],
+      favorites: [],
       currentlyAvailable: [],
       haveFood: [],
     });
     const showSkeleton = ref(true);
+    const loggedIn = computed(() => store.getters['auth/loggedIn']);
 
     /* Composables */
     const { position, checkForLocationPermission, tryGettingLocation } = useGeolocation();
@@ -164,43 +193,63 @@ export default defineComponent({
 
     /* Methods */
     const getFilteredPlaces = async() => {
+      const promises = [
+        PlaceService.index(
+            true,
+            'distance',
+            '',
+            0,
+            4,
+            position.value.latitude,
+            position.value.longitude,
+        ),
+
+        PlaceService.index(
+            true,
+            'availability',
+            '',
+            0,
+            4,
+            position.value.latitude,
+            position.value.longitude,
+        ),
+
+        PlaceService.index(
+            true,
+            'food',
+            '',
+            0,
+            4,
+            position.value.latitude,
+            position.value.longitude,
+        ),
+
+        ...loggedIn.value ?
+            [
+              PlaceService.index(
+                  true,
+                  'favorites',
+                  '',
+                  0,
+                  4,
+                  position.value.latitude,
+                  position.value.longitude,
+              ),
+            ] :
+            [],
+      ];
       await tryCatch(
           async() => {
-            const response = await Promise.all([
-              PlaceService.index(
-                  true,
-                  'distance',
-                  '',
-                  0,
-                  4,
-                  position.value.latitude,
-                  position.value.longitude,
-              ),
-
-              PlaceService.index(
-                  true,
-                  'availability',
-                  '',
-                  0,
-                  4,
-                  position.value.latitude,
-                  position.value.longitude,
-              ),
-
-              PlaceService.index(
-                  true,
-                  'food',
-                  '',
-                  0,
-                  4,
-                  position.value.latitude,
-                  position.value.longitude,
-              ),
-            ]);
+            const response = await Promise.all(promises);
 
             places.closestToUser = response[0].data;
             places.currentlyAvailable = response[1].data;
             places.haveFood = response[2].data;
+
+            if(promises.length === 4) {
+              places.favorites = response[3].data;
+            }
+
           },
           null,
           'dataFetchingError',
@@ -225,6 +274,41 @@ export default defineComponent({
       showSkeleton.value = false;
     };
 
+    /* Watchers */
+    watch(loggedIn, async() => {
+      if(loggedIn.value) {
+        await tryCatch(
+            async() => {
+              const response = await PlaceService.index(
+                  true,
+                  'favorites',
+                  '',
+                  0,
+                  4,
+                  position.value.latitude,
+                  position.value.longitude,
+              );
+
+              places.favorites = response.data;
+            },
+            null,
+            'dataFetchingError',
+        );
+      }
+    });
+    store.subscribeAction((action) => {
+      if(action.type === "user/removeFavoritePlace") {
+        const indexToRemove = places.favorites.findIndex(place => place.id === action.payload.id);
+        if(indexToRemove > -1) {
+          places.favorites.splice(indexToRemove, 1);
+        }
+      }
+
+      if(action.type === "user/addFavoritePlace") {
+        places.favorites.push(action.payload);
+      }
+    });
+
     return {
       /* Global properties */
       /* Component properties */
@@ -242,7 +326,8 @@ export default defineComponent({
 
       /* Methods */
 
-      /* Icons from */
+      /* Icons */
+      starOutline,
     };
   },
 });

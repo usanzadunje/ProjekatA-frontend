@@ -15,12 +15,12 @@
         </div>
       </div>
       <hr class="card-horizontal-ruler">
-      <div class="px-3 pt-3 pb-2.5 flex justify-between">
+      <div class="px-3 pt-3 pb-2.5 flex justify-between items-center">
         <div class="flex w-20 ml-1">
           <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
         </div>
-        <div class="flex w-10">
-          <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+        <div class="flex items-center w-4 h-4 rounded-full">
+          <ion-skeleton-text animated></ion-skeleton-text>
         </div>
       </div>
     </div>

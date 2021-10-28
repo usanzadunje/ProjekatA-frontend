@@ -12,6 +12,7 @@ export const state = {
     notifications: [],
     placesAdditionalInfo: [],
     subscriptions: [],
+    favoritePlaces: [],
 };
 
 export const mutations = {
@@ -54,6 +55,7 @@ export const mutations = {
     PURGE_PLACE_ADDITIONAL_INFO(state) {
         state.placesAdditionalInfo = [];
     },
+
     /* SUBSCRIPTIONS */
     SET_SUBSCRIPTIONS(state, payload) {
         state.subscriptions = payload;
@@ -66,6 +68,20 @@ export const mutations = {
     },
     PURGE_SUBSCRIPTION_DATA(state) {
         state.subscriptions = [];
+    },
+
+    /* FAVOURITE PLACES */
+    SET_FAVORITE_PLACES(state, payload) {
+        state.favoritePlaces = payload;
+    },
+    ADD_FAVORITE_PLACE(state, payload) {
+        state.favoritePlaces.push(payload);
+    },
+    REMOVE_FAVORITE_PLACE(state, id) {
+        state.favoritePlaces = state.favoritePlaces.filter(placeId => placeId !== id);
+    },
+    PURGE_FAVORITE_PLACE_DATA(state) {
+        state.favoritePlaces = [];
     },
 };
 
@@ -156,6 +172,22 @@ export const actions = {
 
         commit("SET_SUBSCRIPTIONS", response.data.subscriptions);
     },
+
+    async getFavoritePlaces({ commit }) {
+        const response = await PlaceService.userFavoritePlaceIds();
+
+        commit("SET_FAVORITE_PLACES", response.data.favorite_places);
+    },
+    async addFavoritePlace({ commit }, payload) {
+        PlaceService.favorite(payload.id);
+
+        commit("ADD_FAVORITE_PLACE", payload.id);
+    },
+    async removeFavoritePlace({ commit }, payload) {
+        PlaceService.unfavorite(payload.id);
+
+        commit("REMOVE_FAVORITE_PLACE", payload.id);
+    },
 };
 
 export const getters = {
@@ -204,5 +236,9 @@ export const getters = {
 
     isSubscribedTo: (state) => (id) => {
         return !!state.subscriptions?.find(placeId => placeId === id);
+    },
+
+    hasInFavorites: (state) => (id) => {
+        return !!state.favoritePlaces?.find(placeId => placeId === id);
     },
 };

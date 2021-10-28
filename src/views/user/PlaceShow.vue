@@ -21,12 +21,33 @@
                 @click="openPreview(place.images?.filter(img => !img.is_logo))"
             />
             <div class="mt-4 ion-item-no-padding-x">
-              <h1 v-show="!showSkeleton" class="cafe-show-name">{{ place.name }}</h1>
-              <h1 v-show="showSkeleton">
+              <div
+                  v-show="!showSkeleton"
+                  class="flex justify-between items-center"
+              >
+                <h1 class="cafe-show-name">{{ place.name }}</h1>
+                <AppFavoriteButton
+                    :place="strippedPlaceInfo"
+                    :icon-size="22"
+                />
+              </div>
+              <div
+                  v-show="showSkeleton"
+                  class="flex justify-between items-center"
+              >
                 <ion-skeleton-text animated class="rounded-md h-8 w-2/3"></ion-skeleton-text>
-              </h1>
-              <p v-show="!showSkeleton" class="cafe-show-offers mt-1">{{ $t('showPlace') }}</p>
-              <p v-show="showSkeleton" class="mt-1">
+                <div class="flex items-center w-6 h-6 rounded-full">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </div>
+              </div>
+
+              <p
+                  v-show="!showSkeleton"
+                  class="cafe-show-offers mt-1 pr-10"
+              >
+                {{ $t('showPlace') }}
+              </p>
+              <p v-show="showSkeleton" class="mt-1 pr-10">
                 <ion-skeleton-text animated class="rounded-md h-12"></ion-skeleton-text>
               </p>
             </div>
@@ -115,6 +136,7 @@ import {
 
 import TheGoBackHeader        from '@/components/user/headers/TheGoBackHeader';
 import MainImagePreview       from '@/components/MainImagePreview';
+import AppFavoriteButton      from '@/components/AppFavoriteButton';
 import PlaceInfoBody          from '@/components/place/PlaceInfoBody';
 import FilterCategoryHeading  from '@/components/user/FilterCategoryHeading';
 import TableContainer         from '@/components/TableContainer';
@@ -157,6 +179,7 @@ export default defineComponent({
     IonRefresherContent,
     TheGoBackHeader,
     MainImagePreview,
+    AppFavoriteButton,
     PlaceInfoBody,
     FilterCategoryHeading,
     TableContainer,
@@ -181,6 +204,18 @@ export default defineComponent({
     const resetProductOffset = ref(false);
     const dropzoneWidth = computed(() => {
       return deviceWidth.value - ((2.25 * parseFloat(getComputedStyle(document.documentElement).fontSize)) + 4);
+    });
+    const strippedPlaceInfo = computed(() => {
+      return {
+        id: place.value.id,
+        name: place.value.name,
+        city: place.value.city,
+        address: place.value.address,
+        latitude: place.value.latitude,
+        longitude: place.value.longitude,
+        images: [place.value.images?.find((image) => image.is_logo)] ?? [],
+        availability_ratio: place.value.availability_ratio,
+      };
     });
 
     /* Computed properties */
@@ -326,6 +361,7 @@ export default defineComponent({
       showSkeleton,
       loadingProducts,
       resetProductOffset,
+      strippedPlaceInfo,
 
       /* Computed properties */
       loggedIn,

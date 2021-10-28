@@ -42,6 +42,7 @@ export const actions = {
 
         if(!getters.isStaff && !getters.isOwner) {
             dispatch('user/getSubscriptions', null, { root: true });
+            dispatch('user/getFavoritePlaces', null, { root: true });
         }
 
         if(getters.isStaff) {
@@ -97,6 +98,7 @@ export const actions = {
             commit('user/SET_DARKMODE', false, { root: true });
             commit('user/SET_LOCALIZATION', { text: "SRB", value: "sr" }, { root: true });
             commit('user/PURGE_SUBSCRIPTION_DATA', null, { root: true });
+            commit('user/PURGE_FAVORITE_PLACE_DATA', null, { root: true });
 
             i18n.global.locale.value = 'sr';
             document.body.classList.toggle('dark', false);

@@ -1,15 +1,22 @@
 <template>
   <div class="px-4 pt-4">
-    <div class="ion-item-no-padding-x flex items-center">
-      <img
-          :src="`${backendStorageURL + logoPath}`"
-          :alt="`Logo`"
-          class="modal-thumbnail radius-11px"
-      >
-      <div class="ml-4">
-        <h1 class="modal-cafe-name-text">{{ place.name }}</h1>
-        <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
+    <div class="flex justify-between">
+      <div class="ion-item-no-padding-x flex items-center">
+        <img
+            :src="`${backendStorageURL + logoPath}`"
+            :alt="`Logo`"
+            class="modal-thumbnail radius-11px"
+        >
+        <div class="ml-4">
+          <h1 class="modal-cafe-name-text">{{ place.name }}</h1>
+          <p class="modal-cafe-offers">Kafic, hrana, basta...</p>
+        </div>
       </div>
+
+      <AppFavoriteButton
+          :place="place"
+          :icon-size="22"
+      />
     </div>
 
     <PlaceInfoBody
@@ -35,7 +42,7 @@
       <ion-button
           @click="openModal(true);hideModal('.custom-modal > .modal-wrapper')"
           class="flex-shrink uppercase button-subscribe modal-button-border"
-          :disabled="false"
+          :disabled="isSubButtonDisabled"
       >
         <ion-icon slot="start"
                   :icon="isUserSubscribed ? notifications : notificationsOutline"
@@ -60,36 +67,40 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, onUnmounted } from 'vue';
-import { useRoute, useRouter }                         from 'vue-router';
-import { useStore }                                    from 'vuex';
+import { defineComponent, ref, computed, onUnmounted, toRefs } from 'vue';
+import { useRoute, useRouter }                                 from 'vue-router';
+import { useStore }                                            from 'vuex';
 import {
   IonIcon,
   IonButton,
-}                                                      from '@ionic/vue';
+}                                                              from '@ionic/vue';
 
+import AppFavoriteButton         from '@/components/AppFavoriteButton';
 import PlaceInfoBody             from '@/components/place/PlaceInfoBody';
 import PlaceInfoModalImageSlider from '@/components/user/sliders/PlaceInfoModalImageSlider';
 import AppModal                  from '@/components/AppModal';
 import PlaceSubscriptionModal    from '@/components/user/modals/PlaceSubscriptionModal';
 
-import { useModal }              from '@/composables/useModal';
-import { useCache }              from '@/composables/useCache';
+import { useModal }         from '@/composables/useModal';
+import { useCache }         from '@/composables/useCache';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   notifications,
   notificationsOutline,
+  star,
+  starOutline,
 
 } from 'ionicons/icons';
 
-import { Capacitor }        from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 
 export default defineComponent({
   name: 'PlaceInfoModal',
   components: {
     IonIcon,
     IonButton,
+    AppFavoriteButton,
     PlaceInfoBody,
     PlaceInfoModalImageSlider,
     AppModal,
@@ -110,13 +121,15 @@ export default defineComponent({
 
     /* Component properties */
     const showSkeleton = ref(true);
+    const { place } = toRefs(props);
 
-    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](props.place.id));
-    const placeAdditionalInfo = computed(() => store.getters['user/getPlaceAdditionInfo'](props.place.id));
+    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](place.value.id));
+    const placeAdditionalInfo = computed(() => store.getters['user/getPlaceAdditionInfo'](place.value.id));
     const isSubButtonDisabled = ref(true);
     const logoPath = computed(() => {
-      if(props.place.images?.length > 0) {
-        return props.place.images[0]?.path;
+      if(place.value.images?.length > 0) {
+        return place.value.images?.find(image => image.is_logo).path ??
+            place.value.images[0]?.path;
       }else {
         return '/places/default_place_logo.png';
       }
@@ -131,11 +144,11 @@ export default defineComponent({
     (async() => {
       await tryCatch(
           async() => {
-            await getCachedOrFetchPlaceAdditionalInfo(props.place.id);
+            await getCachedOrFetchPlaceAdditionalInfo(place.value.id);
           },
           null,
-          'dataFetchingError'
-      )
+          'dataFetchingError',
+      );
 
       setTimeout(() => {
         showSkeleton.value = false;
@@ -171,6 +184,8 @@ export default defineComponent({
       /* Icons from */
       notifications,
       notificationsOutline,
+      star,
+      starOutline,
     };
   },
 });

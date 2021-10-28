@@ -35,7 +35,7 @@
           >
         </ion-avatar>
         <ion-label class="break-all">
-          {{ authUser?.username || authUser.fname }}
+          {{ authUser?.username || authUser?.fname }}
         </ion-label>
       </ion-chip>
     </div>

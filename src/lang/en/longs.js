@@ -15,4 +15,6 @@ export default {
     "owner.currentActiveStaff": "Currently active staff",
     "currentTableAvailability": "Table is currently {availability}.",
     "currentTableSmokingAllowed": "Smoking {isAllowed} allowed at this table.",
+    "noFavoritePlaces1": "You have no favorite places yet. You can click on ",
+    "noFavoritePlaces2": " to add one.",
 };

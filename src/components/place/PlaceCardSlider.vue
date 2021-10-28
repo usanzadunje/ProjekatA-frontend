@@ -53,7 +53,7 @@ export default defineComponent({
   emits: ['openPlaceModal'],
   setup(props) {
     /* Component properties */
-    const numberOfSlides = computed(() => Math.floor(props.places.length / 2));
+    const numberOfSlides = computed(() => Math.ceil(props.places.length / 2));
 
     return {
       /* Component properties */

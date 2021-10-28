@@ -119,7 +119,6 @@ import {
   trashOutline,
 } from 'ionicons/icons';
 
-
 export default defineComponent({
   name: 'UserDashboard',
   components: {
@@ -268,6 +267,21 @@ export default defineComponent({
     const removeExpiredSubscription = (placeId) => {
       placesUserSubscribedTo.value = placesUserSubscribedTo.value.filter(place => place.id !== placeId);
     };
+
+    /* Watchers */
+    store.subscribeAction((action) => {
+      if(action.type === "user/removeFavoritePlace" && sortBy.value === 'favorites') {
+        const indexToRemove = placesUserSubscribedTo.value.findIndex(place => place.id === action.payload.id);
+        if(indexToRemove > -1) {
+          placesUserSubscribedTo.value.splice(indexToRemove, 1);
+        }
+      }
+      if(action.type === "user/addFavoritePlace" && sortBy.value === 'favorites') {
+        if(store.getters["user/isSubscribedTo"](action.payload.id)) {
+          placesUserSubscribedTo.value.push(action.payload);
+        }
+      }
+    });
 
     return {
       /* Component properties */

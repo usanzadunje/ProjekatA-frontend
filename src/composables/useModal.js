@@ -18,14 +18,14 @@ export function useModal() {
     const hideModal = (selector) => {
         const modal = document.querySelector(`${selector}`);
 
-        modal.style.transition = 'opacity 0.25s ease-in';
-        modal.style.opacity = 0;
+        modal.style.setProperty('transition', 'opacity 0.35s ease-in', 'important');
+        modal.style.setProperty('opacity', '0', 'important');
     };
     const showModal = (selector) => {
         const modal = document.querySelector(`${selector}`);
 
-        modal.style.transition = 'opacity 0.1s ease-out';
-        modal.style.opacity = 1;
+        modal.style.setProperty('transition', 'opacity 0.2s ease-out', 'important');
+        modal.style.setProperty('opacity', '1', 'important');
     };
 
 

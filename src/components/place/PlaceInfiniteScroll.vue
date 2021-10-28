@@ -36,6 +36,7 @@
 
 <script>
 import { defineComponent, ref, watch, toRefs, onMounted } from 'vue';
+import { useStore }                                       from 'vuex';
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
@@ -75,6 +76,7 @@ export default defineComponent({
   emits: ['mounted', 'scrollToTop', 'openPlaceModal', 'infiniteScrollToggle'],
   setup(props, { emit }) {
     /* Global properties */
+    const store = useStore();
     /* Component properties */
     const places = ref([]);
     const { placeSearchTerm } = toRefs(props);
@@ -179,6 +181,18 @@ export default defineComponent({
     watch(props.refresher, async() => {
       if(props.refresher.isActive) {
         await refresh(props.refresher.event);
+      }
+    });
+    store.subscribeAction((action) => {
+      if(action.type === "user/removeFavoritePlace" && sortBy.value === 'favorites') {
+        const indexToRemove = places.value.findIndex(place => place.id === action.payload.id);
+        if(indexToRemove > -1) {
+          places.value.splice(indexToRemove, 1);
+        }
+      }
+
+      if(action.type === "user/addFavoritePlace" && sortBy.value === 'favorites') {
+        places.value.push(action.payload);
       }
     });
 

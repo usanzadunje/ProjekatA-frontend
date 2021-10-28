@@ -88,6 +88,7 @@ export default defineComponent({
           async() => {
             if(store.getters['auth/loggedIn']) {
               store.dispatch("user/getSubscriptions");
+              store.dispatch("user/getFavoritePlaces");
             }
           },
           null,

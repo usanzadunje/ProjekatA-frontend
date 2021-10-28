@@ -23,10 +23,11 @@
           <span class="cafe-card-fade-text ml-1">{{ distance }}m</span>
         </div>
       </div>
-      <div class="primary-icon-color">
-        <ion-icon :icon="fastFoodOutline"></ion-icon>
-        <ion-icon :icon="leafOutline" class="ml-1"></ion-icon>
-      </div>
+
+      <AppFavoriteButton
+          :place="place"
+          :icon-size="17"
+      />
     </div>
   </div>
 </template>
@@ -37,19 +38,23 @@ import {
   IonIcon,
 }                                            from '@ionic/vue';
 
+import AppFavoriteButton from '@/components/AppFavoriteButton';
+
 import PlaceService from '@/services/PlaceService';
 
 import {
   locationOutline,
   pieChart,
-  fastFoodOutline,
-  leafOutline,
+  starOutline,
+  star,
 } from 'ionicons/icons';
+
 
 export default defineComponent({
   name: 'PlaceCard',
   components: {
     IonIcon,
+    AppFavoriteButton,
   },
   props: {
     place: {
@@ -58,9 +63,10 @@ export default defineComponent({
     },
   },
   setup(props) {
+    /* Global properties */
     /* Component properties */
     const { place } = toRefs(props);
-    const distance = computed(() => Math.round(PlaceService.getDistance(place.latitude, place.longitude)));
+    const distance = computed(() => Math.round(PlaceService.getDistance(place.value.latitude, place.value.longitude)));
     const logoPath = computed(() => {
       if(place.value.images?.length > 0) {
         return place.value.images.find(image => image.is_logo)?.path ??
@@ -69,6 +75,9 @@ export default defineComponent({
         return '/places/default_place_logo.png';
       }
     });
+
+    /* Composables */
+
     /* Event handlers */
 
     return {
@@ -81,8 +90,8 @@ export default defineComponent({
       /* Icons from */
       locationOutline,
       pieChart,
-      fastFoodOutline,
-      leafOutline,
+      starOutline,
+      star,
     };
   },
 });
