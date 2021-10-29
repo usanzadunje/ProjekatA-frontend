@@ -35,7 +35,10 @@
             </div>
           </div>
         </ion-item>
-        <ion-item-options side="end" @ionSwipe="showAlert(category, true)">
+        <ion-item-options
+            side="end"
+            :class="{ 'rounded-tl-3xl	': index === 0, 'rounded-bl-3xl	': index === categories.length - 1 }"
+            @ionSwipe="showAlert(category, true, $event)">
           <ion-item-option type="button" :expandable="true" @click="showAlert(category, false, $event)">
             <ion-icon
                 slot="icon-only"
@@ -81,6 +84,7 @@ import CategoryCreateEditModal from '@/components/owner/modals/CategoryCreateEdi
 import { useModal }         from '@/composables/useModal';
 import { useSlidingItem }   from '@/composables/useSlidingItem';
 import { useErrorHandling } from '@/composables/useErrorHandling';
+import { shrink, swipe }    from '@/composables/useAnimations';
 
 import {
   createOutline,
@@ -115,6 +119,8 @@ export default defineComponent({
     const { t } = useI18n();
     const { isModalOpen, modalData, openModal } = useModal();
     const { tryCatch } = useErrorHandling();
+    const { fullSwipeLeft } = swipe();
+    const { shrinkToMiddle } = shrink();
 
     /* Methods */
     const removeCategory = async(id) => {
@@ -157,6 +163,13 @@ export default defineComponent({
                 text: t('agree'),
                 handler: () => {
                   removeCategory(category.id);
+                  if(swiping) {
+                    fullSwipeLeft(event.target.parentElement.firstChild);
+                    shrinkToMiddle(event.target.parentElement);
+                  }else {
+                    fullSwipeLeft(event.target.parentElement.parentElement.firstChild);
+                    shrinkToMiddle(event.target.parentElement.parentElement);
+                  }
                 },
               },
             ],
@@ -205,7 +218,6 @@ ion-item {
 ion-item-options {
   --border-style: none;
   background-color: #E01B43 !important;
-  border-radius: 30px !important;
 }
 
 ion-item-option {

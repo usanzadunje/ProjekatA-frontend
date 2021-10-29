@@ -14,7 +14,7 @@
     </div>
 
     <div v-show="showSkeleton">
-      <div v-for="i in 15" :key="i" class="mb-5">
+      <div v-for="i in 9" :key="i" class="mb-5">
         <PlaceCardSkeleton></PlaceCardSkeleton>
       </div>
     </div>

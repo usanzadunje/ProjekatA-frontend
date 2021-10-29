@@ -23,7 +23,11 @@
 
       <div class="ion-padding">
         <div class="pb-6">
-          <FilterCategoryHeading class="mb-2" :title="$t('closest')"/>
+          <FilterCategoryHeading
+              class="mb-2"
+              :title="$t('closest')"
+              :icon="locationSharp"
+          />
           <PlaceCardSlider
               :places="places.closestToUser"
               :show-skeleton="showSkeleton"
@@ -31,7 +35,11 @@
           />
 
           <div v-if="this.$store.getters['auth/loggedIn']">
-            <FilterCategoryHeading class="mb-2" :title="$t('favorite', 2)"/>
+            <FilterCategoryHeading
+                class="mb-2"
+                :title="$t('favorite', 2)"
+                :icon="starSharp"
+            />
             <PlaceCardSlider
                 v-if="places.favorites.length !== 0"
                 :places="places.favorites"
@@ -51,14 +59,22 @@
             </div>
           </div>
 
-          <FilterCategoryHeading class="mb-2" :title="$t('currently')"/>
+          <FilterCategoryHeading
+              class="mb-2"
+              :title="$t('currently')"
+              :icon="ellipseOutline"
+          />
           <PlaceCardSlider
               :places="places.currentlyAvailable"
               :show-skeleton="showSkeleton"
               @open-place-modal="openModal(true, $event)"
           />
 
-          <FilterCategoryHeading class="mb-2" :title="$t('food')"/>
+          <FilterCategoryHeading
+              class="mb-2"
+              :title="$t('food')"
+              :icon="pizzaSharp"
+          />
           <PlaceCardSlider
               :places="places.haveFood"
               :show-skeleton="showSkeleton"
@@ -110,6 +126,10 @@ import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   starOutline,
+  locationSharp,
+  starSharp,
+  pizzaSharp,
+  ellipseOutline,
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -328,6 +348,10 @@ export default defineComponent({
 
       /* Icons */
       starOutline,
+      locationSharp,
+      starSharp,
+      pizzaSharp,
+      ellipseOutline,
     };
   },
 });

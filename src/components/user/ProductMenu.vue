@@ -1,13 +1,15 @@
 <template>
   <div class="mb-2">
     <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="bookOutline"/>
-    <AccordionList
+    <AppAccordion
         :panel-id="`productPanel${category.id}`"
         v-for="category in place.categories"
-        :key="category"
+        :key="category.id"
         :title="category.name"
         :icon="beerOutline"
         class="accordion-list-border-top"
+        @panel-opened="changeCurrentlyOpenPanel"
+        :is-open="checkIfPanelIsOpen(`productPanel${category.id}`)"
     >
       <ProductCard
           v-for="product in category.products"
@@ -31,7 +33,7 @@
             class="my-2 scale2x"
         ></ion-spinner>
       </div>
-    </AccordionList>
+    </AppAccordion>
 
     <AppModal
         :is-open="isModalOpen"
@@ -52,7 +54,7 @@ import { defineComponent, reactive, toRefs, watch } from 'vue';
 import { IonButton, IonSpinner }                    from '@ionic/vue';
 
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import AccordionList         from '@/components/user/AccordionList';
+import AppAccordion          from '@/components/AppAccordion';
 import ProductCard           from '@/components/ProductCard';
 import AppModal              from '@/components/AppModal';
 import ProductInfoModal      from '@/components/user/modals/ProductInfoModal';
@@ -64,6 +66,7 @@ import {
                                       from 'ionicons/icons';
 import { useModal }                   from '@/composables/useModal';
 import { increaseAccordionMaxHeight } from '@/utils/helpers';
+import { useAccordion }               from '@/composables/useAccordion';
 
 export default defineComponent({
   name: 'Menu',
@@ -71,7 +74,7 @@ export default defineComponent({
     IonButton,
     IonSpinner,
     FilterCategoryHeading,
-    AccordionList,
+    AppAccordion,
     ProductCard,
     AppModal,
     ProductInfoModal,
@@ -99,6 +102,7 @@ export default defineComponent({
 
     /* Composables */
     const { isModalOpen, modalData, openModal } = useModal();
+    const { changeCurrentlyOpenPanel, checkIfPanelIsOpen } = useAccordion();
 
     /* Lifecycle hooks */
     /* Methods */
@@ -106,7 +110,7 @@ export default defineComponent({
       if(key in offset) {
         offset[key] = offset[key] + 10;
       }else {
-        offset[key] = 0;
+        offset[key] = 7;
       }
 
       return offset[key];
@@ -139,6 +143,8 @@ export default defineComponent({
       openModal,
       showProductModal,
       loadMoreProducts,
+      changeCurrentlyOpenPanel,
+      checkIfPanelIsOpen,
 
       /* Icons */
       bookOutline,

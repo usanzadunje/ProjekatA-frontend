@@ -1,9 +1,9 @@
 import * as API from "@/services/API";
 
 export default {
-    index(placeId = null, filter = null, offset = null, limit = null) {
+    index(filter = null, offset = null, limit = null) {
         return API.apiClient.get(
-            `/owner/menu/product/place/${placeId ?? ''}`,
+            `/owner/menu/product/place`,
             {
                 params: {
                     filter,

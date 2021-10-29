@@ -128,7 +128,7 @@ export default defineComponent({
 
     /* Component properties */
     const tables = computed(() => store.getters['owner/tables']);
-    const activeStaff = computed(() => store.getters['owner/staff'].filter(staff => staff.active));
+    const activeStaff = computed(() => store.getters['owner/activeStaff']);
     const isOwner = computed(() => store.getters['auth/isOwner']);
     const showSkeleton = ref(true);
 
@@ -165,7 +165,7 @@ export default defineComponent({
     });
     onIonViewWillEnter(async() => {
       if(!Capacitor.isNativePlatform()) {
-        await getPlaceAvailability;
+        await getPlaceAvailability();
       }
     });
 
@@ -180,7 +180,7 @@ export default defineComponent({
             await store.dispatch('staff/updatePlaceAvailability');
 
             if(isOwner.value) {
-              await store.dispatch('owner/getStaffInfo');
+              await store.dispatch('owner/getActiveStaffInfo');
             }
           },
           null,

@@ -13,8 +13,9 @@
             :class="activeSlidingButton === 'distance' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
+          <ion-icon slot="start"
+                    :icon="activeSlidingButton === 'distance' ? locationSharp : locationOutline"></ion-icon>
           {{ $t('closest') }}
-          <ion-icon slot="start" :icon="locationOutline"></ion-icon>
         </ion-button>
       </swiper-slide>
       <swiper-slide v-if="this.$store.getters['auth/loggedIn']">
@@ -24,8 +25,8 @@
             :class="activeSlidingButton === 'favorites' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
+          <ion-icon slot="start" :icon="activeSlidingButton === 'favorites' ? starSharp : starOutline"></ion-icon>
           {{ $t('favorite', 2) }}
-          <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
       </swiper-slide>
       <swiper-slide>
@@ -35,8 +36,9 @@
             :class="activeSlidingButton === 'availability' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
+          <ion-icon slot="start"
+                    :icon="activeSlidingButton === 'availability' ? ellipseSharp : ellipseOutline"></ion-icon>
           {{ $t('available') }}
-          <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
       </swiper-slide>
       <swiper-slide>
@@ -46,19 +48,19 @@
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
+          <ion-icon slot="start" :icon="activeSlidingButton === 'food' ? pizzaSharp : pizzaOutline"></ion-icon>
           {{ $t('food') }}
-          <ion-icon slot="start" :icon="pieChart"></ion-icon>
         </ion-button>
       </swiper-slide>
       <swiper-slide>
         <ion-button
-            data-sliding-filter="popular"
+            data-sliding-filter="random"
             class="sliding-filter-button sliding-filter-button-text uppercase"
-            :class="activeSlidingButton === 'popular' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
+            :class="activeSlidingButton === 'random' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
-          {{ $t('popular') }}
-          <ion-icon slot="start" :icon="pieChart"></ion-icon>
+          <ion-icon slot="start" :icon="shuffle" style="font-size:1.1rem"></ion-icon>
+          {{ $t('random') }}
         </ion-button>
       </swiper-slide>
     </swiper>
@@ -77,7 +79,14 @@ import { deviceWidth } from '@/composables/useDevice';
 
 import {
   locationOutline,
-  pieChart,
+  locationSharp,
+  starOutline,
+  starSharp,
+  pizzaOutline,
+  pizzaSharp,
+  ellipseOutline,
+  ellipseSharp,
+  shuffle,
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -124,7 +133,14 @@ export default defineComponent({
 
       /* Icons */
       locationOutline,
-      pieChart,
+      locationSharp,
+      starSharp,
+      starOutline,
+      pizzaSharp,
+      pizzaOutline,
+      ellipseSharp,
+      ellipseOutline,
+      shuffle,
     };
   },
 });

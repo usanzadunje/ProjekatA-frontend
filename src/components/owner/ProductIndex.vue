@@ -52,7 +52,7 @@
             </ProductCard>
           </div>
         </ion-item>
-        <ion-item-options side="end" @ionSwipe="showAlert(product, true)">
+        <ion-item-options side="end" @ionSwipe="showAlert(product, true, $event)">
           <ion-item-option type="button" :expandable="true" @click="showAlert(product, false, $event)">
             <ion-icon
                 slot="icon-only"
@@ -80,7 +80,7 @@
 
   <ion-infinite-scroll
       threshold="100px"
-      :disabled="isInfiniteScrollDisabled"
+      :disabled="isInfiniteScrollDisabled || panelIsClosed"
       @ionInfinite="loadMoreProducts($event)"
   >
     <ion-infinite-scroll-content
@@ -115,6 +115,7 @@ import ProductCreateEditModal from '@/components/owner/modals/ProductCreateEditM
 import { useModal }         from '@/composables/useModal';
 import { useSlidingItem }   from '@/composables/useSlidingItem';
 import { useErrorHandling } from '@/composables/useErrorHandling';
+import { shrink, swipe }    from '@/composables/useAnimations';
 
 import { createOutline, trashOutline } from 'ionicons/icons';
 
@@ -144,6 +145,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    panelIsClosed: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props) {
     /* Global properties */
@@ -161,6 +166,8 @@ export default defineComponent({
     const { isModalOpen, modalData, openModal } = useModal();
     const { slidingItem, closeOpenItems } = useSlidingItem();
     const { tryCatch } = useErrorHandling();
+    const { fullSwipeLeft } = swipe();
+    const { shrinkToMiddle } = shrink();
 
     /* Lifecycle hooks */
 
@@ -221,6 +228,13 @@ export default defineComponent({
                 text: t('agree'),
                 handler: () => {
                   removeProduct(product.id);
+                  if(swiping) {
+                    fullSwipeLeft(event.target.parentElement.firstChild);
+                    shrinkToMiddle(event.target.parentElement);
+                  }else {
+                    fullSwipeLeft(event.target.parentElement.parentElement.firstChild);
+                    shrinkToMiddle(event.target.parentElement.parentElement);
+                  }
                 },
               },
             ],

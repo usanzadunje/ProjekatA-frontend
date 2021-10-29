@@ -20,22 +20,31 @@
           </ion-button>
         </div>
 
-        <StaffCard
-            v-for="staffMember in staff"
-            :key="staffMember.id"
-            :staff="staffMember"
-            :button="true"
-            @edit-staff="editStaffMember(staffMember)"
-        >
-          <div class="absolute top-1.5 right-3 z-40">
-            <ion-icon
-                :icon="close"
-                slot="icon-only"
-                class="text-2xl text-danger ml-2"
-                @click="deleteStaffMember(staffMember, $event)"></ion-icon>
+        <div v-show="!showSkeleton">
+          <StaffCard
+              v-for="staffMember in staff"
+              :key="staffMember.id"
+              :staff="staffMember"
+              :button="true"
+              @edit-staff="editStaffMember(staffMember)"
+          >
+            <div class="absolute top-1.5 right-3 z-40">
+              <ion-icon
+                  :icon="close"
+                  slot="icon-only"
+                  class="text-2xl text-danger ml-2"
+                  @click="deleteStaffMember(staffMember, $event)"></ion-icon>
+            </div>
+          </StaffCard>
+        </div>
+
+        <div v-show="showSkeleton">
+          <div v-for="i in 9" :key="i">
+            <StaffCardSkeleton/>
           </div>
-        </StaffCard>
+        </div>
       </div>
+
       <AppModal
           :is-open="isModalOpen"
           css-class="custom-edit-staff-modal"
@@ -48,14 +57,25 @@
             @dismiss="openModal(false)"
         />
       </AppModal>
+
+      <ion-infinite-scroll
+          threshold="100px"
+          :disabled="isInfiniteScrollDisabled"
+          @ionInfinite="loadMoreStaff($event)"
+      >
+        <ion-infinite-scroll-content
+            loading-spinner="dots"
+        >
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue';
-import { useStore }                  from 'vuex';
-import { useI18n }                   from 'vue-i18n';
+import { defineComponent, computed, ref } from 'vue';
+import { useStore }                       from 'vuex';
+import { useI18n }                        from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -63,10 +83,13 @@ import {
   IonRefresherContent,
   IonButton,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   alertController,
-}                                    from '@ionic/vue';
+}                                         from '@ionic/vue';
 
 import StaffCard            from '@/components/staff/cards/StaffCard';
+import StaffCardSkeleton    from '@/components/staff/cards/StaffCardSkeleton';
 import AppModal             from '@/components/AppModal';
 import StaffCreateEditModal from '@/components/staff/modals/StaffCreateEditModal';
 
@@ -86,7 +109,10 @@ export default defineComponent({
     IonRefresherContent,
     IonButton,
     IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     StaffCard,
+    StaffCardSkeleton,
     AppModal,
     StaffCreateEditModal,
   },
@@ -96,13 +122,37 @@ export default defineComponent({
 
     /* Component properties */
     const staff = computed(() => store.getters['owner/staff']);
+    const isInfiniteScrollDisabled = ref(false);
+    const showSkeleton = ref(true);
+    let offset = 0;
 
     /* Composables */
     const { t } = useI18n();
     const { isModalOpen, modalData, openModal } = useModal();
     const { tryCatch } = useErrorHandling();
 
+    /* Methods */
+    const getStaff = async(load = null) => {
+      showSkeleton.value = !load;
+
+      await tryCatch(
+          async() => {
+            isInfiniteScrollDisabled.value = await store.dispatch('owner/getStaffInfo', {
+              offset,
+              limit: 10,
+              load,
+            });
+          },
+          null,
+          'dataFetchingError',
+      );
+
+      showSkeleton.value = false;
+    };
     /* Lifecycle hooks */
+    (async() => {
+      await getStaff();
+    })();
 
     /* Event handlers */
     const createStaffMember = async() => {
@@ -145,15 +195,18 @@ export default defineComponent({
       await alert.present();
     };
     const refresh = async(event) => {
-      await tryCatch(
-          async() => {
-            await store.dispatch('owner/getStaffInfo');
-          },
-          null,
-          'dataFetchingError',
-      );
+      offset = 0;
+
+      await getStaff();
 
       event.target.complete();
+    };
+    const loadMoreStaff = async(e) => {
+      offset += 10;
+
+      await getStaff(true);
+
+      e?.target.complete();
     };
 
     return {
@@ -161,6 +214,8 @@ export default defineComponent({
       staff,
       isModalOpen,
       modalData,
+      isInfiniteScrollDisabled,
+      showSkeleton,
 
       /* Event handlers */
       createStaffMember,
@@ -168,6 +223,7 @@ export default defineComponent({
       deleteStaffMember,
       refresh,
       openModal,
+      loadMoreStaff,
 
       /* Icons */
       close,

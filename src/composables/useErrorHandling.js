@@ -21,11 +21,12 @@ export function useErrorHandling() {
         successMessageKey = null,
         errorMessageKey = null,
         catchCallback = null,
+        successMessageParams = null,
     ) => {
         try {
             await tryCallback();
             if(successMessageKey) {
-                showSuccessToast(t(successMessageKey));
+                showSuccessToast(t(successMessageKey, successMessageParams));
             }
         }catch(errors) {
             if(!errorMessageKey) {

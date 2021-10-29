@@ -154,5 +154,6 @@ export default {
     "allowed": "Dozvoljeno",
     "forbidden": "Zabranjeno",
     "favorite": "Omiljen | Omiljeni",
+    "random": "Nasumično",
 };
 

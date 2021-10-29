@@ -1,8 +1,19 @@
 import * as API from "@/services/API";
 
 export default {
-    allStaff() {
-        return API.apiClient.get(`/owner/staff`);
+    allStaff(offset = null, limit = null) {
+        return API.apiClient.get(
+            `/owner/staff`,
+            {
+                params: {
+                    offset,
+                    limit,
+                },
+            },
+        );
+    },
+    activeStaff() {
+        return API.apiClient.get(`/owner/staff/active`);
     },
     createStaff(payload) {
         return API.apiClient.post(`/owner/staff`, payload);

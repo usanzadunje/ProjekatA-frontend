@@ -15,7 +15,7 @@
           mode="md"
           :disabled="isUserSubscribed"
           class="pl-4"
-          @ionChange="indefiniteTimerToggle($event)"
+          @ionChange="indefiniteTimerToggle"
       ></ion-toggle>
       <ion-label class="margin-left-1 submodal-fade-text">{{ $t('indefinitely') }}</ion-label>
     </ion-item>
@@ -43,7 +43,7 @@
       <ion-button
           :disabled="loading"
           class="uppercase button-confirm modal-button-border"
-          @click="toggleSubscription(place.id)"
+          @click="toggleSubscription"
       >
         <ion-icon
             slot="start"
@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from 'vue';
-import { useStore }                       from 'vuex';
-import { useI18n }                        from 'vue-i18n';
+import { computed, defineComponent, ref, toRefs } from 'vue';
+import { useStore }                               from 'vuex';
+import { useI18n }                                from 'vue-i18n';
 import {
   IonItem,
   IonIcon,
@@ -67,7 +67,7 @@ import {
   IonRange,
   IonLabel,
   alertController,
-}                                         from '@ionic/vue';
+}                                                 from '@ionic/vue';
 
 import PlaceService from '@/services/PlaceService';
 
@@ -102,9 +102,10 @@ export default defineComponent({
     const { t } = useI18n();
 
     /* Component properties */
+    const { place } = toRefs(props);
     const notificationTime = ref(15);
     const indefiniteTimerActive = ref(false);
-    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](props.place.id));
+    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](place.value.id));
     const loading = ref(false);
 
     /* Composables */
@@ -112,20 +113,24 @@ export default defineComponent({
     const { tryCatch } = useErrorHandling();
 
     /* Methods */
-    const subscribe = async(placeId) => {
+    const subscribe = async() => {
       const notifyIn = indefiniteTimerActive.value ? '' : notificationTime.value;
 
       await tryCatch(
           async() => {
-            await PlaceService.subscribe(placeId, notifyIn);
+            await PlaceService.subscribe(place.value.id, notifyIn);
 
-            store.commit("user/ADD_SUBSCRIPTION", placeId);
+            store.commit("user/ADD_SUBSCRIPTION", place.value.id);
           },
           'successSubscribe',
           'generalAlertError',
+          null,
+          {
+            place: place.value.name,
+          },
       );
     };
-    const showAlert = async(placeId) => {
+    const showAlert = async() => {
       const alert = await alertController
           .create({
             header: t('alertNotificationsOffHeader'),
@@ -145,7 +150,7 @@ export default defineComponent({
                   await tryCatch(
                       async() => {
                         await registerToken();
-                        await subscribe(placeId);
+                        await subscribe(place.value.id);
                         await store.dispatch('user/setNotifications', true);
                       },
                       null,
@@ -166,7 +171,7 @@ export default defineComponent({
       indefiniteTimerActive.value = e.target.checked;
     };
     /* Adding pair of users/place in database corresponding to authenticated users subscribed to certain place */
-    const toggleSubscription = async(placeId) => {
+    const toggleSubscription = async() => {
       loading.value = true;
 
       if(indefiniteTimerActive.value) {
@@ -176,19 +181,23 @@ export default defineComponent({
       if(isUserSubscribed.value) {
         await tryCatch(
             async() => {
-              await PlaceService.unsubscribe(placeId);
+              await PlaceService.unsubscribe(place.value.id);
 
-              store.commit("user/REMOVE_SUBSCRIPTION", placeId);
+              store.commit("user/REMOVE_SUBSCRIPTION", place.value.id);
             },
             'successUnsubscribe',
             'generalAlertError',
+            null,
+            {
+              place: place.value.name,
+            },
         );
       }else {
         if(!store.getters['user/notifications']) {
-          await showAlert(placeId);
+          await showAlert(place.value.id);
           return;
         }
-        await subscribe(placeId);
+        await subscribe(place.value.id);
       }
 
       loading.value = false;

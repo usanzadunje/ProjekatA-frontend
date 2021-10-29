@@ -2,14 +2,14 @@
   <div class="sticky top-0 z-40">
     <div class="w-full h-12 bg-gray-100 flex items-center justify-between">
       <ion-button
-          class="reset-button-size pl-4"
+          class="reset-button-size pl-2"
           slot="icon-only"
           fill="clear"
           @click="toggleMenu"
       >
         <ion-icon
             slot="icon-only"
-            :icon="filterOutline"
+            :icon="menuOutline"
             class="text-2xl text-black"
         ></ion-icon>
       </ion-button>
@@ -61,7 +61,7 @@ import { useMenu }    from '@/composables/useMenu';
 import { usePopover } from '@/composables/usePopover';
 
 import {
-  filterOutline,
+  menuOutline,
 }                         from 'ionicons/icons';
 import { useCurrentUser } from '@/composables/useCurrentUser';
 
@@ -114,7 +114,7 @@ export default defineComponent({
       toggleDarkMode,
 
       /* Icons */
-      filterOutline,
+      menuOutline,
     };
   },
 });

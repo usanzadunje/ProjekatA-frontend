@@ -47,6 +47,46 @@ export function slideUp(elementId) {
     };
 }
 
+export function swipe() {
+    /* Global properties */
+
+    /* Component properties */
+
+    /* Methods */
+    const fullSwipeLeft = (element) => {
+        element.style.transition = 'transform 0.45s ease-out';
+        element.style.transform = 'translate3d(-100%, 0px, 0px)';
+    };
+
+
+    return {
+        /* Component properties */
+
+        /* Methods */
+        fullSwipeLeft,
+    };
+}
+
+export function shrink() {
+    /* Global properties */
+
+    /* Component properties */
+
+    /* Methods */
+    const shrinkToMiddle = (element) => {
+        element.style.transition = 'transform 0.25s ease-in';
+        element.style.transform = 'scaleY(0)';
+    };
+
+
+    return {
+        /* Component properties */
+
+        /* Methods */
+        shrinkToMiddle,
+    };
+}
+
 
 //
 // export function useCache() {

@@ -152,4 +152,6 @@ export default {
     "allowed": "Allowed",
     "forbidden": "Forbidden",
     "favorite": "Favorite | Favorites",
+    "random": "Random",
+
 };

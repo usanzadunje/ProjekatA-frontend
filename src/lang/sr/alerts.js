@@ -1,6 +1,6 @@
 export default {
-    "successSubscribe": "Uspešno ste se pretplatili!",
-    "successUnsubscribe": "Uspešno ste se odjavili!",
+    "successSubscribe": "Uspešno ste se pretplatili na {place}!",
+    "successUnsubscribe": "Uspešno ste se odjavili iz {place}!",
     "alertNotificationsOffHeader": "Pretplaćujete se na objekat ali su vam notifickacije isključene",
     "alertNotificationsOffMessage": "Dozvolite nam da ih uključimo ili ih sami promenite u podešavanjima.",
     "alertUnsubscribeHeader": "Odjavljujete se iz objekta.",
@@ -21,7 +21,7 @@ export default {
     "tooManyRequests": "Previše zahteva za kratak vremenski period. Uspori.",
     "unauthorized": "Nemate autorizaciju da izvršite željenu akciju.",
     "forceLogout": "Došlo je do greške ali smo vas izlogovali.",
-    "successLogin": "Uspešno ste se ulogovali!",
+    "successLogin": "Dobrodošli nazad!",
     "successUpdate": "Uspešno ste izmenili podatke!",
     "successImageUpload": "Uspešno ste dodali fotografije!",
     "successImageRemove": "Uspešno ste uklonili fotografiju!",
@@ -41,6 +41,6 @@ export default {
     "owner.createProduct": "Uspešno ste dodali novi proizvod u meni!",
     "owner.updateProduct": "Uspešno ste izmenili proizvod!",
     "owner.removeProduct": "Uspešno ste uklonili proizvod iz menija!",
-    "successAddedFavorite": "Uspešno ste dodali u omiljene!",
-    "successRemovedFavorite": "Uspešno ste uklonili iz omiljenih!",
+    "successAddedFavorite": "Uspešno ste dodali {place} u listu omiljenih!",
+    "successRemovedFavorite": "Uspešno ste uklonili {place} iz liste omiljenih!",
 };

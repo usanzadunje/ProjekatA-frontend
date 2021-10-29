@@ -57,7 +57,7 @@ export default defineComponent({
           async() => {
             if(store.getters['auth/isOwner']) {
               await getCachedOrFetchPlaceInfo();
-              await store.dispatch('owner/getStaffInfo');
+              await store.dispatch('owner/getActiveStaffInfo');
             }
             if(Capacitor.isNativePlatform()) {
               await registerToken();

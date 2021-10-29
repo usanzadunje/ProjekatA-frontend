@@ -1,6 +1,6 @@
 export default {
-    "successSubscribe": "Successfully subscribed!",
-    "successUnsubscribe": "Successfully unsubscribed!",
+    "successSubscribe": "Successfully subscribed to {place}!",
+    "successUnsubscribe": "Successfully unsubscribed from {place}!",
     "alertNotificationsOffHeader": "Subscribing to place but notifications are OFF",
     "alertNotificationsOffMessage": "Let us turn them ON for you or manually change in your settings.",
     "alertUnsubscribeHeader": "Unsubscribing from cafe",
@@ -21,7 +21,7 @@ export default {
     "tooManyRequests": "Too much requests in short period of time. Slow down.",
     "unauthorized": "You are unauthorized to do this action.",
     "forceLogout": "There was an error but we forced logout.",
-    "successLogin": "Successfully logged in!",
+    "successLogin": "Welcome back!",
     "successUpdate": "Successfully updated profile information!",
     "successImageUpload": "Successfully uploaded images!",
     "successImageRemove": "Successfully removed image!",
@@ -41,7 +41,7 @@ export default {
     "owner.createProduct": "Successfully added new product to menu!",
     "owner.updateProduct": "Successfully updated product!",
     "owner.removeProduct": "Successfully removed product from menu!",
-    "successAddedFavorite": "Successfully added to favorites!",
-    "successRemovedFavorite": "Successfully removed from favorites!",
+    "successAddedFavorite": "Successfully added {place} to favorites!",
+    "successRemovedFavorite": "Successfully removed {place} from favorites!",
 
 };

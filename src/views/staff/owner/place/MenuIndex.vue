@@ -10,27 +10,33 @@
 
       <div class="px-4 pb-4">
         <div v-show="!showSkeleton">
-          <AccordionList
+          <AppAccordion
               :panel-id="'categoryPanel'"
               :title="$t('category', 2)"
               :title-size="'1.125rem'"
               :icon-size="'1.25rem'"
               :icon="pricetagOutline"
               class="accordion-list-border-top"
+              @panel-opened="changeCurrentlyOpenPanel"
+              :is-open="checkIfPanelIsOpen('categoryPanel')"
           >
             <CategoryIndex class="mb-4"/>
-          </AccordionList>
-          <AccordionList
+          </AppAccordion>
+          <AppAccordion
               :panel-id="'productPanel'"
               :title="$t('product', 2)"
               :title-size="'1.125rem'"
               :icon-size="'1.25rem'"
-              :open="true"
               :icon="fastFoodOutline"
               class="accordion-list-border-top accordion-list-border-bottom"
+              @panel-opened="changeCurrentlyOpenPanel"
+              :is-open="checkIfPanelIsOpen('productPanel')"
           >
-            <ProductIndex :enable-infinite-scroll="enableInfiniteScroll"/>
-          </AccordionList>
+            <ProductIndex
+                :enable-infinite-scroll="enableInfiniteScroll"
+                :panel-is-closed="checkIfPanelIsOpen('productPanel', true)"
+            />
+          </AppAccordion>
         </div>
         <div>
           <ion-skeleton-text
@@ -60,12 +66,13 @@ import {
   IonSkeletonText,
 }                               from '@ionic/vue';
 
-import AccordionList from '@/components/user/AccordionList';
+import AppAccordion  from '@/components/AppAccordion';
 import CategoryIndex from '@/components/owner/CategoryIndex';
 import ProductIndex  from '@/components/owner/ProductIndex';
 
 import { useCache }         from '@/composables/useCache';
 import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useAccordion }     from '@/composables/useAccordion';
 
 import {
   pricetagOutline,
@@ -80,7 +87,7 @@ export default defineComponent({
     IonRefresher,
     IonRefresherContent,
     IonSkeletonText,
-    AccordionList,
+    AppAccordion,
     CategoryIndex,
     ProductIndex,
   },
@@ -95,6 +102,7 @@ export default defineComponent({
     /* Composables */
     const { getCachedOrFetchPlaceCategories } = useCache();
     const { tryCatch } = useErrorHandling();
+    const { changeCurrentlyOpenPanel, checkIfPanelIsOpen } = useAccordion();
 
     /* Methods */
     const getMenuData = async(forceFetch = false) => {
@@ -128,6 +136,7 @@ export default defineComponent({
       enableInfiniteScroll.value = false;
     };
 
+
     return {
       /* Component properties */
       enableInfiniteScroll,
@@ -135,6 +144,8 @@ export default defineComponent({
 
       /* Event handlers */
       refresh,
+      changeCurrentlyOpenPanel,
+      checkIfPanelIsOpen,
 
       /* Icons */
       pricetagOutline,

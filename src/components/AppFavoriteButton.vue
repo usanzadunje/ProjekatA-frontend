@@ -56,12 +56,12 @@ export default defineComponent({
       event?.stopPropagation();
 
       if(!userFavorite.value) {
-        event.target.classList.remove('normal');
+        event.target.classList.remove('scale-100');
         event.target.classList.add('scale');
         setTimeout(() => {
           event.target.classList.remove('scale');
-          event.target.classList.add('normal');
-        }, 1000);
+          event.target.classList.add('scale-100');
+        }, 650);
       }
 
       const toggleMutation = userFavorite.value ? "user/removeFavoritePlace" : "user/addFavoritePlace";
@@ -72,6 +72,10 @@ export default defineComponent({
           },
           userFavorite.value ? 'successRemovedFavorite' : 'successAddedFavorite',
           'generalAlertError',
+          null,
+          {
+            place: place.value.name,
+          },
       );
     };
 
@@ -92,9 +96,5 @@ export default defineComponent({
 <style scoped>
 .scale {
   transform: scale(2);
-}
-
-.normal {
-  transform: scale(1);
 }
 </style>

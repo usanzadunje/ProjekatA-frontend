@@ -16,6 +16,7 @@ export const namespaced = true;
 export const state = {
     place: {},
     staff: [],
+    activeStaff: [],
     tables: [],
     categories: [],
     products: [],
@@ -37,6 +38,12 @@ export const mutations = {
     /* STAFF */
     SET_STAFF_MEMBERS(state, payload) {
         state.staff = payload;
+    },
+    LOAD_MORE_STAFF_MEMBERS(state, payload) {
+        state.staff = state.staff.concat(payload);
+    },
+    SET_ACTIVE_STAFF_MEMBERS(state, payload) {
+        state.activeStaff = payload;
     },
     CREATE_STAFF(state, payload) {
         state.staff.push(payload);
@@ -201,10 +208,33 @@ export const actions = {
     },
 
     /* STAFF */
-    async getStaffInfo({ commit }) {
-        const response = await OwnerService.allStaff();
+    async getStaffInfo(
+        { commit },
+        {
+            offset = 0,
+            limit = 10,
+            load = false,
+        },
+    ) {
+        const response = await OwnerService.allStaff(offset, limit);
 
-        commit('SET_STAFF_MEMBERS', response.data);
+        if(load) {
+            commit('LOAD_MORE_STAFF_MEMBERS', response.data);
+        }else {
+            commit('SET_STAFF_MEMBERS', response.data);
+        }
+
+        // Returning true so infinite scroll can be disabled in components
+        // When there is no more data or backend returned less data than required
+        // which means there is no more data to be returned
+        if(!response.data || response.data.length < limit) {
+            return true;
+        }
+    },
+    async getActiveStaffInfo({ commit }) {
+        const response = await OwnerService.activeStaff();
+
+        commit('SET_ACTIVE_STAFF_MEMBERS', response.data);
     },
     async createStaff({ commit }, user) {
         const response = await OwnerService.createStaff(user);
@@ -302,7 +332,7 @@ export const actions = {
             load = false,
         },
     ) {
-        const response = await ProductService.index(null, filter, offset, limit);
+        const response = await ProductService.index(filter, offset, limit);
 
         if(load) {
             commit('LOAD_MORE_PRODUCTS', response.data);
@@ -340,6 +370,9 @@ export const getters = {
     },
     staff: (state) => {
         return state.staff;
+    },
+    activeStaff: (state) => {
+        return state.activeStaff;
     },
     tables: (state) => {
         return state.tables;

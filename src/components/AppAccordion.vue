@@ -13,12 +13,12 @@
         >{{ title }}</p>
       </div>
       <ion-icon
-          :icon="isPanelOpen ? chevronForwardOutline : chevronDownOutline"
+          :icon="isPanelOpen ? chevronDownOutline : chevronForwardOutline"
           :style="`font-size:${iconSize}`"
           class="primary-icon-color"
       ></ion-icon>
     </div>
-    <div :id="panelId" class="panel">
+    <div ref='panel' :id="panelId" class="panel">
       <div v-if="items">
         <div v-for="item in items" :key="item">
           {{ item }}
@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, toRefs, watch } from 'vue';
 import {
   IonIcon,
-}                               from '@ionic/vue';
+}                                              from '@ionic/vue';
 
 import {
   chevronDownOutline,
@@ -41,7 +41,7 @@ import {
 } from 'ionicons/icons';
 
 export default defineComponent({
-  name: "AccordionList",
+  name: "AppAccordion",
   components: {
     IonIcon,
   },
@@ -62,10 +62,6 @@ export default defineComponent({
       type: String,
       default: '',
     },
-    open: {
-      type: Boolean,
-      default: false,
-    },
     items: {
       type: Array,
       default: null,
@@ -74,30 +70,47 @@ export default defineComponent({
       type: String,
       default: null,
     },
+    isOpen: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup() {
+  emits: ['panelOpened'],
+  setup(props, { emit }) {
     /* Component properties */
-    const isPanelOpen = ref(true);
+    const { isOpen } = toRefs(props);
+    const isPanelOpen = ref(false);
+    const panel = ref();
 
     /* Methods */
-    const togglePane = (e, paneClicked = false) => {
+    const togglePane = (e) => {
       /*
        Select HTML element accordingly to what has been clicked, if header has been clicked
        select sibling(panel element) if panel has been clicked select itself.
       */
-      let panel = paneClicked ? e.currentTarget : e.currentTarget.nextElementSibling;
-      if(panel.style.maxHeight) {
+      let panel = e.currentTarget.nextElementSibling;
+
+      if(isPanelOpen.value) {
         panel.style.maxHeight = null;
       }else {
         panel.style.maxHeight = panel.scrollHeight + "px";
+        emit('panelOpened', props.panelId);
       }
+
       isPanelOpen.value = !isPanelOpen.value;
     };
+
+    watch(isOpen, () => {
+      if(!isOpen.value && isPanelOpen.value) {
+        panel.value.style.maxHeight = null;
+        isPanelOpen.value = false;
+      }
+    });
 
     return {
       /* Component properties */
       isPanelOpen,
-
+      panel,
       /* Methods */
       togglePane,
 

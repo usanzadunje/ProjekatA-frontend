@@ -43,7 +43,7 @@
               />
             </ion-item>
 
-            <ion-item-options side="end" @ionSwipe="unsubscribeSwiping(place.id)">
+            <ion-item-options side="end" @ionSwipe="unsubscribeSwiping(place.id, $event)">
               <ion-item-option type="button" :expandable="true" @click="showAlert(place.id, $event)">
                 <ion-icon
                     slot="icon-only"
@@ -112,6 +112,7 @@ import { useGeolocation }        from '@/composables/useGeolocation';
 import { useModal }              from '@/composables/useModal';
 import { useSlidingItem }        from '@/composables/useSlidingItem';
 import { useErrorHandling }      from '@/composables/useErrorHandling';
+import { shrink, swipe }         from '@/composables/useAnimations';
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
@@ -159,6 +160,8 @@ export default defineComponent({
     const { isModalOpen, modalData, openModal } = useModal();
     const { slidingItem, closeOpenItems } = useSlidingItem();
     const { tryCatch } = useErrorHandling();
+    const { fullSwipeLeft } = swipe();
+    const { shrinkToMiddle } = shrink();
 
     /* Lifecycle hooks */
     onIonViewDidEnter(async() => {
@@ -220,6 +223,10 @@ export default defineComponent({
                 text: t('agree'),
                 handler: () => {
                   unsubscribe(placeId);
+
+                  fullSwipeLeft(event.target.parentElement.parentElement.firstChild);
+                  shrinkToMiddle(event.target.parentElement.parentElement);
+
                   showSuccessToast(t('successUnsubscribe'));
                 },
               },
@@ -227,11 +234,11 @@ export default defineComponent({
           });
       await alert.present();
     };
-
     const unsubscribe = async(placeId) => {
       await tryCatch(
           async() => {
             await PlaceService.unsubscribe(placeId);
+
             placesUserSubscribedTo.value = placesUserSubscribedTo.value.filter((place) => {
               return place.id !== placeId;
             });
@@ -242,13 +249,17 @@ export default defineComponent({
           'generalAlertError',
       );
     };
-    const unsubscribeSwiping = (placeId) => {
+    const unsubscribeSwiping = (placeId, event) => {
       timeLeftText = document.getElementById('expiryText' + placeId)?.innerHTML.split(' ');
 
-      unsubscribe(placeId);
-      Haptics.impact({ style: ImpactStyle.Heavy });
-      showUndoToast(t('successUnsubscribe'), async() => {
+      fullSwipeLeft(event.target.parentElement.firstChild);
+      shrinkToMiddle(event.target.parentElement);
 
+      unsubscribe(placeId, event);
+
+      Haptics.impact({ style: ImpactStyle.Heavy });
+
+      showUndoToast(t('successUnsubscribe'), async() => {
         await tryCatch(
             async() => {
               const notifyIn = timeLeftText?.length > 0 ? timeLeftText[0] : null;
@@ -260,6 +271,7 @@ export default defineComponent({
             null,
             'generalAlertError',
         );
+
 
         await getSubscriptions();
       });
@@ -321,15 +333,16 @@ ion-item {
 
 ion-item-options {
   --border-style: none;
-  background-color: #E01B43 !important;
+  background-color: #e01b43 !important;
   border-radius: 20px !important;
+  margin-top: 1px !important;
 }
 
 ion-item-option {
   --border-style: none;
   --background: #e01b43;
   background: #e01b43;
-  border-radius: 17px !important;
+  border-radius: 0 17px 17px 0 !important;
 }
 
 ion-item-option:active {
