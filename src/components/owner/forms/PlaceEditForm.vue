@@ -270,7 +270,7 @@ export default defineComponent({
     });
     const mainImagePath = computed(() => {
       if(placeInfo.value.images?.length > 0) {
-        return placeInfo.value.images.find(image => image.is_main)?.path ??
+        return placeInfo.value.images?.find(image => image.is_main)?.path ??
             placeInfo.value.images[0]?.path;
       }else {
         return '/places/default_place_cover.png';

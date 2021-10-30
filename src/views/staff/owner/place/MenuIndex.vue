@@ -38,17 +38,30 @@
             />
           </AppAccordion>
         </div>
-        <div>
-          <ion-skeleton-text
-              v-show="showSkeleton"
-              animated="true"
-              class="w-ful h-12 mb-0.5"
-          ></ion-skeleton-text>
-          <ion-skeleton-text
-              v-show="showSkeleton"
-              animated="true"
-              class="w-ful h-12"
-          ></ion-skeleton-text>
+        <div
+            v-show="showSkeleton"
+        >
+          <div
+              class="py-2.5 flex justify-between accordion-list-box accordion-list-border-bottom accordion-list-border-top">
+            <ion-skeleton-text
+                animated
+                class="w-1/3 h-5"
+            ></ion-skeleton-text>
+            <ion-skeleton-text
+                animated
+                class="w-5 h-5 rounded-full"
+            ></ion-skeleton-text>
+          </div>
+          <div class="py-2.5 flex justify-between accordion-list-box accordion-list-border-bottom">
+            <ion-skeleton-text
+                animated
+                class="w-1/3 h-5"
+            ></ion-skeleton-text>
+            <ion-skeleton-text
+                animated
+                class="w-5 h-5 rounded-full"
+            ></ion-skeleton-text>
+          </div>
         </div>
       </div>
     </ion-content>

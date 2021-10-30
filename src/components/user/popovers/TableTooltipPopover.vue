@@ -34,7 +34,7 @@
               })
         }}
         <ion-icon
-            :icon="table?.smoking_allowed ? checkmarkCircleOutline : closeCircleOutline"
+            :icon="table?.smoking_allowed ? checkmarkCircleOutline : logoNoSmoking"
             class="flex-shrink-0"
             :class="table?.smoking_allowed ? 'text-green-500' : 'text-red-500'"
         ></ion-icon>
@@ -53,6 +53,7 @@ import {
 import {
   checkmarkCircleOutline,
   closeCircleOutline,
+  logoNoSmoking,
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -77,6 +78,7 @@ export default defineComponent({
       /* Icons */
       checkmarkCircleOutline,
       closeCircleOutline,
+      logoNoSmoking,
     };
   },
 });

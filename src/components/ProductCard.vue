@@ -44,7 +44,7 @@ export default defineComponent({
     const { product } = toRefs(props);
     const mainImagePath = computed(() => {
       if(product.value.images?.length > 0) {
-        return product.value.images.find(image => image.is_main === 1)?.path ??
+        return product.value.images?.find(image => image.is_main === 1)?.path ??
             product.value.images[0]?.path;
       }else {
         return '/places/default_place_product_logo.png';

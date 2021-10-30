@@ -8,6 +8,18 @@
         </ion-refresher-content>
       </ion-refresher>
       <div class="wrap">
+        <div
+            v-if="this.$store.getters['auth/isStaff']"
+            class="w-56 -mt-4 mb-4 mx-auto px-4 border-b border-l border-r border-primary rounded-bl-3xl rounded-br-3xl"
+        >
+          <p class="text-center secondary-heading">You status</p>
+          <StaffActivityToggle
+              :class="this.$store.getters['staff/active'] ? 'active-status-text-color' : ''"
+              :icon-classes="`pb-1 text-2xl ml-1 mr-1`"
+              :text-classes="`pb-1 text-xl`"
+          />
+        </div>
+
         <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentAvailabilitySituation') }}</h1>
 
         <div class="mt-4">
@@ -78,7 +90,6 @@
               ></ion-skeleton-text>
             </div>
           </div>
-
         </div>
       </div>
     </ion-content>
@@ -97,6 +108,7 @@ import {
   onIonViewWillEnter,
 }                                                    from '@ionic/vue';
 
+import StaffActivityToggle            from '@/components/staff/StaffActivityToggle';
 import TableContainer                 from '@/components/TableContainer';
 import Table                          from '@/components/Table';
 import StaffCard                      from '@/components/staff/cards/StaffCard';
@@ -116,6 +128,7 @@ export default defineComponent({
     IonRefresher,
     IonRefresherContent,
     IonSkeletonText,
+    StaffActivityToggle,
     TableContainer,
     Table,
     StaffCard,
@@ -127,6 +140,7 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
+    const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
     const tables = computed(() => store.getters['owner/tables']);
     const activeStaff = computed(() => store.getters['owner/activeStaff']);
     const isOwner = computed(() => store.getters['auth/isOwner']);
@@ -151,15 +165,6 @@ export default defineComponent({
       showSkeleton.value = false;
     };
     /* Lifecycle hooks */
-    (async() => {
-      await tryCatch(
-          async() => {
-            await store.dispatch('owner/getTables');
-          },
-          null,
-          'dataFetchingError',
-      );
-    })();
     onMounted(async() => {
       await getPlaceAvailability();
     });
@@ -197,6 +202,7 @@ export default defineComponent({
 
     return {
       /* Component properties */
+      availabilityRatio,
       tables,
       activeStaff,
       isOwner,

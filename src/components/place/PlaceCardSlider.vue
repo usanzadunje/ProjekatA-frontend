@@ -18,8 +18,14 @@
   </swiper>
 
   <div v-show="showSkeleton" class="mb-4">
-    <PlaceCardSkeleton class="mb-2"></PlaceCardSkeleton>
-    <PlaceCardSkeleton></PlaceCardSkeleton>
+    <div class="flex mb-4">
+      <PlaceCardSkeleton class="w-full"></PlaceCardSkeleton>
+      <PlaceCardSkeleton class="ml-2 w-6"></PlaceCardSkeleton>
+    </div>
+    <div class="flex mb-4">
+      <PlaceCardSkeleton class="w-full"></PlaceCardSkeleton>
+      <PlaceCardSkeleton class="ml-2 w-6"></PlaceCardSkeleton>
+    </div>
   </div>
 </template>
 

@@ -6,7 +6,7 @@ export default {
     "alertUnsubscribeHeader": "Unsubscribing from cafe",
     "alertUnsubscribeMessage": "Are you sure you want to delete this place from subscription list?",
     "alertRemovingCategoryHeader": "Removing {category} category",
-    "alertRemovingCategoryMessage": "Are you sure you want to remove this category from list?",
+    "alertRemovingCategoryMessage": "Are you sure you want to remove this category and all products associated with it from list?",
     "alertRemovingProductHeader": "Removing {product} product",
     "alertRemovingProductMessage": "Are you sure you want to remove this product from list?",
     "staff.alertRemoveStaffHeader": "Removing staff member",

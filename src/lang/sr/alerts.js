@@ -6,7 +6,7 @@ export default {
     "alertUnsubscribeHeader": "Odjavljujete se iz objekta.",
     "alertUnsubscribeMessage": "Da li ste sigurni da želite da uklonite objekat iz liste pretplaćenih?",
     "alertRemovingCategoryHeader": "Uklanjate {category} kategoriju",
-    "alertRemovingCategoryMessage": "Da li ste sigurni da želite da uklonite kategoriju?",
+    "alertRemovingCategoryMessage": "Da li ste sigurni da želite da uklonite kategoriju i sve proizvode koji joj pripadaju?",
     "alertRemovingProductHeader": "Uklanjate {product} proizvod",
     "alertRemovingProductMessage": "Da li ste sigurni da želite da uklonite proizvod?",
     "staff.alertRemoveStaffHeader": "Uklanjate zaposlenog",

@@ -115,6 +115,8 @@
     --primary-border: #F3F3F3;
 
     --search-color: #000000;
+    
+    --active-status-color: #064e3b;
 
     --header-border-color: rgba(35, 43, 56, 0.25);
 
@@ -328,6 +330,8 @@ http://ionicframework.com/docs/theming/ */
 
         --search-color: #FFFFFF;
 
+        --active-status-color: #6ec1ad;
+
         --header-border-color: rgba(240, 240, 242, 0.25);
 
         --background-rgb: 255, 255, 255;
@@ -422,6 +426,8 @@ http://ionicframework.com/docs/theming/ */
 
         --search-color: #FFFFFF;
 
+        --active-status-color: #6ec1ad;
+
         --header-border-color: rgba(240, 240, 242, 0.25);
 
         --background-rgb: 255, 255, 255;
@@ -478,6 +484,8 @@ body.dark {
     --primary-border: #272736;
 
     --search-color: #FFFFFF;
+
+    --active-status-color: #6ec1ad;
 
     --header-border-color: rgba(240, 240, 242, 0.25);
 

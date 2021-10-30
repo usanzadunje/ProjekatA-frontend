@@ -55,6 +55,8 @@ export default defineComponent({
     (async() => {
       await tryCatch(
           async() => {
+            await store.dispatch('owner/getTables');
+
             if(store.getters['auth/isOwner']) {
               await getCachedOrFetchPlaceInfo();
               await store.dispatch('owner/getActiveStaffInfo');

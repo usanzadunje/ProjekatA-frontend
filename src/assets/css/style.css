@@ -101,8 +101,13 @@ ion-datetime {
     font-size: 0.75rem !important;
 }
 
+ion-loading {
+    backdrop-filter: blur(5px);
+}
+
 ion-modal {
     --background: none !important;
+    backdrop-filter: blur(5px);
 }
 
 ion-modal ion-content {
@@ -312,6 +317,10 @@ ion-toggle {
 
 .placeholder-text-color {
     color: var(--placeholder-paint)
+}
+
+.active-status-text-color {
+    color: var(--active-status-color);
 }
 
 .border-primary {
