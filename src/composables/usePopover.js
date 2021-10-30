@@ -20,7 +20,10 @@ export function usePopover() {
                 showBackdrop: false,
                 mode: 'ios',
             });
+
         await popover.present();
+
+        return popover;
     };
 
 

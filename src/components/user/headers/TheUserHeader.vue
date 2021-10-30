@@ -5,7 +5,7 @@
         <div v-if="loggedIn" class="flex items-center justify-between">
           <p class="main-toolbar-fade-text">
             {{ $t('hello') }}
-            <span>
+            <span class="break-all">
               {{ displayName }}!
             </span>
           </p>

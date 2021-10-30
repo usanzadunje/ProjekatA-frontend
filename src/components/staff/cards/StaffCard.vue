@@ -15,7 +15,7 @@
 
           <div class="ml-8 flex-shrink">
             <h3 class="main-heading-smaller">{{ staff.active ? $t('active') : $t('inactive') }}</h3>
-            <h2 class="secondary-heading">{{ displayName }}</h2>
+            <h2 class="secondary-heading break-all">{{ displayName }}</h2>
           </div>
         </div>
       </ion-card-header>

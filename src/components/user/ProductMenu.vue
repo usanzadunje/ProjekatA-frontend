@@ -1,12 +1,12 @@
 <template>
   <div class="mb-2">
-    <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="bookOutline"/>
+    <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="icons['bookOutline']"/>
     <AppAccordion
         :panel-id="`productPanel${category.id}`"
         v-for="category in place.categories"
         :key="category.id"
         :title="category.name"
-        :icon="beerOutline"
+        :icon="icons[category.icon]"
         class="accordion-list-border-top"
         @panel-opened="changeCurrentlyOpenPanel"
         :is-open="checkIfPanelIsOpen(`productPanel${category.id}`)"
@@ -59,14 +59,11 @@ import ProductCard           from '@/components/ProductCard';
 import AppModal              from '@/components/AppModal';
 import ProductInfoModal      from '@/components/user/modals/ProductInfoModal';
 
-import {
-  bookOutline,
-  beerOutline,
-}
-                                      from 'ionicons/icons';
 import { useModal }                   from '@/composables/useModal';
 import { increaseAccordionMaxHeight } from '@/utils/helpers';
 import { useAccordion }               from '@/composables/useAccordion';
+
+import * as icons from 'ionicons/icons';
 
 export default defineComponent({
   name: 'Menu',
@@ -147,8 +144,7 @@ export default defineComponent({
       checkIfPanelIsOpen,
 
       /* Icons */
-      bookOutline,
-      beerOutline,
+      icons,
     };
   },
 });

@@ -3,11 +3,11 @@
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('category') }"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
     >
-      <ion-icon :icon="pricetagOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon :icon="icons['pricetagOutline']" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
-          v-model.lazy="categoryName"
+          v-model.lazy="internalCategory.name"
           v-capitalize
           type="text"
           :placeholder="$t('category')"
@@ -15,6 +15,27 @@
           required
           @keyup.enter="createOrUpdateCategory"
       ></ion-input>
+    </ion-item>
+    <ion-item
+        button
+        detail="false"
+        lines="none"
+        class="flex rounded-2xl h-11 mt-3.5"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('icon') }"
+        @click="openIconChoicePopover"
+    >
+      <span
+          slot="start"
+          class="placeholder-text-color"
+      >
+        {{ $t('chooseIcon') }}
+      </span>
+
+      <ion-icon
+          slot="end"
+          :icon="icons[internalCategory.icon] ?? icons['fastFoodOutline']"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
     </ion-item>
 
     <div class="mt-4">
@@ -43,22 +64,23 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, toRefs } from 'vue';
-import { useStore }                                from 'vuex';
+import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
+import { useStore }                                          from 'vuex';
 import {
   IonItem,
   IonIcon,
   IonInput,
   IonButton,
   IonSpinner,
-}                                                  from '@ionic/vue';
+}                                                            from '@ionic/vue';
 
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import IconChoicePopover from '@/components/owner/popovers/IconChoicePopover';
+
+import { useErrorHandling }   from '@/composables/useErrorHandling';
 import { hideNativeKeyboard } from '@/composables/useDevice';
+import { usePopover }         from '@/composables/usePopover';
 
-import {
-  pricetagOutline,
-} from 'ionicons/icons';
+import * as icons from 'ionicons/icons';
 
 export default defineComponent({
   name: "CategoryCreateEditForm",
@@ -85,14 +107,20 @@ export default defineComponent({
 
     /* Component properties */
     const { category } = toRefs(props);
-    const categoryName = ref(null);
+    const internalCategory = reactive({
+      name: null,
+      icon: null,
+    });
     const loading = ref(false);
 
-    /* Computed properties */
+    /* Composables */
+    const { openPopover } = usePopover();
+
     /* Lifecycle hooks */
     onMounted(async() => {
       if(category?.value) {
-        categoryName.value = category.value.name;
+        internalCategory.name = category.value.name;
+        internalCategory.icon = category.value.icon;
       }
     });
 
@@ -113,10 +141,10 @@ export default defineComponent({
             if(category?.value) {
               await store.dispatch("owner/updateCategory", {
                 id: category.value.id,
-                value: categoryName.value,
+                category: internalCategory,
               });
             }else {
-              await store.dispatch("owner/createCategory", categoryName.value);
+              await store.dispatch("owner/createCategory", internalCategory);
 
               increaseParentHeight(55);
             }
@@ -128,7 +156,15 @@ export default defineComponent({
 
       loading.value = false;
     };
+    const openIconChoicePopover = async() => {
+      const popover = await openPopover(IconChoicePopover, null, 'icon-choice-popover', {
+        icons,
+      });
 
+      const { data } = await popover.onDidDismiss();
+
+      internalCategory.icon = data?.icon;
+    };
     /* Watchers */
 
 
@@ -136,15 +172,16 @@ export default defineComponent({
       /* Global properties */
 
       /* Component properties */
-      categoryName,
+      internalCategory,
       errorNames,
       loading,
 
       /* Event handlers  */
       createOrUpdateCategory,
+      openIconChoicePopover,
 
       /* Icons */
-      pricetagOutline,
+      icons,
     };
   },
 });
@@ -153,5 +190,9 @@ export default defineComponent({
 hr {
   border-top: solid 1px var(--primary-heading) !important;
   width: 100% !important;
+}
+
+span {
+  font-size: 0.8rem !important;
 }
 </style>

@@ -210,6 +210,15 @@ ion-modal ion-item {
     background: #E5E7EB !important;
 }
 
+.icon-choice-popover {
+    --max-height: 250px;
+    --width: 250px;
+
+}
+
+.icon-choice-popover .popover-content {
+    background: var(--input-bg) !important;
+}
 
 .undo-toast {
     --color: #FFF;
@@ -929,7 +938,7 @@ ion-toggle.dark-toggle-checked {
 .panel {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease-in;
+    transition: max-height 0.3s ease-in;
 }
 
 .button-subscribe-wide {

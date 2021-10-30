@@ -9,8 +9,8 @@
             :alt="`Image of ${product.name} menu product`"
         >
         <div class="ml-3">
-          <h3 class="mb-1">{{ product.name }}</h3>
-          <p>
+          <h3 class="mb-1 break-all">{{ product.name }}</h3>
+          <p class="break-all">
             {{
               product.description?.length > 45
                   ? product.description.substring(0, 45).concat('...')

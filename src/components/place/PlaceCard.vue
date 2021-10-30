@@ -4,11 +4,11 @@
       <img
           :src="`${backendStorageURL + logoPath}`"
           alt="Logo"
-          class="cafe-card-image"
+          class="cafe-card-image flex-shrink-0"
       >
       <div class="ml-3.5 flex flex-col items-start">
-        <h2 class="cafe-card-name">{{ place.name }}</h2>
-        <p class="cafe-card-fade-text">Kafic, hrana, basta ...</p>
+        <h2 class="cafe-card-name break-all">{{ place.name }}</h2>
+        <p class="cafe-card-fade-text break-all">Kafic, hrana, basta ...</p>
       </div>
     </div>
     <hr class="card-horizontal-ruler">

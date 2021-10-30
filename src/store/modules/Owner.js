@@ -125,10 +125,12 @@ export const mutations = {
     CREATE_CATEGORY(state, payload) {
         state.categories.push(payload);
     },
-    UPDATE_CATEGORY(state, { id, value }) {
-        let category = state.categories.find(category => category.id === id);
+    UPDATE_CATEGORY(state, { id, category }) {
+        let existingCategory = state.categories.find(category => category.id === id);
 
-        category.name = value;
+        Object.keys(category).forEach(key => {
+            existingCategory[key] = category[key];
+        });
     },
     REMOVE_CATEGORY(state, id) {
         state.categories = state.categories.filter(category => category.id !== id);
@@ -299,22 +301,14 @@ export const actions = {
         commit('SET_CATEGORIES', response.data);
     },
     async createCategory({ commit }, payload) {
-        const requestPayload = {
-            category: payload,
-        };
-
-        const response = await CategoryService.create(requestPayload);
+        const response = await CategoryService.create(payload);
 
         commit('CREATE_CATEGORY', response.data);
     },
-    async updateCategory({ commit }, { id, value }) {
-        const payload = {
-            category: value,
-        };
+    async updateCategory({ commit }, { id, category }) {
+        await CategoryService.update(id, category);
 
-        await CategoryService.update(id, payload);
-
-        commit('UPDATE_CATEGORY', { id, value });
+        commit('UPDATE_CATEGORY', { id, category });
     },
     async deleteCategory({ commit }, id) {
         await CategoryService.destroy(id);

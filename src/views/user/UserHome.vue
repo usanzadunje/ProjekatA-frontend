@@ -48,6 +48,7 @@
             />
             <div
                 v-else
+                v-show="!showSkeleton"
                 class="primary-text-color text-xs mb-2"
             >
               {{ $t('noFavoritePlaces1') }}

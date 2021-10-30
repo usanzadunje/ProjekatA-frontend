@@ -38,6 +38,7 @@ import {
 import {
   chevronDownOutline,
   chevronForwardOutline,
+  fastFoodOutline,
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -68,7 +69,7 @@ export default defineComponent({
     },
     icon: {
       type: String,
-      default: null,
+      default: fastFoodOutline,
     },
     isOpen: {
       type: Boolean,

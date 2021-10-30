@@ -155,5 +155,6 @@ export default {
     "forbidden": "Zabranjeno",
     "favorite": "Omiljen | Omiljeni",
     "random": "Nasumično",
+    "chooseIcon": "Izaberite ikonicu",
 };
 

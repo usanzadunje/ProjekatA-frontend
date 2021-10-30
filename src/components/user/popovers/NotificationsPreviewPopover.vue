@@ -13,7 +13,7 @@
     >
       <div class="px-4 py-3 flex items-center justify-between rounded-md">
         <p
-            class="main-toolbar-fade-text"
+            class="main-toolbar-fade-text break-all"
             :class="{ 'notification-read': notification.read }"
             @click="notificationRead(notification.id)"
         >{{ notification.body }}</p>

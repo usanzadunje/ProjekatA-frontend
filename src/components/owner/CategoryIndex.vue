@@ -1,5 +1,5 @@
 <template>
-  <div class="px-12">
+  <div class="px-6">
     <div class="flex justify-end">
       <ion-button
           expand="block"
@@ -21,8 +21,8 @@
       >
         <ion-item class="ion-no-padding ion-no-margin" @click="editCategory(category)">
           <div class="px-4 flex justify-between items-center w-full">
-            <span>{{ category.name }}</span>
-            <div>
+            <span class="break-all">{{ category.name }}</span>
+            <div class="flex-shrink-0">
               <ion-icon
                   :icon="createOutline"
                   class="text-2xl text-blue"

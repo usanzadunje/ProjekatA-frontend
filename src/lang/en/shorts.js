@@ -153,5 +153,6 @@ export default {
     "forbidden": "Forbidden",
     "favorite": "Favorite | Favorites",
     "random": "Random",
+    "chooseIcon": "Choose icon",
 
 };

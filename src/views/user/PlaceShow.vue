@@ -23,9 +23,9 @@
             <div class="mt-4 ion-item-no-padding-x">
               <div
                   v-show="!showSkeleton"
-                  class="flex justify-between items-center"
+                  class="flex justify-between items-start"
               >
-                <h1 class="cafe-show-name">{{ place.name }}</h1>
+                <h1 class="cafe-show-name break-all">{{ place.name }}</h1>
                 <AppFavoriteButton
                     :place="strippedPlaceInfo"
                     :icon-size="22"

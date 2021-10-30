@@ -36,16 +36,16 @@
                 :product="product"
                 class="w-full"
             >
-              <div class="flex justify-end items-center w-20">
+              <div class="flex justify-end items-center w-20 ml-1">
                 <ion-icon
                     slot="icon-only"
                     :icon="createOutline"
-                    class="text-2xl text-blue"
+                    class="text-2xl text-blue flex-shrink-0"
                 ></ion-icon>
                 <ion-icon
                     slot="icon-only"
                     :icon="trashOutline"
-                    class="text-2xl text-danger ml-2"
+                    class="text-2xl text-danger ml-2 flex-shrink-0"
                     @click="showAlert(product, false, $event)"
                 ></ion-icon>
               </div>
