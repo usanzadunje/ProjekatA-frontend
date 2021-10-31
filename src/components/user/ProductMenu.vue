@@ -63,7 +63,36 @@ import { useModal }                   from '@/composables/useModal';
 import { increaseAccordionMaxHeight } from '@/utils/helpers';
 import { useAccordion }               from '@/composables/useAccordion';
 
-import * as icons from 'ionicons/icons';
+import {
+  barbellOutline,
+  balloonOutline,
+  bagHandleOutline,
+  beerOutline,
+  bookOutline,
+  cafeOutline,
+  cartOutline,
+  fastFoodOutline,
+  fishOutline,
+  heartOutline,
+  iceCreamOutline,
+  leafOutline,
+  nutritionOutline,
+  pawOutline,
+  pizzaOutline,
+  restaurantOutline,
+  ribbonOutline,
+  rocketOutline,
+  roseOutline,
+  snowOutline,
+  starOutline,
+  storefrontOutline,
+  sunnyOutline,
+  thumbsUpOutline,
+  wineOutline,
+  walletOutline,
+  trashOutline,
+  timeOutline,
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: 'Menu',
@@ -96,6 +125,36 @@ export default defineComponent({
     /* Component properties */
     let offset = reactive({});
     const { resetProductOffset } = toRefs(props);
+    const icons = {
+      barbellOutline: barbellOutline,
+      balloonOutline: balloonOutline,
+      bagHandleOutline: bagHandleOutline,
+      beerOutline: beerOutline,
+      bookOutline: bookOutline,
+      cafeOutline: cafeOutline,
+      cartOutline: cartOutline,
+      fastFoodOutline: fastFoodOutline,
+      fishOutline: fishOutline,
+      heartOutline: heartOutline,
+      iceCreamOutline: iceCreamOutline,
+      leafOutline: leafOutline,
+      nutritionOutline: nutritionOutline,
+      pawOutline: pawOutline,
+      pizzaOutline: pizzaOutline,
+      restaurantOutline: restaurantOutline,
+      ribbonOutline: ribbonOutline,
+      rocketOutline: rocketOutline,
+      roseOutline: roseOutline,
+      snowOutline: snowOutline,
+      starOutline: starOutline,
+      storefrontOutline: storefrontOutline,
+      sunnyOutline: sunnyOutline,
+      thumbsUpOutline: thumbsUpOutline,
+      wineOutline: wineOutline,
+      walletOutline: walletOutline,
+      trashOutline: trashOutline,
+      timeOutline: timeOutline,
+    };
 
     /* Composables */
     const { isModalOpen, modalData, openModal } = useModal();

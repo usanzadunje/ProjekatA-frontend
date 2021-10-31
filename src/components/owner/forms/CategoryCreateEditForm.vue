@@ -5,7 +5,7 @@
         class="flex rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
     >
-      <ion-icon :icon="icons['pricetagOutline']" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon :icon="pricetagOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
           v-model.lazy="internalCategory.name"
           v-capitalize
@@ -80,7 +80,37 @@ import { useErrorHandling }   from '@/composables/useErrorHandling';
 import { hideNativeKeyboard } from '@/composables/useDevice';
 import { usePopover }         from '@/composables/usePopover';
 
-import * as icons from 'ionicons/icons';
+import {
+  barbellOutline,
+  balloonOutline,
+  bagHandleOutline,
+  beerOutline,
+  bookOutline,
+  cafeOutline,
+  cartOutline,
+  fastFoodOutline,
+  fishOutline,
+  heartOutline,
+  iceCreamOutline,
+  leafOutline,
+  nutritionOutline,
+  pawOutline,
+  pizzaOutline,
+  restaurantOutline,
+  ribbonOutline,
+  rocketOutline,
+  roseOutline,
+  snowOutline,
+  starOutline,
+  storefrontOutline,
+  sunnyOutline,
+  thumbsUpOutline,
+  wineOutline,
+  walletOutline,
+  trashOutline,
+  timeOutline,
+  pricetagOutline,
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "CategoryCreateEditForm",
@@ -99,8 +129,40 @@ export default defineComponent({
   },
   emits: ['dismiss'],
   setup(props, { emit }) {
-    /* Global properties and methods */
+    /* Global properties */
     const store = useStore();
+
+    /* Component properties */
+    const icons = {
+      barbellOutline: barbellOutline,
+      balloonOutline: balloonOutline,
+      bagHandleOutline: bagHandleOutline,
+      beerOutline: beerOutline,
+      bookOutline: bookOutline,
+      cafeOutline: cafeOutline,
+      cartOutline: cartOutline,
+      fastFoodOutline: fastFoodOutline,
+      fishOutline: fishOutline,
+      heartOutline: heartOutline,
+      iceCreamOutline: iceCreamOutline,
+      leafOutline: leafOutline,
+      nutritionOutline: nutritionOutline,
+      pawOutline: pawOutline,
+      pizzaOutline: pizzaOutline,
+      restaurantOutline: restaurantOutline,
+      ribbonOutline: ribbonOutline,
+      rocketOutline: rocketOutline,
+      roseOutline: roseOutline,
+      snowOutline: snowOutline,
+      starOutline: starOutline,
+      storefrontOutline: storefrontOutline,
+      sunnyOutline: sunnyOutline,
+      thumbsUpOutline: thumbsUpOutline,
+      wineOutline: wineOutline,
+      walletOutline: walletOutline,
+      trashOutline: trashOutline,
+      timeOutline: timeOutline,
+    };
 
     /* Composables */
     const { errorNames, tryCatch } = useErrorHandling();
@@ -182,6 +244,7 @@ export default defineComponent({
 
       /* Icons */
       icons,
+      pricetagOutline,
     };
   },
 });

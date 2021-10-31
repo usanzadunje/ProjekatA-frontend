@@ -2,7 +2,7 @@
   <ion-content class="ion-no-padding" :scrollY="false">
     <div>
       <div
-          v-for="(icon, index) in availableIcons"
+          v-for="(icon, name, index) in icons"
           :key="index"
           class="p-2 inline-block"
       >
@@ -10,11 +10,11 @@
             fill="clear"
             slot="icon-only"
             class="reset-button-size"
-            @click="chooseIcon(icon)"
+            @click="chooseIcon(name)"
         >
           <ion-icon
               slot="icon-only"
-              :icon="icons[icon]"
+              :icon="icon"
               class="text-2xl text-gray-500"
           ></ion-icon>
         </ion-button>
@@ -49,36 +49,6 @@ export default defineComponent({
   setup() {
     /* Global properties */
     /* Component properties */
-    const availableIcons = [
-      'barbellOutline',
-      'balloonOutline',
-      'bagHandleOutline',
-      'beerOutline',
-      'bookOutline',
-      'cafeOutline',
-      'cartOutline',
-      'fastFoodOutline',
-      'fishOutline',
-      'heartOutline',
-      'iceCreamOutline',
-      'leafOutline',
-      'nutritionOutline',
-      'pawOutline',
-      'pizzaOutline',
-      'restaurantOutline',
-      'ribbonOutline',
-      'rocketOutline',
-      'roseOutline',
-      'snowOutline',
-      'starOutline',
-      'storefrontOutline',
-      'sunnyOutline',
-      'thumbsUpOutline',
-      'wineOutline',
-      'walletOutline',
-      'trashOutline',
-      'timeOutline',
-    ];
 
     /* Event handlers */
     const chooseIcon = (icon) => {
@@ -86,7 +56,6 @@ export default defineComponent({
     };
     return {
       /* Component properties */
-      availableIcons,
 
       /* Event handlers */
       chooseIcon,
