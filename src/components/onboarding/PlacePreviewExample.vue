@@ -5,7 +5,12 @@
         {{ $t('onboardingFind') }}
       </h1>
       <p class="onboarding-paragraphs mt-3.5">
-        {{ $t('onboardingFindT') }}
+        {{ $t('onboardingFindT1') }}
+        <ion-icon
+            :icon="starOutline"
+            class="text-yellow-400"
+        ></ion-icon>
+        {{ $t('onboardingFindT2') }}
       </p>
     </div>
   </div>
@@ -13,9 +18,20 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { IonIcon }         from '@ionic/vue';
+
+import { starOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'PlacePreviewExample',
+  components: {
+    IonIcon,
+  },
+  setup() {
+    return {
+      starOutline,
+    };
+  },
 });
 </script>
 <style scoped>

@@ -44,7 +44,7 @@
             </ion-item>
 
             <ion-item-options side="end" @ionSwipe="unsubscribeSwiping(place.id, $event)">
-              <ion-item-option type="button" :expandable="true" @click="showAlert(place.id, $event)">
+              <ion-item-option type="button" :expandable="true" @click="showAlert(place, $event)">
                 <ion-icon
                     slot="icon-only"
                     :icon="trashOutline"
@@ -206,13 +206,17 @@ export default defineComponent({
       await tryGettingLocation();
       await getSubscriptions();
     };
-    const showAlert = async(placeId, event) => {
+    const showAlert = async(place, event) => {
       event?.stopPropagation();
 
       const alert = await alertController
           .create({
-            header: t('alertUnsubscribeHeader'),
-            message: t('alertUnsubscribeMessage'),
+            header: t('alertUnsubscribeHeader', {
+              place: place.name,
+            }),
+            message: t('alertUnsubscribeMessage', {
+              place: place.name,
+            }),
             mode: 'ios',
             buttons: [
               {
@@ -222,7 +226,7 @@ export default defineComponent({
               {
                 text: t('agree'),
                 handler: () => {
-                  unsubscribe(placeId);
+                  unsubscribe(place.id);
 
                   fullSwipeLeft(event.target.parentElement.parentElement.firstChild);
                   shrinkToMiddle(event.target.parentElement.parentElement);

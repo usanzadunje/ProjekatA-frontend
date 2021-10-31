@@ -170,8 +170,10 @@ export default defineComponent({
 
       const alert = await alertController
           .create({
-            header: t('staff.alertRemoveStaffHeader'),
-            message: t('staff.removeStaffMessage', { staff: `${staffMember.fname} ${staffMember.lname}` }),
+            header: t('staff.alertRemoveStaffHeader', {
+              staff: `${staffMember.fname} ${staffMember.lname}`,
+            }),
+            message: t('staff.removeStaffMessage'),
             mode: 'ios',
             buttons: [
               {

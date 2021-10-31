@@ -1,5 +1,5 @@
 export default {
-    "email": "marko.markovic{'@'}nesto.rs",
+    "email": "marko.markovic{'@'}primer.rs",
     "password": "Lozinka",
     "passwordConfirm": "Ponovite lozinku",
     "passwordOld": "Trenutna lozinka",
@@ -110,7 +110,6 @@ export default {
     "basic": "Osnovno",
     "table": "Sto | Stolovi",
     "tables": "Stolovi",
-    "owner.noImage": "Izaberite najmanje 1 fotografiju.",
     "uploadSelectedImages": "Sačuvaj",
     "saving": "Čuvam",
     "toggling": "Menjam",

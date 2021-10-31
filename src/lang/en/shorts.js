@@ -109,7 +109,6 @@ export default {
     "basic": "Basic info",
     "table": "Table | Tables",
     "tables": "Table setup",
-    "owner.noImage": "Please select at least 1 image.",
     "uploadSelectedImages": "Upload",
     "saving": "Saving",
     "toggling": "Toggling",

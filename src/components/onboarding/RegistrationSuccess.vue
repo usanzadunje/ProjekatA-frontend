@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col justify-center text-center full-size bg">
     <h1 class="text-4xl onboarding-headings text-white">
-      Uspesno ste se registrovali!
+      {{ $t('onboardingSuccess') }}
     </h1>
     <p class="onboarding-paragraphs text-white mt-3.5">
-      Dobrodosli u Project A. Nastavi dalje kako bi video sta vam nasa aplikacija nudi.
+      {{ $t('onboardingWelcome') }}
     </p>
   </div>
 </template>

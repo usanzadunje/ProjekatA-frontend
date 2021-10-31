@@ -27,5 +27,8 @@
 			"forceCodeForRefreshToken": true
 		}
 	},
-	"cordova": {}
+	"cordova": {},
+	"server": {
+		"url": "http://192.168.1.203:8100"
+	}
 }
