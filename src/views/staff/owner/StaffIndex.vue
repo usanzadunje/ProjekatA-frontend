@@ -60,7 +60,7 @@
 
       <ion-infinite-scroll
           threshold="100px"
-          :disabled="isInfiniteScrollDisabled"
+          :disabled="isInfiniteScrollDisabled || showSkeleton"
           @ionInfinite="loadMoreStaff($event)"
       >
         <ion-infinite-scroll-content
@@ -98,7 +98,8 @@ import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   close,
-} from 'ionicons/icons';
+}                 from 'ionicons/icons';
+import { shrink } from '@/composables/useAnimations';
 
 export default defineComponent({
   name: "StaffIndex",
@@ -130,6 +131,7 @@ export default defineComponent({
     const { t } = useI18n();
     const { isModalOpen, modalData, openModal } = useModal();
     const { tryCatch } = useErrorHandling();
+    const { shrinkToMiddle } = shrink();
 
     /* Methods */
     const getStaff = async(load = null) => {
@@ -174,7 +176,6 @@ export default defineComponent({
               staff: `${staffMember.fname} ${staffMember.lname}`,
             }),
             message: t('staff.removeStaffMessage'),
-            mode: 'ios',
             buttons: [
               {
                 text: t('disagree'),
@@ -185,10 +186,15 @@ export default defineComponent({
                 handler: async() => {
                   await tryCatch(
                       async() => {
+                        shrinkToMiddle(event.target.parentElement.parentElement);
+
                         await store.dispatch('owner/deleteStaff', staffMember.id);
                       },
                       null,
                       'generalAlertError',
+                      () => {
+                        event.target.parentElement.parentElement.style.transform = 'scaleY(1)';
+                      },
                   );
                 },
               },

@@ -171,7 +171,7 @@ export default defineComponent({
     const { category } = toRefs(props);
     const internalCategory = reactive({
       name: null,
-      icon: null,
+      icon: 'fastFoodOutline',
     });
     const loading = ref(false);
 

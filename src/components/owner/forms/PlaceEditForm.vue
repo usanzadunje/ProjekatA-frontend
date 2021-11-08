@@ -200,9 +200,9 @@
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
-          @click="$router.back()"
+          @click="resetInput"
       >
-        {{ $t('cancel') }}
+        {{ $t('reset') }}
       </ion-button>
     </div>
   </div>
@@ -227,7 +227,7 @@ import {
 import MainImagePreview    from '@/components/MainImagePreview';
 import PlaceImagesAddModal from '@/components/owner/modals/PlaceImagesAddModal';
 
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useErrorHandling }   from '@/composables/useErrorHandling';
 import { hideNativeKeyboard } from '@/composables/useDevice';
 
 import {
@@ -260,7 +260,8 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup(props) {
+  emits: ['scrollToTop'],
+  setup(props, { emit }) {
     /* Global properties and methods */
     const store = useStore();
 
@@ -315,6 +316,8 @@ export default defineComponent({
       place.saturday_end = saturday_hours[1];
       place.sunday_start = sunday_hours[0];
       place.sunday_end = sunday_hours[1];
+
+      emit('scrollToTop');
     };
 
     /* Event handlers */
@@ -330,7 +333,6 @@ export default defineComponent({
             place.working_hours.sunday = `${place.sunday_start}-${place.sunday_end}`;
 
             await store.dispatch("owner/updatePlaceInfo", place);
-
           },
           'successUpdate',
       );

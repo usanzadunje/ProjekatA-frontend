@@ -25,18 +25,35 @@
           class="text-black w-full flex justify-between items-center"
       >
         {{
-          $t(
-              'currentTableSmokingAllowed',
-              {
+          table?.smoking_allowed
+              ?
+              $t('currentTableSmokingAllowed', {
                 isAllowed: table?.smoking_allowed
                     ? $t('is').toLowerCase()
                     : $t('isNot').toLowerCase(),
               })
+              :
+              $t('tableSmokingAllowedUnavailable')
+
         }}
         <ion-icon
             :icon="table?.smoking_allowed ? checkmarkCircleOutline : logoNoSmoking"
             class="flex-shrink-0"
             :class="table?.smoking_allowed ? 'text-green-500' : 'text-red-500'"
+        ></ion-icon>
+      </div>
+      <hr class="border-b border-gray-300 my-1">
+      <div
+          class="text-black w-full flex justify-between items-center"
+      >
+        {{
+          table?.seats ?
+              $t('numberOfSeatsAtTable', { seats: table?.seats }) :
+              $t('numberOfSeatsUnavailable')
+        }}
+        <ion-icon
+            :icon="accessibilityOutline"
+            class="flex-shrink-0"
         ></ion-icon>
       </div>
     </div>
@@ -53,6 +70,7 @@ import {
 import {
   checkmarkCircleOutline,
   closeCircleOutline,
+  accessibilityOutline,
   logoNoSmoking,
 } from 'ionicons/icons';
 
@@ -78,6 +96,7 @@ export default defineComponent({
       /* Icons */
       checkmarkCircleOutline,
       closeCircleOutline,
+      accessibilityOutline,
       logoNoSmoking,
     };
   },

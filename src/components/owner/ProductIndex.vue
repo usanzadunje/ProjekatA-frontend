@@ -218,7 +218,6 @@ export default defineComponent({
           .create({
             header: t('alertRemovingProductHeader', { product: product.name }),
             message: t('alertRemovingProductMessage'),
-            mode: 'ios',
             buttons: [
               {
                 text: t('disagree'),
@@ -232,8 +231,8 @@ export default defineComponent({
                     fullSwipeLeft(event.target.parentElement.firstChild);
                     shrinkToMiddle(event.target.parentElement);
                   }else {
-                    fullSwipeLeft(event.target.parentElement.parentElement.firstChild);
-                    shrinkToMiddle(event.target.parentElement.parentElement);
+                    fullSwipeLeft(event.target.parentElement.parentElement.parentElement.firstChild);
+                    shrinkToMiddle(event.target.parentElement.parentElement.parentElement);
                   }
                 },
               },

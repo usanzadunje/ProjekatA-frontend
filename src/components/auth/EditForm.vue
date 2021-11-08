@@ -200,9 +200,9 @@
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"
-          @click="$router.back()"
+          @click="resetInputs"
       >
-        {{ $t('cancel') }}
+        {{ $t('reset') }}
       </ion-button>
     </div>
   </div>
@@ -257,7 +257,8 @@ export default defineComponent({
       default: false,
     },
   },
-  setup(props) {
+  emits: ['scrollToTop'],
+  setup(props, { emit }) {
     /* Global properties and methods */
     const store = useStore();
     const { authUser } = useCurrentUser();
@@ -281,12 +282,7 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     onMounted(async() => {
-      user.fname = authUser.value.fname;
-      user.lname = authUser.value.lname;
-      user.username = authUser.value.username;
-      user.email = authUser.value.email;
-      user.bday = authUser.value.bday;
-      user.phone = authUser.value.phone;
+      resetInputs();
     });
 
     /* Composables */
@@ -299,6 +295,24 @@ export default defineComponent({
       delete user.old_password;
       delete user.password;
       delete user.password_confirmation;
+    };
+    const resetInputs = () => {
+      user.fname = authUser.value.fname;
+      user.lname = authUser.value.lname;
+      user.username = authUser.value.username;
+      user.email = authUser.value.email;
+      user.bday = authUser.value.bday;
+      user.phone = authUser.value.phone;
+      user.avatar = null;
+      photo.value = null;
+
+      showPasswordEdit.value = false;
+      showOldPassword.value = false;
+      showPassword.value = false;
+      showPasswordConfirm.value = false;
+      clearPasswordInputs();
+
+      emit('scrollToTop');
     };
 
     /* Event handlers */
@@ -346,13 +360,7 @@ export default defineComponent({
     /* Watchers */
     watch(clearInputs, () => {
       if(clearInputs.value) {
-        showPasswordEdit.value = false;
-        showOldPassword.value = false;
-        showPassword.value = false;
-        showPasswordConfirm.value = false;
-        clearPasswordInputs();
-
-        user.avatar = authUser.value.avatar;
+        resetInputs();
       }
     });
     watch(photo, () => {
@@ -386,6 +394,7 @@ export default defineComponent({
       update,
       togglePasswordShow,
       selectImageSource,
+      resetInputs,
 
       /* Icons */
       personOutline,

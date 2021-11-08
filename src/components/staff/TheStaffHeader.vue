@@ -1,44 +1,42 @@
 <template>
-  <div class="sticky top-0 z-40">
-    <div class="w-full h-12 bg-gray-100 flex items-center justify-between">
-      <ion-button
-          class="reset-button-size pl-2"
+  <div class="w-full h-12 bg-gray-100 flex items-center justify-between">
+    <ion-button
+        class="reset-button-size pl-2"
+        slot="icon-only"
+        fill="clear"
+        @click="toggleMenu"
+    >
+      <ion-icon
           slot="icon-only"
-          fill="clear"
-          @click="toggleMenu"
-      >
-        <ion-icon
-            slot="icon-only"
-            :icon="menuOutline"
-            class="text-2xl text-black"
-        ></ion-icon>
-      </ion-button>
+          :icon="menuOutline"
+          class="text-2xl text-black"
+      ></ion-icon>
+    </ion-button>
 
-      <div class="flex items-center">
-        <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'Dark' : 'Light' }}</ion-label>
-        <ion-toggle
-            :checked="isDarkModeOn"
-            mode="md"
-            class="dark-toggle-checked"
-            @ionChange="toggleDarkMode($event)"
-        ></ion-toggle>
+    <div class="flex items-center ml-2">
+      <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'Dark' : 'Light' }}</ion-label>
+      <ion-toggle
+          :checked="isDarkModeOn"
+          mode="md"
+          class="dark-toggle-checked"
+          @ionChange="toggleDarkMode($event)"
+      ></ion-toggle>
 
-        <AppLanguagePicker class="ml-3"/>
-      </div>
-
-      <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
-        <ion-avatar class="flex-shrink-0">
-          <img
-              :src="authUser?.avatar ?? backendStorageURL + '/users/default_avatar.png'"
-              alt="Profile picture"
-              class="w-full h-full object-cover"
-          >
-        </ion-avatar>
-        <ion-label class="break-all">
-          {{ authUser?.username || authUser?.fname }}
-        </ion-label>
-      </ion-chip>
+      <AppLanguagePicker class="ml-3"/>
     </div>
+
+    <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
+      <ion-avatar class="flex-shrink-0">
+        <img
+            :src="authUser?.avatar ?? backendStorageURL + '/users/default_avatar.png'"
+            alt="Profile picture"
+            class="w-full h-full object-cover"
+        >
+      </ion-avatar>
+      <ion-label class="break-all">
+        {{ authUser?.username || authUser?.fname }}
+      </ion-label>
+    </ion-chip>
   </div>
 </template>
 

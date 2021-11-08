@@ -135,7 +135,6 @@ export default defineComponent({
           .create({
             header: t('alertNotificationsOffHeader'),
             message: t('alertNotificationsOffMessage'),
-            mode: 'ios',
             buttons: [
               {
                 text: t('no'),

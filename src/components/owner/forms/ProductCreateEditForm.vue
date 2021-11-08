@@ -50,11 +50,11 @@
             v-model="newProduct.description"
             v-capitalize
             :placeholder="$t('productDescription')"
-            auto-grow="true"
             :autocapitalize="true"
             debounce="100"
             inputmode="text"
             required
+            :rows="Math.ceil(newProduct.description?.length / 24)"
         >
         </ion-textarea>
       </ion-item>
@@ -116,7 +116,7 @@ import {
   IonSpinner,
 }                                                                      from '@ionic/vue';
 
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useErrorHandling }   from '@/composables/useErrorHandling';
 import { hideNativeKeyboard } from '@/composables/useDevice';
 
 import {

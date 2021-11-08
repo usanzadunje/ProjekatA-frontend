@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content ref="content">
       <ion-refresher pull-max="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
@@ -9,7 +9,11 @@
       </ion-refresher>
 
       <div class="h-full">
-        <PlaceEditForm :reset-inputs="resetInputs" :refresher="refresher"/>
+        <PlaceEditForm
+            :reset-inputs="resetInputs"
+            :refresher="refresher"
+            @scrollToTop="scrollToTop(this.$refs.content, 500);"
+        />
       </div>
     </ion-content>
   </ion-page>
@@ -26,7 +30,8 @@ import {
   onIonViewWillEnter,
 }                               from '@ionic/vue';
 
-import PlaceEditForm from '@/components/owner/forms/PlaceEditForm';
+import PlaceEditForm  from '@/components/owner/forms/PlaceEditForm';
+import { useContent } from '@/composables/useContent';
 
 export default defineComponent({
   name: "PlaceEdit",
@@ -44,6 +49,9 @@ export default defineComponent({
       isActive: false,
       event: null,
     });
+
+    /* Composables */
+    const { scrollToTop } = useContent();
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
@@ -66,6 +74,7 @@ export default defineComponent({
 
       /* Event handlers */
       refresh,
+      scrollToTop,
     };
   },
 

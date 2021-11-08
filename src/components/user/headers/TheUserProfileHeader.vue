@@ -38,7 +38,7 @@
                   {{ authUser?.username }}
                 </p>
               </div>
-              <a v-else @click="$router.push({ name: 'edit' })" class="user-profile-username underline lowercase">
+              <a v-else @click="this.$router.push({ name: 'edit' })" class="user-profile-username underline lowercase">
                 {{ $t('noSettingsText') }}
               </a>
             </div>
@@ -120,7 +120,10 @@ ion-toolbar {
 }
 
 .user-header-bg {
-  background: var(--user-selected-color) url('https://resize.rs/storage/img/users/header-background.png') no-repeat;
+  background-color: var(--user-selected-color);
+  background-image: url('https://resize.rs/storage/img/users/header-background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
   background-blend-mode: multiply;
   border-bottom-left-radius: 15px !important;
   border-bottom-right-radius: 15px !important;;

@@ -3,9 +3,9 @@
     <ion-content scrollY="false">
       <div class="h-full flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-center">
-            <Table/>
-            <span class="ml-2 secondary-heading">-pick a table and drag</span>
+          <div class="flex flex-col items-center">
+            <div class="secondary-heading text-center">{{ $t('addTableText') }}</div>
+            <Table class="mt-2"/>
           </div>
 
           <div class="px-4">
@@ -16,11 +16,11 @@
                   :draggable="true"
                   :data-id="table.id"
                   :style="
-                                  `position: absolute;
-                                  top: 0; left: 0;
-                                  transform:translate(${table.position?.left}px, ${table.position.top}px)
-                                  `
-                                "
+                        `position: absolute;
+                        top: 0; left: 0;
+                        transform:translate(${table.position?.left}px, ${table.position.top}px)
+                        `
+                      "
                   @click="showTableModal(table)"
               />
             </TableContainer>

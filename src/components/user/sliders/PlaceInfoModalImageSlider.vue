@@ -1,6 +1,7 @@
 <template>
   <div v-if="!showSkeleton">
     <swiper
+        v-update-swiper
         v-if="images?.length !== 0"
         :slides-per-view="2.5"
         :space-between="10"

@@ -1,6 +1,9 @@
 <template>
   <ion-content class="ion-no-padding" :scrollY="false">
-    <div>
+    <div class="pb-2">
+      <div class="pt-2 pb-4">
+        <h1 class="secondary-heading text-center">{{ $t('chooseIcon') }}</h1>
+      </div>
       <div
           v-for="(icon, name, index) in icons"
           :key="index"

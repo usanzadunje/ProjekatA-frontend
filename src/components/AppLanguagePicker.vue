@@ -1,7 +1,7 @@
 <template>
   <ion-item @click="chooseLanguage" slot="end" class="ion-no-padding ion-no-margin no-border mr-1">
-    <ion-button fill="clear" class="settings-fade-text">
-      {{ localization.text || 'SRB' }}
+    <ion-button fill="clear">
+      <span class="settings-fade-text">{{ localization.text || 'SRB' }}</span>
     </ion-button>
   </ion-item>
 </template>

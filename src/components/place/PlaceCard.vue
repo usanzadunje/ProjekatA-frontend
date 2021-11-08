@@ -16,7 +16,7 @@
       <div class="flex">
         <div class="flex">
           <ion-icon :icon="pieChart" class="text-yellow-400"></ion-icon>
-          <span class="cafe-card-fade-text ml-1">{{ place.availability_ratio }}</span>
+          <span class="cafe-card-fade-text ml-1">{{ freeSeats }}</span>
         </div>
         <div class="flex ml-2">
           <ion-icon :icon="locationOutline" class="primary-icon-color"></ion-icon>
@@ -49,7 +49,6 @@ import {
   star,
 } from 'ionicons/icons';
 
-
 export default defineComponent({
   name: 'PlaceCard',
   components: {
@@ -64,6 +63,7 @@ export default defineComponent({
   },
   setup(props) {
     /* Global properties */
+
     /* Component properties */
     const { place } = toRefs(props);
     const distance = computed(() => Math.round(PlaceService.getDistance(place.value.latitude, place.value.longitude)));
@@ -75,6 +75,11 @@ export default defineComponent({
         return '/places/default_place_logo.png';
       }
     });
+    const freeSeats = computed(() => {
+      const ratio = place.value?.availability_ratio?.split('/');
+
+      return `${ratio[1] - ratio[0]}/${ratio[1]}`;
+    });
 
     /* Composables */
 
@@ -84,6 +89,7 @@ export default defineComponent({
       /* Component Properties */
       distance,
       logoPath,
+      freeSeats,
 
       /* Event listeners */
 

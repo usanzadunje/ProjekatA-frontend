@@ -1,9 +1,14 @@
 <template>
   <ion-page>
     <ion-content>
-      <ion-item class="no-border mt-3">
-        <h1 class="settings-heading">{{ $t('settings') }}</h1>
-      </ion-item>
+      <ion-header class="ion-no-border">
+        <ion-toolbar class="ion-no-padding">
+          <ion-item class="no-border">
+            <h1 class="settings-heading">{{ $t('settings') }}</h1>
+          </ion-item>
+        </ion-toolbar>
+      </ion-header>
+
       <ion-item class="no-border">
         <div class="settings-icon-badge settings-red-icon-color flex justify-center settings-padding-icon-top">
           <ion-icon :icon="flash" class="text-white"></ion-icon>
@@ -92,12 +97,14 @@
 import { computed, defineComponent, ref } from 'vue';
 import { useStore }                       from 'vuex';
 import {
-  IonButton,
+  IonPage,
   IonContent,
+  IonHeader,
+  IonToolbar,
+  IonButton,
   IonIcon,
   IonItem,
   IonLabel,
-  IonPage,
   IonToggle,
 }                                         from '@ionic/vue';
 
@@ -106,18 +113,20 @@ import ColorPicker       from '@/components/ColorPicker';
 
 import AuthService from '@/services/AuthService';
 
-import { useFCM }                from '@/composables/useFCM';
+import { useFCM }           from '@/composables/useFCM';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import { chevronForward, flash, rocket } from 'ionicons/icons';
 
-import { Capacitor }        from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 
 export default defineComponent({
   name: 'UserSettings',
   components: {
-    IonContent,
     IonPage,
+    IonContent,
+    IonHeader,
+    IonToolbar,
     IonItem,
     IonIcon,
     IonLabel,
@@ -213,5 +222,12 @@ ion-item {
 
 .ion-item-padding-right {
   --padding-end: 20px;
+}
+
+ion-toolbar {
+  background: var(--primary-paint);
+  --background: var(--primary-paint);
+  border-bottom-left-radius: unset !important;
+  border-bottom-right-radius: unset !important;
 }
 </style>

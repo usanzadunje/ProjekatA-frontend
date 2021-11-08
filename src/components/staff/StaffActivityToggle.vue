@@ -1,9 +1,9 @@
 <template>
   <div
-      class="flex justify-between items-center"
+      class="flex items-center"
       :class="[isStaffActive ? 'text-green-900' : 'text-red-500']"
   >
-    <div class="flex items-center">
+    <div class="flex items-center mr-2">
       <ion-icon slot="start" :icon="isStaffActive ? checkmarkOutline : closeOutline" :class="iconClasses"></ion-icon>
       <span :class="textClasses">{{ isStaffActive ? $t('active') : $t('inactive') }}</span>
     </div>

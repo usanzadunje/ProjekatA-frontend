@@ -13,8 +13,11 @@
             :class="activeSlidingButton === 'distance' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
-          <ion-icon slot="start"
-                    :icon="activeSlidingButton === 'distance' ? locationSharp : locationOutline"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="activeSlidingButton === 'distance' ? locationSharp : locationOutline"
+          >
+          </ion-icon>
           {{ $t('closest') }}
         </ion-button>
       </swiper-slide>
@@ -25,7 +28,11 @@
             :class="activeSlidingButton === 'favorites' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
-          <ion-icon slot="start" :icon="activeSlidingButton === 'favorites' ? starSharp : starOutline"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="activeSlidingButton === 'favorites' ? starSharp : starOutline"
+          >
+          </ion-icon>
           {{ $t('favorite', 2) }}
         </ion-button>
       </swiper-slide>
@@ -36,8 +43,11 @@
             :class="activeSlidingButton === 'availability' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
-          <ion-icon slot="start"
-                    :icon="activeSlidingButton === 'availability' ? ellipseSharp : ellipseOutline"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="activeSlidingButton === 'availability' ? ellipseSharp : ellipseOutline"
+          >
+          </ion-icon>
           {{ $t('available') }}
         </ion-button>
       </swiper-slide>
@@ -48,7 +58,11 @@
             :class="activeSlidingButton === 'food' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
-          <ion-icon slot="start" :icon="activeSlidingButton === 'food' ? pizzaSharp : pizzaOutline"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="activeSlidingButton === 'food' ? pizzaSharp : pizzaOutline"
+          >
+          </ion-icon>
           {{ $t('food') }}
         </ion-button>
       </swiper-slide>
@@ -59,7 +73,12 @@
             :class="activeSlidingButton === 'random' ? 'sliding-filter-button-active' : 'sliding-filter-button-inactive'"
             @click="sortButtonActivated"
         >
-          <ion-icon slot="start" :icon="shuffle" style="font-size:1.1rem"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="shuffle"
+              style="font-size: 1.1rem !important"
+          >
+          </ion-icon>
           {{ $t('random') }}
         </ion-button>
       </swiper-slide>
@@ -148,6 +167,6 @@ export default defineComponent({
 <style scoped>
 ion-button {
   height: 30px;
-  width: 113px;
+  min-width: 113px;
 }
 </style>

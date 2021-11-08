@@ -17,7 +17,7 @@
     </swiper-slide>
   </swiper>
 
-  <div v-show="showSkeleton" class="mb-4">
+  <div v-show="showSkeleton" class="mb-5">
     <div class="flex mb-4">
       <PlaceCardSkeleton class="w-full"></PlaceCardSkeleton>
       <PlaceCardSkeleton class="ml-2 w-6"></PlaceCardSkeleton>

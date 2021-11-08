@@ -12,12 +12,20 @@
 
           <NotificationsPreview/>
         </div>
-        <div v-if="!loggedIn" class="flex justify-around">
-          <ion-button fill="clear" routerLink="/login">
-            <p class="main-toolbar-fade-text uppercase">{{ $t('login') }}</p>
+        <div v-if="!loggedIn" class="flex justify-around mb-4">
+          <ion-button
+              fill="clear"
+              routerLink="/login"
+              class="py-2"
+          >
+            <span class="main-toolbar-fade-text uppercase">{{ $t('login') }}</span>
           </ion-button>
-          <ion-button fill="clear" routerLink="/register">
-            <p class="main-toolbar-fade-text uppercase">{{ $t('register') }}</p>
+          <ion-button
+              fill="clear"
+              class="py-2"
+              @click="this.$router.replace({ name: 'register' })"
+          >
+            <span class="main-toolbar-fade-text uppercase">{{ $t('register') }}</span>
           </ion-button>
         </div>
 
@@ -93,8 +101,7 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-button {
-  padding: 0 0 0.75rem 0 !important;
-  margin: 0 -1rem 0 0 !important;
+  height: auto;
 }
 
 ion-toolbar::part(open) {

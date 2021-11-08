@@ -15,7 +15,12 @@ export default {
     "owner.currentAvailabilitySituation": "Current situation in your place",
     "owner.currentActiveStaff": "Currently active staff",
     "currentTableAvailability": "Table is currently {availability}.",
+    "numberOfSeatsAtTable": "This table has {seats} seats.",
+    "numberOfSeatsUnavailable": "The number of seats is not specified.",
     "currentTableSmokingAllowed": "Smoking {isAllowed} allowed at this table.",
+    "tableSmokingAllowedUnavailable": "Smoking permission is not specified.",
     "noFavoritePlaces1": "You have no favorite places yet. You can click on ",
     "noFavoritePlaces2": " to add one.",
+    "addTableText": "Drag to add new table",
+    "noProductDescription": "Description is not set for this product.",
 };

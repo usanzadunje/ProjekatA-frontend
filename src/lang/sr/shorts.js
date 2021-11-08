@@ -20,7 +20,7 @@ export default {
     "garden": "Bašta",
     "food": "Hrana",
     "popular": "Popularno",
-    "closest": "Najbliži vama",
+    "closest": "Najbliži",
     "available": "Slobodni",
     "availability": "Dostupnost",
     "drink": "Piće | Pića",
@@ -155,5 +155,7 @@ export default {
     "favorite": "Omiljen | Omiljeni",
     "random": "Nasumično",
     "chooseIcon": "Izaberite ikonicu",
+    "workingActivity": "Radna aktivnost",
+    "numberOfSeats": "Broj mesta za stolom",
 };
 

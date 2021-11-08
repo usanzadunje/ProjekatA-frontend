@@ -75,7 +75,7 @@
       <ion-button
           :disabled="loading"
           fill="clear"
-          @click="$router.replace({ name: 'login' })"
+          @click="this.$router.replace({ name: 'login' })"
           size="large"
           expand="block"
           class="auth-button-size auth-button-border-radius uppercase button-text-black mt-4"

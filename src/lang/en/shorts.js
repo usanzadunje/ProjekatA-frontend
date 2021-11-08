@@ -153,5 +153,6 @@ export default {
     "favorite": "Favorite | Favorites",
     "random": "Random",
     "chooseIcon": "Choose icon",
-
+    "workingActivity": "Working activity",
+    "numberOfSeats": "Number of seats for table",
 };

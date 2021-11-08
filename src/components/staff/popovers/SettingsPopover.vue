@@ -5,7 +5,11 @@
         :class="{ 'text-yellow-600' : activeRouteName === 'dashboard' }"
         @click="navigateTo('staff.dashboard')"
     >
-      <ion-icon slot="start" :icon="statsChartOutline"></ion-icon>
+      <ion-icon
+          :icon="statsChartOutline"
+          class="flex-shrink-0"
+      >
+      </ion-icon>
       <span class="text-sm ml-3">{{ $t('staff.dashboard') }}</span>
     </div>
 
@@ -13,7 +17,11 @@
          class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
          :class="{ 'text-green-600' : activeRouteName === 'place' }"
          @click="navigateTo('owner.place')">
-      <ion-icon slot="start" :icon="homeOutline"></ion-icon>
+      <ion-icon
+          :icon="homeOutline"
+          class="flex-shrink-0"
+      >
+      </ion-icon>
       <span class="text-sm ml-3">{{ $t('owner.place') }}</span>
     </div>
 
@@ -22,7 +30,11 @@
          :class="{ 'text-blue-600' : activeRouteName === 'staff' }"
          @click="navigateTo('owner.staff')"
     >
-      <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
+      <ion-icon
+          :icon="peopleOutline"
+          class="flex-shrink-0"
+      >
+      </ion-icon>
       <span class="text-sm ml-3">{{ $t('owner.staff') }}</span>
     </div>
 
@@ -31,7 +43,11 @@
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
         @click="navigateTo('staff.settings')"
     >
-      <ion-icon slot="start" :icon="personOutline"></ion-icon>
+      <ion-icon
+          :icon="personOutline"
+          class="flex-shrink-0"
+      >
+      </ion-icon>
       <span class="text-sm ml-3">{{ $t('profile') }}</span>
     </div>
 
@@ -45,7 +61,11 @@
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-gray-300"
         @click="logout"
     >
-      <ion-icon slot="start" :icon="logOutOutline" class="text-black"></ion-icon>
+      <ion-icon
+          :icon="logOutOutline"
+          class="flex-shrink-0"
+      >
+      </ion-icon>
       <span class="text-sm ml-3">{{ $t('logout') }}</span>
     </div>
   </ion-content>

@@ -21,67 +21,65 @@
       </ion-refresher>
 
 
-      <div class="ion-padding">
-        <div class="pb-6">
+      <div class="ion-padding mb-10">
+        <FilterCategoryHeading
+            class="mb-2"
+            :title="$t('closest')"
+            :icon="locationSharp"
+        />
+        <PlaceCardSlider
+            :places="places.closestToUser"
+            :show-skeleton="showSkeleton"
+            @open-place-modal="openModal(true, $event)"
+        />
+
+        <div v-if="this.$store.getters['auth/loggedIn']">
           <FilterCategoryHeading
               class="mb-2"
-              :title="$t('closest')"
-              :icon="locationSharp"
+              :title="$t('favorite', 2)"
+              :icon="starSharp"
           />
           <PlaceCardSlider
-              :places="places.closestToUser"
+              v-if="places.favorites.length !== 0"
+              :places="places.favorites"
               :show-skeleton="showSkeleton"
               @open-place-modal="openModal(true, $event)"
           />
-
-          <div v-if="this.$store.getters['auth/loggedIn']">
-            <FilterCategoryHeading
-                class="mb-2"
-                :title="$t('favorite', 2)"
-                :icon="starSharp"
-            />
-            <PlaceCardSlider
-                v-if="places.favorites.length !== 0"
-                :places="places.favorites"
-                :show-skeleton="showSkeleton"
-                @open-place-modal="openModal(true, $event)"
-            />
-            <div
-                v-else
-                v-show="!showSkeleton"
-                class="primary-text-color text-xs mb-2"
-            >
-              {{ $t('noFavoritePlaces1') }}
-              <ion-icon
-                  :icon="starOutline"
-                  class="text-yellow-400"
-              ></ion-icon>
-              {{ $t('noFavoritePlaces2') }}
-            </div>
+          <div
+              v-else
+              v-show="!showSkeleton"
+              class="primary-text-color text-xs mb-2"
+          >
+            {{ $t('noFavoritePlaces1') }}
+            <ion-icon
+                :icon="starOutline"
+                class="text-yellow-400"
+            ></ion-icon>
+            {{ $t('noFavoritePlaces2') }}
           </div>
-
-          <FilterCategoryHeading
-              class="mb-2"
-              :title="$t('currently')"
-              :icon="ellipseOutline"
-          />
-          <PlaceCardSlider
-              :places="places.currentlyAvailable"
-              :show-skeleton="showSkeleton"
-              @open-place-modal="openModal(true, $event)"
-          />
-
-          <FilterCategoryHeading
-              class="mb-2"
-              :title="$t('food')"
-              :icon="pizzaSharp"
-          />
-          <PlaceCardSlider
-              :places="places.haveFood"
-              :show-skeleton="showSkeleton"
-              @open-place-modal="openModal(true, $event)"
-          />
         </div>
+
+        <FilterCategoryHeading
+            class="mb-2"
+            :title="$t('currently')"
+            :icon="ellipseOutline"
+        />
+        <PlaceCardSlider
+            :places="places.currentlyAvailable"
+            :show-skeleton="showSkeleton"
+            @open-place-modal="openModal(true, $event)"
+        />
+
+        <FilterCategoryHeading
+            class="mb-2"
+            :title="$t('food')"
+            :icon="pizzaSharp"
+        />
+        <PlaceCardSlider
+            :places="places.haveFood"
+            :show-skeleton="showSkeleton"
+            @open-place-modal="openModal(true, $event)"
+        />
       </div>
 
       <AppModal

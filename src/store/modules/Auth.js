@@ -19,6 +19,9 @@ export const mutations = {
     },
     UPDATE_USER(state, payload) {
         Object.keys(payload).forEach(key => {
+            if(key === 'avatar' && !payload['avatar']) {
+                return;
+            }
             state.user[key] = payload[key];
         });
     },
@@ -69,7 +72,6 @@ export const actions = {
                     spinner: 'crescent',
                     cssClass: 'custom-loading',
                     message: i18n.global.t('loggingOut'),
-                    mode: 'ios',
                 });
             await loading.present();
 

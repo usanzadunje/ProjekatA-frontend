@@ -35,9 +35,8 @@
           lines="none"
           class="flex rounded-2xl mt-3.5"
       >
-
         <p>
-          {{ product?.description }}
+          {{ product?.description || $t('noProductDescription') }}
         </p>
       </ion-item>
       <ion-item

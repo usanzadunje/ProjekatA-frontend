@@ -16,7 +16,12 @@ export default {
     "owner.currentAvailabilitySituation": "Trenutno stanje u vašem objektu",
     "owner.currentActiveStaff": "Trenutno aktivni zaposleni",
     "currentTableAvailability": "Sto je trenutno {availability}.",
+    "numberOfSeatsAtTable": "Ovaj sto ima {seats} mesta za sedenje.",
+    "numberOfSeatsUnavailable": "Broj mesta za sedenje nije naveden.",
     "currentTableSmokingAllowed": "Pušenje {isAllowed} dozvoljeno za ovim stolom.",
+    "tableSmokingAllowedUnavailable": "Dozvola za pušenje nije navedena.",
     "noFavoritePlaces1": "Trenutno nemate omiljenih objekata. Možete kliknuti na ",
     "noFavoritePlaces2": " kako biste dodali jedan.",
+    "addTableText": "Prevucite da dodate novi sto",
+    "noProductDescription": "Opis nije postavljen za ovaj prozvod.",
 };

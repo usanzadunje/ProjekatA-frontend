@@ -1,24 +1,38 @@
 <template>
   <ion-content class="ion-no-padding" :scrollY="false">
     <div
-        class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-        @click="navigateTo('edit')">
-      <ion-icon slot="start" :icon="personOutline" class="text-black"></ion-icon>
+        class="h-12 text-black flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
+        @click="navigateTo('edit')"
+    >
+      <ion-icon
+          :icon="personOutline"
+          class="text-black flex-shrink-0"
+      >
+      </ion-icon>
       <span class="text-sm ml-3">{{ $t('profile') }}</span>
     </div>
 
     <div
-        class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-        @click="navigateTo('settings')">
-      <ion-icon slot="start" :icon="settingsOutline" class="text-black"></ion-icon>
+        class="h-12 text-black flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
+        @click="navigateTo('settings')"
+    >
+      <ion-icon
+          :icon="settingsOutline"
+          class="text-black flex-shrink-0"
+      >
+      </ion-icon>
       <span class="text-sm ml-3">{{ $t('settings') }}</span>
     </div>
 
     <div
-        class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-gray-300"
+        class="h-12 text-black flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-gray-300"
         @click="logout"
     >
-      <ion-icon slot="start" :icon="logOutOutline" class="text-black"></ion-icon>
+      <ion-icon
+          :icon="logOutOutline"
+          class="text-black flex-shrink-0"
+      >
+      </ion-icon>
       <span class="text-sm ml-3">{{ $t('logout') }}</span>
     </div>
   </ion-content>

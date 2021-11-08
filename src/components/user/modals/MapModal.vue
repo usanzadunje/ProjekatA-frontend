@@ -25,8 +25,6 @@ import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import { CapacitorGoogleMaps } from '@capacitor-community/capacitor-googlemaps-native';
 
-import { sleep } from '@/utils/helpers';
-
 export default defineComponent({
   name: "MapModal",
   props: {
@@ -54,6 +52,7 @@ export default defineComponent({
       mapContainerBoundingRect = map.value?.getBoundingClientRect();
       await tryCatch(
           async() => {
+            let mapReadyEventCount = 0;
             await CapacitorGoogleMaps.create({
               width: Math.round(mapContainerBoundingRect.width),
               height: Math.round(mapContainerBoundingRect.height),
@@ -64,34 +63,38 @@ export default defineComponent({
               zoom: 16,
             });
 
-            CapacitorGoogleMaps.addListener("onMapReady", async function() {
-              await CapacitorGoogleMaps.settings({
-                indoorPicker: true,
-                zoomGestures: true,
-              });
+            CapacitorGoogleMaps.addListener("onMapReady", async() => {
+              //For some reason this event is called multiple times if map is opened multiple times
+              //this is resulting in creation of multiple markers for user position which are visible on the map
+              //this is avoided with this condition
+              if(++mapReadyEventCount === 1) {
+                await CapacitorGoogleMaps.settings({
+                  indoorPicker: true,
+                  zoomGestures: true,
+                });
 
-              await CapacitorGoogleMaps.addMarker({
-                latitude: Number(place.value.latitude) || 43.317862492567,
-                longitude: Number(place.value.longitude) || 21.895785976058143,
-                title: place.value.name,
-                snippet: place.value.address,
-              });
+                await CapacitorGoogleMaps.addMarker({
+                  latitude: Number(place.value.latitude) || 43.317862492567,
+                  longitude: Number(place.value.longitude) || 21.895785976058143,
+                  title: place.value.name,
+                  snippet: place.value.address,
+                });
 
-              await CapacitorGoogleMaps.addMarker({
-                latitude: position.value.latitude,
-                longitude: position.value.longitude,
-                title: t('me'),
-                snippet: t('currentPosition'),
-                opacity: 2.5,
-              });
+                await CapacitorGoogleMaps.addMarker({
+                  latitude: position.value.latitude,
+                  longitude: position.value.longitude,
+                  title: t('me'),
+                  snippet: t('currentPosition'),
+                  opacity: 2.5,
+                });
 
-              await CapacitorGoogleMaps.setMapType({
-                "type": "normal",
-              });
+                await CapacitorGoogleMaps.setMapType({
+                  "type": "normal",
+                });
+              }
 
 
             });
-
           },
           null,
           'warningGoogleMapsError',
@@ -108,21 +111,18 @@ export default defineComponent({
             cssClass: 'custom-loading',
             message: t('loading'),
             spinner: 'crescent',
-            mode: 'ios',
           });
 
       await loading.present();
 
       distance.value = `${Math.round(PlaceService.getDistance(place.value.latitude, place.value.longitude))}m`;
 
-      await sleep(400);
-
       await createMap();
 
       await loading.dismiss();
     });
-    onBeforeUnmount(() => {
-      CapacitorGoogleMaps.close();
+    onBeforeUnmount(async() => {
+      await CapacitorGoogleMaps.close();
     });
 
     return {

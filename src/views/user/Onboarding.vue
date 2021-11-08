@@ -26,7 +26,7 @@
         <swiper-slide>
           <div class="relative">
             <ActivatingNotificationExample/>
-            <OnboardingButton @next-slide="$router.replace({ name: 'home' })"/>
+            <OnboardingButton @next-slide="slideNext(true)"/>
           </div>
         </swiper-slide>
       </swiper>
@@ -49,6 +49,7 @@ import SearchingExample              from '@/components/onboarding/SearchingExam
 import PlacePreviewExample           from '@/components/onboarding/PlacePreviewExample';
 import ActivatingNotificationExample from '@/components/onboarding/ActivatingNotificationExample';
 import { Swiper, SwiperSlide }       from 'swiper/vue';
+import { useRouter }                 from 'vue-router';
 
 
 export default defineComponent({
@@ -65,12 +66,18 @@ export default defineComponent({
     ActivatingNotificationExample,
   },
   setup() {
-    /* Component references */
-    const slides = ref(null);
+    /* Global properties */
+    const router = useRouter();
 
     /* Component properties */
+    const slides = ref(null);
+
     /* Event handlers */
-    const slideNext = async() => {
+    const slideNext = async(end = false) => {
+      if(end) {
+        await router.replace({ name: 'home' });
+        return;
+      }
       const swiper = await slides?.value?.$el.swiper;
       await swiper.slideNext();
     };

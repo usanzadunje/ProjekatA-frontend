@@ -217,7 +217,6 @@ export default defineComponent({
             message: t('alertUnsubscribeMessage', {
               place: place.name,
             }),
-            mode: 'ios',
             buttons: [
               {
                 text: t('disagree'),
@@ -228,8 +227,8 @@ export default defineComponent({
                 handler: () => {
                   unsubscribe(place.id);
 
-                  fullSwipeLeft(event.target.parentElement.parentElement.firstChild);
-                  shrinkToMiddle(event.target.parentElement.parentElement);
+                  fullSwipeLeft(event.target.parentElement.parentElement.parentElement.firstChild);
+                  shrinkToMiddle(event.target.parentElement.parentElement.parentElement);
 
                   showSuccessToast(t('successUnsubscribe'));
                 },

@@ -1,8 +1,11 @@
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content ref="content">
       <div class="wrap h-full">
-        <EditForm :clear-inputs="clearInputs"/>
+        <EditForm
+            :clear-inputs="clearInputs"
+            @scrollToTop="scrollToTop(this.$refs.content, 500);"
+        />
       </div>
     </ion-content>
   </ion-page>
@@ -19,6 +22,8 @@ import {
 
 import EditForm from '@/components/auth/EditForm';
 
+import { useContent } from '@/composables/useContent';
+
 export default defineComponent({
   name: "StaffEdit",
   components: {
@@ -29,6 +34,9 @@ export default defineComponent({
   setup() {
     /* Component properties */
     const clearInputs = ref(false);
+
+    /* Composables */
+    const { scrollToTop } = useContent();
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
@@ -44,6 +52,7 @@ export default defineComponent({
       clearInputs,
 
       /* Event handlers */
+      scrollToTop,
     };
   },
 

@@ -1,7 +1,10 @@
 <template>
   <ion-page>
-
-    <TheGoBackHeader class="px-2 py-1"/>
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="ion-no-padding">
+        <TheGoBackHeader class="px-2 py-1"/>
+      </ion-toolbar>
+    </ion-header>
 
     <ion-content ref="content" class="h-full">
       <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
@@ -123,6 +126,8 @@ import { useRoute }                              from 'vue-router';
 import { Capacitor }                             from '@capacitor/core';
 import {
   IonPage,
+  IonHeader,
+  IonToolbar,
   IonContent,
   IonIcon,
   IonButton,
@@ -171,6 +176,8 @@ export default defineComponent({
   name: "PlaceShow",
   components: {
     IonPage,
+    IonHeader,
+    IonToolbar,
     IonContent,
     IonIcon,
     IonButton,

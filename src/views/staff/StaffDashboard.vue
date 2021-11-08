@@ -10,10 +10,11 @@
       <div class="wrap">
         <div
             v-if="this.$store.getters['auth/isStaff']"
-            class="w-56 -mt-4 mb-4 mx-auto px-4 border-b border-l border-r border-primary rounded-bl-3xl rounded-br-3xl"
+            class="w-auto -mt-4 mb-4 mx-auto px-4 border-b border-l border-r border-primary rounded-bl-3xl rounded-br-3xl"
         >
-          <p class="text-center secondary-heading">You status</p>
+          <p class="text-center secondary-heading">{{ $t('workingActivity') }}</p>
           <StaffActivityToggle
+              class="justify-center"
               :class="this.$store.getters['staff/active'] ? 'active-status-text-color' : ''"
               :icon-classes="`pb-1 text-2xl ml-1 mr-1`"
               :text-classes="`pb-1 text-xl`"

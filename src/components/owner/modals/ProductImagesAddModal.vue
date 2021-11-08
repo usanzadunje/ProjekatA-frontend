@@ -1,67 +1,69 @@
 <template>
-  <ion-content :fullscreen="true" scrollY="false">
-    <div class="absolute top-0 z-40 w-full">
-      <ion-item class="mt-1 bg-transparent text-center" lines="none">
-        <ion-button
-            v-show="!images"
-            fill="clear"
-            color="light"
-            class="text-lg uppercase"
-            @click="selectImages"
-        >
-          {{ $t('add') }}
-          <input
-              ref="imagesInput"
-              id="images"
-              type="file"
-              accept="image/png, image/jpeg, image/jpg"
-              multiple
-              @change="imagesSelected"
+  <ion-content scrollY="false">
+    <div class="relative h-full">
+      <div class="absolute top-0 z-40 w-full">
+        <ion-item class="mt-1 bg-transparent text-center" lines="none">
+          <ion-button
+              v-show="!images"
+              fill="clear"
+              color="light"
+              class="text-lg uppercase"
+              @click="selectImages"
           >
-        </ion-button>
-        <ion-button
-            v-show="images"
-            fill="clear"
-            color="light"
-            class="text-lg uppercase"
-            @click="uploadImages"
-        >
-          {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
-        </ion-button>
-        <ion-button
-            id="removeButton"
-            fill="clear"
-            color="light"
-            slot="end"
-            :disabled="productImages?.length === 0"
-            class="text-lg uppercase"
-            @click="removeImage"
-        >
-          {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
-        </ion-button>
-        <ion-button @click="dismiss" fill="clear" color="light" slot="end">
-          <ion-icon :icon="close" slot="start"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </div>
+            {{ $t('add') }}
+            <input
+                ref="imagesInput"
+                id="images"
+                type="file"
+                accept="image/png, image/jpeg, image/jpg"
+                multiple
+                @change="imagesSelected"
+            >
+          </ion-button>
+          <ion-button
+              v-show="images"
+              fill="clear"
+              color="light"
+              class="text-lg uppercase"
+              @click="uploadImages"
+          >
+            {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
+          </ion-button>
+          <ion-button
+              id="removeButton"
+              fill="clear"
+              color="light"
+              slot="end"
+              :disabled="productImages?.length === 0"
+              class="text-lg uppercase"
+              @click="removeImage"
+          >
+            {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
+          </ion-button>
+          <ion-button @click="dismiss" fill="clear" color="light" slot="end">
+            <ion-icon :icon="close" slot="start"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </div>
 
-    <ImagePreviewModalSlider
-        :id="'productImageSlider'"
-        :images="productImages"
-        @mounted="setSliderRef"
-        @updated="setSliderRef"
-    />
+      <ImagePreviewModalSlider
+          :id="'productImageSlider'"
+          :images="productImages"
+          @mounted="setSliderRef"
+          @updated="setSliderRef"
+      />
 
-    <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
-      <ion-button
-          :disabled="loading === 0 || productImages?.length === 0"
-          fill="white"
-          expand="block"
-          class="text-sm font-bold uppercase main-img-button"
-          @click="setAsMainImage"
-      >
-        {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
-      </ion-button>
+      <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
+        <ion-button
+            :disabled="loading === 0 || productImages?.length === 0"
+            fill="white"
+            expand="block"
+            class="text-sm font-bold uppercase main-img-button"
+            @click="setAsMainImage"
+        >
+          {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
+        </ion-button>
+      </div>
     </div>
   </ion-content>
 </template>

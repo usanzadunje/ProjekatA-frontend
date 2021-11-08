@@ -1,14 +1,16 @@
 <template>
-  <ion-content :fullscreen="true" scrollY="false">
-    <div class="absolute top-0 right-0 z-40">
-      <ion-button @click="dismiss" fill="clear" color="light">
-        <ion-icon :icon="close" slot="icon-only"></ion-icon>
-      </ion-button>
-    </div>
+  <ion-content scrollY="false">
+    <div class="relative h-full">
+      <div class="absolute top-0 right-0 z-40">
+        <ion-button @click="dismiss" fill="clear" color="light">
+          <ion-icon :icon="close" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
 
-    <ImagePreviewModalSlider
-        :images="images"
-    />
+      <ImagePreviewModalSlider
+          :images="images"
+      />
+    </div>
 
   </ion-content>
 </template>

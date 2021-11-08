@@ -28,6 +28,25 @@
           </div>
         </div>
       </div>
+      <ion-item
+          lines="none"
+          class="flex rounded-2xl h-11 mt-3.5"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('price') }"
+      >
+        <ion-icon
+            :icon="accessibilityOutline"
+            class="mr-2 text-xl text-gray-500"
+        >
+        </ion-icon>
+
+        <ion-input
+            v-model.number="table.seats"
+            type="number"
+            :placeholder="$t('numberOfSeats')"
+            required
+            @keyup.enter="updateTable(tableProp.id)"
+        ></ion-input>
+      </ion-item>
     </div>
     <div class="mt-12">
       <ion-button
@@ -61,6 +80,9 @@ import { useStore }                     from 'vuex';
 import { useI18n }                      from 'vue-i18n';
 import {
   IonLabel,
+  IonItem,
+  IonInput,
+  IonIcon,
   IonButton,
   IonSpinner,
   alertController,
@@ -68,10 +90,17 @@ import {
 
 import { useErrorHandling } from '@/composables/useErrorHandling';
 
+import {
+  accessibilityOutline,
+} from 'ionicons/icons';
+
 export default defineComponent({
   name: 'TableEditModal',
   components: {
     IonLabel,
+    IonItem,
+    IonInput,
+    IonIcon,
     IonButton,
     IonSpinner,
   },
@@ -96,7 +125,8 @@ export default defineComponent({
     const { errorNames, tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
-    table.value.smoking_allowed = tableProp.value.smoking_allowed;
+    table.value.smoking_allowed = tableProp.value.smoking_allowed ?? false;
+    table.value.seats = tableProp.value.seats;
 
     /* Event handlers */
     const updateTable = async(id) => {
@@ -119,7 +149,6 @@ export default defineComponent({
           .create({
             header: t('owner.alertRemoveTableHeader'),
             message: t('owner.removeTableMessage'),
-            mode: 'ios',
             buttons: [
               {
                 text: t('disagree'),
@@ -164,6 +193,7 @@ export default defineComponent({
       dismiss,
 
       /* Icons */
+      accessibilityOutline,
     };
   },
 });

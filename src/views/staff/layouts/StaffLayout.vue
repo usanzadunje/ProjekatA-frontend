@@ -1,14 +1,23 @@
 <template>
   <ion-page>
     <ion-header class="ion-no-border">
-      <TheStaffHeader/>
+      <ion-toolbar class="ion-no-padding">
+        <TheStaffHeader/>
+      </ion-toolbar>
     </ion-header>
 
-    <TheStaffSideMenu/>
+    <ion-menu
+        id="admin-menu"
+        content-id="admin-outlet"
+        :swipe-gesture="$route.name !== 'owner.place.tables'"
+    >
+      <TheStaffSideMenu/>
+    </ion-menu>
 
-    <ion-router-outlet id="admin-outlet" class="mt-12">
-
-    </ion-router-outlet>
+    <ion-content>
+      <ion-router-outlet id="admin-outlet">
+      </ion-router-outlet>
+    </ion-content>
 
   </ion-page>
 </template>
@@ -20,6 +29,9 @@ import {
   IonPage,
   IonRouterOutlet,
   IonHeader,
+  IonToolbar,
+  IonMenu,
+  IonContent,
 }                          from '@ionic/vue';
 
 import TheStaffHeader   from '@/components/staff/TheStaffHeader';
@@ -38,6 +50,9 @@ export default defineComponent({
     IonPage,
     IonRouterOutlet,
     IonHeader,
+    IonToolbar,
+    IonMenu,
+    IonContent,
     TheStaffHeader,
     TheStaffSideMenu,
   },
@@ -85,5 +100,24 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+ion-menu::part(container) {
+  --max-width: 14rem !important;
+  margin-top: 3rem;
+  height: calc(100% - 3rem);
+  background: #F3F4F6 !important;
+  border-bottom-right-radius: 0.875rem !important;
+  border-top-right-radius: 0.875rem !important;
+  box-shadow: none;
+}
 
+ion-menu::part(backdrop) {
+  background: transparent !important;
+}
+
+ion-toolbar {
+  background: #F3F4F6 !important;
+  --background: #F3F4F6 !important;
+  border-bottom-left-radius: unset !important;
+  border-bottom-right-radius: unset !important;
+}
 </style>

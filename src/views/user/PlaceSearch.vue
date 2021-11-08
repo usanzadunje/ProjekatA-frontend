@@ -102,7 +102,7 @@ export default defineComponent({
 
     /* Component properties */
     const content = ref();
-    const placeSearchTerm = ref('');
+    const placeSearchTerm = ref(route?.query?.searchTerm ?? '');
     const sortBy = ref('distance');
     const infiniteScrollLoading = ref(false);
     const refresher = ref({

@@ -7,17 +7,19 @@
               mode="ios"
               defaultHref="/dashboard"
               :text="$t('back')"
-              :icon="chevronBackOutline">
-            >
+          >
           </ion-back-button>
         </ion-buttons>
-        <ion-title mode="ios">{{ $t('updateProfile') }}</ion-title>
+        <ion-title mode="ios">{{ $t('profile') }}</ion-title>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-content ref="content">
       <div class="px-4 pt-4 h-full">
-        <EditForm :clear-inputs="clearInputs"/>
+        <EditForm
+            :clear-inputs="clearInputs"
+            @scrollToTop="scrollToTop(this.$refs.content, 500);"
+        />
       </div>
     </ion-content>
   </ion-page>
@@ -39,6 +41,8 @@ import {
 
 import EditForm from '@/components/auth/EditForm';
 
+import { useContent } from '@/composables/useContent';
+
 import { arrowBackOutline, chevronBackOutline } from 'ionicons/icons';
 
 export default defineComponent({
@@ -57,6 +61,9 @@ export default defineComponent({
     /* Component properties */
     let settingsTab = null;
     const clearInputs = ref(false);
+
+    /* Composables */
+    const { scrollToTop } = useContent();
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
@@ -77,6 +84,10 @@ export default defineComponent({
     return {
       /* Component properties */
       clearInputs,
+
+      /* Event handlers */
+      scrollToTop,
+
       /* Icons */
       arrowBackOutline,
       chevronBackOutline,
@@ -90,10 +101,13 @@ ion-header {
 }
 
 ion-toolbar {
-  --border-color: var(--header-border-color);
   --background: var(--show-paint);
   border-bottom-left-radius: unset !important;
   border-bottom-right-radius: unset !important;
+}
+
+ion-back-button::part(icon) {
+  font-size: 1.625rem;
 }
 
 ion-content {

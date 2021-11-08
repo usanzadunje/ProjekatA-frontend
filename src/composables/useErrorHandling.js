@@ -29,14 +29,14 @@ export function useErrorHandling() {
                 showSuccessToast(t(successMessageKey, successMessageParams));
             }
         }catch(errors) {
+            if(catchCallback) {
+                await catchCallback();
+            }
             if(!errorMessageKey) {
                 errorNames.value = getError(errors);
                 await showErrorToast(errors);
                 await sleep(Object.keys(errorNames.value).length * 900);
                 errorNames.value = {};
-                if(catchCallback) {
-                    await catchCallback();
-                }
             }else {
                 showErrorToast(
                     null,
