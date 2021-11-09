@@ -44,5 +44,7 @@ export default {
     "owner.noImage": "Please select at least 1 image.",
     "successAddedFavorite": "Successfully added {place} to favorites!",
     "successRemovedFavorite": "Successfully removed {place} from favorites!",
-
+    "owner.createSection": "Successfully created new section!",
+    "owner.updateSection": "Successfully updated section!",
+    "owner.removeSection": "Successfully removed section!",
 };

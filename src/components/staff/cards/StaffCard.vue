@@ -9,12 +9,12 @@
       <ion-card-header>
         <div class="flex items-center justify-center">
           <AppAvatar
-              :avatar-path="staff.avatar"
+              :avatar-path="staff?.avatar"
               :avatar-img-classes="'profile-avatar'"
           />
 
           <div class="ml-8 flex-shrink">
-            <h3 class="main-heading-smaller">{{ staff.active ? $t('active') : $t('inactive') }}</h3>
+            <h3 class="main-heading-smaller">{{ staff?.active ? $t('active') : $t('inactive') }}</h3>
             <h2 class="secondary-heading break-all">{{ displayName }}</h2>
           </div>
         </div>
@@ -55,9 +55,9 @@ export default defineComponent({
   setup(props) {
     /* Component properties */
     const displayName = computed(() => {
-      return !props.staff.fname && !props.staff.lname
-          ? props.staff.username ?? ''
-          : `${props.staff.fname ?? ''} ${props.staff.lname ?? ''}`;
+      return !props.staff?.fname && !props.staff?.lname
+          ? props.staff?.username ?? ''
+          : `${props.staff?.fname ?? ''} ${props.staff?.lname ?? ''}`;
     });
 
     /* Event handlers */

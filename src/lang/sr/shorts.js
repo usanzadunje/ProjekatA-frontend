@@ -139,6 +139,9 @@ export default {
     "productDescription": "Opis proizvoda",
     "price": "Cena",
     "createProduct": "Kreiraj novi proizvod",
+    "section": "Sekcija | Sekcije",
+    "sectionEdit": "Sekciju",
+    "createSection": "Kreiraj novu sekciju",
     "close": "Zatvori",
     "image": "Fotografija | Fotografije",
     "noImages": "Nema fotografija za prikazati.",
@@ -157,5 +160,6 @@ export default {
     "chooseIcon": "Izaberite ikonicu",
     "workingActivity": "Radna aktivnost",
     "numberOfSeats": "Broj mesta za stolom",
+    "uncategorized": "Nekategorisan | Nekategorisani",
 };
 

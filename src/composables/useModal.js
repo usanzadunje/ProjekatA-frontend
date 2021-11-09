@@ -5,7 +5,8 @@ export function useModal() {
     // Showing/Hiding modal based on this property value
     const isModalOpen = ref(false);
     // Place which information is sent to modal
-    const modalData = ref({});
+    const modalData = ref(null);
+    const visibleModal = ref();
 
 
     /* Methods */
@@ -33,6 +34,7 @@ export function useModal() {
         /* Component properties  */
         isModalOpen,
         modalData,
+        visibleModal,
 
         /* Methods */
         openModal,

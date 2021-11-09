@@ -44,4 +44,9 @@ export default {
     "owner.noImage": "Izaberite najmanje 1 fotografiju.",
     "successAddedFavorite": "Uspešno ste dodali {place} u listu omiljenih!",
     "successRemovedFavorite": "Uspešno ste uklonili {place} iz liste omiljenih!",
+    "owner.createSection": "Uspešno ste kreirali novu sekciju!",
+    "owner.updateSection": "Uspešno ste izmenili sekciju!",
+    "owner.removeSection": "Uspešno ste uklonili sekciju!",
+    "alertRemovingSectionHeader": "Uklanjate sekciju: {section}",
+    "alertRemovingSectionMessage": "Da li ste sigurni da želite da uklonite sekciju i sve stolove koji joj pripadaju?",
 };

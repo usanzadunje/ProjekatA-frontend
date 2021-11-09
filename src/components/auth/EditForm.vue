@@ -5,7 +5,7 @@
           class="flex justify-center mb-6"
       >
         <AppAvatar
-            :avatar-path="user.avatar ?? authUser.avatar"
+            :avatar-path="user?.avatar ?? authUser?.avatar"
             :avatar-img-classes="{ 'error-border' : errorNames.hasOwnProperty('avatar'), 'edit-avatar': true }"
             @click="selectImageSource"
         />

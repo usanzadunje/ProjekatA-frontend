@@ -8,6 +8,7 @@ import TableService    from '@/services/TableService';
 import { deviceWidth } from '@/composables/useDevice';
 
 import { calculatePxFromPercent, removeClonedTableElements } from '@/utils/helpers';
+import TableSectionService                                   from '@/services/TableSectionService';
 
 const fontSize = getComputedStyle(document.documentElement).fontSize;
 
@@ -18,6 +19,7 @@ export const state = {
     staff: [],
     activeStaff: [],
     tables: [],
+    tableSections: [],
     categories: [],
     products: [],
 };
@@ -118,6 +120,25 @@ export const mutations = {
     REMOVE_TABLE(state, payload) {
         state.tables = state.tables.filter(table => table.id !== payload);
     },
+
+    /* TABLE SECTIONS */
+    CREATE_TABLE_SECTION(state, payload) {
+        state.tableSections.push(payload);
+    },
+    SET_TABLE_SECTIONS(state, payload) {
+        state.tableSections = payload;
+    },
+    UPDATE_TABLE_SECTION(state, { sectionId, payload }) {
+        let section = state.tableSections.find(section => section.id === sectionId);
+
+        Object.keys(payload).forEach(key => {
+            section[key] = payload[key];
+        });
+    },
+    REMOVE_TABLE_SECTION(state, payload) {
+        state.tableSections = state.tableSections.filter(section => section.id !== payload);
+    },
+
     /* CATEGORIES */
     SET_CATEGORIES(state, payload) {
         state.categories = payload;
@@ -258,18 +279,34 @@ export const actions = {
     async getTables({ commit }) {
         const response = await OwnerService.allTables();
 
-        commit('SET_TABLES', response.data);
+        commit('SET_TABLES', response.data.tables);
+        commit('SET_TABLE_SECTIONS', response.data.sections);
 
         removeClonedTableElements();
 
         commit('SET_ALL_TABLES_LEFT_POSITION');
     },
-    async updateTables({ getters, commit }) {
+    async updateTables({ getters, commit }, payload) {
         const dropzoneWidth = deviceWidth.value - ((2.25 * parseFloat(fontSize) + 4));
         const dirtyTables = getters.tables.filter(table => table.dirty);
 
-        const response = await TableService.updateMany(dirtyTables);
+        dirtyTables.forEach(table => {
+            if(table.clone) {
+                if(!payload) {
+                    payload = {
+                        id: 1,
+                    };
+                }
+                commit('UPDATE_TABLE', {
+                    tableId: table.id,
+                    payload: {
+                        'section': payload,
+                    },
+                });
+            }
+        });
 
+        const response = await TableService.updateMany(dirtyTables);
 
         commit('REMOVE_CLONED_TABLES');
         commit('CLEAN_DIRTY_TABLES');
@@ -293,6 +330,22 @@ export const actions = {
         commit('REMOVE_TABLE', tableId);
     },
 
+    /* TABLE SECTIONS */
+    async createTableSection({ commit }, payload) {
+        const response = await TableSectionService.store(payload);
+
+        commit('CREATE_TABLE_SECTION', response.data);
+    },
+    async updateTableSection({ commit }, { sectionId, payload }) {
+        await TableSectionService.update(sectionId, payload);
+
+        commit('UPDATE_TABLE_SECTION', { sectionId, payload });
+    },
+    async deleteTableSection({ commit }, sectionId) {
+        await TableSectionService.destroy(sectionId);
+
+        commit('REMOVE_TABLE_SECTION', sectionId);
+    },
 
     /* CATEGORIES */
     async getCategories({ commit }) {
@@ -370,6 +423,9 @@ export const getters = {
     },
     tables: (state) => {
         return state.tables;
+    },
+    tableSections: (state) => {
+        return state.tableSections;
     },
     categories: (state) => {
         return state.categories;

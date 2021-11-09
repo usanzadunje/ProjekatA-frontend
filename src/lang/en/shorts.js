@@ -138,6 +138,9 @@ export default {
     "productDescription": "Product description",
     "price": "Price",
     "createProduct": "Create new product",
+    "section": "Section | Sections",
+    "sectionEdit": "Section",
+    "createSection": "Create new section",
     "close": "Close",
     "image": "Image | Images",
     "noImages": "There are no images to show.",
@@ -155,4 +158,5 @@ export default {
     "chooseIcon": "Choose icon",
     "workingActivity": "Working activity",
     "numberOfSeats": "Number of seats for table",
+    "uncategorized": "Uncategorized",
 };
