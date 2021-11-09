@@ -13,7 +13,6 @@ import owner                   from '@/middleware/owner';
 /* Layouts */
 import UserLayout              from '@/views/user/layouts/UserLayout';
 import StaffLayout             from '@/views/staff/layouts/StaffLayout';
-import OwnerLayout        from '@/views/staff/layouts/OwnerLayout';
 
 const routes = [
     /* =============================================
@@ -155,28 +154,22 @@ const routes = [
                     import(/* webpackChunkName: "OwnerStaffIndex" */ "@/views/staff/owner/StaffIndex"),
             },
             {
-                path: "/owner/place",
-                component: OwnerLayout,
-                name: "owner.place",
+                path: "/owner/place/info",
+                name: "owner.place.info",
                 meta: { middleware: [owner] },
-                redirect: '/owner/place/info',
-                children: [
-                    {
-                        path: "info",
-                        name: "owner.place.info",
-                        component: () => import(/* webpackChunkName: "PlaceEdit" */ "@/views/staff/owner/place/PlaceEdit"),
-                    },
-                    {
-                        path: "tables",
-                        name: "owner.place.tables",
-                        component: () => import(/* webpackChunkName: "TableIndex" */ "@/views/staff/owner/place/TableIndex"),
-                    },
-                    {
-                        path: "menu",
-                        name: "owner.place.menu",
-                        component: () => import(/* webpackChunkName: "MenuIndex" */ "@/views/staff/owner/place/MenuIndex"),
-                    },
-                ],
+                component: () => import(/* webpackChunkName: "PlaceEdit" */ "@/views/staff/owner/place/PlaceEdit"),
+            },
+            {
+                path: "/owner/place/tables",
+                name: "owner.place.tables",
+                meta: { middleware: [owner] },
+                component: () => import(/* webpackChunkName: "TableIndex" */ "@/views/staff/owner/place/TableIndex"),
+            },
+            {
+                path: "/owner/place/menu",
+                name: "owner.place.menu",
+                meta: { middleware: [owner] },
+                component: () => import(/* webpackChunkName: "MenuIndex" */ "@/views/staff/owner/place/MenuIndex"),
             },
         ],
     },

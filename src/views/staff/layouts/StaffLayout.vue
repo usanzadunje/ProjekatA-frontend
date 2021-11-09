@@ -9,7 +9,7 @@
     <ion-menu
         id="admin-menu"
         content-id="admin-outlet"
-        :swipe-gesture="$route.name !== 'owner.place.tables'"
+        :swipe-gesture="this.$route.name !== 'owner.place.tables'"
     >
       <TheStaffSideMenu/>
     </ion-menu>
@@ -102,22 +102,20 @@ export default defineComponent({
 <style scoped>
 ion-menu::part(container) {
   --max-width: 14rem !important;
-  margin-top: 3rem;
-  height: calc(100% - 3rem);
   background: #F3F4F6 !important;
   border-bottom-right-radius: 0.875rem !important;
   border-top-right-radius: 0.875rem !important;
   box-shadow: none;
 }
 
-ion-menu::part(backdrop) {
-  background: transparent !important;
+ion-header {
+  background-color: var(--show-paint) !important;
 }
 
 ion-toolbar {
   background: #F3F4F6 !important;
   --background: #F3F4F6 !important;
-  border-bottom-left-radius: unset !important;
-  border-bottom-right-radius: unset !important;
+  /*border-bottom-left-radius: unset !important;*/
+  /*border-bottom-right-radius: unset !important;*/
 }
 </style>

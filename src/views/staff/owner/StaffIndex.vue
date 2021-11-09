@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <ion-refresher pull-min="60" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
         >

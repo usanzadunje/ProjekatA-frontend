@@ -1,17 +1,14 @@
 <template>
   <ion-content scrollY="false">
-    <div class="relative h-full">
-      <div class="absolute top-0 right-0 z-40">
-        <ion-button @click="dismiss" fill="clear" color="light">
-          <ion-icon :icon="close" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div>
-
-      <ImagePreviewModalSlider
-          :images="images"
-      />
+    <div class="safe-area z-40">
+      <ion-button @click="dismiss" fill="clear" color="light">
+        <ion-icon :icon="close" slot="icon-only"></ion-icon>
+      </ion-button>
     </div>
 
+    <ImagePreviewModalSlider
+        :images="images"
+    />
   </ion-content>
 </template>
 
@@ -87,5 +84,11 @@ ion-button {
 
 ion-button::part(native) {
   height: auto !important;
+}
+
+.safe-area {
+  position: absolute;
+  top: var(--ion-safe-area-top, 0);
+  right: var(--ion-safe-area-right, 0);;
 }
 </style>

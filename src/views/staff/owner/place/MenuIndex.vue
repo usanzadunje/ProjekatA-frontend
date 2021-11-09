@@ -1,6 +1,8 @@
 <template>
   <ion-page>
     <ion-content>
+      <TheOwnerSegmentNavigation/>
+
       <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
@@ -79,6 +81,7 @@ import {
   IonSkeletonText,
 }                               from '@ionic/vue';
 
+import TheOwnerSegmentNavigation from '@/components/owner/TheOwnerSegmentNavigation';
 import AppAccordion  from '@/components/AppAccordion';
 import CategoryIndex from '@/components/owner/CategoryIndex';
 import ProductIndex  from '@/components/owner/ProductIndex';
@@ -90,7 +93,7 @@ import { useAccordion }     from '@/composables/useAccordion';
 import {
   pricetagOutline,
   fastFoodOutline,
-} from 'ionicons/icons';
+}                                from 'ionicons/icons';
 
 export default defineComponent({
   name: "MenuIndex",
@@ -100,6 +103,7 @@ export default defineComponent({
     IonRefresher,
     IonRefresherContent,
     IonSkeletonText,
+    TheOwnerSegmentNavigation,
     AppAccordion,
     CategoryIndex,
     ProductIndex,

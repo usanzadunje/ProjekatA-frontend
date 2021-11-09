@@ -1,6 +1,8 @@
 <template>
   <ion-page>
     <ion-content scrollY="false">
+      <TheOwnerSegmentNavigation/>
+
       <div class="h-full flex flex-col justify-between">
         <div>
           <div class="flex flex-col items-center">
@@ -65,19 +67,21 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from 'vue';
-import { useStore }                       from 'vuex';
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { useStore }                                  from 'vuex';
 import {
   IonPage,
   IonContent,
   IonButton,
   onIonViewWillLeave,
-}                                         from '@ionic/vue';
+  onIonViewDidEnter,
+}                                                    from '@ionic/vue';
 
-import TableContainer from '@/components/TableContainer';
-import Table          from '@/components/Table';
-import AppModal       from '@/components/AppModal';
-import TableEditModal from '@/components/owner/modals/TableEditModal';
+import TheOwnerSegmentNavigation from '@/components/owner/TheOwnerSegmentNavigation';
+import TableContainer            from '@/components/TableContainer';
+import Table                     from '@/components/Table';
+import AppModal                  from '@/components/AppModal';
+import TableEditModal            from '@/components/owner/modals/TableEditModal';
 
 
 import { useErrorHandling } from '@/composables/useErrorHandling';
@@ -91,6 +95,7 @@ export default defineComponent({
     IonPage,
     IonContent,
     IonButton,
+    TheOwnerSegmentNavigation,
     TableContainer,
     Table,
     AppModal,
@@ -103,15 +108,29 @@ export default defineComponent({
     /* Component properties */
     const tables = computed(() => store.getters['owner/tables'].filter(table => !table.clone));
     const loading = ref(-1);
+    let outlet = null;
+    const swiperHandler = ref({});
 
     /* Composables */
     const { isModalOpen, modalData, openModal } = useModal();
     const { tryCatch } = useErrorHandling();
 
     /* Lifecycle hooks */
+    onMounted(() => {
+      outlet = document.getElementById('admin-outlet');
+
+      swiperHandler.value = outlet.swipeHandler;
+    });
+    onIonViewDidEnter(() => {
+      if(outlet) {
+        outlet.swipeHandler = null;
+      }
+    });
     onIonViewWillLeave(() => {
       removeClonedTableElements();
       store.commit('owner/REMOVE_CLONED_TABLES');
+
+      outlet.swipeHandler = swiperHandler.value;
     });
 
     /* Methods */

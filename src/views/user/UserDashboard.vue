@@ -43,7 +43,7 @@
               />
             </ion-item>
 
-            <ion-item-options side="end" @ionSwipe="unsubscribeSwiping(place.id, $event)">
+            <ion-item-options side="end" @ionSwipe="unsubscribeSwiping(place, $event)">
               <ion-item-option type="button" :expandable="true" @click="showAlert(place, $event)">
                 <ion-icon
                     slot="icon-only"
@@ -230,7 +230,7 @@ export default defineComponent({
                   fullSwipeLeft(event.target.parentElement.parentElement.parentElement.firstChild);
                   shrinkToMiddle(event.target.parentElement.parentElement.parentElement);
 
-                  showSuccessToast(t('successUnsubscribe'));
+                  showSuccessToast(t('successUnsubscribe', { place: place.name }));
                 },
               },
             ],
@@ -252,24 +252,24 @@ export default defineComponent({
           'generalAlertError',
       );
     };
-    const unsubscribeSwiping = (placeId, event) => {
-      timeLeftText = document.getElementById('expiryText' + placeId)?.innerHTML.split(' ');
+    const unsubscribeSwiping = (place, event) => {
+      timeLeftText = document.getElementById('expiryText' + place.id)?.innerHTML.split(' ');
 
       fullSwipeLeft(event.target.parentElement.firstChild);
       shrinkToMiddle(event.target.parentElement);
 
-      unsubscribe(placeId, event);
+      unsubscribe(place.id, event);
 
       Haptics.impact({ style: ImpactStyle.Heavy });
 
-      showUndoToast(t('successUnsubscribe'), async() => {
+      showUndoToast(t('successUnsubscribe', { place: place.name }), async() => {
         await tryCatch(
             async() => {
               const notifyIn = timeLeftText?.length > 0 ? timeLeftText[0] : null;
 
-              await PlaceService.subscribe(placeId, notifyIn);
+              await PlaceService.subscribe(place.id, notifyIn);
 
-              store.commit("user/ADD_SUBSCRIPTION", placeId);
+              store.commit("user/ADD_SUBSCRIPTION", place.id);
             },
             null,
             'generalAlertError',

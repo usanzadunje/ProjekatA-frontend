@@ -1,7 +1,9 @@
 <template>
   <ion-page>
     <ion-content ref="content">
-      <ion-refresher pull-max="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+      <TheOwnerSegmentNavigation/>
+
+      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
         <ion-refresher-content
             refreshing-spinner="crescent"
         >
@@ -30,6 +32,7 @@ import {
   onIonViewWillEnter,
 }                               from '@ionic/vue';
 
+import TheOwnerSegmentNavigation from '@/components/owner/TheOwnerSegmentNavigation';
 import PlaceEditForm  from '@/components/owner/forms/PlaceEditForm';
 import { useContent } from '@/composables/useContent';
 
@@ -40,6 +43,7 @@ export default defineComponent({
     IonContent,
     IonRefresher,
     IonRefresherContent,
+    TheOwnerSegmentNavigation,
     PlaceEditForm,
   },
   setup() {

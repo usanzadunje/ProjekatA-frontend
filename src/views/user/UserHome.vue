@@ -20,7 +20,6 @@
         </ion-refresher-content>
       </ion-refresher>
 
-
       <div class="ion-padding mb-10">
         <FilterCategoryHeading
             class="mb-2"
