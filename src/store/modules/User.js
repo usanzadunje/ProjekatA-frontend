@@ -237,6 +237,9 @@ export const getters = {
     isSubscribedTo: (state) => (id) => {
         return !!state.subscriptions?.find(placeId => placeId === id);
     },
+    hasSubscriptions: (state) => {
+        return state.subscriptions?.length > 0;
+    },
 
     hasInFavorites: (state) => (id) => {
         return !!state.favoritePlaces?.find(placeId => placeId === id);

@@ -310,6 +310,14 @@ ion-toggle {
 
 
 /* UTILITY CLASSES */
+.primary-button-background {
+    --background: var(--primary-button) !important;
+}
+
+.blue-button-background {
+    --background: #1b6de0 !important;
+}
+
 .primary-text-color {
     color: var(--primary-heading) !important;
 }
@@ -1270,4 +1278,39 @@ ion-toggle.dark-toggle-checked {
 
 /*
     END TABLE SECTIONS STYLES
+*/
+
+/*
+    START PLACEHOLDER SCREENS STYLES
+*/
+.placeholder-container {
+    width: 100%;
+}
+
+.placeholder-heading-big {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1.125rem;
+}
+
+.placeholder-heading-small {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.placeholder-heading-extra-small {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.placeholder-heading-2extra-small {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+/*
+    END PLACEHOLDER SCREENS STYLES
 */

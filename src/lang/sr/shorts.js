@@ -55,7 +55,7 @@ export default {
     "searchResults": "Rezultati pretrage",
     "indefinitely": "Neodređeno",
     "setUsername": "Podesi korisničko ime",
-    "subscribedPlaces": "Mesta koja pratim",
+    "subscribedPlaces": "Objekti na koje sam pretplaćen",
     "findAvailablePlace": "Pronađi slobodno mesto",
     "loading": "Učitava se...",
     "loadMore": "Učitaj još",
@@ -161,5 +161,6 @@ export default {
     "workingActivity": "Radna aktivnost",
     "numberOfSeats": "Broj mesta za stolom",
     "uncategorized": "Nekategorisan | Nekategorisani",
+    "findPlace": "Pronađite objekat",
 };
 

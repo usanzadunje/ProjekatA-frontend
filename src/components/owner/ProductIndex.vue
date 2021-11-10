@@ -1,68 +1,94 @@
 <template>
   <div>
-    <div>
-      <ion-searchbar
-          :value="searchTerm"
-          :placeholder="$t('searchProductPlaceholder')"
-          enterkeyhint="search"
-          @ionChange="searchInputChanged($event)"
-      ></ion-searchbar>
-    </div>
-    <div class="flex justify-end mt-2">
-      <ion-button
-          expand="block"
-          class="auth-button-size auth-button-border-radius uppercase button-text-white"
-          @click="showCreateProductModal"
-      >
-        {{ $t('create') }}
-      </ion-button>
-    </div>
-
-    <ion-list class="mt-4" lines="none">
-      <ion-item-sliding
-          ref="slidingItem"
-          v-for="product in products"
-          :key="product.id"
-          class="ion-no-padding mb-2"
-          @click="closeOpenItems"
-      >
-        <ion-item
-            class="ion-no-padding ion-no-margin"
-            lines="none"
-            @click="showEditProductModal(product)"
+    <div v-if="products.length > 0">
+      <div>
+        <ion-searchbar
+            :value="searchTerm"
+            :placeholder="$t('searchProductPlaceholder')"
+            enterkeyhint="search"
+            @ionChange="searchInputChanged($event)"
+        ></ion-searchbar>
+      </div>
+      <div class="flex justify-end mt-2">
+        <ion-button
+            expand="block"
+            class="auth-button-size auth-button-border-radius uppercase button-text-white"
+            @click="createProduct"
         >
-          <div class="flex justify-between items-center w-full">
-            <ProductCard
-                :product="product"
-                class="w-full"
-            >
-              <div class="flex justify-end items-center w-20 ml-1">
-                <ion-icon
-                    slot="icon-only"
-                    :icon="createOutline"
-                    class="text-2xl text-blue flex-shrink-0"
-                ></ion-icon>
-                <ion-icon
-                    slot="icon-only"
-                    :icon="trashOutline"
-                    class="text-2xl text-danger ml-2 flex-shrink-0"
-                    @click="showAlert(product, false, $event)"
-                ></ion-icon>
-              </div>
-            </ProductCard>
-          </div>
-        </ion-item>
-        <ion-item-options side="end" @ionSwipe="showAlert(product, true, $event)">
-          <ion-item-option type="button" :expandable="true" @click="showAlert(product, false, $event)">
-            <ion-icon
-                slot="icon-only"
-                :icon="trashOutline"
-                class="text-2xl"
-            ></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+          {{ $t('create') }}
+        </ion-button>
+      </div>
+
+      <ion-list class="mt-4" lines="none">
+        <ion-item-sliding
+            ref="slidingItem"
+            v-for="product in products"
+            :key="product.id"
+            class="ion-no-padding mb-2"
+            @click="closeOpenItems"
+        >
+          <ion-item
+              class="ion-no-padding ion-no-margin"
+              lines="none"
+              @click="showEditProductModal(product)"
+          >
+            <div class="flex justify-between items-center w-full">
+              <ProductCard
+                  :product="product"
+                  class="w-full"
+              >
+                <div class="flex justify-end items-center w-20 ml-1">
+                  <ion-icon
+                      slot="icon-only"
+                      :icon="createOutline"
+                      class="text-2xl text-blue flex-shrink-0"
+                  ></ion-icon>
+                  <ion-icon
+                      slot="icon-only"
+                      :icon="trashOutline"
+                      class="text-2xl text-danger ml-2 flex-shrink-0"
+                      @click="showAlert(product, false, $event)"
+                  ></ion-icon>
+                </div>
+              </ProductCard>
+            </div>
+          </ion-item>
+          <ion-item-options side="end" @ionSwipe="showAlert(product, true, $event)">
+            <ion-item-option type="button" :expandable="true" @click="showAlert(product, false, $event)">
+              <ion-icon
+                  slot="icon-only"
+                  :icon="trashOutline"
+                  class="text-2xl"
+              ></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </div>
+    <div
+        v-else
+        class="w-full h-full flex flex-col items-start justify-center mt-4 px-6"
+    >
+      <img
+          :src="`${backendStorageURL}/screens/no_products_placeholder.svg`"
+          alt="Placeholder image of people looking at empty box"
+      >
+      <div class="flex flex-col items-center mt-2">
+        <p class="text-center placeholder-heading-big primary-text-color">
+          {{ $t('noProductsHeading1') }}
+        </p>
+        <p class="text-center placeholder-heading-small primary-text-color break-words">
+          {{ $t('noProductsHeading2') }}
+        </p>
+
+        <ion-button
+            class="blue-button-background mt-2"
+            @click="createProduct"
+        >
+          {{ $t('add') }}
+        </ion-button>
+      </div>
+    </div>
 
     <AppModal
         :is-open="isModalOpen"
@@ -197,7 +223,7 @@ export default defineComponent({
     };
 
     /* Event handlers */
-    const showCreateProductModal = async() => {
+    const createProduct = async() => {
       modalData.value = null;
 
       openModal(true);
@@ -274,7 +300,7 @@ export default defineComponent({
 
       /* Event handlers */
       openModal,
-      showCreateProductModal,
+      createProduct,
       showEditProductModal,
       showAlert,
       searchInputChanged,

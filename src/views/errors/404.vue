@@ -2,12 +2,16 @@
   <ion-page>
     <ion-content>
       <div class="h-full flex flex-col justify-center">
-        <article class="text-center">
-          <h1
-              class="mb-2 text-8xl font-bold text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to-green-500"
+        <div class="text-center">
+          <!--          <h1-->
+          <!--              class="mb-2 text-8xl font-bold text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to-green-500"-->
+          <!--          >-->
+          <!--            4O4-->
+          <!--          </h1>-->
+          <img
+              src="http://192.168.1.203:8200/storage/img/screens/404.svg"
+              alt="Add place subscriptions"
           >
-            4O4
-          </h1>
           <div class="mt-8">
             <p class="font-bold">
               {{ $t('404Lost', { user: (authUser?.fname || authUser?.username) || $t('unknown') }) }}
@@ -23,10 +27,10 @@
           >
             <p
                 class="main-toolbar-fade-text uppercase underline"
-                style="font-size: 1.25rem"
+                style="font-size: 1.25rem; color: #1b6de0"
             >HOME</p>
           </ion-button>
-        </article>
+        </div>
       </div>
     </ion-content>
   </ion-page>

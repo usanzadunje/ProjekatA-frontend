@@ -159,4 +159,5 @@ export default {
     "workingActivity": "Working activity",
     "numberOfSeats": "Number of seats for table",
     "uncategorized": "Uncategorized",
+    "findPlace": "Find place",
 };

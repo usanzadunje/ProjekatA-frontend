@@ -50,29 +50,32 @@
           :id="'placeImageSlider'"
           :images="place.images"
           @updated="setSliderRef"
+          @add-images="selectImages"
       />
 
-      <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
-        <ion-button
-            :disabled="loading === 0 || place.images?.length === 0"
-            fill="white"
-            expand="block"
-            class="text-sm font-bold uppercase main-img-button"
-            @click="setAsMainImage"
-        >
-          {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
-        </ion-button>
-      </div>
-      <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40">
-        <ion-button
-            :disabled="loading === 0 || place.images?.length === 0"
-            fill="white"
-            expand="block"
-            class="text-sm font-bold uppercase main-img-button"
-            @click="setAsLogo"
-        >
-          {{ loading === 0 ? `${$t('setting')}...` : $t('setLogo') }}
-        </ion-button>
+      <div v-show="place.images.length > 0">
+        <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
+          <ion-button
+              :disabled="loading === 0 || place.images?.length === 0"
+              fill="white"
+              expand="block"
+              class="text-sm font-bold uppercase main-img-button"
+              @click="setAsMainImage"
+          >
+            {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
+          </ion-button>
+        </div>
+        <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40">
+          <ion-button
+              :disabled="loading === 0 || place.images?.length === 0"
+              fill="white"
+              expand="block"
+              class="text-sm font-bold uppercase main-img-button"
+              @click="setAsLogo"
+          >
+            {{ loading === 0 ? `${$t('setting')}...` : $t('setLogo') }}
+          </ion-button>
+        </div>
       </div>
     </div>
   </ion-content>

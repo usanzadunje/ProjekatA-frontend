@@ -20,14 +20,46 @@
   </swiper>
   <div
       v-else
-      class="h-full flex items-center justify-center text-white"
+      class="w-full h-full flex flex-col items-center justify-center"
+      :class="this.$store.getters['auth/isOwner'] ? 'pt-8' : ''"
   >
-    {{ $t('noImages') }}
+    <img
+        :src="`${backendStorageURL}/screens/no_images_placeholder.svg`"
+        alt="Placeholder image of images"
+    >
+    <div class="flex flex-col items-center mt-6 px-4">
+      <p class="text-center placeholder-heading-big text-white">
+        {{ $t('noImagesAvailableHeading1') }}
+      </p>
+      <p
+          v-if="!this.$store.getters['auth/isOwner']"
+          class="text-center placeholder-heading-small text-white break-words"
+      >
+        {{ $t('noImagesAvailableHeading2') }}
+      </p>
+      <div
+          v-else
+          class="text-center placeholder-heading-small text-white break-words"
+      >
+        <p
+            class="text-center placeholder-heading-small text-white break-words"
+        >
+          {{ $t('owner.noImagesAvailableHeading2') }}
+        </p>
+        <ion-button
+            class="blue-button-background mt-2"
+            @click="$emit('addImages')"
+        >
+          {{ $t('add') }}
+        </ion-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, onMounted, onUpdated, ref } from 'vue';
+import { IonButton }                                  from '@ionic/vue';
 import { Swiper, SwiperSlide }                        from 'swiper/vue';
 // Installing Swiper modules
 import SwiperCore, {
@@ -41,6 +73,7 @@ export default defineComponent({
   components: {
     Swiper,
     SwiperSlide,
+    IonButton,
   },
   props: {
     id: {
@@ -52,7 +85,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['mounted', 'updated'],
+  emits: ['mounted', 'updated', 'addImages'],
   setup(props, { emit }) {
     /* Component properties */
     const swiperRef = ref(null);

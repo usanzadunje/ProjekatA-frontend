@@ -4,20 +4,30 @@
       <TheUserProfileHeader/>
       <SlidingFilter
           v-if="!showSkeleton"
+          v-show="userHasSubscriptions"
           class="mt-2 px-4"
           @sort-has-changed="sortHasChanged"
       />
     </div>
 
     <ion-content>
-      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+      <ion-refresher
+          v-if="userHasSubscriptions"
+          pull-min="100"
+          slot="fixed"
+          @ionRefresh="refresh($event)"
+          class="transparent"
+      >
         <ion-refresher-content
             refreshing-spinner="crescent"
         >
         </ion-refresher-content>
       </ion-refresher>
 
-      <div class="px-4 pb-4 mt-3">
+      <div
+          v-show="userHasSubscriptions"
+          class="px-4 pb-4 mt-3"
+      >
         <FilterCategoryHeading :title="$t('subscribedPlaces')" class="mb-2"/>
 
         <div v-show="!showSkeleton">
@@ -62,6 +72,31 @@
         </div>
       </div>
 
+      <div
+          v-show="!userHasSubscriptions"
+          class="w-full h-full flex flex-col items-center justify-center px-6"
+      >
+        <img
+            :src="`${backendStorageURL}/screens/add_subscriptions_placeholder.svg`"
+            alt="Placeholder image of many notifications coming out of phone"
+        >
+        <div class="flex flex-col items-center mt-2">
+          <p class="text-center placeholder-heading-big primary-text-color">
+            {{ $t('noSubscriptionsHeading1') }}
+          </p>
+          <p class="text-center placeholder-heading-small primary-text-color break-words">
+            {{ $t('noSubscriptionsHeading2') }}
+          </p>
+
+          <ion-button
+              class="blue-button-background mt-2"
+              @click="this.$router.push({ name: 'search' })"
+          >
+            {{ $t('findPlace') }}
+          </ion-button>
+        </div>
+      </div>
+
       <AppModal
           :is-open="isModalOpen"
           css-class="custom-modal"
@@ -78,10 +113,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { useRoute }             from 'vue-router';
-import { useStore }             from 'vuex';
-import { useI18n }              from 'vue-i18n';
+import { computed, defineComponent, ref } from 'vue';
+import { useRoute }                       from 'vue-router';
+import { useStore }                       from 'vuex';
+import { useI18n }                        from 'vue-i18n';
 import {
   IonContent,
   IonPage,
@@ -93,8 +128,9 @@ import {
   alertController,
   IonRefresher,
   IonRefresherContent,
+  IonButton,
   onIonViewDidEnter,
-}                               from '@ionic/vue';
+}                                         from '@ionic/vue';
 
 import TheUserProfileHeader  from '@/components/user/headers/TheUserProfileHeader';
 import SlidingFilter         from '@/components/user/SlidingFilter';
@@ -132,6 +168,7 @@ export default defineComponent({
     IonIcon,
     IonRefresher,
     IonRefresherContent,
+    IonButton,
     TheUserProfileHeader,
     SlidingFilter,
     FilterCategoryHeading,
@@ -150,6 +187,7 @@ export default defineComponent({
     /* Component properties */
     // places users is subscribed to
     const placesUserSubscribedTo = ref([]);
+    const userHasSubscriptions = computed(() => store.getters['user/hasSubscriptions']);
     const sortBy = ref('distance');
     const showSkeleton = ref(true);
     let timeLeftText = null;
@@ -191,6 +229,8 @@ export default defineComponent({
       );
     };
     const refresh = async(event) => {
+      showSkeleton.value = true;
+
       if(sortBy.value === 'distance') {
         await checkForLocationPermission();
       }
@@ -199,6 +239,8 @@ export default defineComponent({
       await getSubscriptions();
 
       event.target.complete();
+
+      showSkeleton.value = false;
     };
 
     /* Event handlers */
@@ -305,6 +347,7 @@ export default defineComponent({
     return {
       /* Component properties */
       placesUserSubscribedTo,
+      userHasSubscriptions,
       sortBy,
       isModalOpen,
       modalData,

@@ -1,54 +1,84 @@
 <template>
-  <div class="px-6">
-    <div class="flex justify-end">
-      <ion-button
-          expand="block"
-          class="auth-button-size auth-button-border-radius uppercase button-text-white"
-          @click="createCategory"
+  <div>
+    <div
+        class="px-6"
+        v-if="categories.length > 0"
+    >
+      <div class="flex justify-end">
+        <ion-button
+            expand="block"
+            class="auth-button-size auth-button-border-radius uppercase button-text-white"
+            @click="createCategory"
+        >
+          {{ $t('create') }}
+        </ion-button>
+      </div>
+
+      <ion-list class="rounded-2xl mt-4" lines="none">
+        <ion-item-sliding
+            ref="slidingItem"
+            v-for="(category, index) in categories"
+            :key="category.id"
+            class="ion-no-padding"
+            :class="{ 'item-border': index !== categories.length - 1 }"
+            @click="closeOpenItems"
+        >
+          <ion-item class="ion-no-padding ion-no-margin" @click="editCategory(category)">
+            <div class="px-4 flex justify-between items-center w-full">
+              <span class="break-all">{{ category.name }}</span>
+              <div class="flex-shrink-0">
+                <ion-icon
+                    :icon="createOutline"
+                    class="text-2xl text-blue"
+                ></ion-icon>
+                <ion-icon
+                    :icon="trashOutline"
+                    class="text-2xl text-danger ml-2"
+                    @click="showAlert(category, false, $event)"
+                ></ion-icon>
+              </div>
+            </div>
+          </ion-item>
+          <ion-item-options
+              side="end"
+              :class="{ 'rounded-tl-3xl	': index === 0, 'rounded-bl-3xl	': index === categories.length - 1 }"
+              @ionSwipe="showAlert(category, true, $event)">
+            <ion-item-option type="button" :expandable="true" @click="showAlert(category, false, $event)">
+              <ion-icon
+                  slot="icon-only"
+                  :icon="trashOutline"
+                  class="text-2xl"
+              ></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </div>
+    <div
+        v-else
+        class="w-full h-full flex flex-col items-start justify-center mt-4 px-6"
+    >
+      <img
+          :src="`${backendStorageURL}/screens/add_entries_placeholder.svg`"
+          alt="Placeholder image of person writing"
       >
-        {{ $t('create') }}
-      </ion-button>
+      <div class="flex flex-col items-center mt-2">
+        <p class="text-center placeholder-heading-big primary-text-color">
+          {{ $t('noCategoriesHeading1') }}
+        </p>
+        <p class="text-center placeholder-heading-small primary-text-color break-words">
+          {{ $t('noCategoriesHeading2') }}
+        </p>
+
+        <ion-button
+            class="blue-button-background mt-2"
+            @click="createCategory"
+        >
+          {{ $t('add') }}
+        </ion-button>
+      </div>
     </div>
 
-    <ion-list class="rounded-2xl mt-4" lines="none">
-      <ion-item-sliding
-          ref="slidingItem"
-          v-for="(category, index) in categories"
-          :key="category.id"
-          class="ion-no-padding"
-          :class="{ 'item-border': index !== categories.length - 1 }"
-          @click="closeOpenItems"
-      >
-        <ion-item class="ion-no-padding ion-no-margin" @click="editCategory(category)">
-          <div class="px-4 flex justify-between items-center w-full">
-            <span class="break-all">{{ category.name }}</span>
-            <div class="flex-shrink-0">
-              <ion-icon
-                  :icon="createOutline"
-                  class="text-2xl text-blue"
-              ></ion-icon>
-              <ion-icon
-                  :icon="trashOutline"
-                  class="text-2xl text-danger ml-2"
-                  @click="showAlert(category, false, $event)"
-              ></ion-icon>
-            </div>
-          </div>
-        </ion-item>
-        <ion-item-options
-            side="end"
-            :class="{ 'rounded-tl-3xl	': index === 0, 'rounded-bl-3xl	': index === categories.length - 1 }"
-            @ionSwipe="showAlert(category, true, $event)">
-          <ion-item-option type="button" :expandable="true" @click="showAlert(category, false, $event)">
-            <ion-icon
-                slot="icon-only"
-                :icon="trashOutline"
-                class="text-2xl"
-            ></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
     <AppModal
         :is-open="isModalOpen"
         css-class="custom-edit-staff-modal"

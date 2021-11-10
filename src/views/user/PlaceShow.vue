@@ -60,7 +60,7 @@
                 :show-skeleton="showSkeleton"
             />
 
-            <div>
+            <div v-if="place.tables?.length > 0">
               <FilterCategoryHeading class="mt-4" :title="$t('tables')" :icon="storefrontOutline"/>
               <TableContainer v-show="!showSkeleton" class="mt-2">
                 <Table
@@ -87,17 +87,54 @@
                   @section-changed="changeSection"
               />
             </div>
+            <div
+                v-else
+                class="flex items-center mt-4"
+            >
+              <img
+                  :src="`${backendStorageURL}/screens/add_tables_placeholder.svg`"
+                  alt="Placeholder image of person moving squares"
+                  class="w-1/2"
+              >
+              <div class="">
+                <p class="text-center placeholder-heading-extra-small primary-text-color">
+                  {{ $t('noTablesHeading1') }}
+                </p>
+                <p class="text-center placeholder-heading-2extra-small primary-text-color">
+                  {{ $t('noTablesHeading2') }}
+                </p>
+              </div>
+            </div>
 
             <div v-show="showSkeleton">
               <ion-skeleton-text animated class="rounded-md" style="height: 180px;"></ion-skeleton-text>
             </div>
 
             <ProductMenu
+                v-if="place.categories?.length > 0"
                 :place="place"
                 :loading-products="loadingProducts"
                 :reset-product-offset="resetProductOffset"
                 @load-more-products="loadMoreProducts($event)"
             />
+            <div
+                v-else
+                class="flex items-center justify-center my-6"
+            >
+              <img
+                  :src="`${backendStorageURL}/screens/no_menu_placeholder.svg`"
+                  alt="Placeholder image of empty papers"
+                  class="w-1/2"
+              >
+              <div class="flex flex-col items-center mt-2">
+                <p class="text-center placeholder-heading-small primary-text-color">
+                  {{ $t('noProductsUserHeading1') }}
+                </p>
+                <p class="text-center placeholder-heading-extra-small primary-text-color break-words">
+                  {{ $t('noProductsUserHeading2') }}
+                </p>
+              </div>
+            </div>
           </div>
 
           <div>

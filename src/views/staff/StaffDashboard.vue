@@ -48,6 +48,7 @@
               class="tableSkeleton rounded-md"
           ></ion-skeleton-text>
           <TableSectionPicker
+              v-if="this.$store.getters['owner/tables'].length > 0"
               v-show="!showSkeleton"
               :table-sections="tableSections"
               :active-section="activeSection"
@@ -67,37 +68,108 @@
               v-if="isOwner"
               class="mt-10"
           >
-            <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentActiveStaff') }}</h1>
+            <div v-if="activeStaff.length > 0">
+              <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentActiveStaff') }}</h1>
 
-            <StaffCard
-                v-for="staff in activeStaff"
-                :key="staff.id"
-                :staff="staff"
-                :button="false"
-                class="mt-4"
-            />
+              <StaffCard
+                  v-for="staff in activeStaff"
+                  :key="staff.id"
+                  :staff="staff"
+                  :button="false"
+                  class="mt-4"
+              />
+            </div>
+            <div
+                v-else
+                class="flex flex-col items-center justify-center px-6"
+            >
+              <img
+                  :src="`${backendStorageURL}/screens/sleeping_placeholder.svg`"
+                  alt="Placeholder image of creature sleeping"
+                  class="w-3/5"
+              >
+              <div class="flex flex-col items-center mt-2">
+                <p class="text-center placeholder-heading-big primary-text-color">
+                  {{ $t('noActiveStaffHeading1') }}
+                </p>
+                <p class="text-center placeholder-heading-small primary-text-color break-words">
+                  {{ $t('noActiveStaffHeading2') }}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <StaffAvailabilityToggleButtons class="md:self-center md:w-1/2"/>
 
-          <PlaceAvailabilityChart v-show="!showSkeleton"/>
-          <div class="flex justify-start items-center mt-8">
-            <ion-skeleton-text
-                v-show="showSkeleton"
-                animated="true"
-                class="chartSkeleton rounded-full flex-shrink-0"
-            ></ion-skeleton-text>
-            <div class="ml-2">
+          <div
+              v-if="this.$store.getters['owner/tables'].length > 0"
+              :class="`
+              flex ${ isOwner ? 'flex-col-reverse' : 'flex-col' } md:flex-row
+              justify-start md:justify-around
+              `"
+          >
+            <StaffAvailabilityToggleButtons class="md:self-center md:w-1/2"/>
+
+            <PlaceAvailabilityChart v-show="!showSkeleton"/>
+            <div class="flex justify-start items-center mt-8">
               <ion-skeleton-text
                   v-show="showSkeleton"
                   animated="true"
-                  class="w-20 h-4"
+                  class="chartSkeleton rounded-full flex-shrink-0"
               ></ion-skeleton-text>
-              <ion-skeleton-text
-                  v-show="showSkeleton"
-                  animated="true"
-                  class="w-20 h-4"
-              ></ion-skeleton-text>
+              <div class="ml-2">
+                <ion-skeleton-text
+                    v-show="showSkeleton"
+                    animated="true"
+                    class="w-20 h-4"
+                ></ion-skeleton-text>
+                <ion-skeleton-text
+                    v-show="showSkeleton"
+                    animated="true"
+                    class="w-20 h-4"
+                ></ion-skeleton-text>
+              </div>
+            </div>
+          </div>
+          <div
+              v-else
+              class="flex items-center w-full mt-8"
+          >
+            <img
+                :src="`${backendStorageURL}/screens/no_tables_chart_placeholder.svg`"
+                alt="Placeholder image of person looking at chart"
+                class="w-3/5 -ml-8"
+            >
+            <div
+            >
+              <div
+                  v-if="isOwner"
+                  class="flex flex-col items-center"
+              >
+                <p class="text-center placeholder-heading-extra-small primary-text-color">
+                  {{ $t('noTablesChartHeading1') }}
+                </p>
+                <p class="text-center placeholder-heading-2extra-small primary-text-color">
+                  {{ $t('owner.noTablesChartHeading2') }}
+                </p>
+                <ion-button
+                    size="small"
+                    class="blue-button-background mt-2"
+                    @click="this.$router.push({ name: 'owner.place.tables' })"
+                >
+                  {{ $t('add') }}
+                </ion-button>
+              </div>
+              <div
+                  v-if="isStaff"
+                  class="flex flex-col items-center"
+              >
+                <p class="text-center placeholder-heading-extra-small primary-text-color">
+                  {{ $t('noTablesChartHeading1') }}
+                </p>
+                <p class="text-center placeholder-heading-2extra-small primary-text-color">
+                  {{ $t('staff.noTablesChartHeading2') }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -115,6 +187,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSkeletonText,
+  IonButton,
   onIonViewWillEnter,
 }                                                    from '@ionic/vue';
 
@@ -129,6 +202,7 @@ import StaffAvailabilityToggleButtons from '@/components/staff/StaffAvailability
 import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 import { useErrorHandling }     from '@/composables/useErrorHandling';
 import { useTableSections }     from '@/composables/useTableSections';
+import { useCurrentUser }       from '@/composables/useCurrentUser';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -140,6 +214,7 @@ export default defineComponent({
     IonRefresher,
     IonRefresherContent,
     IonSkeletonText,
+    IonButton,
     StaffActivityToggle,
     TableContainer,
     Table,
@@ -159,13 +234,13 @@ export default defineComponent({
     });
     const tableSections = computed(() => store.getters['owner/tableSections']);
     const activeStaff = computed(() => store.getters['owner/activeStaff']);
-    const isOwner = computed(() => store.getters['auth/isOwner']);
     const showSkeleton = ref(true);
 
     /* Composables */
     const { toggle } = usePlaceManipulation();
     const { tryCatch } = useErrorHandling();
     const { activeSection, changeSection } = useTableSections();
+    const { isOwner, isStaff } = useCurrentUser();
 
     /* Methods */
     const getPlaceAvailability = async() => {
@@ -224,6 +299,7 @@ export default defineComponent({
       tableSections,
       activeStaff,
       isOwner,
+      isStaff,
       showSkeleton,
       activeSection,
 

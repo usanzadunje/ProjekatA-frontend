@@ -1,13 +1,23 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
-      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+    <ion-content>
+      <ion-refresher
+          v-if="hasStaff"
+          pull-min="100"
+          slot="fixed"
+          @ionRefresh="refresh($event)"
+          class="transparent"
+      >
         <ion-refresher-content
             refreshing-spinner="crescent"
         >
         </ion-refresher-content>
       </ion-refresher>
-      <div class="wrap">
+
+      <div
+          v-if="hasStaff"
+          class="wrap"
+      >
         <h1 class="secondary-heading text-center uppercase">{{ $t('owner.staff') }}</h1>
 
         <div class="flex justify-end w-5/6 mx-auto mt-6 mb-4">
@@ -44,6 +54,31 @@
           </div>
         </div>
       </div>
+      <div
+          v-else
+          class="w-full h-full flex flex-col items-start justify-center px-6"
+      >
+        <img
+            :src="`${backendStorageURL}/screens/add_staff_placeholder.svg`"
+            alt="Placeholder image of many people inside circles"
+        >
+        <div class="flex flex-col items-center mt-2">
+          <p class="text-center placeholder-heading-big primary-text-color">
+            {{ $t('noStaffHeading1') }}
+          </p>
+          <p class="text-center placeholder-heading-small primary-text-color break-words">
+            {{ $t('noStaffHeading2') }}
+          </p>
+
+          <ion-button
+              class="blue-button-background mt-2"
+              @click="createStaffMember"
+          >
+            {{ $t('add') }}
+          </ion-button>
+        </div>
+      </div>
+
 
       <AppModal
           :is-open="isModalOpen"
@@ -123,6 +158,7 @@ export default defineComponent({
 
     /* Component properties */
     const staff = computed(() => store.getters['owner/staff']);
+    const hasStaff = computed(() => store.getters['owner/staff'].length > 0);
     const isInfiniteScrollDisabled = ref(false);
     const showSkeleton = ref(true);
     let offset = 0;
@@ -220,6 +256,7 @@ export default defineComponent({
     return {
       /* Component properties */
       staff,
+      hasStaff,
       isModalOpen,
       modalData,
       isInfiniteScrollDisabled,
