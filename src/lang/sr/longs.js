@@ -24,4 +24,7 @@ export default {
     "noFavoritePlaces2": " kako biste dodali jedan.",
     "addTableText": "Prevucite da dodate novi sto",
     "noProductDescription": "Opis nije postavljen za ovaj prozvod.",
+    "404Lost": "Izgledaš izgubljeno, {user}",
+    "404GetHome": "Početna je jedan klik od tebe.",
+
 };

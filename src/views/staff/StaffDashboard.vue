@@ -7,7 +7,7 @@
         >
         </ion-refresher-content>
       </ion-refresher>
-      <div class="wrap">
+      <div class="wrap safe-mb">
         <div
             v-if="this.$store.getters['auth/isStaff']"
             class="w-auto -mt-4 mb-4 mx-auto px-4 border-b border-l border-r border-primary rounded-bl-3xl rounded-br-3xl"
@@ -47,6 +47,15 @@
               animated="true"
               class="tableSkeleton rounded-md"
           ></ion-skeleton-text>
+          <TableSectionPicker
+              v-show="!showSkeleton"
+              :table-sections="tableSections"
+              :active-section="activeSection"
+              :active-css-classes="'staff-section-active'"
+              :inactive-css-classes="'staff-section-inactive'"
+              class="mt-4"
+              @section-changed="changeSection"
+          />
         </div>
         <div
             :class="`
@@ -112,12 +121,14 @@ import {
 import StaffActivityToggle            from '@/components/staff/StaffActivityToggle';
 import TableContainer                 from '@/components/TableContainer';
 import Table                          from '@/components/Table';
+import TableSectionPicker             from '@/components/TableSectionPicker';
 import StaffCard                      from '@/components/staff/cards/StaffCard';
 import PlaceAvailabilityChart         from '@/components/staff/charts/PlaceAvailabilityChart';
 import StaffAvailabilityToggleButtons from '@/components/staff/StaffAvailabilityToggleButtons';
 
 import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 import { useErrorHandling }     from '@/composables/useErrorHandling';
+import { useTableSections }     from '@/composables/useTableSections';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -132,6 +143,7 @@ export default defineComponent({
     StaffActivityToggle,
     TableContainer,
     Table,
+    TableSectionPicker,
     StaffCard,
     StaffAvailabilityToggleButtons,
     PlaceAvailabilityChart,
@@ -142,7 +154,10 @@ export default defineComponent({
 
     /* Component properties */
     const availabilityRatio = computed(() => store.getters['staff/availabilityRatio']);
-    const tables = computed(() => store.getters['owner/tables']);
+    const tables = computed(() => {
+      return store.getters['owner/tables'].filter(table => table.section.id === activeSection.value);
+    });
+    const tableSections = computed(() => store.getters['owner/tableSections']);
     const activeStaff = computed(() => store.getters['owner/activeStaff']);
     const isOwner = computed(() => store.getters['auth/isOwner']);
     const showSkeleton = ref(true);
@@ -150,6 +165,7 @@ export default defineComponent({
     /* Composables */
     const { toggle } = usePlaceManipulation();
     const { tryCatch } = useErrorHandling();
+    const { activeSection, changeSection } = useTableSections();
 
     /* Methods */
     const getPlaceAvailability = async() => {
@@ -205,13 +221,16 @@ export default defineComponent({
       /* Component properties */
       availabilityRatio,
       tables,
+      tableSections,
       activeStaff,
       isOwner,
       showSkeleton,
+      activeSection,
 
       /* Event handlers */
       toggle,
       refresh,
+      changeSection,
     };
   },
 

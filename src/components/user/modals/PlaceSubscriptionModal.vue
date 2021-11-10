@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 pt-4">
+  <div class="px-4 pt-4 safe-pb">
     <ion-item>
       <h1 class="submodal-heading">{{ $t('notification', 2) }}</h1>
     </ion-item>

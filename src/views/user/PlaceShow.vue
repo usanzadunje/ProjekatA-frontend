@@ -64,7 +64,7 @@
               <FilterCategoryHeading class="mt-4" :title="$t('tables')" :icon="storefrontOutline"/>
               <TableContainer v-show="!showSkeleton" class="mt-2">
                 <Table
-                    v-for="table in place.tables"
+                    v-for="table in tables"
                     :key="table.id"
                     :empty="Number(table.empty)"
                     :draggable="false"
@@ -77,6 +77,15 @@
                     @click="showTableTooltip($event, table)"
                 />
               </TableContainer>
+              <TableSectionPicker
+                  v-show="!showSkeleton"
+                  :table-sections="place.sections"
+                  :active-section="activeSection"
+                  :active-css-classes="'user-section-active'"
+                  :inactive-css-classes="'user-section-inactive'"
+                  class="mt-4"
+                  @section-changed="changeSection"
+              />
             </div>
 
             <div v-show="showSkeleton">
@@ -171,6 +180,8 @@ import {
   from 'ionicons/icons';
 
 import { calculatePxFromPercent } from '@/utils/helpers';
+import TableSectionPicker         from '@/components/TableSectionPicker';
+import { useTableSections }       from '@/composables/useTableSections';
 
 export default defineComponent({
   name: "PlaceShow",
@@ -191,6 +202,7 @@ export default defineComponent({
     FilterCategoryHeading,
     TableContainer,
     Table,
+    TableSectionPicker,
     ProductMenu,
     AppModal,
     PlaceSubscriptionModal,
@@ -203,6 +215,7 @@ export default defineComponent({
     /* Component properties */
     const content = ref();
     const place = ref({});
+    const tables = computed(() => place?.value?.tables?.filter(table => table?.section?.id === activeSection.value));
     const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](place.value.id));
     let searchTab = null;
     const platformIsWeb = Capacitor.getPlatform() === 'web';
@@ -242,6 +255,7 @@ export default defineComponent({
     const { getCachedOrFetchPlaceAdditionalInfo } = useCache();
     const { openPopover } = usePopover();
     const { tryCatch } = useErrorHandling();
+    const { activeSection, changeSection } = useTableSections();
 
     /* Methods */
     const getPlace = async() => {
@@ -361,6 +375,7 @@ export default defineComponent({
       /* Component properties */
       content,
       place,
+      tables,
       mainImagePath,
       isModalOpen,
       isUserSubscribed,
@@ -369,6 +384,7 @@ export default defineComponent({
       loadingProducts,
       resetProductOffset,
       strippedPlaceInfo,
+      activeSection,
 
       /* Computed properties */
       loggedIn,
@@ -379,6 +395,7 @@ export default defineComponent({
       refresh,
       loadMoreProducts,
       showTableTooltip,
+      changeSection,
 
       /* Icons */
       notifications,

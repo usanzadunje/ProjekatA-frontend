@@ -183,7 +183,10 @@
       </div>
     </div>
 
-    <div class="mt-6">
+    <div
+        class="mt-6"
+        :class="!isEndUser ? 'safe-pb' : ''"
+    >
       <ion-button
           :disabled="loading"
           size="large"
@@ -261,7 +264,7 @@ export default defineComponent({
   setup(props, { emit }) {
     /* Global properties and methods */
     const store = useStore();
-    const { authUser } = useCurrentUser();
+    const { authUser, isEndUser } = useCurrentUser();
 
     /* Component properties */
     const user = reactive({});
@@ -389,6 +392,7 @@ export default defineComponent({
       passwordConfirmInput,
       loading,
       showPasswordEdit,
+      isEndUser,
 
       /* Event handlers  */
       update,

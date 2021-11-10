@@ -23,4 +23,6 @@ export default {
     "noFavoritePlaces2": " to add one.",
     "addTableText": "Drag to add new table",
     "noProductDescription": "Description is not set for this product.",
+    "404Lost": "You seem lost, {user}",
+    "404GetHome": "Home is one click away.",
 };

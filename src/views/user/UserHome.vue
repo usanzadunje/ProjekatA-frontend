@@ -206,7 +206,10 @@ export default defineComponent({
       showSkeleton.value = false;
     });
     onIonViewDidEnter(() => {
-      openModal(!!route.query.openModal);
+      //Safety check, do not open modal if there is no data to be shown inside it
+      if(modalData.value){
+        openModal(!!route.query.openModal);
+      }
     });
 
     /* Methods */

@@ -144,10 +144,6 @@ ion-modal ion-item {
     bottom: 0 !important;
 }
 
-.ios.custom-modal .modal-wrapper {
-    padding-bottom: 1rem;
-}
-
 .custom-sub-modal {
     --border-radius: 20px 20px 0 0;
     --background: var(--secondary-paint) !important;
@@ -158,10 +154,6 @@ ion-modal ion-item {
     bottom: 0 !important;
 }
 
-.ios.custom-sub-modal .modal-wrapper {
-    padding-bottom: 1rem;
-}
-
 .custom-map-modal {
     --border-radius: 20px 20px 0 0;
     --background: var(--secondary-paint) !important;
@@ -170,10 +162,6 @@ ion-modal ion-item {
 .custom-map-modal .modal-wrapper {
     position: absolute !important;
     bottom: 0 !important;
-}
-
-.ios.custom-map-modal .modal-wrapper {
-    padding-bottom: 1rem;
 }
 
 .custom-edit-staff-modal {
@@ -453,6 +441,25 @@ ion-toggle.dark-toggle-checked {
     transform: scale(2);
 }
 
+.safe-mt {
+    margin-top: var(--ion-safe-area-top);
+}
+
+.safe-mb {
+    margin-bottom: var(--ion-safe-area-bottom);
+}
+
+.safe-pt {
+    padding-top: var(--ion-safe-area-top);
+}
+
+.safe-pb {
+    padding-bottom: var(--ion-safe-area-bottom);
+}
+
+/*
+    END UTILITY CLASSES
+*/
 
 /*
     START Android specific styles
@@ -1233,4 +1240,34 @@ ion-toggle.dark-toggle-checked {
 
 /*
     END SWIPER STYLES
+*/
+/*
+    START TABLE SECTIONS STYLES
+*/
+.staff-section-active {
+    --color: white;
+    background: var(--primary-button);
+    font-weight: 500;
+}
+
+.staff-section-inactive {
+    --color: var(--primary-button);
+    background: var(--show-paint);
+    font-weight: 500;
+}
+
+.user-section-active {
+    --color: white;
+    background: var(--user-selected-color);
+    font-weight: 500;
+}
+
+.user-section-inactive {
+    --color: var(--user-selected-color);
+    background: var(--show-paint);
+    font-weight: 500;
+}
+
+/*
+    END TABLE SECTIONS STYLES
 */

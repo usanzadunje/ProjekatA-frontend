@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content scrollY="false">
+    <ion-content>
       <div class="h-full flex flex-col justify-between">
         <div>
           <TheOwnerSegmentNavigation/>
@@ -31,7 +31,7 @@
                 ></ion-icon>
               </ion-button>
               <div>
-                <h1 class="text-lg primary-text-color">
+                <h1 class="text-lg primary-text-color text-center">
                   {{
                     `${$t('add')}${activeSection !== 1 ? `/${$t('update')}` : ''} ${$t('sectionEdit').toLowerCase()}`
                   }}
@@ -68,31 +68,18 @@
               </div>
             </div>
 
-            <div class="flex justify-center items-center flex-wrap mt-4 w-full">
-              <ion-chip
-                  :outline="true"
-                  class="flex-shrink-0"
-                  :class="activeSection === 1  ? 'section-active' : 'section-inactive'"
-                  @click="changeSection(1)"
-              >
-                <ion-label class="uppercase">{{ $t('uncategorized', 2) }}</ion-label>
-              </ion-chip>
-              <ion-chip
-                  v-for="section in tableSections"
-                  :key="section.id"
-                  :outline="true"
-                  class="flex-shrink-0"
-                  :class="activeSection === section.id ? 'section-active' : 'section-inactive'"
-                  @click="changeSection(section.id)"
-              >
-                <ion-label class="uppercase">{{ section.name }}</ion-label>
-              </ion-chip>
-            </div>
+            <TableSectionPicker
+                :table-sections="tableSections"
+                :active-section="activeSection"
+                :active-css-classes="'staff-section-active'"
+                :inactive-css-classes="'staff-section-inactive'"
+                class="mt-4"
+                @section-changed="changeSection"
+            />
           </div>
-
         </div>
 
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center safe-pb">
           <ion-button
               expand="block"
               class="auth-button-size auth-button-border-radius uppercase button-text-white mt-8 mb-3 mx-auto w-5/6"
@@ -104,7 +91,7 @@
           <ion-button
               expand="block"
               fill="clear"
-              class="auth-button-size auth-button-border-radius uppercase button-text-black mb-4 mx-auto w-5/6"
+              class="auth-button-size auth-button-border-radius uppercase button-text-black mx-auto w-5/6"
               @click="resetTables"
               :disabled="loading >= 0"
           >
@@ -144,22 +131,22 @@ import {
   IonContent,
   IonButton,
   IonIcon,
-  IonChip,
-  IonLabel,
   onIonViewWillLeave,
-  onIonViewDidEnter, alertController,
+  onIonViewDidEnter,
+  alertController,
 }                                                    from '@ionic/vue';
 
 import TheOwnerSegmentNavigation from '@/components/owner/TheOwnerSegmentNavigation';
 import TableEdit                 from '@/components/owner/TableEdit';
 import Table                     from '@/components/Table';
+import TableSectionPicker        from '@/components/TableSectionPicker';
 import AppModal                  from '@/components/AppModal';
 import TableEditModal            from '@/components/owner/modals/TableEditModal';
 import SectionCreateEditModal    from '@/components/owner/modals/SectionCreateEditModal';
 
-
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useModal }         from '@/composables/useModal';
+import { useTableSections } from '@/composables/useTableSections';
 
 import { removeClonedTableElements } from '@/utils/helpers';
 
@@ -167,7 +154,7 @@ import {
   addCircle,
   create,
   removeCircle,
-} from 'ionicons/icons';
+}                           from 'ionicons/icons';
 
 export default defineComponent({
   name: "TableIndex",
@@ -176,11 +163,10 @@ export default defineComponent({
     IonContent,
     IonButton,
     IonIcon,
-    IonChip,
-    IonLabel,
     TheOwnerSegmentNavigation,
     TableEdit,
     Table,
+    TableSectionPicker,
     AppModal,
     TableEditModal,
     SectionCreateEditModal,
@@ -197,12 +183,12 @@ export default defineComponent({
     const loading = ref(-1);
     let outlet = null;
     const swiperHandler = ref({});
-    const activeSection = ref(1);
 
     /* Composables */
     const { isModalOpen, modalData, visibleModal, openModal } = useModal();
     const { tryCatch } = useErrorHandling();
     const { t } = useI18n();
+    const { activeSection, changeSection } = useTableSections();
 
     /* Lifecycle hooks */
     onMounted(() => {
@@ -253,9 +239,7 @@ export default defineComponent({
       visibleModal.value = 'table';
       openModal(true, table);
     };
-    const changeSection = async(section) => {
-      activeSection.value = section;
-    };
+
     const addSection = async() => {
       visibleModal.value = 'section';
       openModal(true);
@@ -329,18 +313,6 @@ export default defineComponent({
 <style scoped>
 ion-content {
   --background: var(--show-paint);
-}
-
-.section-active {
-  --color: white;
-  background: var(--primary-button);
-  font-weight: 500;
-}
-
-.section-inactive {
-  --color: var(--primary-button);
-  background: var(--show-paint);
-  font-weight: 500;
 }
 
 .edit-button {

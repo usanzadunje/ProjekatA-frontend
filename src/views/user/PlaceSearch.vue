@@ -127,7 +127,10 @@ export default defineComponent({
       }
     });
     onIonViewDidEnter(() => {
-      openModal(!!route.query.openModal);
+      //Safety check, do not open modal if there is no data to be shown inside it
+      if(modalData.value) {
+        openModal(!!route.query.openModal);
+      }
     });
     //Uncomment this if it is better to clear input every time after users leaves search page.
     // onIonViewWillLeave(() => {

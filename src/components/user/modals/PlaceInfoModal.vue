@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 pt-4">
+  <div class="px-4 pt-4 safe-pb">
     <div class="flex justify-between">
       <div class="ion-item-no-padding-x flex items-center">
         <img

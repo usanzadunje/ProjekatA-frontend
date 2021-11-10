@@ -33,8 +33,8 @@ import {
 }                               from '@ionic/vue';
 
 import TheOwnerSegmentNavigation from '@/components/owner/TheOwnerSegmentNavigation';
-import PlaceEditForm  from '@/components/owner/forms/PlaceEditForm';
-import { useContent } from '@/composables/useContent';
+import PlaceEditForm             from '@/components/owner/forms/PlaceEditForm';
+import { useContent }            from '@/composables/useContent';
 
 export default defineComponent({
   name: "PlaceEdit",

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full px-8 pb-2 flex flex-col justify-between">
+  <div class="h-full px-8 flex flex-col justify-between">
     <div>
       <div>
         <div class="mb-6">
@@ -179,7 +179,7 @@
       </div>
     </div>
 
-    <div class="mt-10">
+    <div class="mt-10 safe-pb">
       <ion-button
           :disabled="loading"
           size="large"

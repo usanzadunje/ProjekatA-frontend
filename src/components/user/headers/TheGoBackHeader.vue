@@ -1,7 +1,7 @@
 <template>
   <div id="goHeader">
     <div class="flex justify-between mt-1 md margin-top-reset">
-      <ion-button fill="clear" :routerLink="$route.query.redirect || '/home'" class="reset-button-size">
+      <ion-button fill="clear" :routerLink="this.$route.query.redirect || '/home'" class="reset-button-size">
         <ion-icon
             slot="icon-only"
             :icon="arrowBackOutline"

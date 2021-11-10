@@ -11,7 +11,7 @@
         content-id="admin-outlet"
         :swipe-gesture="this.$route.name !== 'owner.place.tables'"
     >
-      <TheStaffSideMenu/>
+      <TheStaffSideMenu class="pb-2 pl-2 pr-4 mt-4"/>
     </ion-menu>
 
     <ion-content>

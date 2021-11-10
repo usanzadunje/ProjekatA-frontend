@@ -165,7 +165,11 @@ export default defineComponent({
 
     /* Lifecycle hooks */
     onIonViewDidEnter(async() => {
-      openModal(!!route.query.openModal);
+      //Safety check, do not open modal if there is no data to be shown inside it
+      if(modalData.value) {
+        openModal(!!route.query.openModal);
+      }
+
       // Everytime users comes to the page give him view of fresh places he has subscribed to
       await getSubscriptions();
       showSkeleton.value = false;

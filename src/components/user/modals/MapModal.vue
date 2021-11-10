@@ -1,6 +1,6 @@
 <template>
-  <div class="px-2">
-    <div class="text-center">
+  <div class="px-2 safe-pb">
+    <div class="text-center mt-2">
       <h1 class="main-toolbar-heading text-xl">{{ place.name }}</h1>
     </div>
 

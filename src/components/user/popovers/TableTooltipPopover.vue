@@ -25,7 +25,7 @@
           class="text-black w-full flex justify-between items-center"
       >
         {{
-          table?.smoking_allowed
+          table?.smoking_allowed !== undefined
               ?
               $t('currentTableSmokingAllowed', {
                 isAllowed: table?.smoking_allowed
@@ -37,6 +37,7 @@
 
         }}
         <ion-icon
+            v-if="table?.smoking_allowed !== undefined"
             :icon="table?.smoking_allowed ? checkmarkCircleOutline : logoNoSmoking"
             class="flex-shrink-0"
             :class="table?.smoking_allowed ? 'text-green-500' : 'text-red-500'"

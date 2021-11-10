@@ -32,6 +32,7 @@ export default createStore({
                 'permission',
                 'staff',
                 "owner.place",
+                "owner.tableSections",
                 "owner.categories",
             ],
         }),

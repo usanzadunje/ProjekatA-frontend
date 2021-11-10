@@ -28,6 +28,9 @@ export const mutations = {
     /* PLACE */
     SET_PLACE_INFO(state, payload) {
         Object.keys(payload).forEach(key => {
+            if(key === 'sections') {
+                return;
+            }
             state.place[key] = payload[key];
         });
     },
@@ -191,6 +194,7 @@ export const mutations = {
         state.place = {};
         state.staff = [];
         state.tables = [];
+        state.tableSections = [];
         state.categories = [];
         state.products = [];
     },
@@ -200,6 +204,8 @@ export const actions = {
     /* PLACE */
     async getPlaceInfo({ commit, rootGetters }) {
         const response = await PlaceService.show(rootGetters['auth/authUser'].place);
+
+        commit('SET_TABLE_SECTIONS', response.data.sections);
 
         commit('SET_PLACE_INFO', response.data);
     },
@@ -279,8 +285,7 @@ export const actions = {
     async getTables({ commit }) {
         const response = await OwnerService.allTables();
 
-        commit('SET_TABLES', response.data.tables);
-        commit('SET_TABLE_SECTIONS', response.data.sections);
+        commit('SET_TABLES', response.data);
 
         removeClonedTableElements();
 

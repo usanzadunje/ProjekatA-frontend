@@ -18,6 +18,9 @@ export function useCurrentUser() {
             return t('unknown');
         }
     });
+    const isOwner = computed(() => store.getters['auth/isOwner']);
+    const isStaff = computed(() => store.getters['auth/isStaff']);
+    const isEndUser = computed(() => !isOwner.value && !isStaff.value);
 
 
     /* Methods */
@@ -26,6 +29,9 @@ export function useCurrentUser() {
         /* Component properties */
         authUser,
         displayName,
+        isOwner,
+        isStaff,
+        isEndUser,
 
         /* Methods */
     };

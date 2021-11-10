@@ -1,18 +1,30 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
-      <div class="max-w-lg m-auto vcenter">
-        <article class="p-5 text-center">
+    <ion-content>
+      <div class="h-full flex flex-col justify-center">
+        <article class="text-center">
           <h1
-              class="mb-2 text-6xl font-bold text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to-green-500"
+              class="mb-2 text-8xl font-bold text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to-green-500"
           >
             4O4
           </h1>
-          <p class="font-bold">
-            The page you're looking for is not here.
-          </p>
-          <ion-button fill="clear" routerLink="/" class="m-auto">
-            <p class="main-toolbar-fade-text uppercase">HOME</p>
+          <div class="mt-8">
+            <p class="font-bold">
+              {{ $t('404Lost', { user: (authUser?.fname || authUser?.username) || $t('unknown') }) }}
+            </p>
+            <p class="font-bold">
+              {{ $t('404GetHome') }}
+            </p>
+          </div>
+          <ion-button
+              fill="clear"
+              class="mx-auto mt-4"
+              @click="this.$router.push({ name: isEndUser ? 'home' : 'staff.dashboard'})"
+          >
+            <p
+                class="main-toolbar-fade-text uppercase underline"
+                style="font-size: 1.25rem"
+            >HOME</p>
           </ion-button>
         </article>
       </div>
@@ -21,9 +33,10 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-
+import { defineComponent }                from 'vue';
 import { IonButton, IonPage, IonContent } from '@ionic/vue';
+
+import { useCurrentUser } from '@/composables/useCurrentUser';
 
 export default defineComponent({
   name: "404",
@@ -31,6 +44,16 @@ export default defineComponent({
     IonButton,
     IonPage,
     IonContent,
+  },
+  setup() {
+    /* Component properties */
+    const { authUser, isEndUser } = useCurrentUser();
+
+    return {
+      /* Component properties */
+      authUser,
+      isEndUser,
+    };
   },
 });
 </script>

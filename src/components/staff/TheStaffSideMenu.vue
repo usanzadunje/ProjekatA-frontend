@@ -1,8 +1,8 @@
 <template>
-  <div class="pb-2 pl-2 pr-4 h-full flex flex-col justify-between">
+  <div class="h-full flex flex-col justify-between">
     <div>
       <div
-          class="flex pb-0.5 first-item"
+          class="flex pb-0.5"
           :class="[activeMenuItem === 'dashboard' ? 'border-b-2 border-yellow-600 text-yellow-600' : 'text-gray-800']"
           @click="menuItemClicked('staff.dashboard')"
       >
@@ -70,7 +70,7 @@
     </div>
     <div>
       <div
-          class="flex items-center last-item"
+          class="flex items-center"
           @click="this.$store.dispatch('auth/logout')"
       >
         <ion-icon
@@ -154,11 +154,5 @@ export default defineComponent({
 
 </script>
 <style scoped>
-.first-item {
-  margin-top: calc(1rem + var(--ion-safe-area-top, 0))
-}
 
-.last-item {
-  margin-bottom: var(--ion-safe-area-top, 0);
-}
 </style>
