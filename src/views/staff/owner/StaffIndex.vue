@@ -18,17 +18,21 @@
           v-if="hasStaff"
           class="wrap"
       >
-        <h1 class="secondary-heading text-center uppercase">{{ $t('owner.staff') }}</h1>
+        <TheHangingHeader class="mb-4">
+          <div class="pt-2 pb-4">
+            <h1 class="secondary-heading text-center">{{ $t('owner.staff') }}</h1>
 
-        <div class="flex justify-end w-5/6 mx-auto mt-6 mb-4">
-          <ion-button
-              expand="block"
-              class="auth-button-size auth-button-border-radius uppercase button-text-white"
-              @click="createStaffMember"
-          >
-            {{ $t('create') }}
-          </ion-button>
-        </div>
+            <div class="w-5/6 mx-auto mt-4">
+              <ion-button
+                  expand="block"
+                  class="auth-button-size auth-button-border-radius uppercase button-text-white"
+                  @click="createStaffMember"
+              >
+                {{ $t('create') }}
+              </ion-button>
+            </div>
+          </div>
+        </TheHangingHeader>
 
         <div v-show="!showSkeleton">
           <StaffCard
@@ -127,6 +131,7 @@ import StaffCard            from '@/components/staff/cards/StaffCard';
 import StaffCardSkeleton    from '@/components/staff/cards/StaffCardSkeleton';
 import AppModal             from '@/components/AppModal';
 import StaffCreateEditModal from '@/components/staff/modals/StaffCreateEditModal';
+import TheHangingHeader     from '@/components/TheHangingHeader';
 
 import { useModal }         from '@/composables/useModal';
 import { useErrorHandling } from '@/composables/useErrorHandling';
@@ -147,6 +152,7 @@ export default defineComponent({
     IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
+    TheHangingHeader,
     StaffCard,
     StaffCardSkeleton,
     AppModal,

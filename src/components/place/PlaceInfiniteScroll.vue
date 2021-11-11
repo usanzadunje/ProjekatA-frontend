@@ -1,6 +1,10 @@
 <template>
   <div>
-    <FilterCategoryHeading :title="$t('searchResults')" class="mb-2"/>
+    <FilterCategoryHeading
+        :title="$t('searchResults')"
+        :icon="search"
+        class="mb-2"
+    />
     <div
         v-show="!showSkeleton"
         :class="{ 'pb-6' : isInfiniteScrollDisabled }"
@@ -50,6 +54,11 @@ import PlaceService from '@/services/PlaceService';
 
 import { useGeolocation }   from '@/composables/useGeolocation';
 import { useErrorHandling } from '@/composables/useErrorHandling';
+
+import {
+  search,
+  searchCircle,
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "PlaceInfiniteScroll",
@@ -207,8 +216,8 @@ export default defineComponent({
       refresh,
 
       /* Icons */
-      // @ionInfinite="loadMorePlaces($event)"
-
+      search,
+      searchCircle,
     };
   },
 });

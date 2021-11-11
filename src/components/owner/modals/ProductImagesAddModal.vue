@@ -1,7 +1,7 @@
 <template>
   <ion-content scrollY="false">
     <div class="relative h-full">
-      <div class="absolute top-0 z-40 w-full">
+      <div class="absolute safe-area-positioning z-40 w-full">
         <ion-item class="mt-1 bg-transparent text-center" lines="none">
           <ion-button
               v-show="!images"
@@ -53,7 +53,7 @@
           @updated="setSliderRef"
       />
 
-      <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
+      <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40 safe-pb">
         <ion-button
             :disabled="loading === 0 || productImages?.length === 0"
             fill="white"
@@ -277,5 +277,9 @@ ion-button {
 
 #removeButton {
   margin-right: 1rem !important;
+}
+
+.safe-area-positioning {
+  top: var(--ion-safe-area-top, 0);
 }
 </style>

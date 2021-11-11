@@ -77,7 +77,7 @@ export default defineComponent({
 <style scoped>
 ion-card {
   box-shadow: #000 0 1px 4px;
-  --background: var(--staff-card-background);
+  --background: var(--primary-button);
   border-radius: 20px !important;
 }
 

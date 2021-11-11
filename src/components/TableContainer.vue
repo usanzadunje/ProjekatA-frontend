@@ -1,9 +1,7 @@
 <template>
   <div class="p-0.5 border-2 rounded-md border-primary">
     <div id="dropzone" class="relative dropzone-height">
-      <div v-if="this.$store.getters['owner/tables'].length > 0 || isEndUser">
-        <slot></slot>
-      </div>
+      <slot></slot>
       <div
           v-if="this.$store.getters['owner/tables'].length <= 0 && !isEndUser"
           class="flex justify-start"

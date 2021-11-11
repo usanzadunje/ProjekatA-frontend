@@ -4,6 +4,7 @@
     <swiper
         id="slidingFilterSwiper"
         ref="swiper"
+        v-update-swiper
         :slides-per-view="deviceWidth <= 335 ? 2.1 : 2.6"
     >
       <swiper-slide>

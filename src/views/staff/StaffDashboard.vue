@@ -8,9 +8,9 @@
         </ion-refresher-content>
       </ion-refresher>
       <div class="wrap safe-mb">
-        <div
+        <TheHangingHeader
             v-if="this.$store.getters['auth/isStaff']"
-            class="w-auto -mt-4 mb-4 mx-auto px-4 border-b border-l border-r border-primary rounded-bl-3xl rounded-br-3xl"
+            class="px-4 mb-4"
         >
           <p class="text-center secondary-heading">{{ $t('workingActivity') }}</p>
           <StaffActivityToggle
@@ -19,9 +19,14 @@
               :icon-classes="`pb-1 text-2xl ml-1 mr-1`"
               :text-classes="`pb-1 text-xl`"
           />
-        </div>
+        </TheHangingHeader>
 
-        <h1 class="text-center uppercase secondary-heading">{{ $t('owner.currentAvailabilitySituation') }}</h1>
+        <TheHangingHeader
+            v-if="this.$store.getters['auth/isOwner']"
+            class="p-2"
+        >
+          <h1 class="text-center secondary-heading">{{ $t('owner.currentAvailabilitySituation') }}</h1>
+        </TheHangingHeader>
 
         <div class="mt-4">
           <TableContainer
@@ -198,6 +203,7 @@ import TableSectionPicker             from '@/components/TableSectionPicker';
 import StaffCard                      from '@/components/staff/cards/StaffCard';
 import PlaceAvailabilityChart         from '@/components/staff/charts/PlaceAvailabilityChart';
 import StaffAvailabilityToggleButtons from '@/components/staff/StaffAvailabilityToggleButtons';
+import TheHangingHeader               from '@/components/TheHangingHeader';
 
 import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 import { useErrorHandling }     from '@/composables/useErrorHandling';
@@ -215,6 +221,7 @@ export default defineComponent({
     IonRefresherContent,
     IonSkeletonText,
     IonButton,
+    TheHangingHeader,
     StaffActivityToggle,
     TableContainer,
     Table,

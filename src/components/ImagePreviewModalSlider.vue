@@ -27,7 +27,7 @@
         :src="`${backendStorageURL}/screens/no_images_placeholder.svg`"
         alt="Placeholder image of images"
     >
-    <div class="flex flex-col items-center mt-6 px-4">
+    <div class="flex flex-col items-center mt-6 px-4 safe-pb">
       <p class="text-center placeholder-heading-big text-white">
         {{ $t('noImagesAvailableHeading1') }}
       </p>

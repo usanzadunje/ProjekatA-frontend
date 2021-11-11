@@ -47,7 +47,7 @@ export default defineComponent({
         return product.value.images?.find(image => image.is_main === 1)?.path ??
             product.value.images[0]?.path;
       }else {
-        return '/places/default_place_product_logo.png';
+        return '/places/image_placeholder.png';
       }
     });
     /* Composables */

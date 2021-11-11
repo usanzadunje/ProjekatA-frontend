@@ -60,7 +60,7 @@ export default defineComponent({
         return currentProduct?.images?.find(image => image.is_main)?.path ??
             currentProduct?.images[0]?.path;
       }else {
-        return '/places/default_place_product_logo.png';
+        return '/places/image_placeholder.png';
       }
     });
 

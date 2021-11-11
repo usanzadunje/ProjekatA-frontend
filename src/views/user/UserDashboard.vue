@@ -28,7 +28,11 @@
           v-show="userHasSubscriptions"
           class="px-4 pb-4 mt-3"
       >
-        <FilterCategoryHeading :title="$t('subscribedPlaces')" class="mb-2"/>
+        <FilterCategoryHeading
+            :title="$t('subscribedPlaces')"
+            :icon="bookmark"
+            class="mb-2"
+        />
 
         <div v-show="!showSkeleton">
           <ion-item-sliding
@@ -153,6 +157,7 @@ import { shrink, swipe }         from '@/composables/useAnimations';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 import {
+  bookmark,
   trashOutline,
 } from 'ionicons/icons';
 
@@ -365,6 +370,7 @@ export default defineComponent({
       closeOpenItems,
 
       /* Icons */
+      bookmark,
       trashOutline,
     };
 

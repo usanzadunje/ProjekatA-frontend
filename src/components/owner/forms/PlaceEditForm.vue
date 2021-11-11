@@ -274,7 +274,7 @@ export default defineComponent({
         return placeInfo.value.images?.find(image => image.is_main)?.path ??
             placeInfo.value.images[0]?.path;
       }else {
-        return '/places/default_place_cover.png';
+        return '/places/image_placeholder.png';
       }
     });
 

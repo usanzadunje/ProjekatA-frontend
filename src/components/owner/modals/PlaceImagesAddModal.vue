@@ -1,7 +1,7 @@
 <template>
   <ion-content scrollY="false">
     <div class="relative h-full">
-      <div class="absolute top-0 z-40 w-full">
+      <div class="absolute safe-area-positioning z-40 w-full">
         <ion-item class="mt-1 bg-transparent text-center" lines="none">
           <ion-button
               v-show="!images"
@@ -53,8 +53,10 @@
           @add-images="selectImages"
       />
 
-      <div v-show="place.images.length > 0">
-        <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40">
+      <div
+          v-show="place.images.length > 0"
+      >
+        <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40 safe-pb">
           <ion-button
               :disabled="loading === 0 || place.images?.length === 0"
               fill="white"
@@ -65,7 +67,7 @@
             {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
           </ion-button>
         </div>
-        <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40">
+        <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40 safe-pb">
           <ion-button
               :disabled="loading === 0 || place.images?.length === 0"
               fill="white"
@@ -290,5 +292,9 @@ ion-button {
 
 #removeButton {
   margin-right: 1rem !important;
+}
+
+.safe-area-positioning {
+  top: var(--ion-safe-area-top, 0);
 }
 </style>

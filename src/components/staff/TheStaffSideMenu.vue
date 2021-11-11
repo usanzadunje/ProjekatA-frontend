@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col justify-between">
+  <div class="h-full flex flex-col justify-between safe-pt safe-pb">
     <div>
       <div
           class="flex pb-0.5"
@@ -92,6 +92,7 @@ import { useRouter, useRoute }       from 'vue-router';
 import { useStore }                  from 'vuex';
 import {
   IonIcon,
+  menuController,
 }                                    from '@ionic/vue';
 
 import StaffActivityToggle from '@/components/staff/StaffActivityToggle';
@@ -130,6 +131,8 @@ export default defineComponent({
     /* Event handlers */
     const menuItemClicked = async(menuItemName) => {
       await router.push({ name: menuItemName });
+
+      await menuController.close();
     };
 
     return {

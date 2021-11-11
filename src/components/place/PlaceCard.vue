@@ -72,7 +72,7 @@ export default defineComponent({
         return place.value.images?.find(image => image.is_logo)?.path ??
             place.value.images[0]?.path;
       }else {
-        return '/places/default_place_logo.png';
+        return '/places/image_placeholder.png';
       }
     });
     const freeSeats = computed(() => {
