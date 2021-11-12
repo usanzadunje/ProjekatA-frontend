@@ -1,31 +1,26 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
-      <PlaceAvailabilityChart/>
+    <ion-content>
+      <button @click="this.$router.push({name:'settings'})">BACK</button>
+      <NotFoundImage/>
     </ion-content>
   </ion-page>
 </template>
 <script>
 
-import { onMounted } from 'vue';
-
 import {
   IonContent,
   IonPage,
-} from '@ionic/vue';
-
-import PlaceAvailabilityChart from '@/components/staff/charts/PlaceAvailabilityChart';
+}                    from '@ionic/vue';
+import NotFoundImage from '@/components/images/NotFoundImage';
 
 export default {
   components: {
     IonContent,
     IonPage,
-    PlaceAvailabilityChart,
+    NotFoundImage,
   },
   setup() {
-
-    onMounted(async() => {
-    });
 
 
     return {};

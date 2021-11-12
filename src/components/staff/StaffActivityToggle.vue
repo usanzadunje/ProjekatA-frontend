@@ -11,6 +11,7 @@
         :checked="isStaffActive"
         mode="md"
         class="pl-0"
+        :class="isStaffActive ? 'status-active' : 'status-inactive'"
         @click="toggleActivity($event)"
     ></ion-toggle>
   </div>

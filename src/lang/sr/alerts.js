@@ -49,4 +49,7 @@ export default {
     "owner.removeSection": "Uspešno ste uklonili sekciju!",
     "alertRemovingSectionHeader": "Uklanjate sekciju: {section}",
     "alertRemovingSectionMessage": "Da li ste sigurni da želite da uklonite sekciju i sve stolove koji joj pripadaju?",
+    "freeSpot": "Slobodno mesto!",
+    "freeSpotBody": "Došlo je do oslobađanja stola sa {seats} mesta u {place}.",
+
 };

@@ -9,19 +9,6 @@
       </ion-refresher>
       <div class="wrap safe-mb">
         <TheHangingHeader
-            v-if="this.$store.getters['auth/isStaff']"
-            class="px-4 mb-4"
-        >
-          <p class="text-center secondary-heading">{{ $t('workingActivity') }}</p>
-          <StaffActivityToggle
-              class="justify-center"
-              :class="this.$store.getters['staff/active'] ? 'active-status-text-color' : ''"
-              :icon-classes="`pb-1 text-2xl ml-1 mr-1`"
-              :text-classes="`pb-1 text-xl`"
-          />
-        </TheHangingHeader>
-
-        <TheHangingHeader
             v-if="this.$store.getters['auth/isOwner']"
             class="p-2"
         >
@@ -88,11 +75,9 @@
                 v-else
                 class="flex flex-col items-center justify-center px-6"
             >
-              <img
-                  :src="`${backendStorageURL}/screens/sleeping_placeholder.svg`"
-                  alt="Placeholder image of creature sleeping"
-                  class="w-3/5"
-              >
+              <SleepingPlaceholderImage
+                  :width="'60%'"
+              />
               <div class="flex flex-col items-center mt-2">
                 <p class="text-center placeholder-heading-big primary-text-color">
                   {{ $t('noActiveStaffHeading1') }}
@@ -139,11 +124,9 @@
               v-else
               class="flex items-center w-full mt-8"
           >
-            <img
-                :src="`${backendStorageURL}/screens/no_tables_chart_placeholder.svg`"
-                alt="Placeholder image of person looking at chart"
-                class="w-3/5 -ml-8"
-            >
+            <NoTablesChartPlaceholderImage
+                :width="'80%'"
+            />
             <div
             >
               <div
@@ -158,7 +141,7 @@
                 </p>
                 <ion-button
                     size="small"
-                    class="blue-button-background mt-2"
+                    class="user-selected-button-background mt-2"
                     @click="this.$router.push({ name: 'owner.place.tables' })"
                 >
                   {{ $t('add') }}
@@ -196,7 +179,6 @@ import {
   onIonViewWillEnter,
 }                                                    from '@ionic/vue';
 
-import StaffActivityToggle            from '@/components/staff/StaffActivityToggle';
 import TableContainer                 from '@/components/TableContainer';
 import Table                          from '@/components/Table';
 import TableSectionPicker             from '@/components/TableSectionPicker';
@@ -204,6 +186,8 @@ import StaffCard                      from '@/components/staff/cards/StaffCard';
 import PlaceAvailabilityChart         from '@/components/staff/charts/PlaceAvailabilityChart';
 import StaffAvailabilityToggleButtons from '@/components/staff/StaffAvailabilityToggleButtons';
 import TheHangingHeader               from '@/components/TheHangingHeader';
+import NoTablesChartPlaceholderImage  from '@/components/images/NoTablesChartPlaceholderImage';
+import SleepingPlaceholderImage       from '@/components/images/SleepingPlaceholderImage';
 
 import { usePlaceManipulation } from '@/composables/usePlaceManipulation';
 import { useErrorHandling }     from '@/composables/useErrorHandling';
@@ -222,13 +206,14 @@ export default defineComponent({
     IonSkeletonText,
     IonButton,
     TheHangingHeader,
-    StaffActivityToggle,
     TableContainer,
     Table,
     TableSectionPicker,
     StaffCard,
     StaffAvailabilityToggleButtons,
     PlaceAvailabilityChart,
+    NoTablesChartPlaceholderImage,
+    SleepingPlaceholderImage,
   },
   setup() {
     /* Global properties */

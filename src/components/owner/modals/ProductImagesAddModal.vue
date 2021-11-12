@@ -53,7 +53,7 @@
           @updated="setSliderRef"
       />
 
-      <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40 safe-pb">
+      <div class="bg-transparent text-center absolute bottom-7 w-full flex justify-center z-40">
         <ion-button
             :disabled="loading === 0 || productImages?.length === 0"
             fill="white"

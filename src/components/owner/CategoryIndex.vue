@@ -58,10 +58,8 @@
         v-else
         class="w-full h-full flex flex-col items-start justify-center mt-4 px-6"
     >
-      <img
-          :src="`${backendStorageURL}/screens/add_entries_placeholder.svg`"
-          alt="Placeholder image of person writing"
-      >
+      <AddEntriesPlaceholderImage/>
+
       <div class="flex flex-col items-center mt-2">
         <p class="text-center placeholder-heading-big primary-text-color">
           {{ $t('noCategoriesHeading1') }}
@@ -71,7 +69,7 @@
         </p>
 
         <ion-button
-            class="blue-button-background mt-2"
+            class="user-selected-button-background mt-2"
             @click="createCategory"
         >
           {{ $t('add') }}
@@ -108,8 +106,9 @@ import {
   IonItemOption, alertController,
 }                                    from '@ionic/vue';
 
-import AppModal                from '@/components/AppModal';
-import CategoryCreateEditModal from '@/components/owner/modals/CategoryCreateEditModal';
+import AppModal                   from '@/components/AppModal';
+import CategoryCreateEditModal    from '@/components/owner/modals/CategoryCreateEditModal';
+import AddEntriesPlaceholderImage from '@/components/images/AddEntriesPlaceholderImage';
 
 import { useModal }         from '@/composables/useModal';
 import { useSlidingItem }   from '@/composables/useSlidingItem';
@@ -121,7 +120,9 @@ import {
   trashOutline,
 } from 'ionicons/icons';
 
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Haptics, ImpactStyle }       from '@capacitor/haptics';
+
+import { increaseAccordionMaxHeight } from '@/utils/helpers';
 
 export default defineComponent({
   name: 'Categories',
@@ -135,6 +136,7 @@ export default defineComponent({
     IonItemOption,
     AppModal,
     CategoryCreateEditModal,
+    AddEntriesPlaceholderImage,
   },
   setup() {
     /* Global properties */
@@ -157,6 +159,10 @@ export default defineComponent({
       await tryCatch(
           async() => {
             await store.dispatch("owner/deleteCategory", id);
+
+            if(categories.value.length <= 0) {
+              increaseAccordionMaxHeight('categoryPanel', '1500');
+            }
           },
           'owner.removeCategory',
       );

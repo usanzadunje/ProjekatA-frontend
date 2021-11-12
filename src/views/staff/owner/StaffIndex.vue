@@ -62,10 +62,8 @@
           v-else
           class="w-full h-full flex flex-col items-start justify-center px-6"
       >
-        <img
-            :src="`${backendStorageURL}/screens/add_staff_placeholder.svg`"
-            alt="Placeholder image of many people inside circles"
-        >
+        <AddStaffPlaceholderImage/>
+
         <div class="flex flex-col items-center mt-2">
           <p class="text-center placeholder-heading-big primary-text-color">
             {{ $t('noStaffHeading1') }}
@@ -75,7 +73,7 @@
           </p>
 
           <ion-button
-              class="blue-button-background mt-2"
+              class="user-selected-button-background mt-2"
               @click="createStaffMember"
           >
             {{ $t('add') }}
@@ -127,11 +125,12 @@ import {
   alertController,
 }                                         from '@ionic/vue';
 
-import StaffCard            from '@/components/staff/cards/StaffCard';
-import StaffCardSkeleton    from '@/components/staff/cards/StaffCardSkeleton';
-import AppModal             from '@/components/AppModal';
-import StaffCreateEditModal from '@/components/staff/modals/StaffCreateEditModal';
-import TheHangingHeader     from '@/components/TheHangingHeader';
+import StaffCard                from '@/components/staff/cards/StaffCard';
+import StaffCardSkeleton        from '@/components/staff/cards/StaffCardSkeleton';
+import AppModal                 from '@/components/AppModal';
+import StaffCreateEditModal     from '@/components/staff/modals/StaffCreateEditModal';
+import TheHangingHeader         from '@/components/TheHangingHeader';
+import AddStaffPlaceholderImage from '@/components/images/AddStaffPlaceholderImage';
 
 import { useModal }         from '@/composables/useModal';
 import { useErrorHandling } from '@/composables/useErrorHandling';
@@ -157,6 +156,7 @@ export default defineComponent({
     StaffCardSkeleton,
     AppModal,
     StaffCreateEditModal,
+    AddStaffPlaceholderImage,
   },
   setup() {
     /* Global properties */

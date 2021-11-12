@@ -12,7 +12,6 @@ export default {
     "notificationModal1": "Obavesti me ukoliko se oslobodi mesto u objektu ",
     "notificationModal2": " u narednih : ",
     "showPlace": "Kafić, hrana, bašta. Nastavi dalje kako bi video šta vam naša aplikacija nudi.",
-    "freeSpotNotification": "Došlo je do oslobađanja mesta u {place}.",
     "owner.currentAvailabilitySituation": "Trenutno stanje u vašem objektu",
     "owner.currentActiveStaff": "Trenutno aktivni zaposleni",
     "currentTableAvailability": "Sto je trenutno {availability}.",

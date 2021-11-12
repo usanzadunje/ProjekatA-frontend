@@ -81,7 +81,7 @@ export function useFCM() {
             'localNotificationActionPerformed',
             () => {
                 router.push({
-                    name: 'dashboard',
+                    path: 'dashboard',
                 });
             },
         );
@@ -115,12 +115,20 @@ export function useFCM() {
     };
     const handleNotification = async(notification) => {
         if((!store.getters['auth/isStaff'] && !store.getters['auth/isOwner']) || store.getters['auth/authUser'].id === 1) {
+            const notificationBody = t(
+                'freeSpotBody',
+                {
+                    place: notification.data?.place_name,
+                    seats: notification.data?.seats,
+                },
+            );
+
             await LocalNotifications.schedule({
                 notifications: [
                     {
                         id: notification.data.id,
-                        title: notification.data.title,
-                        body: notification.data.body,
+                        title: t('freeSpot'),
+                        body: notificationBody,
                         largeIcon: 'ic_table_icon',
                         schedule: {
                             allowWhileIdle: true,
@@ -130,12 +138,12 @@ export function useFCM() {
             });
 
             await Haptics.vibrate({ duration: 250 });
-            showSuccessToast(t('freeSpotNotification', { place: notification.data?.place_name }));
+            showSuccessToast(notificationBody);
 
             store.commit("user/ADD_NOTIFICATION", {
                 id: notification?.data.id,
                 read: false,
-                body: t('freeSpotNotification', { place: notification.data?.place_name }),
+                body: notificationBody,
             });
 
             store.dispatch("user/persistPushNotifications");

@@ -11,49 +11,28 @@
         @panel-opened="changeCurrentlyOpenPanel"
         :is-open="checkIfPanelIsOpen(`productPanel${category.id}`)"
     >
-      <div v-if="category.products?.length > 0">
-        <ProductCard
-            v-for="product in category.products"
-            :key="product.id"
-            :product="product"
-            @click="showProductModal(product, category.name)"
-            class="py-1"
-        />
-        <div class="w-full flex justify-center py-2">
-          <ion-button
-              v-if="category.products.length >= 7"
-              v-show="!loadingProducts"
-              size="default"
-              @click="loadMoreProducts(category.id, $event)"
-          >
-            {{ $t('loadMore') }}
-          </ion-button>
-          <ion-spinner
-              v-show="loadingProducts"
-              name="dots"
-              class="my-2 scale2x"
-          ></ion-spinner>
-        </div>
-      </div>
-      <div
-          v-else
-          class="flex items-center justify-center"
-      >
-        <img
-            :src="`${backendStorageURL}/screens/no_menu_placeholder.svg`"
-            alt="Placeholder image of empty papers"
-            class="w-1/2"
+      <ProductCard
+          v-for="product in category.products"
+          :key="product.id"
+          :product="product"
+          @click="showProductModal(product, category.name)"
+          class="py-1"
+      />
+      <div class="w-full flex justify-center py-2">
+        <ion-button
+            v-if="category.products.length >= 7"
+            v-show="!loadingProducts"
+            size="default"
+            @click="loadMoreProducts(category.id, $event)"
         >
-        <div class="flex flex-col items-center mt-2">
-          <p class="text-center placeholder-heading-small primary-text-color">
-            {{ $t('noProductsUserHeading1') }}
-          </p>
-          <p class="text-center placeholder-heading-extra-small primary-text-color break-words">
-            {{ $t('noProductsUserHeading2') }}
-          </p>
-        </div>
+          {{ $t('loadMore') }}
+        </ion-button>
+        <ion-spinner
+            v-show="loadingProducts"
+            name="dots"
+            class="my-2 scale2x"
+        ></ion-spinner>
       </div>
-
     </AppAccordion>
 
     <AppModal

@@ -47,4 +47,6 @@ export default {
     "owner.createSection": "Successfully created new section!",
     "owner.updateSection": "Successfully updated section!",
     "owner.removeSection": "Successfully removed section!",
+    "freeSpot": "Spot available!",
+    "freeSpotBody": "There is a free table with {seats} seats at {place} now.",
 };

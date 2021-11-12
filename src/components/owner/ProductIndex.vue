@@ -69,10 +69,8 @@
         v-else
         class="w-full h-full flex flex-col items-start justify-center mt-4 px-6"
     >
-      <img
-          :src="`${backendStorageURL}/screens/no_products_placeholder.svg`"
-          alt="Placeholder image of people looking at empty box"
-      >
+      <NoProductsPlaceholderImage/>
+
       <div class="flex flex-col items-center mt-2">
         <p class="text-center placeholder-heading-big primary-text-color">
           {{ $t('noProductsHeading1') }}
@@ -82,7 +80,7 @@
         </p>
 
         <ion-button
-            class="blue-button-background mt-2"
+            class="user-selected-button-background mt-2"
             @click="createProduct"
         >
           {{ $t('add') }}
@@ -134,9 +132,10 @@ import {
   IonSearchbar,
 }                                                        from '@ionic/vue';
 
-import ProductCard            from '@/components/ProductCard';
-import AppModal               from '@/components/AppModal';
-import ProductCreateEditModal from '@/components/owner/modals/ProductCreateEditModal';
+import ProductCard                from '@/components/ProductCard';
+import AppModal                   from '@/components/AppModal';
+import ProductCreateEditModal     from '@/components/owner/modals/ProductCreateEditModal';
+import NoProductsPlaceholderImage from '@/components/images/NoProductsPlaceholderImage';
 
 import { useModal }         from '@/composables/useModal';
 import { useSlidingItem }   from '@/composables/useSlidingItem';
@@ -165,6 +164,7 @@ export default defineComponent({
     ProductCard,
     AppModal,
     ProductCreateEditModal,
+    NoProductsPlaceholderImage,
   },
   props: {
     enableInfiniteScroll: {
@@ -203,6 +203,9 @@ export default defineComponent({
           async() => {
             await store.dispatch("owner/deleteProduct", id);
 
+            if(products.value.length <= 0) {
+              increaseAccordionMaxHeight('productPanel', '1500');
+            }
           },
           'owner.removeProduct',
       );

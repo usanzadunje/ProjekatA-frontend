@@ -123,13 +123,13 @@ export default defineComponent({
     const showSkeleton = ref(true);
     const { place } = toRefs(props);
 
-    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](place.value.id));
-    const placeAdditionalInfo = computed(() => store.getters['user/getPlaceAdditionInfo'](place.value.id));
+    const isUserSubscribed = computed(() => store.getters['user/isSubscribedTo'](place.value?.id));
+    const placeAdditionalInfo = computed(() => store.getters['user/getPlaceAdditionInfo'](place.value?.id));
     const isSubButtonDisabled = ref(true);
     const logoPath = computed(() => {
-      if(place.value.images?.length > 0) {
-        return place.value.images?.find(image => image.is_logo)?.path ??
-            place.value.images[0]?.path;
+      if(place.value?.images?.length > 0) {
+        return place.value?.images?.find(image => image.is_logo)?.path ??
+            place.value?.images[0]?.path;
       }else {
         return '/places/image_placeholder.png';
       }
@@ -144,7 +144,7 @@ export default defineComponent({
     (async() => {
       await tryCatch(
           async() => {
-            await getCachedOrFetchPlaceAdditionalInfo(place.value.id);
+            await getCachedOrFetchPlaceAdditionalInfo(place.value?.id);
           },
           null,
           'dataFetchingError',

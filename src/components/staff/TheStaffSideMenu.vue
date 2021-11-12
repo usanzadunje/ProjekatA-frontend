@@ -3,7 +3,7 @@
     <div>
       <div
           class="flex pb-0.5"
-          :class="[activeMenuItem === 'dashboard' ? 'border-b-2 border-yellow-600 text-yellow-600' : 'text-gray-800']"
+          :class="[activeMenuItem === 'dashboard' ? 'border-b-2 border-user-selected-color user-selected-color' : 'text-gray-800']"
           @click="menuItemClicked('staff.dashboard')"
       >
         <ion-icon
@@ -18,7 +18,7 @@
       <div
           v-if="isOwner"
           class="flex items-center pb-0.5 mt-4"
-          :class="[activeMenuItem === 'place' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-800']"
+          :class="[activeMenuItem === 'place' ? 'border-b-2 border-user-selected-color user-selected-color' : 'text-gray-800']"
           @click="menuItemClicked('owner.place.info')"
       >
         <ion-icon
@@ -33,7 +33,7 @@
       <div
           v-if="isOwner"
           class="flex items-center pb-0.5 mt-4"
-          :class="[activeMenuItem === 'staff' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-800']"
+          :class="[activeMenuItem === 'staff' ? 'border-b-2 border-user-selected-color user-selected-color' : 'text-gray-800']"
           @click="menuItemClicked('owner.staff')"
       >
         <ion-icon
@@ -47,8 +47,8 @@
       </div>
       <div
           class="flex items-center pb-0.5 mt-4"
-          :class="[activeMenuItem === 'settings' ? 'border-b-2 border-purple-700 text-purple-700' : 'text-gray-800']"
-          @click="menuItemClicked('staff.settings')"
+          :class="[activeMenuItem === 'profile' ? 'border-b-2 border-user-selected-color user-selected-color' : 'text-gray-800']"
+          @click="menuItemClicked('staff.profile')"
       >
         <ion-icon
             slot="icon-only"
@@ -57,15 +57,22 @@
         ></ion-icon>
         <span class="text-xl">
               {{ $t('profile') }}
-            </span>
+        </span>
       </div>
-
-      <StaffActivityToggle
-          v-if="this.$store.getters['auth/isStaff']"
-          class="w-full mt-4"
-          :icon-classes="'pb-1 text-2xl mr-2'"
-          :text-classes="'pb-1 text-xl'"
-      />
+      <div
+          class="flex items-center pb-0.5 mt-4"
+          :class="[activeMenuItem === 'settings' ? 'border-b-2 border-user-selected-color user-selected-color' : 'text-gray-800']"
+          @click="menuItemClicked('staff.settings')"
+      >
+        <ion-icon
+            slot="icon-only"
+            :icon="settingsOutline"
+            class="text-2xl mr-2"
+        ></ion-icon>
+        <span class="text-xl">
+              {{ $t('settings') }}
+        </span>
+      </div>
 
     </div>
     <div>
@@ -79,8 +86,8 @@
             class="text-2xl mr-2"
         ></ion-icon>
         <span class="pb-1 text-xl">
-              {{ $t('logout') }}
-            </span>
+          {{ $t('logout') }}
+        </span>
       </div>
     </div>
   </div>
@@ -94,8 +101,6 @@ import {
   IonIcon,
   menuController,
 }                                    from '@ionic/vue';
-
-import StaffActivityToggle from '@/components/staff/StaffActivityToggle';
 
 import {
   statsChartOutline,
@@ -111,7 +116,6 @@ export default defineComponent({
   name: 'TheStaffSideMenu',
   components: {
     IonIcon,
-    StaffActivityToggle,
   },
   props: {},
   setup() {
@@ -157,5 +161,11 @@ export default defineComponent({
 
 </script>
 <style scoped>
+ion-item {
+  --background: #F3F4F6;
+}
 
+#colorPickerResetText {
+  color: red !important;
+}
 </style>

@@ -1,6 +1,13 @@
 <template>
-  <ion-item slot="end" class="ion-no-padding ion-no-margin no-border mr-1">
-    <ion-button @click="resetDefaults" class="settings-item-text uppercase" fill="clear" slot="end">
+  <div class="flex items-center">
+    <ion-button
+        id="colorPickerResetText"
+        slot="end"
+        fill="clear"
+        :style="{ color: resetTextColor }"
+        class="settings-item-text uppercase"
+        @click="resetDefaults"
+    >
       {{ $t('reset') }}
     </ion-button>
     <ion-button @click="selectColor" class="user-selected-paint w-10 radius-11px" slot="end">
@@ -12,22 +19,26 @@
           @change="colorChanged"
       >
     </ion-button>
-  </ion-item>
+  </div>
 </template>
 <script>
 
 import { defineComponent, ref } from 'vue';
 import { useStore }             from 'vuex';
 import {
-  IonItem,
   IonButton,
 }                               from '@ionic/vue';
 
 export default defineComponent({
   name: 'ColorPicker',
   components: {
-    IonItem,
     IonButton,
+  },
+  props: {
+    resetTextColor: {
+      type: String,
+      default: '',
+    },
   },
   setup() {
     /* Global properties */

@@ -112,6 +112,8 @@ import {
   pricetagOutline,
 } from 'ionicons/icons';
 
+import { increaseAccordionMaxHeight } from '@/utils/helpers';
+
 export default defineComponent({
   name: "CategoryCreateEditForm",
   components: {
@@ -187,11 +189,6 @@ export default defineComponent({
     });
 
     /* Methods */
-    const increaseParentHeight = (additionalHeight) => {
-      const accordionPanel = document.getElementById('categoryPanel');
-      const panelCurrentMaxHeight = parseInt(getComputedStyle(accordionPanel).getPropertyValue('max-height'));
-      accordionPanel.style.setProperty('max-height', `${panelCurrentMaxHeight + additionalHeight}px`);
-    };
 
     /* Event handlers */
     const createOrUpdateCategory = async() => {
@@ -208,7 +205,7 @@ export default defineComponent({
             }else {
               await store.dispatch("owner/createCategory", internalCategory);
 
-              increaseParentHeight(55);
+              increaseAccordionMaxHeight('categoryPanel', 150);
             }
 
             emit('dismiss');

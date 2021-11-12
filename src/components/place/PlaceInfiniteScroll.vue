@@ -141,17 +141,21 @@ export default defineComponent({
       );
     };
     const refresh = async(event) => {
+      showSkeleton.value = true;
+
       if(sortBy.value === 'distance') {
         await checkForLocationPermission();
       }
       await tryGettingLocation();
 
       await getPlaces();
+      store.dispatch("user/getFavoritePlaces");
 
       event.target.complete();
 
       placeOffset = 0;
       isInfiniteScrollDisabled.value = false;
+      showSkeleton.value = false;
     };
 
     /* Event handlers */

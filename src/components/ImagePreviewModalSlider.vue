@@ -23,10 +23,8 @@
       class="w-full h-full flex flex-col items-center justify-center"
       :class="this.$store.getters['auth/isOwner'] ? 'pt-8' : ''"
   >
-    <img
-        :src="`${backendStorageURL}/screens/no_images_placeholder.svg`"
-        alt="Placeholder image of images"
-    >
+    <NoImagesPlaceholderImage/>
+
     <div class="flex flex-col items-center mt-6 px-4 safe-pb">
       <p class="text-center placeholder-heading-big text-white">
         {{ $t('noImagesAvailableHeading1') }}
@@ -47,7 +45,7 @@
           {{ $t('owner.noImagesAvailableHeading2') }}
         </p>
         <ion-button
-            class="blue-button-background mt-2"
+            class="user-selected-button-background mt-2"
             @click="$emit('addImages')"
         >
           {{ $t('add') }}
@@ -68,12 +66,15 @@ import SwiperCore, {
 
 SwiperCore.use([Zoom, Navigation]);
 
+import NoImagesPlaceholderImage from '@/components/images/NoImagesPlaceholderImage';
+
 export default defineComponent({
   name: 'ImagePreviewModalSlider',
   components: {
     Swiper,
     SwiperSlide,
     IonButton,
+    NoImagesPlaceholderImage,
   },
   props: {
     id: {

@@ -126,6 +126,6 @@ ion-toolbar {
   background-repeat: no-repeat;
   background-blend-mode: multiply;
   border-bottom-left-radius: 15px !important;
-  border-bottom-right-radius: 15px !important;;
+  border-bottom-right-radius: 15px !important;
 }
 </style>

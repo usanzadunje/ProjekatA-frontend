@@ -207,7 +207,7 @@ export default defineComponent({
     });
     onIonViewDidEnter(() => {
       //Safety check, do not open modal if there is no data to be shown inside it
-      if(modalData.value){
+      if(modalData.value) {
         openModal(!!route.query.openModal);
       }
     });
@@ -290,6 +290,7 @@ export default defineComponent({
       await tryGettingLocation();
 
       await getFilteredPlaces();
+      store.dispatch("user/getFavoritePlaces");
 
       event.target.complete();
       showSkeleton.value = false;

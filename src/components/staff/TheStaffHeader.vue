@@ -13,17 +13,12 @@
       ></ion-icon>
     </ion-button>
 
-    <div class="flex items-center ml-2">
-      <ion-label class="settings-fade-text">{{ isDarkModeOn ? 'Dark' : 'Light' }}</ion-label>
-      <ion-toggle
-          :checked="isDarkModeOn"
-          mode="md"
-          class="dark-toggle-checked"
-          @ionChange="toggleDarkMode($event)"
-      ></ion-toggle>
-
-      <AppLanguagePicker class="ml-3"/>
-    </div>
+    <StaffActivityToggle
+        v-if="this.$store.getters['auth/isStaff']"
+        class="pl-3"
+        :icon-classes="'text-lg mr-1'"
+        :text-classes="'text-base'"
+    />
 
     <ion-chip class="ion-margin-start" @click="openSettingsPopover($event)">
       <ion-avatar class="flex-shrink-0">
@@ -41,19 +36,17 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue';
-import { useStore }                  from 'vuex';
+import { defineComponent } from 'vue';
 import {
   IonButton,
   IonIcon,
   IonChip,
   IonAvatar,
   IonLabel,
-  IonToggle,
-}                                    from '@ionic/vue';
+}                          from '@ionic/vue';
 
-import SettingsPopover   from '@/components/staff/popovers/SettingsPopover';
-import AppLanguagePicker from '@/components/AppLanguagePicker';
+import SettingsPopover     from '@/components/staff/popovers/SettingsPopover';
+import StaffActivityToggle from '@/components/staff/StaffActivityToggle';
 
 import { useMenu }    from '@/composables/useMenu';
 import { usePopover } from '@/composables/usePopover';
@@ -72,16 +65,13 @@ export default defineComponent({
     IonChip,
     IonAvatar,
     IonLabel,
-    IonToggle,
-    AppLanguagePicker,
+    StaffActivityToggle,
   },
   props: {},
   setup() {
     /* Global properties */
-    const store = useStore();
 
     /* Component properties */
-    const isDarkModeOn = computed(() => store.getters['user/darkMode']);
 
     /* Composables */
     const { toggleMenu } = useMenu();
@@ -92,24 +82,15 @@ export default defineComponent({
     const openSettingsPopover = (event) => {
       openPopover(SettingsPopover, event, 'staff-settings-popover');
     };
-    const toggleDarkMode = async(e) => {
-      if(!e.target.checked) {
-        await store.dispatch('user/setDarkMode', false);
-      }else {
-        await store.dispatch('user/setDarkMode', true);
-      }
-    };
 
 
     return {
       /* Component properties */
-      isDarkModeOn,
       authUser,
 
       /* Event handlers */
       toggleMenu,
       openSettingsPopover,
-      toggleDarkMode,
 
       /* Icons */
       menuOutline,

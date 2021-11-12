@@ -56,7 +56,7 @@
       <div
           v-show="place.images.length > 0"
       >
-        <div class="bg-transparent text-center absolute bottom-6 w-full flex justify-center z-40 safe-pb">
+        <div class="bg-transparent text-center absolute bottom-7 w-full flex justify-center z-40">
           <ion-button
               :disabled="loading === 0 || place.images?.length === 0"
               fill="white"
@@ -67,7 +67,7 @@
             {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
           </ion-button>
         </div>
-        <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40 safe-pb">
+        <div class="bg-transparent text-center absolute bottom-20 w-full flex justify-center z-40">
           <ion-button
               :disabled="loading === 0 || place.images?.length === 0"
               fill="white"

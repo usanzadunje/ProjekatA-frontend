@@ -91,12 +91,9 @@
                 v-else
                 class="flex items-center mt-4"
             >
-              <img
-                  :src="`${backendStorageURL}/screens/add_tables_placeholder.svg`"
-                  alt="Placeholder image of person moving squares"
-                  class="w-1/2"
-              >
-              <div class="">
+              <AddTablesPlaceholderImage :width="'50%'"/>
+
+              <div>
                 <p class="text-center placeholder-heading-extra-small primary-text-color">
                   {{ $t('noTablesHeading1') }}
                 </p>
@@ -119,13 +116,10 @@
             />
             <div
                 v-else
-                class="flex items-center justify-center my-6"
+                class="flex items-center justify-center mt-10 mb-6"
             >
-              <img
-                  :src="`${backendStorageURL}/screens/no_menu_placeholder.svg`"
-                  alt="Placeholder image of empty papers"
-                  class="w-1/2"
-              >
+              <NoMenuPlaceholderImage :width="'50%'"/>
+
               <div class="flex flex-col items-center mt-2">
                 <p class="text-center placeholder-heading-small primary-text-color">
                   {{ $t('noProductsUserHeading1') }}
@@ -185,18 +179,20 @@ import {
   onIonViewWillLeave,
 }                                                from '@ionic/vue';
 
-import TheGoBackHeader        from '@/components/user/headers/TheGoBackHeader';
-import MainImagePreview       from '@/components/MainImagePreview';
-import AppFavoriteButton      from '@/components/AppFavoriteButton';
-import PlaceInfoBody          from '@/components/place/PlaceInfoBody';
-import FilterCategoryHeading  from '@/components/user/FilterCategoryHeading';
-import TableContainer         from '@/components/TableContainer';
-import Table                  from '@/components/Table';
-import TableTooltipPopover    from '@/components/user/popovers/TableTooltipPopover';
-import ProductMenu            from '@/components/user/ProductMenu';
-import AppModal               from '@/components/AppModal';
-import PlaceSubscriptionModal from '@/components/user/modals/PlaceSubscriptionModal';
-import ImagePreviewModal      from '@/components/user/modals/ImagePreviewModal';
+import TheGoBackHeader           from '@/components/user/headers/TheGoBackHeader';
+import MainImagePreview          from '@/components/MainImagePreview';
+import AppFavoriteButton         from '@/components/AppFavoriteButton';
+import PlaceInfoBody             from '@/components/place/PlaceInfoBody';
+import FilterCategoryHeading     from '@/components/user/FilterCategoryHeading';
+import TableContainer            from '@/components/TableContainer';
+import Table                     from '@/components/Table';
+import TableTooltipPopover       from '@/components/user/popovers/TableTooltipPopover';
+import ProductMenu               from '@/components/user/ProductMenu';
+import AppModal                  from '@/components/AppModal';
+import PlaceSubscriptionModal    from '@/components/user/modals/PlaceSubscriptionModal';
+import ImagePreviewModal         from '@/components/user/modals/ImagePreviewModal';
+import AddTablesPlaceholderImage from '@/components/images/AddTablesPlaceholderImage';
+import NoMenuPlaceholderImage from '@/components/images/NoMenuPlaceholderImage';
 
 import PlaceService   from '@/services/PlaceService';
 import ProductService from '@/services/ProductService';
@@ -243,6 +239,8 @@ export default defineComponent({
     ProductMenu,
     AppModal,
     PlaceSubscriptionModal,
+    AddTablesPlaceholderImage,
+    NoMenuPlaceholderImage,
   },
   setup() {
     /* Global properties */

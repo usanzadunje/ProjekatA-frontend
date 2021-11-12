@@ -12,7 +12,6 @@
 
     <ion-content>
       <ion-refresher
-          v-if="userHasSubscriptions"
           pull-min="100"
           slot="fixed"
           @ionRefresh="refresh($event)"
@@ -80,10 +79,8 @@
           v-show="!userHasSubscriptions"
           class="w-full h-full flex flex-col items-center justify-center px-6"
       >
-        <img
-            :src="`${backendStorageURL}/screens/add_subscriptions_placeholder.svg`"
-            alt="Placeholder image of many notifications coming out of phone"
-        >
+        <AddSubscriptionsPlaceholderImage/>
+
         <div class="flex flex-col items-center mt-2">
           <p class="text-center placeholder-heading-big primary-text-color">
             {{ $t('noSubscriptionsHeading1') }}
@@ -93,7 +90,7 @@
           </p>
 
           <ion-button
-              class="blue-button-background mt-2"
+              class="user-selected-button-background mt-2"
               @click="this.$router.push({ name: 'search' })"
           >
             {{ $t('findPlace') }}
@@ -136,14 +133,15 @@ import {
   onIonViewDidEnter,
 }                                         from '@ionic/vue';
 
-import TheUserProfileHeader  from '@/components/user/headers/TheUserProfileHeader';
-import SlidingFilter         from '@/components/user/SlidingFilter';
-import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import Timer                 from '@/components/Timer';
-import PlaceCard             from '@/components/place/PlaceCard';
-import PlaceCardSkeleton     from '@/components/place/PlaceCardSkeleton';
-import AppModal              from '@/components/AppModal';
-import PlaceInfoModal        from '@/components/user/modals/PlaceInfoModal';
+import TheUserProfileHeader             from '@/components/user/headers/TheUserProfileHeader';
+import SlidingFilter                    from '@/components/user/SlidingFilter';
+import FilterCategoryHeading            from '@/components/user/FilterCategoryHeading';
+import Timer                            from '@/components/Timer';
+import PlaceCard                        from '@/components/place/PlaceCard';
+import PlaceCardSkeleton                from '@/components/place/PlaceCardSkeleton';
+import AppModal                         from '@/components/AppModal';
+import PlaceInfoModal                   from '@/components/user/modals/PlaceInfoModal';
+import AddSubscriptionsPlaceholderImage from '@/components/images/AddSubscriptionsPlaceholderImage';
 
 import PlaceService from '@/services/PlaceService';
 
@@ -182,6 +180,7 @@ export default defineComponent({
     AppModal,
     PlaceInfoModal,
     PlaceCardSkeleton,
+    AddSubscriptionsPlaceholderImage,
   },
   setup() {
     /* Global properties */
@@ -242,6 +241,8 @@ export default defineComponent({
       await tryGettingLocation();
 
       await getSubscriptions();
+      store.dispatch("user/getSubscriptions");
+      store.dispatch("user/getFavoritePlaces");
 
       event.target.complete();
 

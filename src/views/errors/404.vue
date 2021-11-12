@@ -8,10 +8,7 @@
           <!--          >-->
           <!--            4O4-->
           <!--          </h1>-->
-          <img
-              src="http://192.168.1.203:8200/storage/img/screens/404.svg"
-              alt="Add place subscriptions"
-          >
+          <NotFoundImage/>
           <div class="mt-8">
             <p class="font-bold">
               {{ $t('404Lost', { user: (authUser?.fname || authUser?.username) || $t('unknown') }) }}
@@ -26,8 +23,7 @@
               @click="this.$router.push({ name: isEndUser ? 'home' : 'staff.dashboard'})"
           >
             <p
-                class="main-toolbar-fade-text uppercase underline"
-                style="font-size: 1.25rem; color: #1b6de0"
+                class="text-xl uppercase underline user-selected-color"
             >HOME</p>
           </ion-button>
         </div>
@@ -40,6 +36,8 @@
 import { defineComponent }                from 'vue';
 import { IonButton, IonPage, IonContent } from '@ionic/vue';
 
+import NotFoundImage from '@/components/images/NotFoundImage';
+
 import { useCurrentUser } from '@/composables/useCurrentUser';
 
 export default defineComponent({
@@ -48,6 +46,7 @@ export default defineComponent({
     IonButton,
     IonPage,
     IonContent,
+    NotFoundImage,
   },
   setup() {
     /* Component properties */

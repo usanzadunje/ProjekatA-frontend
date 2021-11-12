@@ -196,7 +196,7 @@ export default defineComponent({
             }else {
               await store.dispatch("owner/createProduct", newProduct);
 
-              increaseAccordionMaxHeight('productPanel', 100);
+              increaseAccordionMaxHeight('productPanel', 220);
             }
 
             emit('dismiss');

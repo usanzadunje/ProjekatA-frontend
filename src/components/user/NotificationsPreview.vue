@@ -1,6 +1,10 @@
 <template>
   <div class="flex">
-    <ion-button fill="clear" @click="showNotifications($event)" class="reset-button-size">
+    <ion-button
+        fill="clear"
+        @click="showNotifications($event)"
+        class="reset-button-size"
+    >
       <div class="relative">
         <ion-icon
             :icon="hasNotifications
@@ -83,9 +87,11 @@ export default defineComponent({
 ion-icon {
   font-size: 1.6rem !important;
 }
+
 #badge-container {
   left: 10px;
 }
+
 ion-badge {
   font-size: 9px !important;
   padding: 3px !important;

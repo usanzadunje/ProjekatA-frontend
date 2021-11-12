@@ -11,7 +11,6 @@ export default {
     "notificationModal1": "Notify me if there are vacancies in place ",
     "notificationModal2": " in the next : ",
     "showPlace": "Cafe, food, garden. Continue forward in order to see what our application has to offer you.",
-    "freeSpotNotification": "There is a free spot at {place} now.",
     "owner.currentAvailabilitySituation": "Current situation in your place",
     "owner.currentActiveStaff": "Currently active staff",
     "currentTableAvailability": "Table is currently {availability}.",

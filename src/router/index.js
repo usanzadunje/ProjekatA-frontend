@@ -140,11 +140,18 @@ const routes = [
                 component: () => import(/* webpackChunkName: "StaffDashboard" */ "@/views/staff/StaffDashboard"),
             },
             {
+                path: "profile",
+                name: "staff.profile",
+                meta: { middleware: [] },
+                component: () =>
+                    import(/* webpackChunkName: "StaffEdit" */ "@/views/staff/StaffEdit"),
+            },
+            {
                 path: "settings",
                 name: "staff.settings",
                 meta: { middleware: [] },
                 component: () =>
-                    import(/* webpackChunkName: "StaffEdit" */ "@/views/staff/StaffEdit"),
+                    import(/* webpackChunkName: "StaffSettings" */ "@/views/staff/StaffSettings"),
             },
             {
                 path: "/owner/staff",

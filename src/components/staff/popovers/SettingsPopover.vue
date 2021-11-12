@@ -2,7 +2,7 @@
   <ion-content class="ion-no-padding" :scrollY="false">
     <div
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-        :class="{ 'text-yellow-600' : activeRouteName === 'dashboard' }"
+        :class="{ 'user-selected-color' : activeRouteName === 'dashboard' }"
         @click="navigateTo('staff.dashboard')"
     >
       <ion-icon
@@ -15,8 +15,8 @@
 
     <div v-if="this.$store.getters['auth/isOwner']"
          class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-         :class="{ 'text-green-600' : activeRouteName === 'place' }"
-         @click="navigateTo('owner.place')">
+         :class="{ 'user-selected-color' : activeRouteName === 'place' }"
+         @click="navigateTo('owner.place.info')">
       <ion-icon
           :icon="homeOutline"
           class="flex-shrink-0"
@@ -27,7 +27,7 @@
 
     <div v-if="this.$store.getters['auth/isOwner']"
          class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-         :class="{ 'text-blue-600' : activeRouteName === 'staff' }"
+         :class="{ 'user-selected-color' : activeRouteName === 'staff' }"
          @click="navigateTo('owner.staff')"
     >
       <ion-icon
@@ -39,9 +39,9 @@
     </div>
 
     <div
-        :class="{ 'text-purple-700' : activeRouteName === 'settings' }"
+        :class="{ 'user-selected-color' : activeRouteName === 'profile' }"
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-        @click="navigateTo('staff.settings')"
+        @click="navigateTo('staff.profile')"
     >
       <ion-icon
           :icon="personOutline"
@@ -51,12 +51,19 @@
       <span class="text-sm ml-3">{{ $t('profile') }}</span>
     </div>
 
-    <StaffActivityToggle
-        v-if="this.$store.getters['auth/isStaff']"
-        :icon-classes="'icon-popover-size'"
-        :text-classes="'text-sm ml-3'"
-        class="h-12 text-black w-full px-3 bg-gray-200"
-    />
+    <div
+        :class="{ 'user-selected-color' : activeRouteName === 'settings' }"
+        class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
+        @click="navigateTo('staff.settings')"
+    >
+      <ion-icon
+          :icon="settingsOutline"
+          class="flex-shrink-0"
+      >
+      </ion-icon>
+      <span class="text-sm ml-3">{{ $t('settings') }}</span>
+    </div>
+
     <div
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-gray-300"
         @click="logout"
@@ -81,13 +88,12 @@ import {
   popoverController,
 }                                    from '@ionic/vue';
 
-import StaffActivityToggle from '@/components/staff/StaffActivityToggle';
-
 import {
   statsChartOutline,
   personOutline,
   peopleOutline,
   homeOutline,
+  settingsOutline,
   logOutOutline,
 } from 'ionicons/icons';
 
@@ -96,7 +102,6 @@ export default defineComponent({
   components: {
     IonContent,
     IonIcon,
-    StaffActivityToggle,
   },
   setup() {
     /* Global properties */
@@ -132,6 +137,7 @@ export default defineComponent({
       personOutline,
       peopleOutline,
       homeOutline,
+      settingsOutline,
       logOutOutline,
     };
   },

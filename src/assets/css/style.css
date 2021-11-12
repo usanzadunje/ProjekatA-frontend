@@ -318,6 +318,10 @@ ion-toggle {
     --background: #1b6de0 !important;
 }
 
+.user-selected-button-background {
+    --background: var(--user-selected-color) !important;
+}
+
 .primary-text-color {
     color: var(--primary-heading) !important;
 }
@@ -332,6 +336,10 @@ ion-toggle {
 
 .border-primary {
     border-color: var(--primary-heading) !important;
+}
+
+.border-user-selected-color {
+    border-color: var(--user-selected-color) !important;
 }
 
 .no-padding-top {
