@@ -3,7 +3,7 @@
     <ion-content>
       <div class="h-full flex flex-col justify-between">
         <div>
-          <TheOwnerSegmentNavigation/>
+          <TheSegmentNavigation :segments="this.$store.getters['owner/placeSegments']"/>
 
           <div class="flex flex-col items-center">
             <div class="mb-2 secondary-heading text-center">{{ $t('addTableText') }}</div>
@@ -136,7 +136,7 @@ import {
   alertController,
 }                                                    from '@ionic/vue';
 
-import TheOwnerSegmentNavigation from '@/components/owner/TheOwnerSegmentNavigation';
+import TheSegmentNavigation from '@/components/TheSegmentNavigation';
 import TableEdit                 from '@/components/owner/TableEdit';
 import Table                     from '@/components/Table';
 import TableSectionPicker        from '@/components/TableSectionPicker';
@@ -163,7 +163,7 @@ export default defineComponent({
     IonContent,
     IonButton,
     IonIcon,
-    TheOwnerSegmentNavigation,
+    TheSegmentNavigation,
     TableEdit,
     Table,
     TableSectionPicker,

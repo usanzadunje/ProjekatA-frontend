@@ -48,4 +48,5 @@ export default {
     "staff.noTablesChartHeading2": "Zamolite vlasnika da doda stolove kako biste ga otljučali.",
     "noActiveStaffHeading1": "Svi su neaktivni.",
     "noActiveStaffHeading2": "Niko iz vašeg osoblja nije trenutno aktivan.",
+    "requestDayOffAt": "Zatražite slobodan dan datuma"
 };

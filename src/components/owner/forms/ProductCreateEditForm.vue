@@ -45,7 +45,6 @@
           class="flex rounded-2xl mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('description') }"
       >
-
         <ion-textarea
             v-model="newProduct.description"
             v-capitalize

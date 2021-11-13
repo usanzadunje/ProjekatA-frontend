@@ -61,6 +61,20 @@
       </div>
       <div
           class="flex items-center pb-0.5 mt-4"
+          :class="[activeMenuItem === 'schedule' ? 'border-b-2 border-user-selected-color user-selected-color' : 'text-gray-800']"
+          @click="menuItemClicked('staff.schedule')"
+      >
+        <ion-icon
+            slot="icon-only"
+            :icon="calendarOutline"
+            class="text-2xl mr-2"
+        ></ion-icon>
+        <span class="text-xl">
+              {{ $t('schedule') }}
+        </span>
+      </div>
+      <div
+          class="flex items-center pb-0.5 mt-4"
           :class="[activeMenuItem === 'settings' ? 'border-b-2 border-user-selected-color user-selected-color' : 'text-gray-800']"
           @click="menuItemClicked('staff.settings')"
       >
@@ -73,7 +87,6 @@
               {{ $t('settings') }}
         </span>
       </div>
-
     </div>
     <div>
       <div
@@ -109,6 +122,7 @@ import {
   settingsOutline,
   homeOutline,
   peopleOutline,
+  calendarOutline,
   logOutOutline,
 } from 'ionicons/icons';
 
@@ -154,6 +168,7 @@ export default defineComponent({
       settingsOutline,
       homeOutline,
       peopleOutline,
+      calendarOutline,
       logOutOutline,
     };
   },

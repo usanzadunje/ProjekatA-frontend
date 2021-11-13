@@ -441,4 +441,20 @@ export const getters = {
     products: (state) => {
         return state.products;
     },
+    placeSegments: () => {
+        return [
+            {
+                text: 'basic',
+                value: 'owner.place.info',
+            },
+            {
+                text: 'tables',
+                value: 'owner.place.tables',
+            },
+            {
+                text: 'menu',
+                value: 'owner.place.menu',
+            },
+        ];
+    },
 };

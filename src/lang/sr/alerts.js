@@ -51,5 +51,9 @@ export default {
     "alertRemovingSectionMessage": "Da li ste sigurni da želite da uklonite sekciju i sve stolove koji joj pripadaju?",
     "freeSpot": "Slobodno mesto!",
     "freeSpotBody": "Došlo je do oslobađanja stola sa {seats} mesta u {place}.",
+    "successDayOffRequest": "Uspešno ste zatražili slobodne dane! | Uspešno ste zatražili slobodan dan!",
+    "requestedDayPassed": "Ne možete tražiti slobodan dan na datum koji je već prošao.",
+    "alreadyRequestedDay": "Već ste zatražili slobodan dan ovog datuma.",
+
 
 };

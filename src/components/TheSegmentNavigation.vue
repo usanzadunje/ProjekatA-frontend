@@ -1,14 +1,14 @@
 <template>
   <div class="my-6 px-8">
     <ion-segment :value="route.name" class="bg-gray-100" mode="ios">
-      <ion-segment-button value="owner.place.info" mode="ios" @click="changePage($event)">
-        <ion-label>{{ $t('basic') }}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="owner.place.tables" mode="ios" @click="changePage($event)">
-        <ion-label>{{ $t('tables') }}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="owner.place.menu" mode="ios" @click="changePage($event)">
-        <ion-label>{{ $t('menu') }}</ion-label>
+      <ion-segment-button
+          v-for="(segment, index) in segments"
+          :key="index"
+          :value="segment.value"
+          mode="ios"
+          @click="changePage($event)"
+      >
+        <ion-label>{{ $t(segment.text) }}</ion-label>
       </ion-segment-button>
     </ion-segment>
   </div>
@@ -25,14 +25,20 @@ import {
 }                              from '@ionic/vue';
 
 export default defineComponent({
-  name: 'TheOwnerSegmentNavigation',
+  name: 'TheSegmentNavigation',
   components: {
     IonSegment,
     IonSegmentButton,
     IonLabel,
 
   },
-  props: {},
+  props: {
+    segments: {
+      type: Array,
+      default: null,
+      required: true,
+    },
+  },
   setup() {
     /* Global properties */
     const route = useRoute();

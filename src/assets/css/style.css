@@ -178,6 +178,10 @@ ion-modal ion-item {
     --background: var(--secondary-paint) !important;
 }
 
+.custom-day-off-request-modal {
+    --border-radius: 20px;
+    --background: var(--secondary-paint) !important;
+}
 
 .settings-popover {
     --min-width: 170px;
@@ -323,7 +327,7 @@ ion-toggle {
 }
 
 .primary-text-color {
-    color: var(--primary-heading) !important;
+    color: var(--primary-heading);
 }
 
 .placeholder-text-color {
@@ -344,6 +348,10 @@ ion-toggle {
 
 .no-padding-top {
     --padding-top: 0 !important;
+}
+
+.grid-cols-auto {
+    grid-template-columns: repeat(auto-fill, minmax(3.5rem, 1fr));
 }
 
 .vcenter {

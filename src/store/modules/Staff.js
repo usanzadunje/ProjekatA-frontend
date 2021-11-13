@@ -5,6 +5,7 @@ export const namespaced = true;
 export const state = {
     availabilityRatio: '0/0',
     active: false,
+    dayOffRequests: [],
 };
 
 export const mutations = {
@@ -14,6 +15,37 @@ export const mutations = {
 
     SET_ACTIVITY(state, payload) {
         state.active = payload;
+    },
+
+    SET_DAY_OFF_REQUESTS(state, payload) {
+        state.dayOffRequests = payload;
+    },
+    ADD_DAY_OFF_TO_MONTH(state, { day, month, year }) {
+        let existingYear = state.dayOffRequests.find(request => request.year === year);
+
+        if(existingYear) {
+            let existingMonth = existingYear.months?.find(m => m.month === month);
+            if(existingMonth) {
+                if(!existingMonth.days.includes(day)) {
+                    existingMonth.days.push(day);
+                }
+            }else {
+                existingYear.months.push({
+                    month,
+                    days: [day],
+                });
+            }
+        }else {
+            state.dayOffRequests.push({
+                year,
+                months: [
+                    {
+                        month,
+                        days: [day],
+                    },
+                ],
+            });
+        }
     },
 };
 
@@ -32,6 +64,15 @@ export const actions = {
 
         commit('SET_ACTIVITY', payload);
     },
+
+    async getDayOffRequests({ commit }, payload) {
+        //API call
+        commit('SET_DAY_OFF_DAYS', payload);
+    },
+    async addDayOffRequests(context, payload) {
+        //API call
+        console.log(payload);
+    },
 };
 
 export const getters = {
@@ -40,5 +81,26 @@ export const getters = {
     },
     active: (state) => {
         return state.active;
+    },
+
+    dayOffRequestedDays: (state) => (year, month) => {
+        const yearlyRequests = state.dayOffRequests.find(y => y.year === year);
+
+        const monthlyRequests = yearlyRequests?.months?.find(m => m.month === month);
+
+        return monthlyRequests?.days ?? [];
+    },
+
+    scheduleSegments: () => {
+        return [
+            {
+                text: 'schedule',
+                value: 'staff.schedule',
+            },
+            {
+                text: 'daysOff',
+                value: 'staff.schedule.daysOff',
+            },
+        ];
     },
 };

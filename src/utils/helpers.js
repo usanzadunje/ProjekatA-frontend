@@ -27,7 +27,6 @@ export function getError(error) {
     return errorMessage;
 }
 
-// Timer
 export function sleep(milliseconds) {
     return new Promise((resolve, reject) => {
         if(milliseconds < 1) {
@@ -98,4 +97,16 @@ export function didCacheExpire(getter) {
     const expirationTime = store.getters[`global/${getter}`] || Date.now();
 
     return Date.now() >= expirationTime;
+}
+
+export function getDaysInCurrentMonth() {
+    const dt = new Date();
+
+    return new Date(dt.getFullYear(), dt.getMonth() + 1, 0).getDate();
+}
+
+export function getDaysInAMonth(month) {
+    const dt = new Date();
+
+    return new Date(dt.getFullYear(), month + 1, 0).getDate();
 }

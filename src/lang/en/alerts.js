@@ -49,4 +49,8 @@ export default {
     "owner.removeSection": "Successfully removed section!",
     "freeSpot": "Spot available!",
     "freeSpotBody": "There is a free table with {seats} seats at {place} now.",
+    "successDayOffRequest": "Successfully requested day off! | Successfully requested days off!",
+    "requestedDayPassed": "You cannot request day off on a date that has already passed.",
+    "alreadyRequestedDay": "You have already requested day off on this date.",
+
 };

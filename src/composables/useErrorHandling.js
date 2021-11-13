@@ -30,7 +30,7 @@ export function useErrorHandling() {
             }
         }catch(errors) {
             if(catchCallback) {
-                await catchCallback();
+                await catchCallback(errors);
             }
             if(!errorMessageKey) {
                 errorNames.value = getError(errors);

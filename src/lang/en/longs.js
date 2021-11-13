@@ -47,5 +47,6 @@ export default {
     "staff.noTablesChartHeading2": "Ask owner to add tables in order to unlock it.",
     "noActiveStaffHeading1": "Everybody is inactive",
     "noActiveStaffHeading2": "Nobody from your staff is active at the moment.",
+    "requestDayOffAt": "Ask for a day off on"
 
 };

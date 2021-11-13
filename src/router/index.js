@@ -178,6 +178,18 @@ const routes = [
                 meta: { middleware: [owner] },
                 component: () => import(/* webpackChunkName: "MenuIndex" */ "@/views/staff/owner/place/MenuIndex"),
             },
+            {
+                path: "/schedule",
+                name: "staff.schedule",
+                meta: { middleware: [] },
+                component: () => import(/* webpackChunkName: "MenuIndex" */ "@/views/staff/StaffSchedule"),
+            },
+            {
+                path: "/schedule/days-off",
+                name: "staff.schedule.daysOff",
+                meta: { middleware: [] },
+                component: () => import(/* webpackChunkName: "MenuIndex" */ "@/views/staff/StaffDaysOff"),
+            },
         ],
     },
     /* =============================================
