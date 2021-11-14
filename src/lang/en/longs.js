@@ -26,7 +26,7 @@ export default {
     "404GetHome": "Home is one click away.",
     "noSubscriptionsHeading1": "You have no subscriptions.",
     "noSubscriptionsHeading2": "Find place you'd like to subscribe to by clicking the button bellow.",
-    "noImagesAvailableHeading1": "There are no images available.",
+    "noImagesAvailableHeading1": "There are no images.",
     "noImagesAvailableHeading2": "Unfortunately this place has not provided any images.",
     "owner.noImagesAvailableHeading2": "You have not added any images. Add them by clicking the button bellow.",
     "noTablesHeading1": "There are no tables.",
@@ -47,6 +47,7 @@ export default {
     "staff.noTablesChartHeading2": "Ask owner to add tables in order to unlock it.",
     "noActiveStaffHeading1": "Everybody is inactive",
     "noActiveStaffHeading2": "Nobody from your staff is active at the moment.",
-    "requestDayOffAt": "Ask for a day off on"
+    "requestDayOffAt": "Ask for a day off on",
+    "requestAlreadyDeclined": "Your request for a day off has already been declined before."
 
 };

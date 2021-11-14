@@ -51,6 +51,7 @@ export default {
     "freeSpotBody": "There is a free table with {seats} seats at {place} now.",
     "successDayOffRequest": "Successfully requested day off! | Successfully requested days off!",
     "requestedDayPassed": "You cannot request day off on a date that has already passed.",
-    "alreadyRequestedDay": "You have already requested day off on this date.",
+    "alreadyRequestedDay": "Please wait for superior to respond to your request.",
+    "alreadyApprovedDay": "Your day off request has already been approved for this day.",
 
 };

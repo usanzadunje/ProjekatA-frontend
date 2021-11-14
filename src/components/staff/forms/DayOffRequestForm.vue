@@ -3,11 +3,11 @@
     <ion-item
         lines="none"
         class="flex rounded-2xl h-11"
-        :class="{ 'error-border' : errorNames.hasOwnProperty('numberOfDays') }"
+        :class="{ 'error-border' : errorNames.hasOwnProperty('number_of_days') }"
     >
       <ion-icon :icon="calendarNumberOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
-          v-model.lazy.number="dayOffRequest.numberOfDays"
+          v-model.lazy.number="dayOffRequest.number_of_days"
           type="number"
           debounce="100"
           :placeholder="$t('numberOfDays')"
@@ -105,7 +105,7 @@ export default defineComponent({
 
     /* Component properties */
     const dayOffRequest = reactive({
-      dayOffStartDate: props.dayOffStartDate,
+      start_date: props.dayOffStartDate,
     });
     const loading = ref(false);
     const messageInput = ref();

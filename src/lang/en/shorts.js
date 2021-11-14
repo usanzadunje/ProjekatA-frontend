@@ -187,5 +187,6 @@ export default {
     "message": "Message",
     "requestDayOff": "Request",
     "numberOfDays": "Number of days",
+    "again": "Again",
 
 };

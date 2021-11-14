@@ -27,7 +27,7 @@ export default {
     "404GetHome": "Početna je jedan klik od tebe.",
     "noSubscriptionsHeading1": "Nemate ni jednu pretplatu.",
     "noSubscriptionsHeading2": "Pronađite objekat na koji želite da se pretplatite klikom na dugme ispod.",
-    "noImagesAvailableHeading1": "Fotografije nisu dostupne.",
+    "noImagesAvailableHeading1": "Nema fotografija.",
     "noImagesAvailableHeading2": "Na žalost ovaj objekat nije postavio ni jednu fotografiju.",
     "owner.noImagesAvailableHeading2": "Niste postavili ni jednu fotografiju. Dodajte ih klikom na dugme ispod.",
     "noTablesHeading1": "Nema stolova.",
@@ -48,5 +48,6 @@ export default {
     "staff.noTablesChartHeading2": "Zamolite vlasnika da doda stolove kako biste ga otljučali.",
     "noActiveStaffHeading1": "Svi su neaktivni.",
     "noActiveStaffHeading2": "Niko iz vašeg osoblja nije trenutno aktivan.",
-    "requestDayOffAt": "Zatražite slobodan dan datuma"
+    "requestDayOffAt": "Zatražite slobodan dan datuma",
+    "requestAlreadyDeclined": "Vaš zahtev za slobodan dan je već ranije odbijen."
 };

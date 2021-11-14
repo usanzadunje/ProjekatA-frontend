@@ -1,63 +1,85 @@
 import { useStore } from 'vuex';
 
-import { getDaysInAMonth } from '@/utils/helpers';
+import { useCurrentUser }   from '@/composables/useCurrentUser';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 
+import { addDaysToCorrectMonth } from '@/services/DaysOffService';
 
 export function useDaysOffRequest() {
     /* Global properties */
     const store = useStore();
 
     /* Component properties */
+    const PENDING = 0;
+    const DECLINED = 1;
+    const APPROVED = 2;
+
+    /* Composables */
+    const { isStaff } = useCurrentUser();
+    const { tryCatch } = useErrorHandling();
 
     /* Methods */
+    const fetchRequestedDaysOffForStaff = async() => {
+        if(isStaff.value) {
+            await tryCatch(
+                async() => {
+                    await store.dispatch('staff/getDayOffRequests');
+                },
+                null,
+                'dataFetchingError',
+            );
+        }
+    };
+
     const addDaysOffRequest = async(payload) => {
         await store.dispatch('staff/addDayOffRequests', payload);
 
-        addDaysToCorrectMonth(payload);
+        addDaysToCorrectMonth({ ...payload, status: PENDING });
     };
 
-    const addDaysToCorrectMonth = ({ dayOffStartDate, numberOfDays }) => {
-        const dateParts = dayOffStartDate.split('-');
-        let day = Number(dateParts[0]);
-        let month = Number(dateParts[1]) - 1;
-        let year = Number(dateParts[2]);
 
-        store.commit('staff/ADD_DAY_OFF_TO_MONTH', {
-            day,
-            month,
-            year,
-        });
-
-        for(let i = 1; i < numberOfDays; i++) {
-            const daysInAMonthLeft = getDaysInAMonth(month) - day;
-            if(daysInAMonthLeft === 0) {
-                if(month + 1 <= 11) {
-                    month++;
-                }else {
-                    month = 0;
-                    year++;
-                }
-                day = 0;
-            }
-
-            store.commit('staff/ADD_DAY_OFF_TO_MONTH', {
-                day: ++day,
-                month,
-                year,
-            });
-        }
+    const dayOffRequestedDay = (year, month, day) => {
+        return store.getters['staff/dayOffRequestedDay'](year, month, day);
     };
 
     const dayOffRequestedDays = (year, month) => {
         return store.getters['staff/dayOffRequestedDays'](year, month);
     };
 
+    const dayOffRequestedDayStatus = (day, month, year) => {
+        return dayOffRequestedDay(year, month, day)?.status;
+    };
+
+    const alreadyHavePendingRequestAtDate = (day, month, year) => {
+        const requestExists = dayOffRequestedDay(year, month, day);
+        return !!requestExists && requestExists?.status === PENDING;
+    };
+
+    const alreadyHaveApprovedRequestAtDate = (day, month, year) => {
+        const requestExists = dayOffRequestedDay(year, month, day);
+        return !!requestExists && requestExists?.status === APPROVED;
+    };
+
+    const declinedRequestAtDate = (day, month, year) => {
+        const requestExists = dayOffRequestedDay(year, month, day);
+        return !!requestExists && requestExists?.status === DECLINED;
+    };
+
     return {
         /* Component properties */
+        PENDING,
+        DECLINED,
+        APPROVED,
+        dayOffRequestedDay,
         dayOffRequestedDays,
+        dayOffRequestedDayStatus,
 
         /* Methods */
         addDaysOffRequest,
+        alreadyHavePendingRequestAtDate,
+        alreadyHaveApprovedRequestAtDate,
+        fetchRequestedDaysOffForStaff,
+        declinedRequestAtDate,
     };
 }
 

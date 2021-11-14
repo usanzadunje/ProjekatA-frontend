@@ -1,4 +1,5 @@
-import StaffService from '@/services/StaffService';
+import StaffService                              from '@/services/StaffService';
+import DaysOffService, { addDaysToCorrectMonth } from '@/services/DaysOffService';
 
 export const namespaced = true;
 
@@ -17,16 +18,14 @@ export const mutations = {
         state.active = payload;
     },
 
-    SET_DAY_OFF_REQUESTS(state, payload) {
-        state.dayOffRequests = payload;
-    },
+    /* DAY OFF REQUESTS */
     ADD_DAY_OFF_TO_MONTH(state, { day, month, year }) {
-        let existingYear = state.dayOffRequests.find(request => request.year === year);
+        let existingYear = state.dayOffRequests.find(y => y.year === year);
 
         if(existingYear) {
             let existingMonth = existingYear.months?.find(m => m.month === month);
             if(existingMonth) {
-                if(!existingMonth.days.includes(day)) {
+                if(!existingMonth.days.some(d => d.number === day)) {
                     existingMonth.days.push(day);
                 }
             }else {
@@ -47,6 +46,9 @@ export const mutations = {
             });
         }
     },
+    PURGE_DAY_OFF_REQUESTS_DATA(state) {
+        state.dayOffRequests = [];
+    },
 };
 
 export const actions = {
@@ -65,9 +67,22 @@ export const actions = {
         commit('SET_ACTIVITY', payload);
     },
 
-    async getDayOffRequests({ commit }, payload) {
-        //API call
-        commit('SET_DAY_OFF_DAYS', payload);
+    async getDayOffRequests({ commit }) {
+        commit('PURGE_DAY_OFF_REQUESTS_DATA');
+
+        const response = await DaysOffService.index();
+
+        response.data.forEach(request => {
+            const dateParts = request.start_date.split('-');
+
+            const dayOffStartDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
+            addDaysToCorrectMonth({
+                dayOffStartDate,
+                numberOfDays: request.number_of_days,
+                status: request.status,
+            });
+        });
     },
     async addDayOffRequests(context, payload) {
         //API call
@@ -89,6 +104,14 @@ export const getters = {
         const monthlyRequests = yearlyRequests?.months?.find(m => m.month === month);
 
         return monthlyRequests?.days ?? [];
+    },
+
+    dayOffRequestedDay: (state) => (year, month, day) => {
+        const yearlyRequests = state.dayOffRequests.find(y => y.year === year);
+
+        const monthlyRequests = yearlyRequests?.months?.find(m => m.month === month);
+
+        return monthlyRequests?.days?.find(d => d.number === day);
     },
 
     scheduleSegments: () => {

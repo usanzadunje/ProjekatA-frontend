@@ -44,7 +44,7 @@ export function useToastNotifications() {
 
         await toast.present();
     };
-    //Generating toast success notifications
+
     const showSuccessToast = async(message) => {
         const toast = await toastController
             .create({
@@ -62,7 +62,23 @@ export function useToastNotifications() {
         await toast.present();
     };
 
-    //Generating toast error notifications
+    const showWarningToast = async(message) => {
+        const toast = await toastController
+            .create({
+                duration: 1500,
+                position: 'top',
+                message: message,
+                cssClass: 'warning-toast',
+                mode: 'ios',
+            });
+
+        toast.addEventListener('click', () => {
+            toast.dismiss();
+        });
+
+        await toast.present();
+    };
+
     const showErrorToast = async(backendErrors, errorMessage = null) => {
         errors.value = errorMessage || getError(backendErrors);
         for(let i = 0; i < errorKeys.value.length; i++) {
@@ -109,6 +125,7 @@ export function useToastNotifications() {
         /* Methods */
         showUndoToast,
         showSuccessToast,
+        showWarningToast,
         showErrorToast,
     };
 }

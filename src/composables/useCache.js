@@ -26,7 +26,7 @@ export function useCache() {
 
             store.commit(
                 'global/SET_PLACE_INFO_CACHE_EXPIRATION_DATE',
-                getExpirationDate('d', 3),
+                getExpirationDate('d', 1),
             );
         }
 

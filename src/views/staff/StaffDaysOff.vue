@@ -3,7 +3,14 @@
     <ion-content>
       <TheSegmentNavigation :segments="this.$store.getters['staff/scheduleSegments']"/>
 
-      <div class="mb-2 px-2 flex justify-between">
+      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+        <ion-refresher-content
+            refreshing-spinner="crescent"
+        >
+        </ion-refresher-content>
+      </ion-refresher>
+
+      <div class="mb-2 flex justify-between">
         <ion-button
             fill="clear"
             class="reset-button-size"
@@ -12,7 +19,7 @@
           <ion-icon
               slot="icon-only"
               :icon="chevronBack"
-              class="text-gray-400"
+              class="primary-text-color"
           ></ion-icon>
         </ion-button>
 
@@ -36,7 +43,7 @@
           <ion-icon
               slot="icon-only"
               :icon="chevronForward"
-              class="text-gray-400"
+              class="primary-text-color"
           ></ion-icon>
         </ion-button>
       </div>
@@ -45,8 +52,12 @@
           v-if="this.$store.getters['auth/isStaff']"
           :selected-month="selectedMonth"
           :selected-year="selectedYear"
+          :show-skeleton="showSkeleton"
+          class="mb-8"
       />
-      <div v-else>
+      <div
+          v-if="this.$store.getters['auth/isOwner']"
+      >
         OWNER CALENDAR LIST
       </div>
 
@@ -59,6 +70,8 @@ import { defineComponent, ref } from 'vue';
 import {
   IonPage,
   IonContent,
+  IonRefresher,
+  IonRefresherContent,
   IonButton,
   IonIcon,
   onIonViewWillEnter,
@@ -66,6 +79,8 @@ import {
 
 import TheSegmentNavigation from '@/components/TheSegmentNavigation';
 import DayOffCalendarPicker from '@/components/staff/DayOffCalendarPicker';
+
+import { useDaysOffRequest } from '@/composables/useDaysOffRequest';
 
 import {
   chevronBack,
@@ -77,6 +92,8 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
+    IonRefresher,
+    IonRefresherContent,
     IonButton,
     IonIcon,
     TheSegmentNavigation,
@@ -86,16 +103,24 @@ export default defineComponent({
     /* Global properties */
 
     /* Component properties */
+    const showSkeleton = ref(true);
     const selectedMonth = ref(new Date().getMonth());
     const selectedYear = ref(new Date().getFullYear());
 
     /* Composables */
+    const { fetchRequestedDaysOffForStaff } = useDaysOffRequest();
 
     /* Lifecycle hooks */
+    (async() => {
+      await fetchRequestedDaysOffForStaff();
+
+      showSkeleton.value = false;
+    })();
     onIonViewWillEnter(() => {
       selectedMonth.value = new Date().getMonth();
       selectedYear.value = new Date().getFullYear();
     });
+
     /* Event handlers */
     const nextMonth = () => {
       if(selectedMonth.value < 11) {
@@ -113,16 +138,26 @@ export default defineComponent({
         selectedYear.value--;
       }
     };
+    const refresh = async(event) => {
+      showSkeleton.value = true;
+
+      await fetchRequestedDaysOffForStaff();
+
+      event.target.complete();
+
+      showSkeleton.value = false;
+    };
 
     return {
       /* Component properties */
-
+      showSkeleton,
       selectedMonth,
       selectedYear,
 
       /* Event handlers */
       nextMonth,
       previousMonth,
+      refresh,
 
       /* Icons */
       chevronBack,

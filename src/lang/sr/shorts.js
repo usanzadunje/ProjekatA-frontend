@@ -189,5 +189,6 @@ export default {
     "message": "Poruka",
     "requestDayOff": "Zatraži",
     "numberOfDays": "Broj dana",
+    "again": "Ponovo",
 };
 

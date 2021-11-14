@@ -245,7 +245,7 @@ ion-modal ion-item {
 
 .error-toast {
     --color: #FFF;
-    --background: #E01B43;
+    --background: var(--danger-color);
     --box-shadow: none;
     opacity: 0.90;
     font-family: 'Poppins', sans-serif;
@@ -257,7 +257,19 @@ ion-modal ion-item {
 
 .success-toast {
     --color: #FFF;
-    --background: #30a025;
+    --background: var(--success-color);
+    --box-shadow: none;
+    opacity: 0.95;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: top 0.3s ease-in;
+}
+
+.warning-toast {
+    --color: #FFF;
+    --background: var(--warning-color);
     --box-shadow: none;
     opacity: 0.95;
     font-family: 'Poppins', sans-serif;
@@ -364,11 +376,11 @@ ion-toggle {
 }
 
 .bg-danger {
-    background: #e01b43;
+    background: var(--danger-color);
 }
 
 .btn-bg-danger {
-    --background: #e01b43;
+    --background: var(--danger-color);
     --background-activated: #d90e34;
 }
 
@@ -390,7 +402,7 @@ ion-toggle {
 }
 
 .text-danger {
-    color: #e01b43;
+    color: var(--danger-color);
 }
 
 .text-danger:active {
@@ -1095,7 +1107,7 @@ ion-toggle.dark-toggle-checked {
 }
 
 .settings-red-icon-color {
-    background-color: #E01B43;
+    background-color: var(--danger-color);
 }
 
 .settings-yellow-icon-color {
