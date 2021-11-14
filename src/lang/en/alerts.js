@@ -53,5 +53,7 @@ export default {
     "requestedDayPassed": "You cannot request day off on a date that has already passed.",
     "alreadyRequestedDay": "Please wait for superior to respond to your request.",
     "alreadyApprovedDay": "Your day off request has already been approved for this day.",
+    "successApprovedDayOffRequest": "Successfully approved day off request for {staff}!",
+    "successDeclinedDayOffRequest": "Successfully declined day off request for {staff}!",
 
 };

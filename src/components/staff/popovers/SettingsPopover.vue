@@ -13,42 +13,17 @@
       <span class="text-sm ml-3">{{ $t('staff.dashboard') }}</span>
     </div>
 
-    <div v-if="this.$store.getters['auth/isOwner']"
-         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-         :class="{ 'user-selected-color' : activeRouteName === 'place' }"
-         @click="navigateTo('owner.place.info')">
-      <ion-icon
-          :icon="homeOutline"
-          class="flex-shrink-0"
-      >
-      </ion-icon>
-      <span class="text-sm ml-3">{{ $t('owner.place') }}</span>
-    </div>
-
-    <div v-if="this.$store.getters['auth/isOwner']"
-         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-         :class="{ 'user-selected-color' : activeRouteName === 'staff' }"
-         @click="navigateTo('owner.staff')"
-    >
-      <ion-icon
-          :icon="peopleOutline"
-          class="flex-shrink-0"
-      >
-      </ion-icon>
-      <span class="text-sm ml-3">{{ $t('owner.staff') }}</span>
-    </div>
-
     <div
-        :class="{ 'user-selected-color' : activeRouteName === 'profile' }"
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
-        @click="navigateTo('staff.profile')"
+        :class="{ 'user-selected-color' : activeRouteName === 'schedule' }"
+        @click="navigateTo('staff.schedule')"
     >
       <ion-icon
-          :icon="personOutline"
+          :icon="calendarOutline"
           class="flex-shrink-0"
       >
       </ion-icon>
-      <span class="text-sm ml-3">{{ $t('profile') }}</span>
+      <span class="text-sm ml-3">{{ $t('schedule') }}</span>
     </div>
 
     <div
@@ -90,9 +65,7 @@ import {
 
 import {
   statsChartOutline,
-  personOutline,
-  peopleOutline,
-  homeOutline,
+  calendarOutline,
   settingsOutline,
   logOutOutline,
 } from 'ionicons/icons';
@@ -134,9 +107,7 @@ export default defineComponent({
 
       /* Icons */
       statsChartOutline,
-      personOutline,
-      peopleOutline,
-      homeOutline,
+      calendarOutline,
       settingsOutline,
       logOutOutline,
     };

@@ -9,6 +9,7 @@ import { deviceWidth } from '@/composables/useDevice';
 
 import { calculatePxFromPercent, removeClonedTableElements } from '@/utils/helpers';
 import TableSectionService                                   from '@/services/TableSectionService';
+import DaysOffService                                        from '@/services/DaysOffService';
 
 const fontSize = getComputedStyle(document.documentElement).fontSize;
 
@@ -22,6 +23,7 @@ export const state = {
     tableSections: [],
     categories: [],
     products: [],
+    dayOffRequests: [],
 };
 
 export const mutations = {
@@ -190,6 +192,21 @@ export const mutations = {
         product.images = [];
     },
 
+    /* DAYS OFF*/
+    SET_DAY_OFF_REQUESTS(state, payload) {
+        state.dayOffRequests = payload;
+    },
+    APPROVE_DAY_OFF_REQUEST(state, id) {
+        let request = state.dayOffRequests.find(request => request.id === id);
+
+        request.status = 2;
+    },
+    DECLINE_DAY_OFF_REQUEST(state, id) {
+        let request = state.dayOffRequests.find(request => request.id === id);
+
+        request.status = 1;
+    },
+
     PURGE_DATA(state) {
         state.place = {};
         state.staff = [];
@@ -197,6 +214,7 @@ export const mutations = {
         state.tableSections = [];
         state.categories = [];
         state.products = [];
+        state.dayOffRequests = [];
     },
 };
 
@@ -414,6 +432,23 @@ export const actions = {
 
         commit('REMOVE_PRODUCT', id);
     },
+
+    /* DAYS OFF*/
+    async getDayOffRequests({ commit }) {
+        const response = await DaysOffService.indexByPlace();
+
+        commit('SET_DAY_OFF_REQUESTS', response?.data);
+    },
+    async approveDayOffRequest({ commit }, id) {
+        await DaysOffService.approve(id);
+
+        commit('APPROVE_DAY_OFF_REQUEST', id);
+    },
+    async declineDayOffRequest({ commit }, id) {
+        await DaysOffService.decline(id);
+
+        commit('DECLINE_DAY_OFF_REQUEST', id);
+    },
 };
 
 export const getters = {
@@ -440,6 +475,9 @@ export const getters = {
     },
     products: (state) => {
         return state.products;
+    },
+    dayOffRequests: (state) => {
+        return state.dayOffRequests;
     },
     placeSegments: () => {
         return [

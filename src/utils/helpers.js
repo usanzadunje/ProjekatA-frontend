@@ -111,6 +111,10 @@ export function getDaysInAMonth(month) {
     return new Date(dt.getFullYear(), month + 1, 0).getDate();
 }
 
+export function getDayFromDateString(date) {
+    return date.split('-')[0];
+}
+
 export function dateAlreadyPassed(day, month, year) {
     const dt = new Date();
 
@@ -120,9 +124,18 @@ export function dateAlreadyPassed(day, month, year) {
     return dayPassedThisMonth || dayIsInPastMonthsOrYears;
 }
 
-
 export function dateIsCurrentDate(day, month, year) {
     const dt = new Date();
 
     return day === dt.getDate() && month === dt.getMonth() && year === dt.getFullYear();
+}
+
+export function getDisplayNameForUser(user = {}) {
+    if(user.fname || user.lname) {
+        return `${user.fname || ''}${user.fname && user.lname ? ' ' : ''}${user.lname || ''}`;
+    }else if(user.username) {
+        return user.username;
+    }else {
+        return i18n.global.t('unknown');
+    }
 }

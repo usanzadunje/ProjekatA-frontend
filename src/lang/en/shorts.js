@@ -188,5 +188,9 @@ export default {
     "requestDayOff": "Request",
     "numberOfDays": "Number of days",
     "again": "Again",
-
+    "start": "Start",
+    "end": "End",
+    "approved": "Approved",
+    "declined": "Declined",
+    "pending": "Pending",
 };

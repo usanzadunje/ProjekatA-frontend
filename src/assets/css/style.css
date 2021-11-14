@@ -401,6 +401,14 @@ ion-toggle {
     color: #5991e0;
 }
 
+.text-success {
+    color: var(--success-color);
+}
+
+.text-warning {
+    color: var(--warning-color);
+}
+
 .text-danger {
     color: var(--danger-color);
 }

@@ -34,6 +34,7 @@ export default createStore({
                 "owner.place",
                 "owner.tableSections",
                 "owner.categories",
+                "owner.dayOffRequests",
             ],
         }),
     ],

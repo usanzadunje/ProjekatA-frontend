@@ -73,12 +73,8 @@ export const actions = {
         const response = await DaysOffService.index();
 
         response.data.forEach(request => {
-            const dateParts = request.start_date.split('-');
-
-            const dayOffStartDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-
             addDaysToCorrectMonth({
-                dayOffStartDate,
+                dayOffStartDate: request.start_date,
                 numberOfDays: request.number_of_days,
                 status: request.status,
             });

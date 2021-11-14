@@ -190,5 +190,10 @@ export default {
     "requestDayOff": "Zatraži",
     "numberOfDays": "Broj dana",
     "again": "Ponovo",
+    "start": "Početak",
+    "end": "Kraj",
+    "approved": "Odobreno",
+    "declined": "Odbijeno",
+    "pending": "Na čekanju",
 };
 

@@ -11,11 +11,14 @@ export default {
     store(payload) {
         return API.apiClient.post(`/staff/days-off`, payload);
     },
-    update(id, payload) {
-        return API.apiClient.put(`/staff/days-off/${id}`, payload);
-    },
-    destroy(id) {
-        return API.apiClient.delete(`/staff/days-off/${id}`);
+    // update(id, payload) {
+    //     return API.apiClient.put(`/staff/days-off/${id}`, payload);
+    // },
+    // destroy(id) {
+    //     return API.apiClient.delete(`/staff/days-off/${id}`);
+    // },
+    indexByPlace() {
+        return API.apiClient.get(`/owner/days-off`);
     },
     approve(id) {
         return API.apiClient.put(`/owner/days-off/${id}/approve`);

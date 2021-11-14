@@ -55,6 +55,7 @@ export default {
     "requestedDayPassed": "Ne možete tražiti slobodan dan na datum koji je već prošao.",
     "alreadyRequestedDay": "Molimo sačekajte da naređeni odgovori na vaš zahtev.",
     "alreadyApprovedDay": "Vaš zahtev za slobodnim danom je već odobren za ovaj dan.",
-
+    "successApprovedDayOffRequest": "Uspešno ste odobrili zahtev za slobodan dan zaposlenom: {staff}!",
+    "successDeclinedDayOffRequest": "Uspešno ste odbili zahtev za slobodan dan zaposlenom: {staff}!",
 
 };

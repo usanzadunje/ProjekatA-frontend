@@ -55,11 +55,14 @@
           :show-skeleton="showSkeleton"
           class="mb-8"
       />
-      <div
+
+      <DayOffStaffRequests
           v-if="this.$store.getters['auth/isOwner']"
-      >
-        OWNER CALENDAR LIST
-      </div>
+          :selected-month="selectedMonth"
+          :selected-year="selectedYear"
+          :show-skeleton="showSkeleton"
+          class="mt-6 mb-8 px-2"
+      />
 
     </ion-content>
   </ion-page>
@@ -79,6 +82,7 @@ import {
 
 import TheSegmentNavigation from '@/components/TheSegmentNavigation';
 import DayOffCalendarPicker from '@/components/staff/DayOffCalendarPicker';
+import DayOffStaffRequests from '@/components/owner/DayOffStaffRequests';
 
 import { useDaysOffRequest } from '@/composables/useDaysOffRequest';
 
@@ -98,6 +102,7 @@ export default defineComponent({
     IonIcon,
     TheSegmentNavigation,
     DayOffCalendarPicker,
+    DayOffStaffRequests,
   },
   setup() {
     /* Global properties */
@@ -108,11 +113,15 @@ export default defineComponent({
     const selectedYear = ref(new Date().getFullYear());
 
     /* Composables */
-    const { fetchRequestedDaysOffForStaff } = useDaysOffRequest();
+    const {
+      fetchRequestedDaysOffForStaff,
+      fetchRequestedDaysOffFromStaff,
+    } = useDaysOffRequest();
 
     /* Lifecycle hooks */
     (async() => {
       await fetchRequestedDaysOffForStaff();
+      await fetchRequestedDaysOffFromStaff();
 
       showSkeleton.value = false;
     })();
@@ -142,6 +151,7 @@ export default defineComponent({
       showSkeleton.value = true;
 
       await fetchRequestedDaysOffForStaff();
+      await fetchRequestedDaysOffFromStaff();
 
       event.target.complete();
 
