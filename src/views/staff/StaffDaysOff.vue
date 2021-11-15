@@ -10,47 +10,23 @@
         </ion-refresher-content>
       </ion-refresher>
 
-      <div class="mb-2 flex justify-between">
-        <ion-button
-            fill="clear"
-            class="reset-button-size"
-            @click="previousMonth"
-        >
-          <ion-icon
-              slot="icon-only"
-              :icon="chevronBack"
-              class="primary-text-color"
-          ></ion-icon>
-        </ion-button>
-
+      <NextPreviousNavigation
+          class="mb-2"
+          @next="nextMonth"
+          @previous="previousMonth"
+      >
         <div class="flex flex-col items-center">
           <h2 class="secondary-heading">
             {{ selectedYear }}
           </h2>
           <h2 class="secondary-heading underline">
-            {{
-              $t(new Date(selectedYear, selectedMonth).toLocaleString('default', { month: 'long' }).toLowerCase())
-            }}
+            {{ $t(months[selectedMonth]) }}
           </h2>
-
         </div>
-
-        <ion-button
-            fill="clear"
-            class="reset-button-size"
-            @click="nextMonth"
-        >
-          <ion-icon
-              slot="icon-only"
-              :icon="chevronForward"
-              class="primary-text-color"
-          ></ion-icon>
-        </ion-button>
-      </div>
+      </NextPreviousNavigation>
 
       <DayOffCalendarPicker
           v-if="this.$store.getters['auth/isStaff']"
-          v-show="!showLoading"
           :selected-month="selectedMonth"
           :selected-year="selectedYear"
           :show-skeleton="showSkeleton"
@@ -59,19 +35,11 @@
 
       <DayOffStaffRequests
           v-if="this.$store.getters['auth/isOwner']"
-          v-show="!showLoading"
           :selected-month="selectedMonth"
           :selected-year="selectedYear"
           :show-skeleton="showSkeleton"
           class="mt-6 mb-8 px-2"
       />
-
-      <div
-          v-show="showLoading"
-          class="w-full h-3/4 flex items-center justify-center"
-      >
-        <ion-spinner name="bubbles"></ion-spinner>
-      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -83,22 +51,17 @@ import {
   IonContent,
   IonRefresher,
   IonRefresherContent,
-  IonButton,
-  IonIcon,
-  IonSpinner,
   onIonViewWillEnter,
 }                               from '@ionic/vue';
 
-import TheSegmentNavigation from '@/components/TheSegmentNavigation';
-import DayOffCalendarPicker from '@/components/staff/DayOffCalendarPicker';
-import DayOffStaffRequests  from '@/components/owner/DayOffStaffRequests';
+import TheSegmentNavigation   from '@/components/TheSegmentNavigation';
+import NextPreviousNavigation from '@/components/NextPreviousNavigation';
+import DayOffCalendarPicker   from '@/components/staff/DayOffCalendarPicker';
+import DayOffStaffRequests    from '@/components/owner/DayOffStaffRequests';
 
 import { useDaysOffRequest } from '@/composables/useDaysOffRequest';
 
-import {
-  chevronBack,
-  chevronForward,
-} from 'ionicons/icons';
+import { months } from '@/utils/helpers';
 
 export default defineComponent({
   name: 'StaffDaysOff',
@@ -107,10 +70,8 @@ export default defineComponent({
     IonContent,
     IonRefresher,
     IonRefresherContent,
-    IonButton,
-    IonIcon,
-    IonSpinner,
     TheSegmentNavigation,
+    NextPreviousNavigation,
     DayOffCalendarPicker,
     DayOffStaffRequests,
   },
@@ -119,7 +80,6 @@ export default defineComponent({
 
     /* Component properties */
     const showSkeleton = ref(true);
-    const showLoading = ref(false);
     const selectedMonth = ref(new Date().getMonth());
     const selectedYear = ref(new Date().getFullYear());
 
@@ -136,6 +96,7 @@ export default defineComponent({
 
       showSkeleton.value = false;
     })();
+    /* Generating new date in case of stale data */
     onIonViewWillEnter(() => {
       selectedMonth.value = new Date().getMonth();
       selectedYear.value = new Date().getFullYear();
@@ -172,9 +133,9 @@ export default defineComponent({
     return {
       /* Component properties */
       showSkeleton,
-      showLoading,
       selectedMonth,
       selectedYear,
+      months,
 
       /* Event handlers */
       nextMonth,
@@ -182,8 +143,6 @@ export default defineComponent({
       refresh,
 
       /* Icons */
-      chevronBack,
-      chevronForward,
     };
   },
 });
@@ -192,9 +151,5 @@ export default defineComponent({
 ion-content {
   --background: var(--show-paint);
   background: var(--show-paint);
-}
-
-ion-spinner {
-  transform: scale(5);
 }
 </style>

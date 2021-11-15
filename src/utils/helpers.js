@@ -99,16 +99,70 @@ export function didCacheExpire(getter) {
     return Date.now() >= expirationTime;
 }
 
+export const days = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+];
+
+export const shortDays = [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun",
+];
+
+export const months = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
+];
+
+export const shortMonths = [
+    'jan',
+    'feb',
+    'mar',
+    'apr',
+    'may',
+    'jun',
+    'jul',
+    'aug',
+    'sep',
+    'oct',
+    'nov',
+    'dec',
+];
+
 export function getDaysInCurrentMonth() {
     const dt = new Date();
 
     return new Date(dt.getFullYear(), dt.getMonth() + 1, 0).getDate();
 }
 
-export function getDaysInAMonth(month) {
+export function getDaysInAMonth(month, year = null) {
     const dt = new Date();
 
-    return new Date(dt.getFullYear(), month + 1, 0).getDate();
+    if(!year) {
+        year = dt.getFullYear();
+    }
+
+    return new Date(year, month + 1, 0).getDate();
 }
 
 export function getDayFromDateString(date) {
@@ -128,6 +182,21 @@ export function dateIsCurrentDate(day, month, year) {
     const dt = new Date();
 
     return day === dt.getDate() && month === dt.getMonth() && year === dt.getFullYear();
+}
+
+export function getWeekDayNumbers(day, month, year) {
+    const days = [day];
+    let zeroIndex = 0;
+
+    for(let i = 1; i <= 6; i++) {
+        if(getDaysInAMonth(month, year) === day) {
+            days.push(1 + zeroIndex++);
+        }else {
+            days.push(++day);
+        }
+    }
+
+    return days;
 }
 
 export function parseDateToString(date, currentSeparator = '-', newSeparator = '.', order = 'forward') {
