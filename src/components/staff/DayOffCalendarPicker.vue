@@ -82,7 +82,7 @@ import { getDaysInAMonth, dateAlreadyPassed, dateIsCurrentDate } from '@/utils/h
 
 import {
   helpCircleOutline,
-  closeCircleOutline,
+  removeCircleOutline,
   checkmarkCircleOutline,
 } from 'ionicons/icons';
 
@@ -154,7 +154,7 @@ export default defineComponent({
         case PENDING:
           return helpCircleOutline;
         case DECLINED:
-          return closeCircleOutline;
+          return removeCircleOutline;
         case APPROVED:
           return checkmarkCircleOutline;
         default:

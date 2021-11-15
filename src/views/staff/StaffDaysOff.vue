@@ -50,6 +50,7 @@
 
       <DayOffCalendarPicker
           v-if="this.$store.getters['auth/isStaff']"
+          v-show="!showLoading"
           :selected-month="selectedMonth"
           :selected-year="selectedYear"
           :show-skeleton="showSkeleton"
@@ -58,12 +59,19 @@
 
       <DayOffStaffRequests
           v-if="this.$store.getters['auth/isOwner']"
+          v-show="!showLoading"
           :selected-month="selectedMonth"
           :selected-year="selectedYear"
           :show-skeleton="showSkeleton"
           class="mt-6 mb-8 px-2"
       />
 
+      <div
+          v-show="showLoading"
+          class="w-full h-3/4 flex items-center justify-center"
+      >
+        <ion-spinner name="bubbles"></ion-spinner>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -77,12 +85,13 @@ import {
   IonRefresherContent,
   IonButton,
   IonIcon,
+  IonSpinner,
   onIonViewWillEnter,
 }                               from '@ionic/vue';
 
 import TheSegmentNavigation from '@/components/TheSegmentNavigation';
 import DayOffCalendarPicker from '@/components/staff/DayOffCalendarPicker';
-import DayOffStaffRequests from '@/components/owner/DayOffStaffRequests';
+import DayOffStaffRequests  from '@/components/owner/DayOffStaffRequests';
 
 import { useDaysOffRequest } from '@/composables/useDaysOffRequest';
 
@@ -100,6 +109,7 @@ export default defineComponent({
     IonRefresherContent,
     IonButton,
     IonIcon,
+    IonSpinner,
     TheSegmentNavigation,
     DayOffCalendarPicker,
     DayOffStaffRequests,
@@ -109,6 +119,7 @@ export default defineComponent({
 
     /* Component properties */
     const showSkeleton = ref(true);
+    const showLoading = ref(false);
     const selectedMonth = ref(new Date().getMonth());
     const selectedYear = ref(new Date().getFullYear());
 
@@ -161,6 +172,7 @@ export default defineComponent({
     return {
       /* Component properties */
       showSkeleton,
+      showLoading,
       selectedMonth,
       selectedYear,
 
@@ -180,5 +192,9 @@ export default defineComponent({
 ion-content {
   --background: var(--show-paint);
   background: var(--show-paint);
+}
+
+ion-spinner {
+  transform: scale(5);
 }
 </style>

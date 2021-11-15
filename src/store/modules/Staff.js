@@ -81,8 +81,7 @@ export const actions = {
         });
     },
     async addDayOffRequests(context, payload) {
-        //API call
-        console.log(payload);
+        await DaysOffService.store(payload);
     },
 };
 

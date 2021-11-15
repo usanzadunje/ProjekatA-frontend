@@ -119,7 +119,7 @@
     --active-status-color: #064e3b;
 
     --success-color: #30a025;
-    --warning-color: #ffa500;
+    --warning-color: #e09201;
     --danger-color: #E01B43;
 
     --header-border-color: rgba(35, 43, 56, 0.25);
@@ -442,7 +442,7 @@ http://ionicframework.com/docs/theming/ */
 
         --header-border-color: rgba(240, 240, 242, 0.25);
 
-        --success-color: #30a025;
+        --success-color: #41b736;
         --warning-color: #ffa500;
         --danger-color: #E01B43;
 

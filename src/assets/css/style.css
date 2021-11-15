@@ -358,6 +358,11 @@ ion-toggle {
     border-color: var(--user-selected-color) !important;
 }
 
+.input-background {
+    background: var(--input-bg);
+    --background: var(--input-bg);
+}
+
 .no-padding-top {
     --padding-top: 0 !important;
 }
@@ -382,6 +387,24 @@ ion-toggle {
 .btn-bg-danger {
     --background: var(--danger-color);
     --background-activated: #d90e34;
+}
+
+.bg-success {
+    background: var(--success-color);
+}
+
+.btn-bg-success {
+    --background: var(--success-color);
+    --background-activated: #28901E;
+}
+
+.bg-warning {
+    background: var(--warning-color);
+}
+
+.btn-bg-warning {
+    --background: var(--warning-color);
+    --background-activated: #E09201;
 }
 
 .bg-empty {

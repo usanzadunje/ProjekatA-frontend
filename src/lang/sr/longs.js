@@ -49,5 +49,7 @@ export default {
     "noActiveStaffHeading1": "Svi su neaktivni.",
     "noActiveStaffHeading2": "Niko iz vašeg osoblja nije trenutno aktivan.",
     "requestDayOffAt": "Zatražite slobodan dan datuma",
-    "requestAlreadyDeclined": "Vaš zahtev za slobodan dan je već ranije odbijen."
+    "requestAlreadyDeclined": "Vaš zahtev za slobodan dan je već ranije odbijen.",
+    "noMessage": "Nema poruke.",
+
 };

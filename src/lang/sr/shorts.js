@@ -192,8 +192,12 @@ export default {
     "again": "Ponovo",
     "start": "Početak",
     "end": "Kraj",
+    "approve": "Odobri",
     "approved": "Odobreno",
+    "approving": "Odobravam",
+    "decline": "Odbij",
     "declined": "Odbijeno",
+    "declining": "Odbijam",
     "pending": "Na čekanju",
 };
 

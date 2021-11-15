@@ -25,7 +25,13 @@
         >
           <ion-item class="ion-no-padding ion-no-margin" @click="editCategory(category)">
             <div class="px-4 flex justify-between items-center w-full">
-              <span class="break-all">{{ category.name }}</span>
+              <div class="flex items-center">
+                <ion-icon
+                    :icon="categoryIcons[category.icon]"
+                    class="text-2xl text-gray-500"
+                ></ion-icon>
+                <span class="break-all ml-4">{{ category.name }}</span>
+              </div>
               <div class="flex-shrink-0">
                 <ion-icon
                     :icon="createOutline"
@@ -114,13 +120,14 @@ import { useModal }         from '@/composables/useModal';
 import { useSlidingItem }   from '@/composables/useSlidingItem';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { shrink, swipe }    from '@/composables/useAnimations';
+import { useIcons }         from '@/composables/useIcons';
 
 import {
   createOutline,
   trashOutline,
 } from 'ionicons/icons';
 
-import { Haptics, ImpactStyle }       from '@capacitor/haptics';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 import { increaseAccordionMaxHeight } from '@/utils/helpers';
 
@@ -153,6 +160,7 @@ export default defineComponent({
     const { tryCatch } = useErrorHandling();
     const { fullSwipeLeft } = swipe();
     const { shrinkToMiddle } = shrink();
+    const { categoryIcons } = useIcons();
 
     /* Methods */
     const removeCategory = async(id) => {
@@ -227,6 +235,7 @@ export default defineComponent({
       closeOpenItems,
 
       /* Icons */
+      categoryIcons,
       createOutline,
       trashOutline,
     };

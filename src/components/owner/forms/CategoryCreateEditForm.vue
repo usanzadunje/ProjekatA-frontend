@@ -33,7 +33,7 @@
 
       <ion-icon
           slot="end"
-          :icon="icons[internalCategory.icon] ?? icons['fastFoodOutline']"
+          :icon="categoryIcons[internalCategory.icon] ?? categoryIcons['fastFoodOutline']"
           class="mr-2 text-xl text-gray-500"
       ></ion-icon>
     </ion-item>
@@ -79,36 +79,9 @@ import IconChoicePopover from '@/components/owner/popovers/IconChoicePopover';
 import { useErrorHandling }   from '@/composables/useErrorHandling';
 import { hideNativeKeyboard } from '@/composables/useDevice';
 import { usePopover }         from '@/composables/usePopover';
+import { useIcons }           from '@/composables/useIcons';
 
 import {
-  barbellOutline,
-  balloonOutline,
-  bagHandleOutline,
-  beerOutline,
-  bookOutline,
-  cafeOutline,
-  cartOutline,
-  fastFoodOutline,
-  fishOutline,
-  heartOutline,
-  iceCreamOutline,
-  leafOutline,
-  nutritionOutline,
-  pawOutline,
-  pizzaOutline,
-  restaurantOutline,
-  ribbonOutline,
-  rocketOutline,
-  roseOutline,
-  snowOutline,
-  starOutline,
-  storefrontOutline,
-  sunnyOutline,
-  thumbsUpOutline,
-  wineOutline,
-  walletOutline,
-  trashOutline,
-  timeOutline,
   pricetagOutline,
 } from 'ionicons/icons';
 
@@ -135,49 +108,17 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
-    const icons = {
-      barbellOutline: barbellOutline,
-      balloonOutline: balloonOutline,
-      bagHandleOutline: bagHandleOutline,
-      beerOutline: beerOutline,
-      bookOutline: bookOutline,
-      cafeOutline: cafeOutline,
-      cartOutline: cartOutline,
-      fastFoodOutline: fastFoodOutline,
-      fishOutline: fishOutline,
-      heartOutline: heartOutline,
-      iceCreamOutline: iceCreamOutline,
-      leafOutline: leafOutline,
-      nutritionOutline: nutritionOutline,
-      pawOutline: pawOutline,
-      pizzaOutline: pizzaOutline,
-      restaurantOutline: restaurantOutline,
-      ribbonOutline: ribbonOutline,
-      rocketOutline: rocketOutline,
-      roseOutline: roseOutline,
-      snowOutline: snowOutline,
-      starOutline: starOutline,
-      storefrontOutline: storefrontOutline,
-      sunnyOutline: sunnyOutline,
-      thumbsUpOutline: thumbsUpOutline,
-      wineOutline: wineOutline,
-      walletOutline: walletOutline,
-      trashOutline: trashOutline,
-      timeOutline: timeOutline,
-    };
-
-    /* Composables */
-    const { errorNames, tryCatch } = useErrorHandling();
-
-    /* Component properties */
     const { category } = toRefs(props);
     const internalCategory = reactive({
       name: null,
       icon: 'fastFoodOutline',
     });
     const loading = ref(false);
+    const prevSelectedIcon = ref(category.value?.icon);
 
     /* Composables */
+    const { errorNames, tryCatch } = useErrorHandling();
+    const { categoryIcons } = useIcons();
     const { openPopover } = usePopover();
 
     /* Lifecycle hooks */
@@ -217,13 +158,16 @@ export default defineComponent({
     };
     const openIconChoicePopover = async() => {
       const popover = await openPopover(IconChoicePopover, null, 'icon-choice-popover', {
-        icons,
+        icons: categoryIcons,
       });
 
       const { data } = await popover.onDidDismiss();
 
-      internalCategory.icon = data?.icon;
+      internalCategory.icon = data?.icon ?? prevSelectedIcon.value;
+
+      prevSelectedIcon.value = data?.icon ?? prevSelectedIcon.value;
     };
+
     /* Watchers */
 
 
@@ -240,7 +184,7 @@ export default defineComponent({
       openIconChoicePopover,
 
       /* Icons */
-      icons,
+      categoryIcons,
       pricetagOutline,
     };
   },

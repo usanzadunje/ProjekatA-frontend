@@ -1,7 +1,7 @@
 <template>
   <div class="px-8">
     <h2 v-if="staff" class="secondary-heading text-center mb-6">
-      {{ `${$t('editing')}: ${staff.fname} ${staff.lname}` }}
+      {{ `${$t('editing')}: ${getDisplayNameForUser(staff)}` }}
     </h2>
     <h2 v-else class="secondary-heading text-center mb-6"> {{ $t('owner.createStaff') }}</h2>
     <ion-item
@@ -128,8 +128,10 @@ import {
   IonSpinner,
 }                                                            from "@ionic/vue";
 
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useErrorHandling }   from '@/composables/useErrorHandling';
 import { hideNativeKeyboard } from '@/composables/useDevice';
+
+import { getDisplayNameForUser } from '@/utils/helpers';
 
 import {
   mailOutline,
@@ -222,6 +224,7 @@ export default defineComponent({
       emailInput,
       passwordInput,
       loading,
+      getDisplayNameForUser,
 
       /* Event handlers  */
       createOrUpdate,

@@ -48,6 +48,7 @@ export default {
     "noActiveStaffHeading1": "Everybody is inactive",
     "noActiveStaffHeading2": "Nobody from your staff is active at the moment.",
     "requestDayOffAt": "Ask for a day off on",
-    "requestAlreadyDeclined": "Your request for a day off has already been declined before."
+    "requestAlreadyDeclined": "Your request for a day off has already been declined before.",
+    "noMessage": "There is no message.",
 
 };

@@ -190,7 +190,11 @@ export default {
     "again": "Again",
     "start": "Start",
     "end": "End",
+    "approve": "Approve",
     "approved": "Approved",
+    "approving": "Approving",
+    "decline": "Decline",
     "declined": "Declined",
+    "declining": "Declining",
     "pending": "Pending",
 };

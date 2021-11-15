@@ -49,8 +49,8 @@ export default defineComponent({
 
 <style scoped>
 .main {
-  box-shadow: #000 0 1px 4px;
-  background: var(--staff-card-background);
+  background: var(--user-selected-color);
+  --background-rgb: 0, 0, 0;
   border-radius: 20px !important;
 }
 </style>

@@ -130,6 +130,14 @@ export function dateIsCurrentDate(day, month, year) {
     return day === dt.getDate() && month === dt.getMonth() && year === dt.getFullYear();
 }
 
+export function parseDateToString(date, currentSeparator = '-', newSeparator = '.', order = 'forward') {
+    const dateParts = date.split(currentSeparator);
+
+    return order === 'forward' ?
+        `${dateParts[0]}${newSeparator}${dateParts[1]}${newSeparator}${dateParts[2]}` :
+        `${dateParts[2]}${newSeparator}${dateParts[1]}${newSeparator}${dateParts[0]}`;
+}
+
 export function getDisplayNameForUser(user = {}) {
     if(user.fname || user.lname) {
         return `${user.fname || ''}${user.fname && user.lname ? ' ' : ''}${user.lname || ''}`;

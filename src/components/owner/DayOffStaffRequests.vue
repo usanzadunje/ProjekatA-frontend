@@ -1,13 +1,13 @@
 <template>
   <div>
     <div
-        v-show="!showSkeleton"
+        v-show="!showSkeleton && !loading"
         class="flex flex-col gap-2"
     >
       <div
-          v-for="request in staffRequestsForSelectedDate(selectedMonth, selectedYear)"
+          v-for="request in this.$store.getters['owner/dayOffRequests'](selectedMonth, selectedYear)"
           :key="request.id"
-          class="w-full py-4 px-2 bg-gray-200 rounded-md"
+          class="w-full py-4 px-1 bg-gray-200 rounded-md"
           @click="openModal(true, request)"
       >
         <div
@@ -18,47 +18,54 @@
           />
         </div>
         <div class="flex justify-between items-center text-center">
-          <span>{{ getDisplayNameForUser(request.staff) }}</span>
-          <div
-              class="flex flex-col justify-center items-center px-2 border-l border-r border-gray-300"
-          >
-            <span>{{ `${$t('start')}: ${(request.start_date)}` }}</span>
-            <span>{{ `${$t('end')}: ${request.end_date}` }}</span>
+          <div class="w-1/4 px-1">
+            <span>{{ getDisplayNameForUser(request.staff) }}</span>
           </div>
-          <div>
-            <div class="flex justify-center items-center w-20 ml-1 text-3xl">
+          <div
+              class="w-1/2 flex flex-col justify-center items-center px-1 border-l border-r border-gray-300"
+          >
+            <span>
+              {{ `${$t('start')}: ${parseDateToString(request.start_date)}` }}<br>
+            </span>
+            <span>
+              {{ `${$t('end')}: ${parseDateToString(request.end_date)}` }}<br>
+            </span>
+          </div>
+          <div class="w-1/4 flex justify-center items-center px-1">
+            <div class="flex items-center mr-1">
               <ion-button
                   fill="clear"
                   :disabled="request.status === APPROVED"
                   class="reset-button-size"
-                  @click="approveRequest(request.id, getDisplayNameForUser(request.staff))"
+                  @click="approveRequest(request.id, getDisplayNameForUser(request.staff), $event)"
               >
                 <ion-icon
                     slot="icon-only"
                     :icon="checkmarkCircleOutline"
-                    class="text-success flex-shrink-0"
+                    class="text-success flex-shrink-0 text-4xl"
                 ></ion-icon>
               </ion-button>
+            </div>
+            <div class="flex items-center">
               <ion-button
                   fill="clear"
                   :disabled="request.status === DECLINED"
                   class="reset-button-size"
-                  @click="declineRequest(request.id, getDisplayNameForUser(request.staff))"
+                  @click="declineRequest(request.id, getDisplayNameForUser(request.staff), $event)"
               >
                 <ion-icon
                     slot="icon-only"
-                    :icon="closeCircleOutline"
-                    class="text-danger ml-2 flex-shrink-0"
+                    :icon="removeCircleOutline"
+                    class="text-danger flex-shrink-0 text-4xl"
                 ></ion-icon>
               </ion-button>
             </div>
-
           </div>
         </div>
       </div>
     </div>
     <div
-        v-show="showSkeleton"
+        v-show="showSkeleton || loading"
         class="flex flex-col gap-2"
     >
       <div
@@ -103,11 +110,11 @@ import RequestStatusText        from '@/components/staff/RequestStatusText';
 import { useModal }          from '@/composables/useModal';
 import { useDaysOffRequest } from '@/composables/useDaysOffRequest';
 
-import { getDisplayNameForUser } from '@/utils/helpers';
+import { getDisplayNameForUser, parseDateToString } from '@/utils/helpers';
 
 import {
   checkmarkCircleOutline,
-  closeCircleOutline,
+  removeCircleOutline,
 } from 'ionicons/icons';
 
 export default defineComponent({
@@ -145,10 +152,10 @@ export default defineComponent({
     /* Composables */
     const { isModalOpen, modalData, openModal } = useModal();
     const {
+      loading,
       PENDING,
       DECLINED,
       APPROVED,
-      staffRequestsForSelectedDate,
       approveRequest,
       declineRequest,
     } = useDaysOffRequest();
@@ -160,14 +167,15 @@ export default defineComponent({
 
     return {
       /* Component properties */
-      staffRequestsForSelectedDate,
+      loading,
       isModalOpen,
       modalData,
       openModal,
-      getDisplayNameForUser,
       PENDING,
       DECLINED,
       APPROVED,
+      getDisplayNameForUser,
+      parseDateToString,
 
       /* Event handlers */
       approveRequest,
@@ -175,7 +183,7 @@ export default defineComponent({
 
       /* Icons */
       checkmarkCircleOutline,
-      closeCircleOutline,
+      removeCircleOutline,
     };
   },
 });

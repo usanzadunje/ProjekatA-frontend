@@ -476,8 +476,21 @@ export const getters = {
     products: (state) => {
         return state.products;
     },
-    dayOffRequests: (state) => {
-        return state.dayOffRequests;
+    dayOffRequests: (state) => (month, year) => {
+        const requests = [];
+
+        for(let i = state.dayOffRequests.length - 1; i >= 0; i--) {
+            const request = state.dayOffRequests[i];
+            const dateParts = request.start_date.split('-');
+            const requestMonth = Number(dateParts[1]) - 1;
+            const requestYear = Number(dateParts[2]);
+
+            if(requestMonth === month && requestYear === year) {
+                requests.push(request);
+            }
+        }
+
+        return requests;
     },
     placeSegments: () => {
         return [

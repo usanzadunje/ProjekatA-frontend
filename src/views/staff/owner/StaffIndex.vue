@@ -2,7 +2,6 @@
   <ion-page>
     <ion-content>
       <ion-refresher
-          v-if="hasStaff"
           pull-min="100"
           slot="fixed"
           @ionRefresh="refresh($event)"
@@ -59,7 +58,7 @@
         </div>
       </div>
       <div
-          v-else
+          v-if="showPlaceholder"
           class="w-full h-full flex flex-col items-start justify-center px-6"
       >
         <AddStaffPlaceholderImage/>
@@ -110,9 +109,9 @@
 </template>
 
 <script>
-import { defineComponent, computed, ref } from 'vue';
-import { useStore }                       from 'vuex';
-import { useI18n }                        from 'vue-i18n';
+import { defineComponent, computed, ref, watch } from 'vue';
+import { useStore }                              from 'vuex';
+import { useI18n }                               from 'vue-i18n';
 import {
   IonPage,
   IonContent,
@@ -123,7 +122,7 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   alertController,
-}                                         from '@ionic/vue';
+}                                                from '@ionic/vue';
 
 import StaffCard                from '@/components/staff/cards/StaffCard';
 import StaffCardSkeleton        from '@/components/staff/cards/StaffCardSkeleton';
@@ -137,8 +136,9 @@ import { useErrorHandling } from '@/composables/useErrorHandling';
 
 import {
   close,
-}                 from 'ionicons/icons';
-import { shrink } from '@/composables/useAnimations';
+}                                from 'ionicons/icons';
+import { shrink }                from '@/composables/useAnimations';
+import { getDisplayNameForUser } from '@/utils/helpers';
 
 export default defineComponent({
   name: "StaffIndex",
@@ -167,6 +167,7 @@ export default defineComponent({
     const hasStaff = computed(() => store.getters['owner/staff'].length > 0);
     const isInfiniteScrollDisabled = ref(false);
     const showSkeleton = ref(true);
+    const showPlaceholder = ref(false);
     let offset = 0;
 
     /* Composables */
@@ -192,6 +193,7 @@ export default defineComponent({
       );
 
       showSkeleton.value = false;
+      showPlaceholder.value = !hasStaff.value;
     };
     /* Lifecycle hooks */
     (async() => {
@@ -215,7 +217,7 @@ export default defineComponent({
       const alert = await alertController
           .create({
             header: t('staff.alertRemoveStaffHeader', {
-              staff: `${staffMember.fname} ${staffMember.lname}`,
+              staff: getDisplayNameForUser(staffMember),
             }),
             message: t('staff.removeStaffMessage'),
             buttons: [
@@ -259,6 +261,11 @@ export default defineComponent({
       e?.target.complete();
     };
 
+    /* Watchers */
+    watch(hasStaff, () => {
+      showPlaceholder.value = !hasStaff.value;
+    });
+
     return {
       /* Component properties */
       staff,
@@ -267,6 +274,7 @@ export default defineComponent({
       modalData,
       isInfiniteScrollDisabled,
       showSkeleton,
+      showPlaceholder,
 
       /* Event handlers */
       createStaffMember,

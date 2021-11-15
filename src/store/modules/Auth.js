@@ -101,6 +101,7 @@ export const actions = {
             commit('user/SET_LOCALIZATION', { text: "SRB", value: "sr" }, { root: true });
             commit('user/PURGE_SUBSCRIPTION_DATA', null, { root: true });
             commit('user/PURGE_FAVORITE_PLACE_DATA', null, { root: true });
+            commit('staff/PURGE_DAY_OFF_REQUESTS_DATA', null, { root: true });
 
             i18n.global.locale.value = 'sr';
             document.body.classList.toggle('dark', false);
