@@ -15,7 +15,7 @@
         <p
             class="main-toolbar-fade-text break-all"
             :class="{ 'notification-read': notification.read }"
-            @click="notificationRead(notification.id)"
+            @click="readNotification(notification.id)"
         >{{ notification.body }}</p>
         <ion-icon
             :icon="close"
@@ -35,15 +35,17 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue';
-import { useStore }                  from 'vuex';
+import { defineComponent } from 'vue';
 import {
   IonContent,
   IonIcon,
   IonButton,
-}                                    from '@ionic/vue';
+}                          from '@ionic/vue';
+
+import { useNotifications } from '@/composables/useNotificataions';
 
 import { close } from 'ionicons/icons';
+
 
 export default defineComponent({
   name: 'NotificationsPreviewPopover',
@@ -54,24 +56,11 @@ export default defineComponent({
   },
   setup() {
     /* Global properties */
-    const store = useStore();
 
-    /* Component properties */
-    const notifications = computed(() => store.getters['user/pushNotifications']);
-
+    /* Composables */
+    const { notifications, removeNotification, readNotification, clearNotifications } = useNotifications();
     /* Event handlers */
-    const removeNotification = (id) => {
-      store.commit('user/REMOVE_NOTIFICATION', id);
-      store.dispatch("user/persistPushNotifications");
-    };
-    const notificationRead = (id) => {
-      store.commit('user/MARK_NOTIFICATION_AS_READ', id);
-      store.dispatch("user/persistPushNotifications");
-    };
-    const clearNotifications = () => {
-      store.commit('user/CLEAR_NOTIFICATIONS');
-      store.dispatch("user/persistPushNotifications");
-    };
+
 
     return {
       /* Component properties */
@@ -79,7 +68,7 @@ export default defineComponent({
 
       /* Event handlers */
       removeNotification,
-      notificationRead,
+      readNotification,
       clearNotifications,
 
       /* Icons */

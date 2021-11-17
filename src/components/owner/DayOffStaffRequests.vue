@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+      v-if="this.$store.getters['owner/dayOffRequests'](selectedMonth, selectedYear).length > 0"
+  >
     <div
         v-show="!showSkeleton && !loading"
         class="flex flex-col gap-2"
@@ -93,19 +95,38 @@
       />
     </AppModal>
   </div>
+  <div
+      v-else
+      class="flex flex-col justify-center items-center h-3/5"
+  >
+    <NoDaysOffRequestedPlaceholderImage
+        :width="'70%'"
+        class="mt-6"
+    />
+    <div class="w-full mt-6 px-2">
+      <h2 class="placeholder-heading-big primary-text-color break-words text-center">
+        {{ $t('noDayOffRequests1') }}
+      </h2>
+      <h3 class="placeholder-heading-small primary-text-color break-words text-center">
+        {{ $t('noDayOffRequests2') }}
+      </h3>
+    </div>
+  </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs, watch } from 'vue';
+import { useStore }                       from 'vuex';
 import {
   IonButton,
   IonIcon,
   IonSkeletonText,
-}                          from '@ionic/vue';
+}                                         from '@ionic/vue';
 
 import AppModal                 from '@/components/AppModal';
 import DayOffRequestReviewModal from '@/components/owner/modals/DayOffRequestReviewModal';
 import RequestStatusText        from '@/components/staff/RequestStatusText';
+import NoDaysOffRequestedPlaceholderImage       from '@/components/images/NoDaysOffRequestedPlaceholderImage';
 
 import { useModal }          from '@/composables/useModal';
 import { useDaysOffRequest } from '@/composables/useDaysOffRequest';
@@ -126,6 +147,7 @@ export default defineComponent({
     RequestStatusText,
     AppModal,
     DayOffRequestReviewModal,
+    NoDaysOffRequestedPlaceholderImage,
   },
   props: {
     showSkeleton: {
@@ -142,12 +164,16 @@ export default defineComponent({
       default: null,
       required: true,
     },
+    requestIdToOpen: {
+      type: Number,
+      default: null,
+    },
   },
-  setup() {
+  setup(props) {
     /* Global properties */
-
+    const store = useStore();
     /* Component properties */
-    // const { selectedMonth, selectedYear } = toRefs(props);
+    const { requestIdToOpen } = toRefs(props);
 
     /* Composables */
     const { isModalOpen, modalData, openModal } = useModal();
@@ -163,7 +189,12 @@ export default defineComponent({
     /* Methods */
 
     /* Event handlers */
-
+    /* Watchers */
+    watch(requestIdToOpen, () => {
+      if(requestIdToOpen.value && !isModalOpen.value) {
+        openModal(true, store.getters['owner/dayOffRequestById'](requestIdToOpen.value));
+      }
+    });
 
     return {
       /* Component properties */

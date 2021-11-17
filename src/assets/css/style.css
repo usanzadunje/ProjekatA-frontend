@@ -293,6 +293,12 @@ ion-toggle {
     height: 19px;
 }
 
+ion-badge.notification-badge {
+    font-size: 9px !important;
+    padding: 3px !important;
+    --background: var(--user-selected-color);
+}
+
 .scroll-content {
     padding-bottom: 0 !important;
 }
@@ -523,6 +529,11 @@ ion-toggle.dark-toggle-checked {
 .safe-pb {
     padding-bottom: var(--ion-safe-area-bottom);
 }
+
+.left-10p {
+    left: 10px;
+}
+
 
 /*
     END UTILITY CLASSES

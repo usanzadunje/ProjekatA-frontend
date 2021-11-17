@@ -41,6 +41,9 @@ export const mutations = {
             }
         });
     },
+    MARK_ALL_NOTIFICATIONS_AS_READ(state) {
+        state.notifications.forEach(notification => notification.read = true);
+    },
     REMOVE_NOTIFICATION(state, id) {
         state.notifications = state.notifications.filter(notification => notification.id !== id);
     },

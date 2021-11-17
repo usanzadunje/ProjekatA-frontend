@@ -13,6 +13,10 @@ export const mutations = {
     SET_PLACE_INFO_CACHE_EXPIRATION_DATE(state, payload) {
         state.placeInfoCacheExpirationDate = payload;
     },
+
+    NOTIFICATION_DATA_RECEIVED(payload) {
+        return payload;
+    },
 };
 
 export const actions = {};

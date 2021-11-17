@@ -38,6 +38,7 @@
           :selected-month="selectedMonth"
           :selected-year="selectedYear"
           :show-skeleton="showSkeleton"
+          :request-id-to-open="ownerRequestIdAdded"
           class="mt-6 mb-8 px-2"
       />
     </ion-content>
@@ -45,14 +46,15 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
+import { useRoute, useRouter }         from 'vue-router';
 import {
   IonPage,
   IonContent,
   IonRefresher,
   IonRefresherContent,
   onIonViewWillEnter,
-}                               from '@ionic/vue';
+}                                      from '@ionic/vue';
 
 import TheSegmentNavigation   from '@/components/TheSegmentNavigation';
 import NextPreviousNavigation from '@/components/NextPreviousNavigation';
@@ -61,7 +63,8 @@ import DayOffStaffRequests    from '@/components/owner/DayOffStaffRequests';
 
 import { useDaysOffRequest } from '@/composables/useDaysOffRequest';
 
-import { months } from '@/utils/helpers';
+import { months }           from '@/utils/helpers';
+import { useNotifications } from '@/composables/useNotificataions';
 
 export default defineComponent({
   name: 'StaffDaysOff',
@@ -77,17 +80,21 @@ export default defineComponent({
   },
   setup() {
     /* Global properties */
+    const route = useRoute();
+    const router = useRouter();
 
     /* Component properties */
     const showSkeleton = ref(true);
     const selectedMonth = ref(new Date().getMonth());
     const selectedYear = ref(new Date().getFullYear());
+    const ownerRequestIdAdded = ref();
 
     /* Composables */
     const {
       fetchRequestedDaysOffForStaff,
       fetchRequestedDaysOffFromStaff,
     } = useDaysOffRequest();
+    const { newestNotificationPayload } = useNotifications();
 
     /* Lifecycle hooks */
     (async() => {
@@ -100,6 +107,17 @@ export default defineComponent({
     onIonViewWillEnter(() => {
       selectedMonth.value = new Date().getMonth();
       selectedYear.value = new Date().getFullYear();
+
+      if(route.query.month && route.query.year) {
+        selectedMonth.value = Number(route.query.month);
+        selectedYear.value = Number(route.query.year);
+
+        if(route.query.id) {
+          ownerRequestIdAdded.value = Number(route.query.id);
+        }else {
+          router.replace();
+        }
+      }
     });
 
     /* Event handlers */
@@ -130,12 +148,23 @@ export default defineComponent({
       showSkeleton.value = false;
     };
 
+    /* Watchers */
+    watch(newestNotificationPayload, () => {
+      selectedMonth.value = newestNotificationPayload.value?.month;
+      selectedYear.value = newestNotificationPayload.value?.year;
+      if(newestNotificationPayload.value?.id) {
+        ownerRequestIdAdded.value = newestNotificationPayload.value.id;
+      }
+    });
+
     return {
       /* Component properties */
       showSkeleton,
       selectedMonth,
       selectedYear,
       months,
+      ownerRequestIdAdded,
+      newestNotificationPayload,
 
       /* Event handlers */
       nextMonth,

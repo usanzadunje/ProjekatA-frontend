@@ -46,6 +46,17 @@ export const mutations = {
             });
         }
     },
+    UPDATE_DAY_OFF_REQUEST_STATUS(state, { day, month, year, numberOfDays, status }) {
+        const endDay = day + numberOfDays - 1;
+        let existingYear = state.dayOffRequests.find(y => y.year === year);
+        let existingMonth = existingYear.months?.find(m => m.month === month);
+
+        for(let i = day; i <= endDay; i++) {
+            const existingDay = existingMonth.days?.find(d => d.number === i);
+
+            existingDay.status = status;
+        }
+    },
     PURGE_DAY_OFF_REQUESTS_DATA(state) {
         state.dayOffRequests = [];
     },

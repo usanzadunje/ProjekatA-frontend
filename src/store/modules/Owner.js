@@ -196,6 +196,9 @@ export const mutations = {
     SET_DAY_OFF_REQUESTS(state, payload) {
         state.dayOffRequests = payload;
     },
+    ADD_DAY_OFF_REQUEST(state, payload) {
+        state.dayOffRequests.unshift(payload);
+    },
     APPROVE_DAY_OFF_REQUEST(state, id) {
         let request = state.dayOffRequests.find(request => request.id === id);
 
@@ -475,6 +478,9 @@ export const getters = {
     },
     products: (state) => {
         return state.products;
+    },
+    dayOffRequestById: (state) => (id) => {
+        return state.dayOffRequests?.find(request => request.id === id) ?? {};
     },
     dayOffRequests: (state) => (month, year) => {
         const requests = [];

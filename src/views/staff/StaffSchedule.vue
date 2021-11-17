@@ -26,6 +26,14 @@
           class="px-4 mt-6"
       />
 
+      <OwnerSchedulePreview
+          v-if="this.$store.getters['auth/isOwner']"
+          :week-start-day="weekStartDay"
+          :week-start-month="weekStartMonth"
+          :selected-year="selectedYear"
+          class="px-4 mt-6"
+      />
+
     </ion-content>
   </ion-page>
 </template>
@@ -40,6 +48,7 @@ import {
 import TheSegmentNavigation               from '@/components/TheSegmentNavigation';
 import NextPreviousNavigation             from '@/components/NextPreviousNavigation';
 import StaffSchedulePreview               from '@/components/staff/StaffSchedulePreview';
+import OwnerSchedulePreview               from '@/components/owner/OwnerSchedulePreview';
 
 import { getDaysInAMonth, shortMonths } from '@/utils/helpers';
 
@@ -51,6 +60,7 @@ export default defineComponent({
     NextPreviousNavigation,
     TheSegmentNavigation,
     StaffSchedulePreview,
+    OwnerSchedulePreview
   },
   setup() {
     /* Global properties */

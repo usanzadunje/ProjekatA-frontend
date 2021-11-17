@@ -206,10 +206,15 @@ export default {
     "end": "Kraj",
     "approve": "Odobri",
     "approved": "Odobreno",
+    "approved1": "Odobren",
+    "ownerApproved": "Odobrio",
     "approving": "Odobravam",
     "decline": "Odbij",
     "declined": "Odbijeno",
+    "declined1": "Odbijen",
+    "ownerDeclined": "Odbio",
     "declining": "Odbijam",
     "pending": "Na čekanju",
+    "all": "Sve",
 };
 

@@ -13,9 +13,9 @@
             slot="icon-only"
             class="primary-icon-color flex"
         ></ion-icon>
-        <div id="badge-container" v-if="unreadNotificationsCount > 0" class="absolute z-40 top-0">
+        <div v-if="unreadNotificationsCount > 0" class="absolute z-40 top-0 left-10p">
           <div class="w-4 h-4 rounded-full">
-            <ion-badge class="w-full rounded-full">{{ unreadNotificationsCount }}</ion-badge>
+            <ion-badge class="w-full rounded-full notification-badge">{{ unreadNotificationsCount }}</ion-badge>
           </div>
         </div>
       </div>
@@ -86,15 +86,5 @@ export default defineComponent({
 
 ion-icon {
   font-size: 1.6rem !important;
-}
-
-#badge-container {
-  left: 10px;
-}
-
-ion-badge {
-  font-size: 9px !important;
-  padding: 3px !important;
-  --background: var(--user-selected-color);
 }
 </style>

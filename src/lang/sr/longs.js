@@ -51,5 +51,10 @@ export default {
     "requestDayOffAt": "Zatražite slobodan dan datuma",
     "requestAlreadyDeclined": "Vaš zahtev za slobodan dan je već ranije odbijen.",
     "noMessage": "Nema poruke.",
-
+    "noNotificationsHeading1": "Nema notifikacija.",
+    "noNotificationsHeading2": "Trenutno nemate notifikacije. Kada dobijete notifikacije one ce biti ovde prikazane.",
+    "noDayOffRequests1": "Nema zahteva za slobodan dan.",
+    "noDayOffRequests2": "Vaši zaposleni vole da rade. Trenutno ni jedan zaposleni nije poslao zahtev za slobodnim danom ovog meseca.",
+    "noStaffSchedule1": "Nema rasporeda.",
+    "noStaffSchedule2": "Niste postavili ni jednog zaposlenog za ovu nedelju. Možete ga dodati klikom na dugme ispod.",
 };

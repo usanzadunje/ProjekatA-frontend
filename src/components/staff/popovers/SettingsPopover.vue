@@ -38,6 +38,41 @@
       </ion-icon>
       <span class="text-sm ml-3">{{ $t('settings') }}</span>
     </div>
+    <div
+        class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300"
+        @click="navigateTo('staff.notifications');readAllNotifications()"
+    >
+      <div
+          class="relative"
+          :class="{
+            'user-selected-color' :
+              activeRouteName === 'notifications' &&
+              (!this.$store.getters['user/unreadNotificationsCount'] || !this.$store.getters['user/hasNotifications'])
+          }"
+      >
+        <ion-icon
+            :icon="this.$store.getters['user/hasNotifications']
+            ? (this.$store.getters['user/unreadNotificationsCount'] > 0 ? notifications : notificationsOutline)
+            : notificationsOffOutline"
+            class="flex-shrink-0"
+        >
+        </ion-icon>
+        <div v-if="this.$store.getters['user/unreadNotificationsCount'] > 0"
+             class="absolute z-40 -top-1 left-10p">
+          <div class="w-4 h-4 rounded-full">
+            <ion-badge class="w-full rounded-full notification-badge">
+              {{ this.$store.getters['user/unreadNotificationsCount'] }}
+            </ion-badge>
+          </div>
+        </div>
+      </div>
+      <span
+          class="text-sm ml-3"
+          :class="{ 'user-selected-color' : activeRouteName === 'notifications' }"
+      >
+        {{ $t('notification', 2) }}
+      </span>
+    </div>
 
     <div
         class="h-12 text-black w-full flex justify-start items-center px-3 bg-gray-200 hover:bg-gray-300 border-t border-gray-300"
@@ -67,8 +102,12 @@ import {
   statsChartOutline,
   calendarOutline,
   settingsOutline,
+  notifications,
+  notificationsOffOutline,
+  notificationsOutline,
   logOutOutline,
-} from 'ionicons/icons';
+}                           from 'ionicons/icons';
+import { useNotifications } from '@/composables/useNotificataions';
 
 export default defineComponent({
   name: 'SettingsPopover',
@@ -84,6 +123,9 @@ export default defineComponent({
 
     /* Component properties */
     const activeRouteName = computed(() => route.name.split('.')[1]);
+
+    /* Composables */
+    const { readAllNotifications } = useNotifications();
 
     /* Event handlers */
     const logout = async() => {
@@ -104,11 +146,15 @@ export default defineComponent({
       /* Event handlers */
       logout,
       navigateTo,
+      readAllNotifications,
 
       /* Icons */
       statsChartOutline,
       calendarOutline,
       settingsOutline,
+      notifications,
+      notificationsOffOutline,
+      notificationsOutline,
       logOutOutline,
     };
   },

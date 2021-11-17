@@ -114,10 +114,10 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from 'vue';
-import { useRoute }                       from 'vue-router';
-import { useStore }                       from 'vuex';
-import { useI18n }                        from 'vue-i18n';
+import { computed, defineComponent, ref, watch } from 'vue';
+import { useRoute }                   from 'vue-router';
+import { useStore }                              from 'vuex';
+import { useI18n }                               from 'vue-i18n';
 import {
   IonContent,
   IonPage,
@@ -131,7 +131,7 @@ import {
   IonRefresherContent,
   IonButton,
   onIonViewDidEnter,
-}                                         from '@ionic/vue';
+}                                                from '@ionic/vue';
 
 import TheUserProfileHeader             from '@/components/user/headers/TheUserProfileHeader';
 import SlidingFilter                    from '@/components/user/SlidingFilter';
@@ -157,7 +157,8 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import {
   bookmark,
   trashOutline,
-} from 'ionicons/icons';
+}                           from 'ionicons/icons';
+import { useNotifications } from '@/composables/useNotificataions';
 
 export default defineComponent({
   name: 'UserDashboard',
@@ -204,6 +205,7 @@ export default defineComponent({
     const { tryCatch } = useErrorHandling();
     const { fullSwipeLeft } = swipe();
     const { shrinkToMiddle } = shrink();
+    const { newestNotificationPayload } = useNotifications();
 
     /* Lifecycle hooks */
     onIonViewDidEnter(async() => {
@@ -214,7 +216,12 @@ export default defineComponent({
 
       // Everytime users comes to the page give him view of fresh places he has subscribed to
       await getSubscriptions();
+
       showSkeleton.value = false;
+
+      if(route.query.id && !isModalOpen.value) {
+        openModal(true, placesUserSubscribedTo.value.find(place => place.id === Number(route.query.id)));
+      }
     });
 
     /* Methods */
@@ -347,6 +354,14 @@ export default defineComponent({
         if(store.getters["user/isSubscribedTo"](action.payload.id)) {
           placesUserSubscribedTo.value.push(action.payload);
         }
+      }
+    });
+    watch(newestNotificationPayload, () => {
+      if(newestNotificationPayload.value?.id && !isModalOpen.value) {
+        openModal(
+            true,
+            placesUserSubscribedTo.value.find(place => place.id === Number(newestNotificationPayload.value.id)),
+        );
       }
     });
 

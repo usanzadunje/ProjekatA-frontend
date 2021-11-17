@@ -45,7 +45,7 @@ export function useToastNotifications() {
         await toast.present();
     };
 
-    const showSuccessToast = async(message) => {
+    const showSuccessToast = async(message, clickCallback = null) => {
         const toast = await toastController
             .create({
                 duration: 1500,
@@ -56,7 +56,11 @@ export function useToastNotifications() {
             });
 
         toast.addEventListener('click', () => {
-            toast.dismiss();
+            if(clickCallback) {
+                clickCallback();
+            }else {
+                toast.dismiss();
+            }
         });
 
         await toast.present();
@@ -79,7 +83,7 @@ export function useToastNotifications() {
         await toast.present();
     };
 
-    const showErrorToast = async(backendErrors, errorMessage = null) => {
+    const showErrorToast = async(backendErrors, errorMessage = null, clickCallback = null) => {
         errors.value = errorMessage || getError(backendErrors);
         for(let i = 0; i < errorKeys.value.length; i++) {
             if(getErrorMessage(errorKeys.value[i]).length > 1 && typeof getErrorMessage(errorKeys.value[i]) === 'object') {
@@ -110,7 +114,11 @@ export function useToastNotifications() {
                 });
 
                 toast.addEventListener('click', () => {
-                    toast.dismiss();
+                    if(clickCallback) {
+                        clickCallback();
+                    }else {
+                        toast.dismiss();
+                    }
                 });
 
                 toast.style.top = `${3.5 * i}rem`;

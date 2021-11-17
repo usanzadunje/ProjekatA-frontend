@@ -82,13 +82,14 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, onUnmounted } from 'vue';
+import { useRoute, useRouter }          from 'vue-router';
 import {
   IonItem,
   IonIcon,
   IonInput,
   IonButton,
-}                          from '@ionic/vue';
+}                                       from '@ionic/vue';
 
 import RequestStatusText from '@/components/staff/RequestStatusText';
 
@@ -118,9 +119,19 @@ export default defineComponent({
   },
   emits: ['dismiss'],
   setup(props, { emit }) {
+    /* Global properties */
+    const router = useRouter();
+    const route = useRoute();
+
     /* Component properties */
     const staffDisplayName = getDisplayNameForUser(props.requestData.staff);
+
     /* Lifecycle hooks */
+    onUnmounted(() => {
+      if(route.query.id) {
+        router.replace();
+      }
+    });
 
     /* Composables */
     const {

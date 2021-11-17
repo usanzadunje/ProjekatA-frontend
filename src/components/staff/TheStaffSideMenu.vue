@@ -75,6 +75,35 @@
       </div>
       <div
           class="flex items-center pb-0.5 mt-4"
+          :class="activeMenuItem === 'notifications' &&
+              (!this.$store.getters['user/unreadNotificationsCount'] || !this.$store.getters['user/hasNotifications']) ?
+            'border-b-2 border-user-selected-color user-selected-color' :'text-gray-800'"
+          @click="menuItemClicked('staff.notifications');readAllNotifications()"
+      >
+        <div class="relative">
+          <ion-icon
+              :icon="this.$store.getters['user/hasNotifications']
+            ? (this.$store.getters['user/unreadNotificationsCount'] > 0 ? notifications : notificationsOutline)
+            : notificationsOffOutline"
+              class="text-2xl mr-2 flex-shrink-0"
+          >
+          </ion-icon>
+          <div v-if="this.$store.getters['user/unreadNotificationsCount'] > 0"
+               class="absolute z-40 -top-1 left-10p">
+            <div class="w-4 h-4 rounded-full">
+              <ion-badge class="w-full rounded-full notification-badge">
+                {{ this.$store.getters['user/unreadNotificationsCount'] }}
+              </ion-badge>
+            </div>
+          </div>
+        </div>
+
+        <span class="text-xl">
+              {{ $t('notification', 2) }}
+        </span>
+      </div>
+      <div
+          class="flex items-center pb-0.5 mt-4"
           :class="[activeMenuItem === 'settings' ? 'border-b-2 border-user-selected-color user-selected-color' : 'text-gray-800']"
           @click="menuItemClicked('staff.settings')"
       >
@@ -115,6 +144,8 @@ import {
   menuController,
 }                                    from '@ionic/vue';
 
+import { useNotifications } from '@/composables/useNotificataions';
+
 import {
   statsChartOutline,
   toggleOutline,
@@ -123,8 +154,11 @@ import {
   homeOutline,
   peopleOutline,
   calendarOutline,
+  notifications,
+  notificationsOffOutline,
+  notificationsOutline,
   logOutOutline,
-} from 'ionicons/icons';
+}                           from 'ionicons/icons';
 
 export default defineComponent({
   name: 'TheStaffSideMenu',
@@ -145,6 +179,7 @@ export default defineComponent({
     const isOwner = computed(() => store.getters['auth/isOwner']);
 
     /* Composables */
+    const { readAllNotifications } = useNotifications();
 
     /* Event handlers */
     const menuItemClicked = async(menuItemName) => {
@@ -160,6 +195,7 @@ export default defineComponent({
 
       /* Event handlers */
       menuItemClicked,
+      readAllNotifications,
 
       /* Icons */
       statsChartOutline,
@@ -169,6 +205,9 @@ export default defineComponent({
       homeOutline,
       peopleOutline,
       calendarOutline,
+      notifications,
+      notificationsOffOutline,
+      notificationsOutline,
       logOutOutline,
     };
   },
@@ -178,9 +217,5 @@ export default defineComponent({
 <style scoped>
 ion-item {
   --background: #F3F4F6;
-}
-
-#colorPickerResetText {
-  color: red !important;
 }
 </style>

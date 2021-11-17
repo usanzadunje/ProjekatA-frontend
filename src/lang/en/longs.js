@@ -50,5 +50,10 @@ export default {
     "requestDayOffAt": "Ask for a day off on",
     "requestAlreadyDeclined": "Your request for a day off has already been declined before.",
     "noMessage": "There is no message.",
-
+    "noNotificationsHeading1": "No notifications.",
+    "noNotificationsHeading2": "You currently have no notification available. When you receive new notifications they will be shown here.",
+    "noDayOffRequests1": "No day off requests.",
+    "noDayOffRequests2": "Your staff loves working. Nobody is requesting day off this month.",
+    "noStaffSchedule1": "No schedule posted.",
+    "noStaffSchedule2": "You did not add any employee for this week. Click on button bellow to do so.",
 };
