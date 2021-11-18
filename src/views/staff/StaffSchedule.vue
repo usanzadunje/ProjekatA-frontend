@@ -3,6 +3,13 @@
     <ion-content>
       <TheSegmentNavigation :segments="this.$store.getters['staff/scheduleSegments']"/>
 
+      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+        <ion-refresher-content
+            refreshing-spinner="crescent"
+        >
+        </ion-refresher-content>
+      </ion-refresher>
+
       <NextPreviousNavigation
           class="mb-2 px-2"
           @next="nextWeek"
@@ -23,6 +30,7 @@
           :week-start-day="weekStartDay"
           :week-start-month="weekStartMonth"
           :selected-year="selectedYear"
+          :show-skeleton="showSkeleton"
           class="px-4 mt-6"
       />
 
@@ -31,6 +39,7 @@
           :week-start-day="weekStartDay"
           :week-start-month="weekStartMonth"
           :selected-year="selectedYear"
+          :show-skeleton="showSkeleton"
           class="px-4 mt-6"
       />
 
@@ -43,12 +52,16 @@ import { computed, defineComponent, ref } from 'vue';
 import {
   IonPage,
   IonContent,
+  IonRefresher,
+  IonRefresherContent,
   onIonViewWillEnter,
 }                                         from '@ionic/vue';
 import TheSegmentNavigation               from '@/components/TheSegmentNavigation';
 import NextPreviousNavigation             from '@/components/NextPreviousNavigation';
 import StaffSchedulePreview               from '@/components/staff/StaffSchedulePreview';
 import OwnerSchedulePreview               from '@/components/owner/OwnerSchedulePreview';
+
+import { useSchedule }                  from '@/composables/useSchedule';
 
 import { getDaysInAMonth, shortMonths } from '@/utils/helpers';
 
@@ -57,10 +70,12 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
+    IonRefresher,
+    IonRefresherContent,
     NextPreviousNavigation,
     TheSegmentNavigation,
     StaffSchedulePreview,
-    OwnerSchedulePreview
+    OwnerSchedulePreview,
   },
   setup() {
     /* Global properties */
@@ -87,9 +102,21 @@ export default defineComponent({
       }
       return weekStartMonth.value;
     });
+    const showSkeleton = ref(true);
 
     /* Composables */
+    const {
+      fetchScheduleForStaff,
+      fetchScheduleForOwner,
+    } = useSchedule();
+
     /* Lifecycle hooks */
+    (async() => {
+      await fetchScheduleForStaff();
+      await fetchScheduleForOwner();
+
+      showSkeleton.value = false;
+    })();
     /* Generating new date in case of stale data */
     onIonViewWillEnter(() => {
       currentDate = new Date();
@@ -137,7 +164,16 @@ export default defineComponent({
         }
       }
     };
+    const refresh = async(event) => {
+      showSkeleton.value = true;
 
+      await fetchScheduleForStaff();
+      await fetchScheduleForOwner(true);
+
+      event.target.complete();
+
+      showSkeleton.value = false;
+    };
     return {
       /* Component properties */
       shortMonths,
@@ -146,10 +182,12 @@ export default defineComponent({
       selectedYear,
       weekStartDay,
       weekEndDay,
+      showSkeleton,
 
       /* Event handlers */
       nextWeek,
       previousWeek,
+      refresh,
 
       /* Icons */
     };

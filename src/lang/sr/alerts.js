@@ -61,5 +61,9 @@ export default {
     "alreadyApprovedDay": "Vaš zahtev za slobodnim danom je već odobren za ovaj dan.",
     "successApprovedDayOffRequest": "Uspešno ste odobrili zahtev za slobodan dan zaposlenom: {staff}!",
     "successDeclinedDayOffRequest": "Uspešno ste odbili zahtev za slobodan dan zaposlenom: {staff}!",
-
+    "owner.successAddStaffToSchedule": "Uspešno ste dodali {staff} u raspored!",
+    "owner.successUpdateStaffSchedule": "Uspešno ste ažurirali raspored zaposlenog {staff}!",
+    "owner.successRemoveSchedule": "Uspešno ste uklonili zaposlenog iz rasporeda!",
+    "alertRemoveScheduleHeader": "Uklanjate zaposlenog iz rasporeda.",
+    "alertRemoveScheduleMessage": "Da li ste sigurni da želite da uklonite zaposlenog iz rasporeda za ovu nedelju?",
 };

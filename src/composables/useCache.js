@@ -72,6 +72,19 @@ export function useCache() {
             await store.dispatch('owner/getCategories');
         }
     };
+    const getCachedOrFetchStaff = async(forceFetch = false) => {
+        if(store.getters['owner/staff']?.length === 0 || forceFetch) {
+            await store.dispatch('owner/getStaffInfo', {
+                offset: 0,
+                limit: 1000,
+            });
+        }
+    };
+    const getCachedOrFetchSchedules = async(forceFetch = false) => {
+        if(!store.getters['owner/hasSchedules'] || forceFetch) {
+            await store.dispatch('owner/getSchedules');
+        }
+    };
 
     return {
         /* Component properties */
@@ -83,6 +96,9 @@ export function useCache() {
         getCachedOrFetchPlaceInfo,
         getCachedOrFetchPlaceTables,
         getCachedOrFetchPlaceCategories,
+        getCachedOrFetchStaff,
+        getCachedOrFetchSchedules,
+
         //End user
         getCachedOrFetchPlaceAdditionalInfo,
     };

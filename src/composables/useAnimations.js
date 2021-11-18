@@ -54,8 +54,10 @@ export function swipe() {
 
     /* Methods */
     const fullSwipeLeft = (element) => {
-        element.style.transition = 'transform 0.45s ease-out';
-        element.style.transform = 'translate3d(-100%, 0px, 0px)';
+        if(element?.style) {
+            element.style.transition = 'transform 0.45s ease-out';
+            element.style.transform = 'translate3d(-100%, 0px, 0px)';
+        }
     };
 
 
@@ -74,8 +76,10 @@ export function shrink() {
 
     /* Methods */
     const shrinkToMiddle = (element) => {
-        element.style.transition = 'transform 0.25s ease-in';
-        element.style.transform = 'scaleY(0)';
+        if(element?.style) {
+            element.style.transition = 'transform 0.25s ease-in';
+            element.style.transform = 'scaleY(0)';
+        }
     };
 
 

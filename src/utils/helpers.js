@@ -166,7 +166,7 @@ export function getDaysInAMonth(month, year = null) {
 }
 
 export function getDayFromDateString(date) {
-    return date.split('-')[0];
+    return Number(date.split('-')[0]);
 }
 
 export function dateAlreadyPassed(day, month, year) {
@@ -200,7 +200,11 @@ export function getWeekDayNumbers(day, month, year) {
 }
 
 export function parseDateToString(date, currentSeparator = '-', newSeparator = '.', order = 'forward') {
-    const dateParts = date.split(currentSeparator);
+    const dateParts = date?.split(currentSeparator);
+
+    if(!dateParts) {
+        return '';
+    }
 
     return order === 'forward' ?
         `${dateParts[0]}${newSeparator}${dateParts[1]}${newSeparator}${dateParts[2]}` :

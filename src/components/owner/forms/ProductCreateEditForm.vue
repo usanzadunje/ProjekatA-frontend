@@ -23,7 +23,7 @@
           class="flex rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('category_id') }"
       >
-        <ion-label class="category-label">{{ $t('productCategory') }}</ion-label>
+        <ion-label class="ion-select-label">{{ $t('productCategory') }}</ion-label>
         <ion-select
             ref="productCategory"
             v-model="newProduct.category_id"
@@ -165,7 +165,7 @@ export default defineComponent({
       header: t('category', 2),
       subHeader: t('selectCategoryProduct'),
       translucent: true,
-      cssClass: 'custom-category-alert',
+      cssClass: 'custom-select-alert',
     };
 
     /* Methods */

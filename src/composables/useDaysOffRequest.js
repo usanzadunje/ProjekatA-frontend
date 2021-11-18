@@ -3,8 +3,6 @@ import { useStore } from 'vuex';
 import { useCurrentUser }   from '@/composables/useCurrentUser';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 
-import { addDaysToCorrectMonth } from '@/services/DaysOffService';
-
 export function useDaysOffRequest() {
     /* Global properties */
     const store = useStore();
@@ -31,34 +29,36 @@ export function useDaysOffRequest() {
             );
         }
     };
-    const addDaysOffRequest = async(payload) => {
-        await store.dispatch('staff/addDayOffRequests', {
-            start_date: payload.dayOffStartDate,
-            number_of_days: payload.numberOfDays,
-            message: payload.message,
-        });
-
-        addDaysToCorrectMonth({ ...payload, status: PENDING });
+    const fetchRequestedDaysOffStatusesForStaff = async() => {
+        if(isStaff.value) {
+            await tryCatch(
+                async() => {
+                    await store.dispatch('staff/getDayOffRequestStatuses');
+                },
+                null,
+                'dataFetchingError',
+            );
+        }
     };
-    const dayOffRequestedDay = (year, month, day) => {
-        return store.getters['staff/dayOffRequestedDay'](year, month, day);
+    const dayOffRequestedDay = (day, month, year) => {
+        return store.getters['staff/dayOffRequestedDay'](day, month, year);
     };
-    const dayOffRequestedDays = (year, month) => {
-        return store.getters['staff/dayOffRequestedDays'](year, month);
+    const dayOffRequestedDays = (month, year) => {
+        return store.getters['staff/dayOffRequestedDays'](month, year);
     };
     const dayOffRequestedDayStatus = (day, month, year) => {
-        return dayOffRequestedDay(year, month, day)?.status;
+        return dayOffRequestedDay(day, month, year)?.status;
     };
     const alreadyHavePendingRequestAtDate = (day, month, year) => {
-        const requestExists = dayOffRequestedDay(year, month, day);
+        const requestExists = dayOffRequestedDay(day, month, year);
         return !!requestExists && requestExists?.status === PENDING;
     };
     const alreadyHaveApprovedRequestAtDate = (day, month, year) => {
-        const requestExists = dayOffRequestedDay(year, month, day);
+        const requestExists = dayOffRequestedDay(day, month, year);
         return !!requestExists && requestExists?.status === APPROVED;
     };
     const declinedRequestAtDate = (day, month, year) => {
-        const requestExists = dayOffRequestedDay(year, month, day);
+        const requestExists = dayOffRequestedDay(day, month, year);
         return !!requestExists && requestExists?.status === DECLINED;
     };
 
@@ -115,10 +115,10 @@ export function useDaysOffRequest() {
         dayOffRequestedDayStatus,
 
         /* Methods */
-        addDaysOffRequest,
         alreadyHavePendingRequestAtDate,
         alreadyHaveApprovedRequestAtDate,
         fetchRequestedDaysOffForStaff,
+        fetchRequestedDaysOffStatusesForStaff,
         fetchRequestedDaysOffFromStaff,
         declinedRequestAtDate,
         approveRequest,

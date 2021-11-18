@@ -11,9 +11,12 @@ export default {
     store(payload) {
         return API.apiClient.post(`/staff/days-off`, payload);
     },
-    // update(id, payload) {
-    //     return API.apiClient.put(`/staff/days-off/${id}`, payload);
-    // },
+    statuses() {
+        return API.apiClient.get(`/staff/days-off/statuses`);
+    },
+    update(id, payload) {
+        return API.apiClient.put(`/staff/days-off/${id}`, payload);
+    },
     // destroy(id) {
     //     return API.apiClient.delete(`/staff/days-off/${id}`);
     // },

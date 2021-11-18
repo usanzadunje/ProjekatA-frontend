@@ -216,5 +216,11 @@ export default {
     "declining": "Odbijam",
     "pending": "Na čekanju",
     "all": "Sve",
+    "addStaff": "Dodaj zaposlenog",
+    "startWorkTime": "Početak radnog vremena",
+    "numberOfHours": "Broj sati",
+    "chooseStaff": "Izaberite zaposlenog",
+    "employee": "Zaposleni",
+    "numberOfWorkHours": "Broj radnih sati",
 };
 

@@ -138,11 +138,12 @@
 <script>
 import { computed, defineComponent } from 'vue';
 import { useRouter, useRoute }       from 'vue-router';
-import { useStore }                  from 'vuex';
+import { useStore } from 'vuex';
 import {
   IonIcon,
+  IonBadge,
   menuController,
-}                                    from '@ionic/vue';
+}                   from '@ionic/vue';
 
 import { useNotifications } from '@/composables/useNotificataions';
 
@@ -164,6 +165,8 @@ export default defineComponent({
   name: 'TheStaffSideMenu',
   components: {
     IonIcon,
+    IonBadge,
+
   },
   props: {},
   setup() {

@@ -95,6 +95,7 @@ import { useStore }                  from 'vuex';
 import {
   IonContent,
   IonIcon,
+    IonBadge,
   popoverController,
 }                                    from '@ionic/vue';
 
@@ -114,6 +115,7 @@ export default defineComponent({
   components: {
     IonContent,
     IonIcon,
+    IonBadge,
   },
   setup() {
     /* Global properties */

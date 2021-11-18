@@ -57,4 +57,6 @@ export default {
     "noDayOffRequests2": "Vaši zaposleni vole da rade. Trenutno ni jedan zaposleni nije poslao zahtev za slobodnim danom ovog meseca.",
     "noStaffSchedule1": "Nema rasporeda.",
     "noStaffSchedule2": "Niste postavili ni jednog zaposlenog za ovu nedelju. Možete ga dodati klikom na dugme ispod.",
+    "addStaffScheduleToSelectedWeek": "Dodajte zaposlene u raspored za izabranu nedelju",
+    "updateStaffSchedule": "Ažurirajte raspored za zaposlenog",
 };

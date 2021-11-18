@@ -59,5 +59,9 @@ export default {
     "alreadyApprovedDay": "Your day off request has already been approved for this day.",
     "successApprovedDayOffRequest": "Successfully approved day off request for {staff}!",
     "successDeclinedDayOffRequest": "Successfully declined day off request for {staff}!",
-
+    "owner.successAddStaffToSchedule": "Successfully added {staff} to schedule!",
+    "owner.successUpdateStaffSchedule": "Successfully updated schedule for {staff}!",
+    "owner.successRemoveSchedule": "Successfully removed employee from schedule!",
+    "alertRemoveScheduleHeader": "Removing employee from schedule.",
+    "alertRemoveScheduleMessage": "Are you sure you want to remove employee from this weeks schedule?",
 };

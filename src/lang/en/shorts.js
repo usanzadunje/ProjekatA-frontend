@@ -214,4 +214,11 @@ export default {
     "declining": "Declining",
     "pending": "Pending",
     "all": "All",
+    "addStaff": "Add employee",
+    "startWorkTime": "Start of working hours",
+    "numberOfHours": "Number of hours",
+    "chooseStaff": "Choose employee",
+    "employee": "Employee",
+    "numberOfWorkHours": "Number of work hours",
+
 };

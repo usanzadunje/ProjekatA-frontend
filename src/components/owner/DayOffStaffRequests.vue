@@ -123,10 +123,10 @@ import {
   IonSkeletonText,
 }                                         from '@ionic/vue';
 
-import AppModal                 from '@/components/AppModal';
-import DayOffRequestReviewModal from '@/components/owner/modals/DayOffRequestReviewModal';
-import RequestStatusText        from '@/components/staff/RequestStatusText';
-import NoDaysOffRequestedPlaceholderImage       from '@/components/images/NoDaysOffRequestedPlaceholderImage';
+import AppModal                           from '@/components/AppModal';
+import DayOffRequestReviewModal           from '@/components/owner/modals/DayOffRequestReviewModal';
+import RequestStatusText                  from '@/components/staff/RequestStatusText';
+import NoDaysOffRequestedPlaceholderImage from '@/components/images/NoDaysOffRequestedPlaceholderImage';
 
 import { useModal }          from '@/composables/useModal';
 import { useDaysOffRequest } from '@/composables/useDaysOffRequest';

@@ -7,7 +7,7 @@
     >
       <ion-icon :icon="calendarNumberOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
       <ion-input
-          v-model.lazy.number="dayOffRequest.numberOfDays"
+          v-model.lazy.number="dayOffRequest.number_of_days"
           type="number"
           debounce="100"
           :placeholder="$t('numberOfDays')"
@@ -61,8 +61,8 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
-import { useStore }                       from 'vuex';
+import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
+import { useStore }                                          from 'vuex';
 import {
   IonItem,
   IonInput,
@@ -70,7 +70,7 @@ import {
   IonIcon,
   IonButton,
   IonSpinner,
-}                                         from "@ionic/vue";
+}                                                            from "@ionic/vue";
 
 import { useErrorHandling }   from '@/composables/useErrorHandling';
 import { hideNativeKeyboard } from '@/composables/useDevice';
@@ -78,8 +78,7 @@ import { hideNativeKeyboard } from '@/composables/useDevice';
 import {
   chatbubbleEllipsesOutline,
   calendarNumberOutline,
-}                            from 'ionicons/icons';
-import { useDaysOffRequest } from '@/composables/useDaysOffRequest';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "DayOffRequestForm",
@@ -97,6 +96,10 @@ export default defineComponent({
       default: '',
       required: true,
     },
+    request: {
+      type: Object,
+      default: null,
+    },
   },
   emits: ['dismiss'],
   setup(props, { emit }) {
@@ -104,17 +107,24 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
+    const { request } = toRefs(props);
     const dayOffRequest = reactive({
-      dayOffStartDate: props.dayOffStartDate,
+      start_date: props.dayOffStartDate,
     });
     const loading = ref(false);
     const messageInput = ref();
 
     /* Lifecycle hooks */
+    onMounted(async() => {
+      if(request?.value) {
+        dayOffRequest.start_date = request.value.start_date;
+        dayOffRequest.number_of_days = request.value.number_of_days;
+        dayOffRequest.message = request.value.message;
+      }
+    });
 
     /* Composables */
     const { errorNames, tryCatch } = useErrorHandling();
-    const { addDaysOffRequest } = useDaysOffRequest();
 
     /* Event handlers */
     const createOrUpdate = async() => {
@@ -123,7 +133,14 @@ export default defineComponent({
 
       await tryCatch(
           async() => {
-            await addDaysOffRequest(dayOffRequest);
+            if(request.value) {
+              await store.dispatch('staff/updateDayOffRequest', {
+                id: request.value.id,
+                payload: dayOffRequest,
+              });
+            }else {
+              await store.dispatch('staff/addDayOffRequest', dayOffRequest);
+            }
 
             emit('dismiss');
           },

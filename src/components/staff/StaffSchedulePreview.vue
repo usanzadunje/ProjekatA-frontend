@@ -10,13 +10,21 @@
         <span class="primary-text-color font-bold uppercase">{{ $t(days[index]) }}</span>
       </div>
       <div class="w-full h-full flex justify-end items-start">
+        <div v-if="schedule">
+          {{ `${schedule.start_time} - ${calculateEndTime(schedule)}` }}
+        </div>
+        <div v-else>
+          No schedule set.
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent, toRefs } from 'vue';
+
+import { useSchedule } from '@/composables/useSchedule';
 
 import { getWeekDayNumbers, days } from '@/utils/helpers';
 
@@ -40,19 +48,26 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     /* Global properties */
 
     /* Component properties */
+    const { weekStartDay, weekStartMonth, selectedYear } = toRefs(props);
+    const schedule = computed(() => currentSchedule(weekStartDay.value, weekStartMonth.value, selectedYear.value));
 
     /* Composables */
-
+    const {
+      currentSchedule,
+      calculateEndTime,
+    } = useSchedule();
     /* Event handlers */
 
     return {
       /* Component properties */
       days,
       getWeekDayNumbers,
+      calculateEndTime,
+      schedule,
 
       /* Event handlers */
 

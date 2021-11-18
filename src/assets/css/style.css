@@ -303,28 +303,28 @@ ion-badge.notification-badge {
     padding-bottom: 0 !important;
 }
 
-.custom-category-alert .alert-button-group button {
+.custom-select-alert .alert-button-group button {
     font-family: 'Poppins', sans-serif !important;
     font-size: 1rem !important;
 }
 
-.custom-category-alert .alert-checkbox-icon.sc-ion-alert-ios {
+.custom-select-alert .alert-checkbox-icon.sc-ion-alert-ios {
     background-color: white;
 }
 
-.custom-category-alert .alert-title {
+.custom-select-alert .alert-title {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     font-size: 1.125rem !important;
 }
 
-.custom-category-alert .alert-sub-title {
+.custom-select-alert .alert-sub-title {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     font-size: 0.875rem !important;
 }
 
-.custom-category-alert .alert-checkbox-label {
+.custom-select-alert .alert-checkbox-label {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     font-size: 0.875rem !important;
@@ -1216,7 +1216,7 @@ ion-toggle.dark-toggle-checked {
 /*
     START CATEGORY FORM STYLES
 */
-.category-label {
+.ion-select-label {
     font-family: 'Poppins', sans-serif !important;
     font-weight: 400 !important;
     font-size: 0.8rem !important;

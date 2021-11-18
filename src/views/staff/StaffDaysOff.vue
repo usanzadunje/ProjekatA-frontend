@@ -92,6 +92,7 @@ export default defineComponent({
     /* Composables */
     const {
       fetchRequestedDaysOffForStaff,
+      fetchRequestedDaysOffStatusesForStaff,
       fetchRequestedDaysOffFromStaff,
     } = useDaysOffRequest();
     const { newestNotificationPayload } = useNotifications();
@@ -140,7 +141,7 @@ export default defineComponent({
     const refresh = async(event) => {
       showSkeleton.value = true;
 
-      await fetchRequestedDaysOffForStaff();
+      await fetchRequestedDaysOffStatusesForStaff();
       await fetchRequestedDaysOffFromStaff();
 
       event.target.complete();

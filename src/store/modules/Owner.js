@@ -10,6 +10,7 @@ import { deviceWidth } from '@/composables/useDevice';
 import { calculatePxFromPercent, removeClonedTableElements } from '@/utils/helpers';
 import TableSectionService                                   from '@/services/TableSectionService';
 import DaysOffService                                        from '@/services/DaysOffService';
+import ScheduleService                                       from '@/services/ScheduleService';
 
 const fontSize = getComputedStyle(document.documentElement).fontSize;
 
@@ -24,6 +25,7 @@ export const state = {
     categories: [],
     products: [],
     dayOffRequests: [],
+    schedule: [],
 };
 
 export const mutations = {
@@ -210,6 +212,22 @@ export const mutations = {
         request.status = 1;
     },
 
+    /* SCHEDULE */
+    SET_SCHEDULES(state, payload) {
+        state.schedule = payload;
+    },
+    ADD_EMPLOYEE_TO_SCHEDULE(state, payload) {
+        state.schedule.push(payload);
+    },
+    REMOVE_EMPLOYEE_FROM_SCHEDULE(state, id) {
+        state.schedule = state.schedule.filter(schedule => schedule.id !== id);
+    },
+    UPDATE_EMPLOYEE_SCHEDULE(state, { id, payload }) {
+        let existingSchedule = state.schedule.find(schedule => schedule.id === id);
+
+        Object.keys(payload).forEach(key => existingSchedule[key] = payload[key]);
+    },
+
     PURGE_DATA(state) {
         state.place = {};
         state.staff = [];
@@ -218,6 +236,7 @@ export const mutations = {
         state.categories = [];
         state.products = [];
         state.dayOffRequests = [];
+        state.schedule = [];
     },
 };
 
@@ -452,6 +471,28 @@ export const actions = {
 
         commit('DECLINE_DAY_OFF_REQUEST', id);
     },
+    // REMOVE_EMPLOYEE_FROM_SCHEDULE(state, id) {
+    /* SCHEDULE */
+    async getSchedules({ commit }) {
+        const response = await ScheduleService.indexByPlace();
+
+        commit('SET_SCHEDULES', response?.data);
+    },
+    async addEmployeeToSchedule({ commit }, payload) {
+        const response = await ScheduleService.store(payload);
+
+        commit('ADD_EMPLOYEE_TO_SCHEDULE', response.data);
+    },
+    async updateEmployeeSchedule({ commit }, { id, payload }) {
+        await ScheduleService.update(id, payload);
+
+        commit('UPDATE_EMPLOYEE_SCHEDULE', { id, payload });
+    },
+    async removeEmployeeFromSchedule({ commit }, id) {
+        await ScheduleService.destroy(id);
+
+        commit('REMOVE_EMPLOYEE_FROM_SCHEDULE', id);
+    },
 };
 
 export const getters = {
@@ -487,17 +528,39 @@ export const getters = {
 
         for(let i = state.dayOffRequests.length - 1; i >= 0; i--) {
             const request = state.dayOffRequests[i];
-            const dateParts = request.start_date.split('-');
-            const requestMonth = Number(dateParts[1]) - 1;
-            const requestYear = Number(dateParts[2]);
 
-            if(requestMonth === month && requestYear === year) {
+            if(request.month === month && request.year === year) {
                 requests.push(request);
             }
         }
 
         return requests;
     },
+    hasSchedules: (state) => {
+        return state.schedule?.length > 0;
+    },
+    scheduleById: (state) => (id) => {
+        return state.schedule?.find(schedule => schedule.id === id) ?? {};
+    },
+    schedules: (state) => (day, month, year) => {
+        const schedules = [];
+
+        for(let i = state.schedule.length - 1; i >= 0; i--) {
+            const schedule = state.schedule[i];
+
+            if(
+                schedule.day >= day &&
+                schedule.day < day + 7 &&
+                schedule.month === month &&
+                schedule.year === year
+            ) {
+                schedules.push(schedule);
+            }
+        }
+
+        return schedules;
+    },
+
     placeSegments: () => {
         return [
             {

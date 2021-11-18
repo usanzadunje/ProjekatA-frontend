@@ -1,5 +1,7 @@
-import StaffService                              from '@/services/StaffService';
-import DaysOffService, { addDaysToCorrectMonth } from '@/services/DaysOffService';
+import StaffService             from '@/services/StaffService';
+import DaysOffService           from '@/services/DaysOffService';
+import { getDayFromDateString } from '@/utils/helpers';
+import ScheduleService          from '@/services/ScheduleService';
 
 export const namespaced = true;
 
@@ -7,6 +9,7 @@ export const state = {
     availabilityRatio: '0/0',
     active: false,
     dayOffRequests: [],
+    schedule: [],
 };
 
 export const mutations = {
@@ -19,46 +22,35 @@ export const mutations = {
     },
 
     /* DAY OFF REQUESTS */
-    ADD_DAY_OFF_TO_MONTH(state, { day, month, year }) {
-        let existingYear = state.dayOffRequests.find(y => y.year === year);
-
-        if(existingYear) {
-            let existingMonth = existingYear.months?.find(m => m.month === month);
-            if(existingMonth) {
-                if(!existingMonth.days.some(d => d.number === day)) {
-                    existingMonth.days.push(day);
-                }
-            }else {
-                existingYear.months.push({
-                    month,
-                    days: [day],
-                });
-            }
-        }else {
-            state.dayOffRequests.push({
-                year,
-                months: [
-                    {
-                        month,
-                        days: [day],
-                    },
-                ],
-            });
-        }
+    SET_DAY_OFF_REQUESTS(state, payload) {
+        state.dayOffRequests = payload;
     },
-    UPDATE_DAY_OFF_REQUEST_STATUS(state, { day, month, year, numberOfDays, status }) {
-        const endDay = day + numberOfDays - 1;
-        let existingYear = state.dayOffRequests.find(y => y.year === year);
-        let existingMonth = existingYear.months?.find(m => m.month === month);
+    ADD_DAY_OFF_REQUEST(state, payload) {
+        state.dayOffRequests.push(payload);
+    },
+    UPDATE_DAY_OFF_REQUEST(state, { id, payload }) {
+        let existingRequest = state.dayOffRequests.find(request => request.id === id);
 
-        for(let i = day; i <= endDay; i++) {
-            const existingDay = existingMonth.days?.find(d => d.number === i);
-
-            existingDay.status = status;
-        }
+        Object.keys(payload).forEach(key => existingRequest[key] = payload[key]);
+    },
+    UPDATE_DAY_OFF_REQUEST_STATUSES(state, payload) {
+        payload.forEach(freshRequest => {
+            const existingRequest = state.dayOffRequests.find(request => request.id === freshRequest.id);
+            if(existingRequest) {
+                existingRequest.status = freshRequest.status;
+            }
+        });
+    },
+    REMOVE_DAY_OFF_REQUEST(state, payload) {
+        state.dayOffRequests = state.dayOffRequests.filter(request => request.id !== payload);
     },
     PURGE_DAY_OFF_REQUESTS_DATA(state) {
         state.dayOffRequests = [];
+    },
+
+    /* SCHEDULE */
+    SET_SCHEDULES(state, payload) {
+        state.schedule = payload;
     },
 };
 
@@ -79,20 +71,38 @@ export const actions = {
     },
 
     async getDayOffRequests({ commit }) {
-        commit('PURGE_DAY_OFF_REQUESTS_DATA');
-
         const response = await DaysOffService.index();
 
-        response.data.forEach(request => {
-            addDaysToCorrectMonth({
-                dayOffStartDate: request.start_date,
-                numberOfDays: request.number_of_days,
-                status: request.status,
-            });
+        commit('SET_DAY_OFF_REQUESTS', response.data);
+    },
+    async getDayOffRequestStatuses({ commit }) {
+        const response = await DaysOffService.statuses();
+
+        commit('UPDATE_DAY_OFF_REQUEST_STATUSES', response.data);
+    },
+    async addDayOffRequest({ commit }, payload) {
+        const response = await DaysOffService.store(payload);
+
+        commit('ADD_DAY_OFF_REQUEST', { ...response.data, status: 0 });
+    },
+    async updateDayOffRequest({ commit }, { id, payload }) {
+        const response = await DaysOffService.update(id, payload);
+
+        commit('UPDATE_DAY_OFF_REQUEST', {
+            id,
+            payload: {
+                ...payload,
+                status: 0,
+                end_date: response.data.end_date,
+            },
         });
     },
-    async addDayOffRequests(context, payload) {
-        await DaysOffService.store(payload);
+
+    /* SCHEDULE */
+    async getSchedules({ commit }) {
+        const response = await ScheduleService.index();
+
+        commit('SET_SCHEDULES', response.data);
     },
 };
 
@@ -104,22 +114,37 @@ export const getters = {
         return state.active;
     },
 
-    dayOffRequestedDays: (state) => (year, month) => {
-        const yearlyRequests = state.dayOffRequests.find(y => y.year === year);
+    dayOffRequestedDays: (state) => (month, year) => {
+        const requests = [];
 
-        const monthlyRequests = yearlyRequests?.months?.find(m => m.month === month);
+        for(let i = state.dayOffRequests.length - 1; i >= 0; i--) {
+            const request = state.dayOffRequests[i];
 
-        return monthlyRequests?.days ?? [];
+            if(request.month === month && request.year === year) {
+                requests.push(request);
+            }
+        }
+
+        return requests;
     },
 
-    dayOffRequestedDay: (state) => (year, month, day) => {
-        const yearlyRequests = state.dayOffRequests.find(y => y.year === year);
-
-        const monthlyRequests = yearlyRequests?.months?.find(m => m.month === month);
-
-        return monthlyRequests?.days?.find(d => d.number === day);
+    dayOffRequestedDay: (state) => (day, month, year) => {
+        return state.dayOffRequests?.find(
+            request => day >= request.day &&
+                day <= getDayFromDateString(request.end_date) &&
+                request.month === month &&
+                request.year === year,
+        );
     },
-
+    schedule: (state) => (day, month, year) => {
+        return state.schedule.find(
+            schedule =>
+                schedule.day >= day &&
+                schedule.day < day + 7 &&
+                schedule.month === month &&
+                schedule.year === year,
+        );
+    },
     scheduleSegments: () => {
         return [
             {

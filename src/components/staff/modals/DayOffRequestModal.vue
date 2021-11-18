@@ -6,14 +6,19 @@
     >
       {{ `${$t('requestDayOffAt')}:` }}
       <br>
-      {{ requestData.dayOffStartDate }}
+      {{
+        requestData.request ?
+            `${parseDateToString(requestData.request.start_date)}-${parseDateToString(requestData.request.end_date)}` :
+            parseDateToString(requestData.dayOffStartDate)
+      }}
     </h2>
 
     <div
         v-if="!requestData.declined || showRequestForm"
     >
       <DayOffRequestForm
-          :day-off-start-date="requestData.dayOffStartDate"
+          :day-off-start-date="requestData.request?.start_date ?? requestData.dayOffStartDate"
+          :request="requestData.request"
           @dismiss="dismiss"
       />
     </div>
@@ -40,6 +45,8 @@ import { defineComponent, ref } from 'vue';
 import { IonButton }            from '@ionic/vue';
 
 import DayOffRequestForm from '@/components/staff/forms/DayOffRequestForm';
+
+import { parseDateToString } from '@/utils/helpers';
 
 export default defineComponent({
   name: 'DayOffRequestModal',
@@ -69,6 +76,7 @@ export default defineComponent({
     return {
       /* Component properties */
       showRequestForm,
+      parseDateToString,
 
       /* Event handlers */
       dismiss,

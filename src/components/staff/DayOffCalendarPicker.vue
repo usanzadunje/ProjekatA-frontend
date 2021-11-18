@@ -125,7 +125,6 @@ export default defineComponent({
       DECLINED,
       APPROVED,
       dayOffRequestedDay,
-      dayOffRequestedDays,
       dayOffRequestedDayStatus,
       alreadyHavePendingRequestAtDate,
       alreadyHaveApprovedRequestAtDate,
@@ -178,7 +177,7 @@ export default defineComponent({
           openModal(
               true,
               {
-                dayOffStartDate: `${dayNumber}-${selectedMonth.value + 1}-${selectedYear.value}`,
+                request: dayOffRequestedDay(dayNumber, selectedMonth.value, selectedYear.value),
                 declined: true,
               },
           );
@@ -206,8 +205,6 @@ export default defineComponent({
       isModalOpen,
       modalData,
       openModal,
-      dayOffRequestedDay,
-      dayOffRequestedDays,
       dayOffRequestedDayStatus,
       alreadyHavePendingRequestAtDate,
       dateAlreadyPassed,

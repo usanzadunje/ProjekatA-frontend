@@ -56,4 +56,7 @@ export default {
     "noDayOffRequests2": "Your staff loves working. Nobody is requesting day off this month.",
     "noStaffSchedule1": "No schedule posted.",
     "noStaffSchedule2": "You did not add any employee for this week. Click on button bellow to do so.",
+    "addStaffScheduleToSelectedWeek": "Add employee to schedule for selected week",
+    "updateStaffSchedule": "Update schedule for employee",
+
 };
