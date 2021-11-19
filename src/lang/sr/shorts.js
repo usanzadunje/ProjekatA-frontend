@@ -219,6 +219,7 @@ export default {
     "addStaff": "Dodaj zaposlenog",
     "startWorkTime": "Početak radnog vremena",
     "numberOfHours": "Broj sati",
+    "hoursOfWork": "Sati rada",
     "chooseStaff": "Izaberite zaposlenog",
     "employee": "Zaposleni",
     "numberOfWorkHours": "Broj radnih sati",

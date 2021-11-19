@@ -7,7 +7,7 @@
       >
         <ion-header class="ion-no-border mt-1 mb-4">
           <ion-toolbar class="ion-no-padding">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center bg-show">
               <h1 class="primary-text-color font-bold text-2xl">{{ $t('notification', 2) }}</h1>
               <ion-button class="h-auto" @click="clearNotifications">
                 <span class="py-2 uppercase">{{ `${$t('clear')} ${$t('all')}` }}</span>
@@ -62,6 +62,8 @@ import { defineComponent } from 'vue';
 import {
   IonPage,
   IonContent,
+  IonHeader,
+  IonToolbar,
   IonButton,
   IonIcon,
 }                          from '@ionic/vue';
@@ -77,6 +79,8 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
+    IonHeader,
+    IonToolbar,
     IonButton,
     IonIcon,
     NoNotificationsPlaceholderImage,
@@ -111,7 +115,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-content {
+ion-content, ion-header, ion-toolbar {
   --background: var(--show-paint);
   background: var(--show-paint);
 }

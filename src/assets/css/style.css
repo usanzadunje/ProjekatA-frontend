@@ -386,6 +386,22 @@ ion-badge.notification-badge {
     width: 15px;
 }
 
+.h-60vh {
+    height: 60vh
+}
+
+.bg-primary {
+    background: var(--primary-paint);
+}
+
+.bg-show {
+    background: var(--show-paint);
+}
+
+.bg-secondary {
+    background: var(--secondary-paint);
+}
+
 .bg-danger {
     background: var(--danger-color);
 }

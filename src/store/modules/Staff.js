@@ -60,6 +60,9 @@ export const mutations = {
 
         Object.keys(payload).forEach(key => existingSchedule[key] = payload[key]);
     },
+    REMOVE_SCHEDULE(state, payload) {
+        state.schedule = state.schedule.filter(schedule => schedule.id !== payload);
+    },
 };
 
 export const actions = {

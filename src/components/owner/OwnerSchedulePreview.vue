@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-        v-if="this.$store.getters['owner/hasSchedules']"
+        v-if="schedules.length > 0"
     >
       <div class="flex justify-end">
         <ion-button
@@ -32,24 +32,19 @@
                 <span class="">{{ schedule.start_time }}</span>
               </div>
               <div class="flex mt-2">
-                <div class="w-1/2 border-r border-gray-300">
+                <div class="w-1/2 flex flex-col items-center justify-between border-r border-gray-300">
                   <span class="text-sm user-selected-color">
                     {{ $t('employee') }}
                   </span>
                   <div class="flex items-center justify-center">
-                    <ion-icon
-                        slot="icon-only"
-                        :icon="personOutline"
-                        class="text-lg mr-1"
-                    ></ion-icon>
-                    <p class="text-lg">
+                    <p class="text-lg break-all">
                       {{ getDisplayNameForUser(schedule.staff) }}
                     </p>
                   </div>
                 </div>
-                <div class="w-1/2">
+                <div class="w-1/2 flex flex-col items-center justify-between">
                   <span class="text-sm user-selected-color">
-                    {{ $t('numberOfWorkHours') }}
+                    {{ $t('hoursOfWork') }}
                   </span>
                   <div class="flex items-center justify-center">
                     <ion-icon
@@ -94,7 +89,7 @@
     </div>
     <div
         v-else
-        class="flex flex-col justify-center items-center mt-10"
+        class="flex flex-col justify-center items-center h-60vh"
     >
       <NoSchedulePlaceholderImage
           :width="'70%'"
@@ -158,7 +153,6 @@ import { getDisplayNameForUser } from '@/utils/helpers';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 import {
-  personOutline,
   timeOutline,
   trashOutline,
 } from 'ionicons/icons';
@@ -278,7 +272,6 @@ export default defineComponent({
       removeSwiping,
 
       /* Icons */
-      personOutline,
       timeOutline,
       trashOutline,
     };

@@ -217,6 +217,7 @@ export default {
     "addStaff": "Add employee",
     "startWorkTime": "Start of working hours",
     "numberOfHours": "Number of hours",
+    "hoursOfWork": "Work hours",
     "chooseStaff": "Choose employee",
     "employee": "Employee",
     "numberOfWorkHours": "Number of work hours",

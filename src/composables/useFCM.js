@@ -134,6 +134,9 @@ export function useFCM() {
             case 'scheduleUpdated':
                 await notifyStaffScheduleUpdated(notification.data);
                 break;
+            case 'scheduleRemoved':
+                await notifyStaffScheduleRemoved(notification.data);
+                break;
         }
     };
     const handleNotificationActionPerformed = (notification) => {
@@ -176,6 +179,16 @@ export function useFCM() {
                 });
                 break;
             case 'scheduleUpdated':
+                router.push({
+                    name: 'staff.schedule',
+                    query: {
+                        day: notification.day,
+                        month: notification.month,
+                        year: notification.year,
+                    },
+                });
+                break;
+            case 'scheduleRemoved':
                 router.push({
                     name: 'staff.schedule',
                     query: {
@@ -577,6 +590,76 @@ export function useFCM() {
                     number_of_hours: numberOfHours,
                 },
             });
+
+            store.commit("user/ADD_NOTIFICATION", {
+                id: notificationId,
+                read: false,
+                body,
+                received: `${dateReceived.getDate()}.${dateReceived.getMonth() + 1}.${dateReceived.getFullYear()}`,
+            });
+
+            if(route.name === 'staff.notifications') {
+                readAllNotifications();
+            }
+
+            store.dispatch("user/persistPushNotifications");
+        }
+    };
+    const notifyStaffScheduleRemoved = async(notification) => {
+        if(store.getters['auth/isStaff']) {
+            const notificationId = Number(notification.id);
+            const id = Number(notification.schedule_id);
+            const day = Number(notification.day);
+            const month = Number(notification.month) - 1;
+            const year = Number(notification.year);
+            const dateReceived = new Date();
+            const title = t('ownerRemovedSchedule');
+            const body = t(
+                'ownerRemovedScheduleBody',
+                {
+                    start_date: `${notification.day}.${notification.month}.${notification.year}`,
+                },
+            );
+
+            await LocalNotifications.schedule({
+                notifications: [
+                    {
+                        id: notificationId,
+                        title,
+                        body,
+                        largeIcon: 'ic_clock_icon',
+                        schedule: {
+                            allowWhileIdle: true,
+                        },
+                        extra: {
+                            type: notification.type,
+                            day,
+                            month,
+                            year,
+                        },
+                    },
+                ],
+            });
+
+            await Haptics.vibrate({ duration: 250 });
+
+            showSuccessToast(body, () => {
+                router.push({
+                    name: 'staff.schedule',
+                    query: {
+                        day,
+                        month,
+                        year,
+                    },
+                });
+                store.commit("global/NOTIFICATION_DATA_RECEIVED", {
+                    day,
+                    month,
+                    year,
+                });
+            });
+
+            store.commit("staff/REMOVE_SCHEDULE", id);
 
             store.commit("user/ADD_NOTIFICATION", {
                 id: notificationId,
