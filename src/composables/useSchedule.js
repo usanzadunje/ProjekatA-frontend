@@ -36,11 +36,13 @@ export function useSchedule() {
         const startMinutes = schedule.start_time.split(':')[1];
         let endHour = startHour + schedule.number_of_hours;
 
+
+        if(endHour >= 24) {
+            endHour = endHour - 24;
+        }
+
         if(endHour < 10) {
             endHour = `0${endHour}`;
-        }
-        if(endHour === 24) {
-            endHour = '00';
         }
 
         return `${endHour}:${startMinutes}`;

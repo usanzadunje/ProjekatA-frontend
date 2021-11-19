@@ -52,6 +52,14 @@ export const mutations = {
     SET_SCHEDULES(state, payload) {
         state.schedule = payload;
     },
+    ADD_SCHEDULE(state, payload) {
+        state.schedule.push(payload);
+    },
+    UPDATE_SCHEDULE(state, { id, payload }) {
+        let existingSchedule = state.schedule.find(schedule => schedule.id === id);
+
+        Object.keys(payload).forEach(key => existingSchedule[key] = payload[key]);
+    },
 };
 
 export const actions = {

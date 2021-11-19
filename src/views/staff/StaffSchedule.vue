@@ -14,6 +14,7 @@
           class="mb-2 px-2"
           @next="nextWeek"
           @previous="previousWeek"
+          @go-to-today="goToToday"
       >
         <div class="flex flex-col items-center">
           <h2 class="secondary-heading underline">
@@ -48,22 +49,24 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import {
   IonPage,
   IonContent,
   IonRefresher,
   IonRefresherContent,
   onIonViewWillEnter,
-}                                         from '@ionic/vue';
-import TheSegmentNavigation               from '@/components/TheSegmentNavigation';
-import NextPreviousNavigation             from '@/components/NextPreviousNavigation';
-import StaffSchedulePreview               from '@/components/staff/StaffSchedulePreview';
-import OwnerSchedulePreview               from '@/components/owner/OwnerSchedulePreview';
+}                                                from '@ionic/vue';
+import TheSegmentNavigation                      from '@/components/TheSegmentNavigation';
+import NextPreviousNavigation                    from '@/components/NextPreviousNavigation';
+import StaffSchedulePreview                      from '@/components/staff/StaffSchedulePreview';
+import OwnerSchedulePreview                      from '@/components/owner/OwnerSchedulePreview';
 
-import { useSchedule }                  from '@/composables/useSchedule';
+import { useSchedule } from '@/composables/useSchedule';
 
 import { getDaysInAMonth, shortMonths } from '@/utils/helpers';
+import { useRoute, useRouter }          from 'vue-router';
+import { useNotifications }             from '@/composables/useNotificataions';
 
 export default defineComponent({
   name: 'StaffSchedule',
@@ -79,18 +82,13 @@ export default defineComponent({
   },
   setup() {
     /* Global properties */
+    const route = useRoute();
+    const router = useRouter();
 
     /* Component properties */
-    let currentDate = new Date();
-    const weekStartMonth = ref(currentDate.getMonth());
-    const selectedYear = ref(currentDate.getFullYear());
-    const weekStartDay = ref(
-        new Date(
-            selectedYear.value,
-            weekStartMonth.value,
-            currentDate.getDay() === 0 ? currentDate.getDate() - 6 : currentDate.getDate() - (currentDate.getDay() - 1),
-        ).getDate(),
-    );
+    const weekStartMonth = ref();
+    const selectedYear = ref();
+    const weekStartDay = ref();
     const weekEndDay = computed(() => {
       const daysLeft = getDaysInAMonth(weekStartMonth.value) - weekStartDay.value;
 
@@ -109,8 +107,38 @@ export default defineComponent({
       fetchScheduleForStaff,
       fetchScheduleForOwner,
     } = useSchedule();
+    const { newestNotificationPayload } = useNotifications();
+
+    /* Methods */
+    const goToToday = () => {
+      let currentDate = new Date();
+
+      const currentDay = currentDate.getDay() === 0 ? currentDate.getDate() - 6 : currentDate.getDate() - (currentDate.getDay() - 1);
+
+      selectedYear.value = currentDate.getFullYear();
+      weekStartMonth.value = currentDate.getMonth();
+
+      if(currentDay <= 0) {
+        if(weekStartMonth.value - 1 > 0) {
+          weekStartMonth.value--;
+        }else {
+          weekStartMonth.value = 11;
+          selectedYear.value--;
+        }
+        currentDate = new Date(selectedYear.value, weekStartMonth.value, getDaysInAMonth(weekStartMonth.value));
+      }
+
+      weekStartDay.value = new Date(
+          selectedYear.value,
+          weekStartMonth.value,
+          currentDate.getDay() === 0 ? currentDate.getDate() - 6 : currentDate.getDate() - (currentDate.getDay() - 1),
+      ).getDate();
+
+
+    };
 
     /* Lifecycle hooks */
+    goToToday();
     (async() => {
       await fetchScheduleForStaff();
       await fetchScheduleForOwner();
@@ -119,14 +147,15 @@ export default defineComponent({
     })();
     /* Generating new date in case of stale data */
     onIonViewWillEnter(() => {
-      currentDate = new Date();
-      selectedYear.value = currentDate.getFullYear();
-      weekStartMonth.value = currentDate.getMonth();
-      weekStartDay.value = new Date(
-          selectedYear.value,
-          weekStartMonth.value,
-          currentDate.getDay() === 0 ? currentDate.getDate() - 6 : currentDate.getDate() - (currentDate.getDay() - 1),
-      ).getDate();
+      goToToday();
+
+      if(route.query.day && route.query.month && route.query.year) {
+        weekStartDay.value = Number(route.query.day);
+        weekStartMonth.value = Number(route.query.month);
+        selectedYear.value = Number(route.query.year);
+
+        router.replace();
+      }
     });
 
     /* Methods */
@@ -174,6 +203,14 @@ export default defineComponent({
 
       showSkeleton.value = false;
     };
+
+    /* Watchers */
+    watch(newestNotificationPayload, () => {
+      weekStartDay.value = newestNotificationPayload.value?.day;
+      weekStartMonth.value = newestNotificationPayload.value?.month;
+      selectedYear.value = newestNotificationPayload.value?.year;
+    });
+
     return {
       /* Component properties */
       shortMonths,
@@ -187,6 +224,7 @@ export default defineComponent({
       /* Event handlers */
       nextWeek,
       previousWeek,
+      goToToday,
       refresh,
 
       /* Icons */

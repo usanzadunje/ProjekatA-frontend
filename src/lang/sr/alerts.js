@@ -66,4 +66,8 @@ export default {
     "owner.successRemoveSchedule": "Uspešno ste uklonili zaposlenog iz rasporeda!",
     "alertRemoveScheduleHeader": "Uklanjate zaposlenog iz rasporeda.",
     "alertRemoveScheduleMessage": "Da li ste sigurni da želite da uklonite zaposlenog iz rasporeda za ovu nedelju?",
+    "ownerAddedSchedule": "Raspored dodat.",
+    "ownerAddedScheduleBody": "Vaš naređeni je upravo dodao raspored za nedelju koja počinje {start_date}.",
+    "ownerUpdatedSchedule": "Raspored ažuriran.",
+    "ownerUpdatedScheduleBody": "Vaš naređeni je ažurirao raspored za nedelju koja počinje {start_date}.",
 };

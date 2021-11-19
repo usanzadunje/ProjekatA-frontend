@@ -1,30 +1,42 @@
 <template>
-  <div class="flex justify-between">
-    <ion-button
-        fill="clear"
-        class="reset-button-size"
-        @click="$emit('previous')"
-    >
-      <ion-icon
-          slot="icon-only"
-          :icon="chevronBack"
-          class="primary-text-color"
-      ></ion-icon>
-    </ion-button>
+  <div class="w-full flex flex-col items-center">
+    <div class="flex items-center mb-2">
+      <ion-button
+          fill="clear"
+          class="reset-button-size user-selected-color uppercase"
+          @click="$emit('goToToday')"
+      >
+        {{ $t('today') }}
+      </ion-button>
+    </div>
+    <div class="w-full flex justify-between">
+      <ion-button
+          fill="clear"
+          class="reset-button-size"
+          @click="$emit('previous')"
+      >
+        <ion-icon
+            slot="icon-only"
+            :icon="chevronBack"
+            class="primary-text-color"
+        ></ion-icon>
+      </ion-button>
 
-    <slot></slot>
+      <slot></slot>
 
-    <ion-button
-        fill="clear"
-        class="reset-button-size"
-        @click="$emit('next')"
-    >
-      <ion-icon
-          slot="icon-only"
-          :icon="chevronForward"
-          class="primary-text-color"
-      ></ion-icon>
-    </ion-button>
+      <ion-button
+          fill="clear"
+          class="reset-button-size"
+          @click="$emit('next')"
+      >
+        <ion-icon
+            slot="icon-only"
+            :icon="chevronForward"
+            class="primary-text-color"
+        ></ion-icon>
+      </ion-button>
+    </div>
+
   </div>
 </template>
 <script>
@@ -49,7 +61,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['next', 'previous'],
+  emits: ['next', 'previous', 'goToToday'],
   setup() {
     /* Global properties */
     /* Component properties */

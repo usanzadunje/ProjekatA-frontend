@@ -14,6 +14,7 @@
           class="mb-2"
           @next="nextMonth"
           @previous="previousMonth"
+          @go-to-today="goToToday"
       >
         <div class="flex flex-col items-center">
           <h2 class="secondary-heading">
@@ -84,9 +85,10 @@ export default defineComponent({
     const router = useRouter();
 
     /* Component properties */
+    let currentDate = new Date();
     const showSkeleton = ref(true);
-    const selectedMonth = ref(new Date().getMonth());
-    const selectedYear = ref(new Date().getFullYear());
+    const selectedMonth = ref(currentDate.getMonth());
+    const selectedYear = ref(currentDate.getFullYear());
     const ownerRequestIdAdded = ref();
 
     /* Composables */
@@ -97,6 +99,13 @@ export default defineComponent({
     } = useDaysOffRequest();
     const { newestNotificationPayload } = useNotifications();
 
+    /* Methods */
+    const goToToday = () => {
+      currentDate = new Date();
+      selectedMonth.value = currentDate.getMonth();
+      selectedYear.value = currentDate.getFullYear();
+    };
+
     /* Lifecycle hooks */
     (async() => {
       await fetchRequestedDaysOffForStaff();
@@ -106,8 +115,7 @@ export default defineComponent({
     })();
     /* Generating new date in case of stale data */
     onIonViewWillEnter(() => {
-      selectedMonth.value = new Date().getMonth();
-      selectedYear.value = new Date().getFullYear();
+      goToToday();
 
       if(route.query.month && route.query.year) {
         selectedMonth.value = Number(route.query.month);
@@ -170,6 +178,7 @@ export default defineComponent({
       /* Event handlers */
       nextMonth,
       previousMonth,
+      goToToday,
       refresh,
 
       /* Icons */

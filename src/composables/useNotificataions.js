@@ -7,7 +7,7 @@ export function useNotifications() {
 
     /* Component properties */
     const notifications = computed(() => store.getters['user/pushNotifications']);
-    const newestNotificationPayload = ref({ name: 'dsad' });
+    const newestNotificationPayload = ref();
 
     /* Methods */
     const removeNotification = (id) => {

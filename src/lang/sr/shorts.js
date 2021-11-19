@@ -222,5 +222,8 @@ export default {
     "chooseStaff": "Izaberite zaposlenog",
     "employee": "Zaposleni",
     "numberOfWorkHours": "Broj radnih sati",
+    "noSchedule": "Nema rasporeda",
+    "today": "Danas",
+
 };
 

@@ -64,4 +64,8 @@ export default {
     "owner.successRemoveSchedule": "Successfully removed employee from schedule!",
     "alertRemoveScheduleHeader": "Removing employee from schedule.",
     "alertRemoveScheduleMessage": "Are you sure you want to remove employee from this weeks schedule?",
+    "ownerAddedSchedule": "Schedule added.",
+    "ownerAddedScheduleBody": "Your superior has just added schedule for week starting on {start_date}.",
+    "ownerUpdatedSchedule": "Schedule updated.",
+    "ownerUpdatedScheduleBody": "Your superior has just updated schedule for week that starts on {start_date}.",
 };

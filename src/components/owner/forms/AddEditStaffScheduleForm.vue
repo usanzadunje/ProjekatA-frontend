@@ -2,6 +2,7 @@
   <div>
     <div>
       <ion-item
+          v-if="!scheduleData.staff"
           lines="none"
           class="flex rounded-2xl h-11"
           :class="{ 'error-border' : errorNames.hasOwnProperty('user_id') }"
@@ -22,6 +23,20 @@
             {{ getDisplayNameForUser(employee) }}
           </ion-select-option>
         </ion-select>
+
+      </ion-item>
+      <ion-item
+          v-else
+          lines="none"
+          class="flex rounded-2xl h-11"
+          :class="{ 'error-border' : errorNames.hasOwnProperty('user_id') }"
+      >
+        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+
+        <ion-input
+            :value="getDisplayNameForUser(scheduleData.staff)"
+            disabled
+        ></ion-input>
       </ion-item>
       <ion-item
           lines="none"
@@ -101,6 +116,7 @@ import { useErrorHandling }                                            from '@/c
 import { getDisplayNameForUser } from '@/utils/helpers';
 
 import {
+  personOutline,
   timeOutline,
 } from 'ionicons/icons';
 
@@ -215,6 +231,7 @@ export default defineComponent({
       addEmployeeToSchedule,
 
       /* Icons */
+      personOutline,
       timeOutline,
     };
   },

@@ -220,5 +220,7 @@ export default {
     "chooseStaff": "Choose employee",
     "employee": "Employee",
     "numberOfWorkHours": "Number of work hours",
+    "noSchedule": "No schedule",
+    "today": "Today",
 
 };
