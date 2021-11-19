@@ -17,7 +17,7 @@
           @go-to-today="goToToday"
       >
         <div class="flex flex-col items-center">
-          <h2 class="secondary-heading underline">
+          <h2 class="secondary-heading">
             {{ selectedYear }}
           </h2>
           <h2 class="secondary-heading">

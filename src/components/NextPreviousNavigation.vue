@@ -3,7 +3,7 @@
     <div class="flex items-center mb-2">
       <ion-button
           fill="clear"
-          class="reset-button-size user-selected-color uppercase"
+          class="reset-button-size user-selected-color uppercase underline"
           @click="$emit('goToToday')"
       >
         {{ $t('today') }}

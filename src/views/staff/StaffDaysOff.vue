@@ -20,7 +20,7 @@
           <h2 class="secondary-heading">
             {{ selectedYear }}
           </h2>
-          <h2 class="secondary-heading underline">
+          <h2 class="secondary-heading">
             {{ $t(months[selectedMonth]) }}
           </h2>
         </div>

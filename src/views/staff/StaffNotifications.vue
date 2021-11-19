@@ -10,7 +10,7 @@
             <div class="flex justify-between items-center bg-show">
               <h1 class="primary-text-color font-bold text-2xl">{{ $t('notification', 2) }}</h1>
               <ion-button class="h-auto" @click="clearNotifications">
-                <span class="py-2 uppercase">{{ `${$t('clear')} ${$t('all')}` }}</span>
+                <span class="py-2 uppercase">{{ $t('clear') }}</span>
               </ion-button>
             </div>
           </ion-toolbar>

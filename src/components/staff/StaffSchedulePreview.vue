@@ -24,7 +24,9 @@
               ></ion-icon>
               <span class="font-medium">{{ `${schedule.start_time} - ${calculateEndTime(schedule)}` }}</span>
             </div>
-            <div v-else>
+            <div
+                v-else
+            >
               {{ $t('noSchedule') + '.' }}
             </div>
           </div>
