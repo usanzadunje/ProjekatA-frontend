@@ -101,11 +101,11 @@ export default defineComponent({
       );
 
     };
-    const initializeiOS = async() => {
-      await CapacitorGoogleMaps.initialize({
-        key: process.env.VUE_APP_IOS_GOOGLEMAPS_KEY,
-      });
-    };
+    // const initializeiOS = async() => {
+    //   await CapacitorGoogleMaps.initialize({
+    //     key: process.env.VUE_APP_IOS_GOOGLEMAPS_KEY,
+    //   });
+    // };
 
     /* Lifecycle hooks */
     onMounted(async() => {
@@ -122,7 +122,7 @@ export default defineComponent({
 
       distance.value = `${Math.round(PlaceService.getDistance(place.value.latitude, place.value.longitude))}m`;
 
-      await initializeiOS();
+      // await initializeiOS();
       await createMap();
 
       await loading.dismiss();
