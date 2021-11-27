@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: ionic-prod
+    container_name: frontend-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - app-data:/etc/nginx
+    ports:
+      - 80:80
+#      - 443:443
+
+volumes:
+  app-data:
