@@ -1,6 +1,6 @@
-**/node_modules
-**/dist
-**/tests
-**/android
-**/ios
+node_modules
+dist
+tests
+android
+ios
 npm-debug.log
