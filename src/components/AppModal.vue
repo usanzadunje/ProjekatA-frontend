@@ -1,12 +1,12 @@
 <template>
   <ion-modal
-      :css-class="[cssClass, 'auto-height']"
+      :css-class="cssClass + ' auto-height'"
       :is-open="isOpen"
       :backdrop-dismiss="true"
       :swipe-to-close="swipeToClose"
       @willPresent="initialize"
-      @didPresent="$emit('onDidPresent')"
-      @didDismiss="$emit('onDidDismiss')"
+      @didPresent="$emit('didPresent')"
+      @didDismiss="$emit('didDismiss')"
   >
     <div class="inner-content">
       <slot/>
@@ -19,11 +19,11 @@ import { defineComponent } from 'vue';
 import { IonModal }        from '@ionic/vue';
 
 export default defineComponent({
-  name: 'Modal',
+  name: 'AppModal',
   components: {
     IonModal,
   },
-  emits: ['onDidPresent', 'onDidDismiss'],
+  emits: ['didPresent', 'didDismiss'],
   props: {
     cssClass: {
       type: String,

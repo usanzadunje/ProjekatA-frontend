@@ -68,8 +68,9 @@ export default defineComponent({
               await store.dispatch('staff/toggleActivity', true);
             }
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
     };
 

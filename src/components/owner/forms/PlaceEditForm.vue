@@ -11,10 +11,14 @@
         </div>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11"
+            class="rounded-2xl h-11"
             :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
         >
-          <ion-icon :icon="createOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="createOutline"
+              class="mr-2 text-xl text-gray-500"
+          ></ion-icon>
           <ion-input
               v-model.lazy="place.name"
               v-capitalize
@@ -28,10 +32,14 @@
         </ion-item>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5"
+            class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('city') }"
         >
-          <ion-icon :icon="navigateOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="navigateOutline"
+              class="mr-2 text-xl text-gray-500"
+          ></ion-icon>
           <ion-input
               ref="cityInput"
               v-model.lazy="place.city"
@@ -45,10 +53,14 @@
         </ion-item>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5"
+            class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('address') }"
         >
-          <ion-icon :icon="homeOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="homeOutline"
+              class="mr-2 text-xl text-gray-500"
+          ></ion-icon>
           <ion-input
               ref="addressInput"
               v-model.lazy="place.address"
@@ -61,10 +73,14 @@
         </ion-item>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5"
+            class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
         >
-          <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="mailOutline"
+              class="mr-2 text-xl text-gray-500"
+          ></ion-icon>
           <ion-input
               ref="emailInput"
               v-model.lazy="place.email"
@@ -77,10 +93,14 @@
         </ion-item>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5"
+            class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
         >
-          <ion-icon :icon="callOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="callOutline"
+              class="mr-2 text-xl text-gray-500"
+          ></ion-icon>
           <ion-input
               ref="phoneInput"
               v-model.lazy="place.phone"
@@ -103,78 +123,54 @@
       <div v-show="showWorkingHours">
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5"
+            class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('mon_fri') }"
         >
-          <ion-label class="settings-fade-text">{{ `${$t('monday')}-${$t('friday')}` }}</ion-label>
-          <ion-datetime
-              v-model="place.mon_fri_start"
-              :doneText="$t('choose')"
-              :cancelText="$t('cancel')"
-              display-format="HH:mm"
-              value="04:20"
-              :placeholder="$t('selectTime')"
-          ></ion-datetime>
-          &nbsp;
-          -
-          <ion-datetime
-              v-model="place.mon_fri_end"
-              :doneText="$t('choose')"
-              :cancelText="$t('cancel')"
-              display-format="HH:mm"
-              value="04:20"
-              :placeholder="$t('selectTime')"
-          ></ion-datetime>
+          <ion-label slot="start" class="settings-fade-text">{{ `${$t('monday')}-${$t('friday')}` }}</ion-label>
+
+          <AppFromToTimePicker
+              :canInitialize="showWorkingHours"
+              start-trigger-id="open-mon-fri-start-picker"
+              end-trigger-id="open-mon-fri-end-picker"
+              :start-value="place.mon_fri_start"
+              :end-value="place.mon_fri_end"
+              @start-changed="place.mon_fri_start = $event"
+              @end-changed="place.mon_fri_end = $event"
+          />
         </ion-item>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5"
-            :class="{ 'error-border' : errorNames.hasOwnProperty('satudrady') }"
+            class="rounded-2xl h-11 mt-3.5"
+            :class="{ 'error-border' : errorNames.hasOwnProperty('saturday') }"
         >
-          <ion-label class="settings-fade-text">{{ $t('saturday') }}</ion-label>
-          <ion-datetime
-              v-model="place.saturday_start"
-              :doneText="$t('choose')"
-              :cancelText="$t('cancel')"
-              display-format="HH:mm"
-              value="04:20"
-              :placeholder="$t('selectTime')"
-          ></ion-datetime>
-          &nbsp;
-          -
-          <ion-datetime
-              v-model="place.saturday_end"
-              :doneText="$t('choose')"
-              :cancelText="$t('cancel')"
-              display-format="HH:mm"
-              value="04:20"
-              :placeholder="$t('selectTime')"
-          ></ion-datetime>
+          <ion-label slot="start" class="settings-fade-text">{{ $t('saturday') }}</ion-label>
+
+          <AppFromToTimePicker
+              :canInitialize="showWorkingHours"
+              start-trigger-id="open-saturday-start-picker"
+              end-trigger-id="open-saturday-end-picker"
+              :start-value="place.saturday_start"
+              :end-value="place.saturday_end"
+              @start-changed="place.saturday_start = $event"
+              @end-changed="place.saturday_end = $event"
+          />
         </ion-item>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5"
+            class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('sunday') }"
         >
-          <ion-label class="settings-fade-text">{{ $t('sunday') }}</ion-label>
-          <ion-datetime
-              v-model="place.sunday_start"
-              :doneText="$t('choose')"
-              :cancelText="$t('cancel')"
-              display-format="HH:mm"
-              value="04:20"
-              :placeholder="$t('selectTime')"
-          ></ion-datetime>
-          &nbsp;
-          -
-          <ion-datetime
-              v-model="place.sunday_end"
-              :doneText="$t('choose')"
-              :cancelText="$t('cancel')"
-              display-format="HH:mm"
-              value="04:20"
-              :placeholder="$t('selectTime')"
-          ></ion-datetime>
+          <ion-label slot="start" class="settings-fade-text">{{ $t('sunday') }}</ion-label>
+
+          <AppFromToTimePicker
+              :canInitialize="showWorkingHours"
+              start-trigger-id="open-sunday-start-picker"
+              end-trigger-id="open-sunday-end-picker"
+              :start-value="place.sunday_start"
+              :end-value="place.sunday_end"
+              @start-changed="place.sunday_start = $event"
+              @end-changed="place.sunday_end = $event"
+          />
         </ion-item>
       </div>
     </div>
@@ -219,13 +215,13 @@ import {
   IonSpinner,
   IonToggle,
   IonLabel,
-  IonDatetime,
   modalController,
 }
                                                                               from "@ionic/vue";
 
 import MainImagePreview    from '@/components/MainImagePreview';
 import PlaceImagesAddModal from '@/components/owner/modals/PlaceImagesAddModal';
+import AppFromToTimePicker from '@/components/AppFromToTimePicker';
 
 import { useErrorHandling }   from '@/composables/useErrorHandling';
 import { hideNativeKeyboard } from '@/composables/useDevice';
@@ -248,8 +244,8 @@ export default defineComponent({
     IonSpinner,
     IonToggle,
     IonLabel,
-    IonDatetime,
     MainImagePreview,
+    AppFromToTimePicker,
   },
   props: {
     resetInputs: {
@@ -301,21 +297,21 @@ export default defineComponent({
     const resetInput = () => {
       showWorkingHours.value = false;
 
-      const mon_fri_hours = placeInfo.value.working_hours.mon_fri.split('-');
-      const saturday_hours = placeInfo.value.working_hours.saturday.split('-');
-      const sunday_hours = placeInfo.value.working_hours.sunday.split('-');
+      const monFriHours = placeInfo.value.working_hours.mon_fri.split('-');
+      const saturdayHours = placeInfo.value.working_hours.saturday.split('-');
+      const sundayHours = placeInfo.value.working_hours.sunday.split('-');
 
       place.name = placeInfo.value.name;
       place.city = placeInfo.value.city;
       place.address = placeInfo.value.address;
       place.email = placeInfo.value.email;
       place.phone = placeInfo.value.phone;
-      place.mon_fri_start = mon_fri_hours[0];
-      place.mon_fri_end = mon_fri_hours[1];
-      place.saturday_start = saturday_hours[0];
-      place.saturday_end = saturday_hours[1];
-      place.sunday_start = sunday_hours[0];
-      place.sunday_end = sunday_hours[1];
+      place.mon_fri_start = monFriHours[0];
+      place.mon_fri_end = monFriHours[1];
+      place.saturday_start = saturdayHours[0];
+      place.saturday_end = saturdayHours[1];
+      place.sunday_start = sundayHours[0];
+      place.sunday_end = sundayHours[1];
 
       emit('scrollToTop');
     };
@@ -334,7 +330,9 @@ export default defineComponent({
 
             await store.dispatch("owner/updatePlaceInfo", place);
           },
-          'successUpdate',
+          {
+            successMessageKey: 'successUpdate',
+          },
       );
 
       loading.value = false;
@@ -364,8 +362,9 @@ export default defineComponent({
             async() => {
               await store.dispatch("owner/getPlaceInfo");
             },
-            null,
-            'dataFetchingError',
+            {
+              errorMessageKey: 'dataFetchingError',
+            },
         );
 
         resetInput();

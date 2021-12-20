@@ -77,8 +77,6 @@ export default {
     "update": "Izmeni",
     "updating": "Ažuriram",
     "create": "Kreiraj",
-    "selectDate": "Izaberite datum",
-    "selectTime": "Izaberite vreme",
     "done": "Gotovo",
     "unknown": "Neznanac",
     "or": "ili",

@@ -164,10 +164,11 @@ export default defineComponent({
 
             productImages.value = productImages.value.concat(response.data);
           },
-          'successImageUpload',
-          null,
-          () => {
-            images.value = null;
+          {
+            successMessageKey: 'successImageUpload',
+            catchCallback: () => {
+              images.value = null;
+            },
           },
       );
 
@@ -188,7 +189,9 @@ export default defineComponent({
 
             productImages.value = productImages.value.filter(img => img.id !== image.id);
           },
-          'successImageRemove',
+          {
+            successMessageKey: 'successImageRemove',
+          },
       );
 
       loading.value = null;
@@ -212,7 +215,9 @@ export default defineComponent({
               image,
             });
           },
-          'successImageMain',
+          {
+            successMessageKey: 'successImageMain',
+          },
       );
 
       loading.value = null;

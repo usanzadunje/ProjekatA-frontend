@@ -149,7 +149,7 @@ import { increaseAccordionMaxHeight } from '@/utils/helpers';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 export default defineComponent({
-  name: 'Products',
+  name: 'ProductIndex',
   components: {
     IonButton,
     IonList,
@@ -207,7 +207,9 @@ export default defineComponent({
               increaseAccordionMaxHeight('productPanel', '1500');
             }
           },
-          'owner.removeProduct',
+          {
+            successMessageKey: 'owner.removeProduct',
+          },
       );
     };
     const getProducts = async(load) => {
@@ -220,8 +222,9 @@ export default defineComponent({
               load,
             });
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
     };
 

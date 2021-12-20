@@ -91,6 +91,7 @@ ion-spinner {
 
 ion-item {
     --transition: none !important;
+    background: var(--input-bg);
     --background: var(--input-bg);
 }
 
@@ -103,6 +104,13 @@ ion-datetime {
 
 ion-loading {
     backdrop-filter: blur(5px);
+}
+
+ion-datetime {
+    height: auto;
+    width: auto;
+
+    max-width: 350px;
 }
 
 ion-modal {
@@ -139,7 +147,7 @@ ion-modal ion-item {
     --background: var(--secondary-paint) !important;
 }
 
-.custom-modal .modal-wrapper {
+.custom-modal::part(content) {
     position: absolute !important;
     bottom: 0 !important;
 }
@@ -149,7 +157,7 @@ ion-modal ion-item {
     --background: var(--secondary-paint) !important;
 }
 
-.custom-sub-modal .modal-wrapper {
+.custom-sub-modal::part(content) {
     position: absolute !important;
     bottom: 0 !important;
 }
@@ -159,7 +167,7 @@ ion-modal ion-item {
     --background: var(--secondary-paint) !important;
 }
 
-.custom-map-modal .modal-wrapper {
+.custom-map-modal::part(content) {
     position: absolute !important;
     bottom: 0 !important;
 }
@@ -183,11 +191,21 @@ ion-modal ion-item {
     --background: var(--secondary-paint) !important;
 }
 
+.custom-birthday-modal {
+    --width: 290px;
+    --height: 382px;
+    --border-radius: 8px;
+}
+
+.custom-birthday-modal ion-datetime {
+    height: 382px;
+}
+
 .settings-popover {
     --min-width: 170px;
 }
 
-.settings-popover .popover-arrow::after {
+.settings-popover::part(arrow)::after {
     background: #E5E7EB !important;
 }
 
@@ -195,7 +213,7 @@ ion-modal ion-item {
     --min-width: 185px;
 }
 
-.staff-settings-popover .popover-arrow::after {
+.staff-settings-popover::part(arrow)::after {
     background: #E5E7EB !important;
 }
 
@@ -205,7 +223,7 @@ ion-modal ion-item {
     --max-height: 35vh;
 }
 
-.notifications-popover .popover-arrow::after {
+.notifications-popover::part(arrow)::after {
     background: #E5E7EB !important;
 }
 
@@ -215,7 +233,7 @@ ion-modal ion-item {
     --height: auto;
 }
 
-.table-tooltip-popover .popover-arrow::after {
+.table-tooltip-popover::part(arrow)::after {
     background: #E5E7EB !important;
 }
 
@@ -224,7 +242,7 @@ ion-modal ion-item {
     --width: 250px;
 }
 
-.icon-choice-popover .popover-content {
+.icon-choice-popover::part(content) {
     background: var(--input-bg) !important;
 }
 
@@ -332,6 +350,16 @@ ion-badge.notification-badge {
 
 
 /* UTILITY CLASSES */
+.reset-datetime-bg {
+    --background: #fff !important;
+    --background-rgb: unset !important;
+}
+
+.transparent-button-background {
+    --background: transparent;
+    background: transparent;
+}
+
 .primary-button-background {
     --background: var(--primary-button) !important;
 }
@@ -1400,3 +1428,4 @@ ion-toggle.dark-toggle-checked {
 /*
     END PLACEHOLDER SCREENS STYLES
 */
+

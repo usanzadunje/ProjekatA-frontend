@@ -115,7 +115,7 @@
 
 <script>
 import { computed, defineComponent, ref, watch } from 'vue';
-import { useRoute }                   from 'vue-router';
+import { useRoute }                              from 'vue-router';
 import { useStore }                              from 'vuex';
 import { useI18n }                               from 'vue-i18n';
 import {
@@ -235,8 +235,9 @@ export default defineComponent({
             );
             placesUserSubscribedTo.value = response.data;
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
     };
     const refresh = async(event) => {
@@ -330,10 +331,10 @@ export default defineComponent({
 
               store.commit("user/ADD_SUBSCRIPTION", place.id);
             },
-            null,
-            'generalAlertError',
+            {
+              errorMessageKey: 'generalAlertError',
+            },
         );
-
 
         await getSubscriptions();
       });

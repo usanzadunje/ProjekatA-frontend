@@ -25,7 +25,7 @@ export function useModal() {
     const showModal = (selector) => {
         const modal = document.querySelector(`${selector}`);
 
-        modal.style.setProperty('transition', 'opacity 0.2s ease-out', 'important');
+        modal.style.setProperty('transition', 'opacity 0.1s ease-out', 'important');
         modal.style.setProperty('opacity', '1', 'important');
     };
 

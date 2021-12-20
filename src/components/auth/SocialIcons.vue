@@ -61,8 +61,10 @@ export default defineComponent({
             await store.dispatch("user/getSettings");
 
             await router.replace({ name: 'home' });
-          }
-          , 'successLogin',
+          },
+          {
+            successMessageKey: 'successLogin',
+          },
       );
     };
 

@@ -132,7 +132,7 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { increaseAccordionMaxHeight } from '@/utils/helpers';
 
 export default defineComponent({
-  name: 'Categories',
+  name: 'CategoryIndex',
   components: {
     IonButton,
     IonList,
@@ -172,7 +172,9 @@ export default defineComponent({
               increaseAccordionMaxHeight('categoryPanel', '1500');
             }
           },
-          'owner.removeCategory',
+          {
+            successMessageKey: 'owner.removeCategory',
+          },
       );
     };
     /* Event handlers */

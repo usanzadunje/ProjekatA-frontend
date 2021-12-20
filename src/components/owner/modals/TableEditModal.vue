@@ -30,10 +30,11 @@
       </div>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('price') }"
       >
         <ion-icon
+            slot="start"
             :icon="accessibilityOutline"
             class="mr-2 text-xl text-gray-500"
         >
@@ -136,7 +137,9 @@ export default defineComponent({
           async() => {
             await store.dispatch("owner/updateTable", { tableId: id, payload: table.value });
           },
-          'owner.updateTable',
+          {
+            successMessageKey: 'owner.updateTable',
+          },
       );
 
       loading.value = -1;
@@ -164,8 +167,10 @@ export default defineComponent({
                       async() => {
                         await store.dispatch("owner/deleteTable", id);
                       },
-                      'owner.removeTable',
-                      'generalAlertError',
+                      {
+                        successMessageKey: 'owner.removeTable',
+                        errorMessageKey: 'generalAlertError',
+                      },
                   );
 
                   emit('dismiss');

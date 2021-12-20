@@ -2,10 +2,14 @@
   <div class="">
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11"
+        class="rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
     >
-      <ion-icon :icon="pricetagOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="pricetagOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           v-model.lazy="internalCategory.name"
           v-capitalize
@@ -20,7 +24,7 @@
         button
         detail="false"
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
+        class="rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('icon') }"
         @click="openIconChoicePopover"
     >
@@ -151,7 +155,9 @@ export default defineComponent({
 
             emit('dismiss');
           },
-          category?.value ? 'owner.updateCategory' : 'owner.createCategory',
+          {
+            successMessageKey: category?.value ? 'owner.updateCategory' : 'owner.createCategory',
+          },
       );
 
       loading.value = false;

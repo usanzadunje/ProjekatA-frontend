@@ -1,29 +1,38 @@
 <template>
   <ion-page>
     <ion-content>
-      <button @click="this.$router.push({name:'settings'})">BACK</button>
-      <NotFoundImage/>
+      <TheUserHeader
+          id="asdasd"
+          v-show="true"
+          :main-heading="$t('findAvailablePlace')"
+      />
     </ion-content>
   </ion-page>
 </template>
-<script>
 
+<script>
 import {
   IonContent,
   IonPage,
-}                    from '@ionic/vue';
-import NotFoundImage from '@/components/images/NotFoundImage';
+} from '@ionic/vue';
+
+import {
+  locationOutline,
+}                    from 'ionicons/icons';
+import TheUserHeader from '@/components/user/headers/TheUserHeader';
 
 export default {
   components: {
     IonContent,
     IonPage,
-    NotFoundImage,
+    TheUserHeader,
   },
   setup() {
 
 
-    return {};
+    return {
+      locationOutline,
+    };
   },
 };
 </script>

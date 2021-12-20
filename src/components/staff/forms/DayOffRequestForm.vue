@@ -2,10 +2,14 @@
   <div class="px-2">
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11"
+        class="rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('number_of_days') }"
     >
-      <ion-icon :icon="calendarNumberOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="calendarNumberOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           v-model.lazy.number="dayOffRequest.number_of_days"
           type="number"
@@ -18,7 +22,7 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl mt-3.5"
+        class="rounded-2xl mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('message') }"
     >
       <ion-textarea
@@ -144,12 +148,11 @@ export default defineComponent({
 
             emit('dismiss');
           },
-          'successDayOffRequest',
-          null,
-          null,
-          dayOffRequest.numberOfDays,
-      )
-      ;
+          {
+            successMessageKey: 'successDayOffRequest',
+            successMessageParams: dayOffRequest.numberOfDays,
+          },
+      );
 
       loading.value = false;
     };

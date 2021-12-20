@@ -242,8 +242,9 @@ export default defineComponent({
           async() => {
             await store.dispatch('staff/updatePlaceAvailability');
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
 
       showSkeleton.value = false;
@@ -272,8 +273,9 @@ export default defineComponent({
               await store.dispatch('owner/getActiveStaffInfo');
             }
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
 
       showSkeleton.value = false;

@@ -2,10 +2,14 @@
   <div class="">
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11"
+        class="rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
     >
-      <ion-icon :icon="pricetagOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="pricetagOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           v-model.lazy="internalSection.name"
           v-capitalize
@@ -118,7 +122,9 @@ export default defineComponent({
 
             emit('dismiss');
           },
-          section?.value ? 'owner.updateSection' : 'owner.createSection',
+          {
+            successMessageKey: section?.value ? 'owner.updateSection' : 'owner.createSection',
+          },
       );
 
       loading.value = false;

@@ -136,8 +136,9 @@ export default defineComponent({
               places.value = response.data;
             }
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
     };
     const refresh = async(event) => {

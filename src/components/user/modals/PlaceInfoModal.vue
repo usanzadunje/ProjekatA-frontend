@@ -19,12 +19,9 @@
       />
     </div>
 
-    <PlaceInfoBody
-        :place="{...place, working_hours: placeAdditionalInfo?.working_hours}"
-    />
-    <div
-        class="mt-6 ion-no-padding"
-    >
+    <PlaceInfoBody :place="{...place, working_hours: placeAdditionalInfo?.working_hours}"/>
+
+    <div class="mt-6 ion-no-padding">
       <PlaceInfoModalImageSlider
           :images="placeAdditionalInfo?.images?.filter(img => !img.is_logo)"
           :show-skeleton="showSkeleton"
@@ -40,9 +37,9 @@
         {{ $t('more') }}
       </ion-button>
       <ion-button
-          @click="openModal(true);hideModal('.custom-modal > .modal-wrapper')"
+          @click="openModal(true);hideModal('.custom-modal')"
           class="flex-shrink uppercase button-subscribe modal-button-border"
-          :disabled="isSubButtonDisabled"
+          :disabled="false"
       >
         <ion-icon slot="start"
                   :icon="isUserSubscribed ? notifications : notificationsOutline"
@@ -56,7 +53,7 @@
   <AppModal
       :is-open="isModalOpen"
       css-class="custom-map-modal"
-      @didDismiss="openModal(false);showModal('.custom-modal > .modal-wrapper')"
+      @didDismiss="openModal(false);showModal('.custom-modal')"
   >
     <PlaceSubscriptionModal
         :place="{'id': place.id, 'name': place.name}"
@@ -146,8 +143,9 @@ export default defineComponent({
           async() => {
             await getCachedOrFetchPlaceAdditionalInfo(place.value?.id);
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
 
       setTimeout(() => {

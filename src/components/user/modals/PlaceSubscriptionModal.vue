@@ -122,11 +122,12 @@ export default defineComponent({
 
             store.commit("user/ADD_SUBSCRIPTION", place.value.id);
           },
-          'successSubscribe',
-          'generalAlertError',
-          null,
           {
-            place: place.value.name,
+            successMessageKey: 'successSubscribe',
+            errorMessageKey: 'generalAlertError',
+            successMessageParams: {
+              place: place.value.name,
+            },
           },
       );
     };
@@ -152,8 +153,9 @@ export default defineComponent({
                         await subscribe(place.value.id);
                         await store.dispatch('user/setNotifications', true);
                       },
-                      null,
-                      'generalAlertError',
+                      {
+                        errorMessageKey: 'generalAlertError',
+                      },
                   );
                   loading.value = false;
                 },
@@ -184,12 +186,14 @@ export default defineComponent({
 
               store.commit("user/REMOVE_SUBSCRIPTION", place.value.id);
             },
-            'successUnsubscribe',
-            'generalAlertError',
-            null,
             {
-              place: place.value.name,
-            },
+              successMessageKey: 'successUnsubscribe',
+              errorMessageKey: 'generalAlertError',
+              successMessageParams: {
+                place: place.value.name,
+              },
+            }
+
         );
       }else {
         if(!store.getters['user/notifications']) {

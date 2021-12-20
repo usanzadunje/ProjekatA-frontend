@@ -2,10 +2,14 @@
   <div class="px-8">
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
+        class="rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
     >
-      <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="mailOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           v-model.lazy="newUser.email"
           autocomplete="email"
@@ -20,10 +24,14 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
+        class="rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
-      <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="lockOpenOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           ref="passwordInput"
           v-model="newUser.password"
@@ -33,19 +41,24 @@
           required
           @keyup.enter="passwordConfirmInput.$el?.setFocus()"
       ></ion-input>
-      <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
-                @click="togglePasswordShow(false)"
-                class="text-xl text-gray-500"
+      <ion-icon
+          slot="end"
+          :icon="showPassword ? eyeOutline : eyeOffOutline"
+          @click="togglePasswordShow(false)"
+          class="text-xl text-gray-500"
       >
-
       </ion-icon>
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
+        class="rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
-      <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="lockOpenOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           ref="passwordConfirmInput"
           v-model="newUser.password_confirmation"
@@ -55,9 +68,11 @@
           required
           @keyup.enter="register"
       ></ion-input>
-      <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
-                @click="togglePasswordShow(true)"
-                class="text-xl text-gray-500"
+      <ion-icon
+          slot="end"
+          :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
+          @click="togglePasswordShow(true)"
+          class="text-xl text-gray-500"
       ></ion-icon>
     </ion-item>
     <SocialIcons class="mt-7"/>
@@ -95,7 +110,7 @@ import { IonItem, IonInput, IonIcon, IonButton, IonSpinner } from "@ionic/vue";
 import SocialIcons from '@/components/auth/SocialIcons';
 
 import { deviceInfo, hideNativeKeyboard } from '@/composables/useDevice';
-import { useErrorHandling }              from '@/composables/useErrorHandling';
+import { useErrorHandling }               from '@/composables/useErrorHandling';
 
 import {
   personOutline,

@@ -14,9 +14,13 @@
     <div class="mt-4 px-2">
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11"
+          class="rounded-2xl h-11"
       >
-        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="personOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <ion-input
             :value="staffDisplayName"
@@ -26,9 +30,13 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl mt-3.5"
+          class="rounded-2xl mt-3.5"
       >
-        <ion-icon :icon="calendarNumberOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="calendarNumberOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <p class="w-full padding-y text">
           {{ `${$t('start')}: ${(requestData.start_date)}` }}
@@ -36,9 +44,13 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl mt-3.5"
+          class="rounded-2xl mt-3.5"
       >
-        <ion-icon :icon="calendarNumberOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="calendarNumberOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <p class="w-full padding-y text">
           {{ `${$t('end')}: ${(requestData.end_date)}` }}
@@ -51,7 +63,7 @@
       </div>
       <ion-item
           lines="none"
-          class="flex rounded-2xl"
+          class="rounded-2xl"
       >
         <p class="padding-y text break-words">
           {{ requestData.message || $t('noMessage') }}

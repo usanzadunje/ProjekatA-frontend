@@ -104,6 +104,10 @@ ion-button {
   height: auto;
 }
 
+ion-toolbar {
+  --background: var(--secondary-paint);
+}
+
 ion-toolbar::part(open) {
   padding: 0 !important;
 }

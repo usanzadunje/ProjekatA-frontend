@@ -192,7 +192,7 @@ import AppModal                  from '@/components/AppModal';
 import PlaceSubscriptionModal    from '@/components/user/modals/PlaceSubscriptionModal';
 import ImagePreviewModal         from '@/components/user/modals/ImagePreviewModal';
 import AddTablesPlaceholderImage from '@/components/images/AddTablesPlaceholderImage';
-import NoMenuPlaceholderImage from '@/components/images/NoMenuPlaceholderImage';
+import NoMenuPlaceholderImage    from '@/components/images/NoMenuPlaceholderImage';
 
 import PlaceService   from '@/services/PlaceService';
 import ProductService from '@/services/ProductService';
@@ -314,8 +314,9 @@ export default defineComponent({
 
             showSkeleton.value = false;
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
 
       resetProductOffset.value = false;
@@ -339,8 +340,9 @@ export default defineComponent({
 
             category.products = category.products.concat(response.data);
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
 
       loadingProducts.value = false;

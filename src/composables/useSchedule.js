@@ -23,8 +23,9 @@ export function useSchedule() {
                 async() => {
                     await store.dispatch('staff/getSchedules');
                 },
-                null,
-                'dataFetchingError',
+                {
+                    errorMessageKey: 'dataFetchingError',
+                },
             );
         }
     };
@@ -55,8 +56,9 @@ export function useSchedule() {
                 async() => {
                     await getCachedOrFetchSchedules(force);
                 },
-                null,
-                'dataFetchingError',
+                {
+                    errorMessageKey: 'dataFetchingError',
+                },
             );
         }
     };
@@ -68,7 +70,9 @@ export function useSchedule() {
             async() => {
                 await store.dispatch('owner/removeEmployeeFromSchedule', id);
             },
-            'owner.successRemoveSchedule',
+            {
+                successMessageKey: 'owner.successRemoveSchedule',
+            },
         );
     };
 

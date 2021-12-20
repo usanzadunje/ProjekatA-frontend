@@ -70,11 +70,12 @@ export default defineComponent({
           async() => {
             await store.dispatch(toggleMutation, place.value);
           },
-          userFavorite.value ? 'successRemovedFavorite' : 'successAddedFavorite',
-          'generalAlertError',
-          null,
           {
-            place: place.value.name,
+            successMessageKey: userFavorite.value ? 'successRemovedFavorite' : 'successAddedFavorite',
+            errorMessageKey: 'generalAlertError',
+            successMessageParams: {
+              place: place.value.name,
+            },
           },
       );
     };

@@ -6,10 +6,14 @@
     <h2 v-else class="secondary-heading text-center mb-6"> {{ $t('owner.createStaff') }}</h2>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11"
+        class="rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('fname') }"
     >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="personOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           v-model.lazy="user.fname"
           v-capitalize
@@ -23,10 +27,14 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
+        class="rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('lname') }"
     >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="personOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           ref="lnameInput"
           v-model.lazy="user.lname"
@@ -40,10 +48,14 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
+        class="rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('username') }"
     >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="personOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           ref="usernameInput"
           v-model.lazy="user.username"
@@ -56,10 +68,14 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
+        class="rounded-2xl h-11 mt-3.5"
         :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
     >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="mailOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           ref="emailInput"
           v-model.lazy="user.email"
@@ -72,10 +88,14 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+        class="rounded-2xl h-11 mt-3.5 auth-input-background"
         :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
     >
-      <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="lockOpenOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           ref="passwordInput"
           v-model="user.password"
@@ -85,9 +105,11 @@
           required
           @keyup.enter="createOrUpdate"
       ></ion-input>
-      <ion-icon :icon="showPassword ? eyeOutline : eyeOffOutline"
-                @click="togglePasswordShow"
-                class="text-xl text-gray-500"
+      <ion-icon
+          slot="end"
+          :icon="showPassword ? eyeOutline : eyeOffOutline"
+          @click="togglePasswordShow"
+          class="text-xl text-gray-500"
       >
       </ion-icon>
     </ion-item>
@@ -201,7 +223,9 @@ export default defineComponent({
 
             emit('dismiss');
           },
-          staff?.value ? 'owner.updatedStaff' : 'owner.createdStaff',
+          {
+            successMessageKey: staff?.value ? 'owner.updatedStaff' : 'owner.createdStaff',
+          },
       );
 
       loading.value = false;

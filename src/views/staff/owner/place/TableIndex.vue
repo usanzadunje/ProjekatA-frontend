@@ -136,13 +136,13 @@ import {
   alertController,
 }                                                    from '@ionic/vue';
 
-import TheSegmentNavigation from '@/components/TheSegmentNavigation';
-import TableEdit                 from '@/components/owner/TableEdit';
-import Table                     from '@/components/Table';
-import TableSectionPicker        from '@/components/TableSectionPicker';
-import AppModal                  from '@/components/AppModal';
-import TableEditModal            from '@/components/owner/modals/TableEditModal';
-import SectionCreateEditModal    from '@/components/owner/modals/SectionCreateEditModal';
+import TheSegmentNavigation   from '@/components/TheSegmentNavigation';
+import TableEdit              from '@/components/owner/TableEdit';
+import Table                  from '@/components/Table';
+import TableSectionPicker     from '@/components/TableSectionPicker';
+import AppModal               from '@/components/AppModal';
+import TableEditModal         from '@/components/owner/modals/TableEditModal';
+import SectionCreateEditModal from '@/components/owner/modals/SectionCreateEditModal';
 
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useModal }         from '@/composables/useModal';
@@ -154,7 +154,7 @@ import {
   addCircle,
   create,
   removeCircle,
-}                           from 'ionicons/icons';
+} from 'ionicons/icons';
 
 export default defineComponent({
   name: "TableIndex",
@@ -220,7 +220,9 @@ export default defineComponent({
                 tableSections.value.find(section => section.id === activeSection.value),
             );
           },
-          'owner.updateTables',
+          {
+            successMessageKey: 'owner.updateTables',
+          },
       );
 
       loading.value = -1;
@@ -272,7 +274,9 @@ export default defineComponent({
 
                         activeSection.value = 1;
                       },
-                      'owner.removeSection',
+                      {
+                        successMessageKey: 'owner.removeSection',
+                      },
                   );
                 },
               },

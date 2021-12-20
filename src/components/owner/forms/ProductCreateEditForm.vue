@@ -3,10 +3,14 @@
     <div>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11"
+          class="rounded-2xl h-11"
           :class="{ 'error-border' : errorNames.hasOwnProperty('name') }"
       >
-        <ion-icon :icon="createOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="createOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <ion-input
             v-model="newProduct.name"
@@ -20,7 +24,7 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('category_id') }"
       >
         <ion-label class="ion-select-label">{{ $t('productCategory') }}</ion-label>
@@ -42,7 +46,7 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl mt-3.5"
+          class="rounded-2xl mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('description') }"
       >
         <ion-textarea
@@ -59,10 +63,14 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('price') }"
       >
-        <ion-icon :icon="walletOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="walletOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <ion-input
             v-model.number="newProduct.price"
@@ -200,7 +208,9 @@ export default defineComponent({
 
             emit('dismiss');
           },
-          product?.value ? 'owner.updateProduct' : 'owner.createProduct',
+          {
+            successMessageKey: product?.value ? 'owner.updateProduct' : 'owner.createProduct',
+          },
       );
 
       loading.value = false;

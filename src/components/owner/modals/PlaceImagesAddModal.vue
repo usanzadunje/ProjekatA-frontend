@@ -178,10 +178,11 @@ export default defineComponent({
 
             await store.dispatch('owner/uploadPlaceImages', formData);
           },
-          'successImageUpload',
-          null,
-          () => {
-            images.value = null;
+          {
+            successMessageKey: 'successImageUpload',
+            catchCallback: () => {
+              images.value = null;
+            },
           },
       );
 
@@ -198,7 +199,9 @@ export default defineComponent({
 
             await store.dispatch('owner/getPlaceInfo');
           },
-          'successImageRemove',
+          {
+            successMessageKey: 'successImageRemove',
+          },
       );
 
       loading.value = null;
@@ -215,7 +218,9 @@ export default defineComponent({
               type: 'is_main',
             });
           },
-          'successImageMain',
+          {
+            successMessageKey: 'successImageMain',
+          },
       );
 
       loading.value = null;
@@ -232,7 +237,9 @@ export default defineComponent({
               type: 'is_logo',
             });
           },
-          'successImageLogo',
+          {
+            successMessageKey: 'successImageLogo',
+          },
       );
 
       loading.value = null;

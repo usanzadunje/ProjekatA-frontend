@@ -3,7 +3,6 @@
     <ion-router-outlet/>
   </ion-app>
 </template>
-
 <script>
 import { defineComponent }         from 'vue';
 import { useStore }                from 'vuex';
@@ -38,8 +37,9 @@ export default defineComponent({
             await store.dispatch("user/getSettings");
             await initPush();
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
     })();
 

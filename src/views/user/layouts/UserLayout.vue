@@ -91,8 +91,9 @@ export default defineComponent({
               store.dispatch("user/getFavoritePlaces");
             }
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
     });
 

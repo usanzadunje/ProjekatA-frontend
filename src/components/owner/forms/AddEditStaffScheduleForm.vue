@@ -4,7 +4,7 @@
       <ion-item
           v-if="!scheduleData.staff"
           lines="none"
-          class="flex rounded-2xl h-11"
+          class="rounded-2xl h-11"
           :class="{ 'error-border' : errorNames.hasOwnProperty('user_id') }"
       >
         <ion-label class="ion-select-label">{{ $t('chooseStaff') }}</ion-label>
@@ -28,10 +28,14 @@
       <ion-item
           v-else
           lines="none"
-          class="flex rounded-2xl h-11"
+          class="rounded-2xl h-11"
           :class="{ 'error-border' : errorNames.hasOwnProperty('user_id') }"
       >
-        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="personOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <ion-input
             :value="getDisplayNameForUser(scheduleData.staff)"
@@ -39,26 +43,38 @@
         ></ion-input>
       </ion-item>
       <ion-item
+          id="open-staff-schedule-picker-popover"
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('start_time') }"
       >
-        <ion-label class="settings-fade-text">{{ $t('startWorkTime') }}</ion-label>
-        <ion-datetime
-            v-model="schedule.start_time"
-            :doneText="$t('choose')"
-            :cancelText="$t('cancel')"
-            display-format="HH:mm"
-            value="00:00"
-            :placeholder="$t('selectTime')"
-        ></ion-datetime>
+        <ion-label slot="start" class="settings-fade-text">{{ $t('startWorkTime') }}</ion-label>
+        <span slot="end" class="text-sm text-black">{{ schedule?.start_time ?? '00:00' }}</span>
+
+        <ion-popover
+            trigger="open-staff-schedule-picker-popover"
+            :arrow="false"
+            side="top"
+        >
+          <ion-datetime
+              v-model="schedule.start_time"
+              value="00:00"
+              presentation="time"
+              hour-cycle="h23"
+              class="reset-datetime-bg"
+          ></ion-datetime>
+        </ion-popover>
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('number_of_hours') }"
       >
-        <ion-icon :icon="timeOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="timeOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <ion-input
             v-model.number="schedule.number_of_hours"
@@ -103,6 +119,7 @@ import {
   IonIcon,
   IonInput,
   IonLabel,
+  IonPopover,
   IonDatetime,
   IonSelect,
   IonSelectOption,
@@ -127,6 +144,7 @@ export default defineComponent({
     IonIcon,
     IonInput,
     IonLabel,
+    IonPopover,
     IonDatetime,
     IonSelect,
     IonSelectOption,
@@ -158,6 +176,7 @@ export default defineComponent({
     const loading = ref(false);
     const schedule = reactive({
       start_date: props.startDate,
+      start_time: '00:00',
     });
     const customAlertOptions = {
       header: t('staff'),
@@ -200,11 +219,11 @@ export default defineComponent({
 
             emit('dismiss');
           },
-          scheduleData.value ? 'owner.successUpdateStaffSchedule' : 'owner.successAddStaffToSchedule',
-          null,
-          null,
           {
-            staff: getDisplayNameForUser(staff.value.find(staff => staff.id === schedule.user_id)),
+            successMessageKey: scheduleData.value ? 'owner.successUpdateStaffSchedule' : 'owner.successAddStaffToSchedule',
+            successMessageParams: {
+              staff: getDisplayNameForUser(staff.value.find(staff => staff.id === schedule.user_id)),
+            },
           },
       );
 

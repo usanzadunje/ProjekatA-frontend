@@ -76,8 +76,6 @@ export default {
     "update": "Update",
     "updating": "Updating",
     "create": "Create",
-    "selectDate": "Select date",
-    "selectTime": "Select time",
     "done": "Done",
     "unknown": "Unknown",
     "or": "or",

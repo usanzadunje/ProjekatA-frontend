@@ -2,10 +2,14 @@
   <div id="custom" class="px-8">
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11"
+        class="rounded-2xl h-11"
         :class="{ 'error-border' : errorNames.hasOwnProperty('login') }"
     >
-      <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="personOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           ref="emailInput"
           v-model.lazy="user.login"
@@ -21,10 +25,14 @@
     </ion-item>
     <ion-item
         lines="none"
-        class="flex rounded-2xl h-11 mt-3.5"
+        class="rounded-2xl h-11 mt-3.5"
         :class="errorNames.hasOwnProperty('login') || errorNames.hasOwnProperty('password') ? 'error-border' : ''"
     >
-      <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+      <ion-icon
+          slot="start"
+          :icon="lockOpenOutline"
+          class="mr-2 text-xl text-gray-500"
+      ></ion-icon>
       <ion-input
           ref="passwordInput"
           v-model="user.password"
@@ -35,6 +43,7 @@
           @keyup.enter="login"
       ></ion-input>
       <ion-icon
+          slot="end"
           :icon="showPassword ? eyeOutline : eyeOffOutline"
           class="text-xl text-gray-500"
           @click="togglePasswordShow"
@@ -149,7 +158,9 @@ export default defineComponent({
             user.login = '';
             user.password = '';
           },
-          'successLogin',
+          {
+            successMessageKey: 'successLogin',
+          },
       );
 
       loading.value = false;

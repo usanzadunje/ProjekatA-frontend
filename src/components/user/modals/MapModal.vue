@@ -1,7 +1,7 @@
 <template>
   <div class="px-2 safe-pb">
     <div class="text-center mt-2">
-      <h1 class="main-toolbar-heading text-xl">{{ place.name }}</h1>
+      <h1 class="main-toolbar-heading text-xl">{{ place?.name }}</h1>
     </div>
 
     <div ref="map" id="map" class="mt-4 w-full">
@@ -58,8 +58,8 @@ export default defineComponent({
               height: Math.round(mapContainerBoundingRect.height),
               x: Math.round(mapContainerBoundingRect.x),
               y: Math.round(mapContainerBoundingRect.y),
-              latitude: Number(place.value.latitude) || 43.317862492567,
-              longitude: Number(place.value.longitude) || 21.895785976058143,
+              latitude: Number(place.value?.latitude) || 43.317862492567,
+              longitude: Number(place.value?.longitude) || 21.895785976058143,
               zoom: 16,
             });
 
@@ -74,10 +74,10 @@ export default defineComponent({
                 });
 
                 await CapacitorGoogleMaps.addMarker({
-                  latitude: Number(place.value.latitude) || 43.317862492567,
-                  longitude: Number(place.value.longitude) || 21.895785976058143,
-                  title: place.value.name,
-                  snippet: place.value.address,
+                  latitude: Number(place.value?.latitude) || 43.317862492567,
+                  longitude: Number(place.value?.longitude) || 21.895785976058143,
+                  title: place.value?.name,
+                  snippet: place.value?.address,
                 });
 
                 await CapacitorGoogleMaps.addMarker({
@@ -96,8 +96,9 @@ export default defineComponent({
 
             });
           },
-          null,
-          'warningGoogleMapsError',
+          {
+            errorMessageKey: 'warningGoogleMapsError',
+          },
       );
 
     };
@@ -120,7 +121,7 @@ export default defineComponent({
 
       await loading.present();
 
-      distance.value = `${Math.round(PlaceService.getDistance(place.value.latitude, place.value.longitude))}m`;
+      distance.value = `${Math.round(PlaceService.getDistance(place.value?.latitude, place.value?.longitude))}m`;
 
       // await initializeiOS();
       await createMap();
@@ -128,7 +129,14 @@ export default defineComponent({
       await loading.dismiss();
     });
     onBeforeUnmount(async() => {
-      await CapacitorGoogleMaps.close();
+      await tryCatch(
+          async() => {
+            await CapacitorGoogleMaps.close();
+          },
+          {
+            failSilently: true,
+          },
+      );
     });
 
     return {

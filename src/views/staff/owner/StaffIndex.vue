@@ -188,8 +188,9 @@ export default defineComponent({
               load,
             });
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
 
       showSkeleton.value = false;
@@ -234,10 +235,11 @@ export default defineComponent({
 
                         await store.dispatch('owner/deleteStaff', staffMember.id);
                       },
-                      null,
-                      'generalAlertError',
-                      () => {
-                        event.target.parentElement.parentElement.style.transform = 'scaleY(1)';
+                      {
+                        errorMessageKey: 'generalAlertError',
+                        catchCallback: () => {
+                          event.target.parentElement.parentElement.style.transform = 'scaleY(1)';
+                        },
                       },
                   );
                 },

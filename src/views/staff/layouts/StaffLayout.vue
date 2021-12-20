@@ -80,8 +80,9 @@ export default defineComponent({
               await registerToken();
             }
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
     })();
 

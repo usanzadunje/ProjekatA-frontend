@@ -24,8 +24,9 @@ export function useDaysOffRequest() {
                 async() => {
                     await store.dispatch('staff/getDayOffRequests');
                 },
-                null,
-                'dataFetchingError',
+                {
+                    errorMessageKey: 'dataFetchingError',
+                },
             );
         }
     };
@@ -35,8 +36,9 @@ export function useDaysOffRequest() {
                 async() => {
                     await store.dispatch('staff/getDayOffRequestStatuses');
                 },
-                null,
-                'dataFetchingError',
+                {
+                    errorMessageKey: 'dataFetchingError',
+                },
             );
         }
     };
@@ -69,8 +71,9 @@ export function useDaysOffRequest() {
                 async() => {
                     await store.dispatch('owner/getDayOffRequests');
                 },
-                null,
-                'dataFetchingError',
+                {
+                    errorMessageKey: 'dataFetchingError',
+                },
             );
         }
     };
@@ -81,11 +84,12 @@ export function useDaysOffRequest() {
             async() => {
                 await store.dispatch('owner/approveDayOffRequest', id);
             },
-            'successApprovedDayOffRequest',
-            'generalAlertError',
-            null,
             {
-                staff,
+                successMessageKey: 'successApprovedDayOffRequest',
+                errorMessageKey: 'generalAlertError',
+                successMessageParams: {
+                    staff,
+                },
             },
         );
     };
@@ -96,11 +100,12 @@ export function useDaysOffRequest() {
             async() => {
                 await store.dispatch('owner/declineDayOffRequest', id);
             },
-            'successDeclinedDayOffRequest',
-            'generalAlertError',
-            null,
             {
-                staff,
+                successMessageKey: 'successDeclinedDayOffRequest',
+                errorMessageKey: 'generalAlertError',
+                successMessageParams: {
+                    staff,
+                },
             },
         );
     };

@@ -124,8 +124,9 @@ export default defineComponent({
               },
             });
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
 
     });

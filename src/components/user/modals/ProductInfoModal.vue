@@ -9,9 +9,13 @@
     <div class="mt-4">
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11"
+          class="rounded-2xl h-11"
       >
-        <ion-icon :icon="createOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="createOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <ion-input
             :placeholder="product?.name"
@@ -21,9 +25,13 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
       >
-        <ion-icon :icon="pricetagOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="pricetagOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <ion-input
             :placeholder="product?.category"
@@ -33,7 +41,7 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl mt-3.5"
+          class="rounded-2xl mt-3.5"
       >
         <p>
           {{ product?.description || $t('noProductDescription') }}
@@ -41,9 +49,13 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
       >
-        <ion-icon :icon="walletOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="walletOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
 
         <ion-input
             :placeholder="product?.price"

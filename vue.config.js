@@ -9,5 +9,7 @@ module.exports = {
       compositionOnly: true,
       fullInstall: true
     }
-  }
+  },
+
+  lintOnSave: false
 }

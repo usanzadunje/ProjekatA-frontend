@@ -13,7 +13,12 @@
         :scroll-events="true"
         @ionScroll="pullAnimation($event)"
     >
-      <ion-refresher pull-min="100" slot="fixed" @ionRefresh="refresh($event)" class="transparent">
+      <ion-refresher
+          pull-min="100"
+          slot="fixed"
+          @ionRefresh="refresh($event)"
+          class="transparent"
+      >
         <ion-refresher-content
             refreshing-spinner="crescent"
         >
@@ -194,8 +199,9 @@ export default defineComponent({
 
                 unwatch();
               },
-              null,
-              'dataFetchingError',
+              {
+                errorMessageKey: 'dataFetchingError',
+              },
           );
         },
     );
@@ -272,8 +278,9 @@ export default defineComponent({
             }
 
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
     };
 
@@ -313,8 +320,9 @@ export default defineComponent({
 
               places.favorites = response.data;
             },
-            null,
-            'dataFetchingError',
+            {
+              errorMessageKey: 'dataFetchingError',
+            },
         );
       }
     });

@@ -130,8 +130,9 @@ export default defineComponent({
             await getCachedOrFetchPlaceCategories(forceFetch);
             await store.dispatch("owner/getProducts", {});
           },
-          null,
-          'dataFetchingError',
+          {
+            errorMessageKey: 'dataFetchingError',
+          },
       );
 
       showSkeleton.value = false;

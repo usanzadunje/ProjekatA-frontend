@@ -12,10 +12,14 @@
       </div>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11"
+          class="rounded-2xl h-11"
           :class="{ 'error-border' : errorNames.hasOwnProperty('fname') }"
       >
-        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="personOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
         <ion-input
             v-capitalize
             v-model.lazy="user.fname"
@@ -29,10 +33,14 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('lname') }"
       >
-        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="personOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
         <ion-input
             ref="lnameInput"
             v-capitalize
@@ -46,10 +54,14 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('username') }"
       >
-        <ion-icon :icon="personOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="personOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
         <ion-input
             ref="usernameInput"
             v-model="user.username"
@@ -62,10 +74,14 @@
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('email') }"
       >
-        <ion-icon :icon="mailOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="mailOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
         <ion-input
             ref="emailInput"
             v-model="user.email"
@@ -77,26 +93,39 @@
         ></ion-input>
       </ion-item>
       <ion-item
+          id="open-modal"
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('bday') }"
       >
-        <ion-label class="settings-fade-text">{{ $t('birthday') }}</ion-label>
-        <ion-datetime
-            v-model="user.bday"
-            :doneText="$t('choose')"
-            :cancelText="$t('cancel')"
-            display-format="DD MMM YYYY"
-            value="1997-07-21"
-            :placeholder="$t('selectDate')"
-        ></ion-datetime>
+        <ion-label slot="start" class="settings-fade-text">{{ $t('birthday') }}</ion-label>
+        <span slot="end" class="text-sm text-black">{{ user.bday }}</span>
+        <ion-modal
+            trigger="open-modal"
+            css-class="custom-birthday-modal"
+        >
+          <ion-content scrollY="false">
+            <ion-datetime
+                v-model="user.bday"
+                value="1997-07-21"
+                presentation="date"
+                :done-text="$t('choose')"
+                :cancel-text="$t('cancel')"
+                first-day-of-week="1"
+            ></ion-datetime>
+          </ion-content>
+        </ion-modal>
       </ion-item>
       <ion-item
           lines="none"
-          class="flex rounded-2xl h-11 mt-3.5"
+          class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('phone') }"
       >
-        <ion-icon :icon="callOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+        <ion-icon
+            slot="start"
+            :icon="callOutline"
+            class="mr-2 text-xl text-gray-500"
+        ></ion-icon>
         <ion-input
             ref="phoneInput"
             v-model="user.phone"
@@ -118,10 +147,14 @@
       <div v-show="showPasswordEdit">
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+            class="rounded-2xl h-11 mt-3.5 auth-input-background"
             :class="{ 'error-border' : errorNames.hasOwnProperty('login') }"
         >
-          <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="lockOpenOutline"
+              class="mr-2 text-xl text-gray-500"
+          ></ion-icon>
           <ion-input
               v-model="user.old_password"
               inputmode="password"
@@ -131,19 +164,23 @@
               @keyup.enter="passwordInput.$el?.setFocus()"
           ></ion-input>
           <ion-icon
+              slot="end"
               :icon="showOldPassword ? eyeOutline : eyeOffOutline"
               class="text-xl text-gray-500"
               @click="togglePasswordShow(1)"
           >
-
           </ion-icon>
         </ion-item>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+            class="rounded-2xl h-11 mt-3.5 auth-input-background"
             :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
         >
-          <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="lockOpenOutline"
+              class="mr-2 text-xl text-gray-500"
+          ></ion-icon>
           <ion-input
               ref="passwordInput"
               v-model="user.password"
@@ -154,6 +191,7 @@
               @keyup.enter="passwordConfirmInput.$el?.setFocus()"
           ></ion-input>
           <ion-icon
+              slot="end"
               :icon="showPassword ? eyeOutline : eyeOffOutline"
               class="text-xl text-gray-500"
               @click="togglePasswordShow(2)"
@@ -162,10 +200,14 @@
         </ion-item>
         <ion-item
             lines="none"
-            class="flex rounded-2xl h-11 mt-3.5 auth-input-background"
+            class="rounded-2xl h-11 mt-3.5 auth-input-background"
             :class="{ 'error-border' : errorNames.hasOwnProperty('password') }"
         >
-          <ion-icon :icon="lockOpenOutline" class="mr-2 text-xl text-gray-500"></ion-icon>
+          <ion-icon
+              slot="start"
+              :icon="lockOpenOutline"
+              class="mr-2 text-xl text-gray-500"
+          ></ion-icon>
           <ion-input
               ref="passwordConfirmInput"
               v-model="user.password_confirmation"
@@ -175,9 +217,11 @@
               required
               @keyup.enter="update"
           ></ion-input>
-          <ion-icon :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
-                    @click="togglePasswordShow(3)"
-                    class="text-xl text-gray-500"
+          <ion-icon
+              slot="end"
+              :icon="showPasswordConfirm ? eyeOutline : eyeOffOutline"
+              @click="togglePasswordShow(3)"
+              class="text-xl text-gray-500"
           ></ion-icon>
         </ion-item>
       </div>
@@ -223,6 +267,8 @@ import {
   IonDatetime,
   IonLabel,
   IonToggle,
+  IonContent,
+  IonModal,
 }                                                                   from "@ionic/vue";
 
 import AppAvatar from '@/components/AppAvatar';
@@ -253,6 +299,8 @@ export default defineComponent({
     IonToggle,
     IonLabel,
     AppAvatar,
+    IonContent,
+    IonModal,
   },
   props: {
     clearInputs: {
@@ -333,7 +381,9 @@ export default defineComponent({
           async() => {
             await store.dispatch("auth/updateAuthUser", user);
           },
-          'successUpdate',
+          {
+            successMessageKey: 'successUpdate',
+          },
       );
 
       loading.value = false;

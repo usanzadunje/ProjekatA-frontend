@@ -18,32 +18,37 @@ export function useErrorHandling() {
     /* Methods */
     const tryCatch = async(
         tryCallback,
-        successMessageKey = null,
-        errorMessageKey = null,
-        catchCallback = null,
-        successMessageParams = null,
+        opts = {},
     ) => {
         try {
             await tryCallback();
-            if(successMessageKey) {
-                showSuccessToast(t(successMessageKey, successMessageParams));
+            if(opts.successMessageKey) {
+                showSuccessToast(t(opts.successMessageKey, opts.successMessageParams));
             }
         }catch(errors) {
-            if(catchCallback) {
-                await catchCallback(errors);
+            if(opts.catchCallback) {
+                await opts.catchCallback(errors);
             }
-            if(!errorMessageKey) {
-                errorNames.value = getError(errors);
-                await showErrorToast(errors);
-                await sleep(Object.keys(errorNames.value).length * 900);
-                errorNames.value = {};
-            }else {
-                showErrorToast(
-                    null,
-                    { error: t(errorMessageKey) });
+
+            if(!opts.failSilently) {
+                displayErrorMessage(opts.errorMessageKey, errors);
             }
         }
     };
+
+    const displayErrorMessage = async(errorMessageKey, errors) => {
+        if(!errorMessageKey) {
+            errorNames.value = getError(errors);
+            await showErrorToast(errors);
+            await sleep(Object.keys(errorNames.value).length * 900);
+            errorNames.value = {};
+        }else {
+            showErrorToast(
+                null,
+                { error: t(errorMessageKey) });
+        }
+    };
+
 
     return {
         /* Component properties  */
