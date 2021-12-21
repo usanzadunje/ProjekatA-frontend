@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="products.length > 0">
+    <div v-if="products.length > 0 || searchTerm !== ''">
       <div>
         <ion-searchbar
             :value="searchTerm"
@@ -19,7 +19,10 @@
         </ion-button>
       </div>
 
-      <ion-list class="mt-4" lines="none">
+      <ion-list
+          class="mt-4"
+          lines="none"
+      >
         <ion-item-sliding
             ref="slidingItem"
             v-for="product in products"
@@ -90,7 +93,7 @@
 
     <AppModal
         :is-open="isModalOpen"
-        css-class="custom-edit-staff-modal"
+        css-class="custom-product-modal"
         :swipe-to-close="false"
         width="90%"
         @didDismiss="openModal(false);"
@@ -322,11 +325,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ion-list {
+  background: transparent;
+}
+
 ion-item {
+  background: transparent;
   --background: transparent;
   --inner-padding-end: 0;
 }
-
 
 ion-item-options {
   --border-style: none;

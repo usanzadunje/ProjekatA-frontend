@@ -2,7 +2,7 @@
   <div class="flex justify-between mt-10">
     <ion-button
         :disabled="isPlaceEmpty || toggling"
-        class="w-full h-32 btn-bg-empty"
+        class="w-1/2 h-32 btn-bg-empty"
         @click="randomToggle(true)"
     >
       {{ toggling ? `${$t('toggling')}...` : $t('release') }}
@@ -14,7 +14,7 @@
     </ion-button>
     <ion-button
         :disabled="isPlaceFull || toggling"
-        class="w-full h-32 btn-bg-danger"
+        class="w-1/2 h-32 btn-bg-danger"
         @click="randomToggle(false)"
     >
       {{ toggling ? `${$t('toggling')}...` : $t('occupy') }}
@@ -74,5 +74,9 @@ export default defineComponent({
 
 </script>
 <style scoped>
-
+@media (max-width: 375px) {
+  ion-button {
+    font-size: 0.75rem;
+  }
+}
 </style>

@@ -18,10 +18,10 @@
           class="wrap"
       >
         <TheHangingHeader class="mb-4">
-          <div class="pt-2 pb-4">
+          <div class="pt-2 pb-4 px-4 xs:px-12">
             <h1 class="secondary-heading text-center">{{ $t('owner.staff') }}</h1>
 
-            <div class="w-5/6 mx-auto mt-4">
+            <div class="mx-auto mt-4">
               <ion-button
                   expand="block"
                   class="auth-button-size auth-button-border-radius uppercase button-text-white"
@@ -33,7 +33,10 @@
           </div>
         </TheHangingHeader>
 
-        <div v-show="!showSkeleton">
+        <div
+            v-show="!showSkeleton"
+            class="xs:px-8"
+        >
           <StaffCard
               v-for="staffMember in staff"
               :key="staffMember.id"
@@ -83,7 +86,7 @@
 
       <AppModal
           :is-open="isModalOpen"
-          css-class="custom-edit-staff-modal"
+          css-class="custom-staff-modal"
           :swipeToClose="false"
           width="90%"
           @didDismiss="openModal(false);"

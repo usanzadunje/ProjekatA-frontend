@@ -402,6 +402,8 @@ ion-item {
   border-top-right-radius: 15px !important;
   border-bottom-right-radius: 15px !important;
   --inner-padding-end: 0;
+  background: transparent;
+  --background: transparent;
 }
 
 ion-item-options {

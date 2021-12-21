@@ -14,7 +14,8 @@
         <PlaceEditForm
             :reset-inputs="resetInputs"
             :refresher="refresher"
-            @scrollToTop="scrollToTop(this.$refs.content, 500);"
+            @scroll-to-top="scrollToTop(this.$refs.content, 500);"
+            @scroll-to-bottom="scrollToBottom(this.$refs.content, 500);"
         />
       </div>
     </ion-content>
@@ -33,8 +34,8 @@ import {
 }                               from '@ionic/vue';
 
 import TheSegmentNavigation from '@/components/TheSegmentNavigation';
-import PlaceEditForm             from '@/components/owner/forms/PlaceEditForm';
-import { useContent }            from '@/composables/useContent';
+import PlaceEditForm        from '@/components/owner/forms/PlaceEditForm';
+import { useContent }       from '@/composables/useContent';
 
 export default defineComponent({
   name: "PlaceEdit",
@@ -55,7 +56,7 @@ export default defineComponent({
     });
 
     /* Composables */
-    const { scrollToTop } = useContent();
+    const { scrollToTop, scrollToBottom } = useContent();
 
     /* Lifecycle hooks */
     onIonViewWillEnter(() => {
@@ -79,6 +80,7 @@ export default defineComponent({
       /* Event handlers */
       refresh,
       scrollToTop,
+      scrollToBottom,
     };
   },
 

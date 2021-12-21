@@ -96,21 +96,28 @@ ion-item {
 }
 
 ion-datetime {
-    font-family: 'Poppins', sans-serif !important;
-    font-weight: 500 !important;
-    color: var(--primary-heading) !important;
-    font-size: 0.75rem !important;
+    font-weight: 500;
+    --background: #fff;
+    --background-rgb: unset;
+    height: auto;
+    width: auto;
+    max-width: 350px;
+}
+
+.calendar-day-active {
+    color: red !important;
+}
+
+.calendar-day-active::after {
+    background: red !important;
 }
 
 ion-loading {
     backdrop-filter: blur(5px);
 }
 
-ion-datetime {
-    height: auto;
-    width: auto;
-
-    max-width: 350px;
+ion-popover {
+    --backdrop-opacity: 0.7 !important;
 }
 
 ion-modal {
@@ -172,7 +179,7 @@ ion-modal ion-item {
     bottom: 0 !important;
 }
 
-.custom-edit-staff-modal {
+.custom-staff-modal {
     --border-radius: 20px;
     --background: var(--secondary-paint) !important;
 }
@@ -187,6 +194,26 @@ ion-modal ion-item {
 }
 
 .custom-day-off-request-modal {
+    --border-radius: 20px;
+    --background: var(--secondary-paint) !important;
+}
+
+.custom-day-off-request-review-modal {
+    --border-radius: 20px;
+    --background: var(--secondary-paint) !important;
+}
+
+.custom-product-modal {
+    --border-radius: 20px;
+    --background: var(--secondary-paint) !important;
+}
+
+.custom-category-modal {
+    --border-radius: 20px;
+    --background: var(--secondary-paint) !important;
+}
+
+.custom-product-info-modal {
     --border-radius: 20px;
     --background: var(--secondary-paint) !important;
 }
@@ -233,8 +260,8 @@ ion-modal ion-item {
     --height: auto;
 }
 
-.table-tooltip-popover::part(arrow)::after {
-    background: #E5E7EB !important;
+.table-tooltip-popover::part(arrow) {
+    display: none !important;
 }
 
 .icon-choice-popover {
@@ -350,11 +377,6 @@ ion-badge.notification-badge {
 
 
 /* UTILITY CLASSES */
-.reset-datetime-bg {
-    --background: #fff !important;
-    --background-rgb: unset !important;
-}
-
 .transparent-button-background {
     --background: transparent;
     background: transparent;
@@ -395,6 +417,11 @@ ion-badge.notification-badge {
 .input-background {
     background: var(--input-bg);
     --background: var(--input-bg);
+}
+
+.light-color {
+    color: #f4f5f8;
+    --color: #f4f5f8;
 }
 
 .no-padding-top {
@@ -576,6 +603,14 @@ ion-toggle.dark-toggle-checked {
 
 .left-10p {
     left: 10px;
+}
+
+.m-inline-start-0 {
+    margin-inline-start: 0;
+}
+
+.m-inline-end-0 {
+    margin-inline-end: 0;
 }
 
 
@@ -938,29 +973,23 @@ ion-toggle.dark-toggle-checked {
     --color: var(--primary-heading);
     --padding-top: 1.375rem;
     --padding-bottom: 1.375rem;
-    --padding-start: 1.75rem;
-    --padding-end: 1.75rem;
     --background: var(--secondary-button);
     --background-activated: #bbbbbb;
     font-family: 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     color: var(--primary-heading) !important;
     font-size: 0.75rem !important;
-    width: 100% !important;
 }
 
 .button-subscribe {
     --color: #FFF;
     --padding-top: 1.375rem;
     --padding-bottom: 1.375rem;
-    --padding-start: 1.8rem;
-    --padding-end: 1.8rem;
     --background: var(--primary-button);
     font-family: 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     color: #FFF !important;
     font-size: 0.75rem !important;
-    width: 100% !important;
 }
 
 .modal-button-border {
@@ -1006,29 +1035,23 @@ ion-toggle.dark-toggle-checked {
     --color: var(--primary-heading);
     --padding-top: 1.375rem;
     --padding-bottom: 1.375rem;
-    --padding-start: 3.4rem;
-    --padding-end: 3.4rem;
     --background: var(--secondary-button);
     --background-activated: #bbbbbb;
     font-family: 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     color: var(--primary-heading) !important;
     font-size: 0.75rem !important;
-    width: 100% !important;
 }
 
 .button-confirm {
     --color: #FFF;
     --padding-top: 1.375rem;
     --padding-bottom: 1.375rem;
-    --padding-start: 2.85rem;
-    --padding-end: 2.85rem;
     --background: var(--primary-button);
     font-family: 'Poppins', sans-serif !important;
     font-weight: 500 !important;
     color: #FFF !important;
     font-size: 0.75rem !important;
-    width: 100% !important;
 }
 
 /*

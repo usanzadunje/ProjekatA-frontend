@@ -48,8 +48,13 @@
           class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('start_time') }"
       >
-        <ion-label slot="start" class="settings-fade-text">{{ $t('startWorkTime') }}</ion-label>
-        <span slot="end" class="text-sm text-black">{{ schedule?.start_time ?? '00:00' }}</span>
+        <ion-label slot="start" class="settings-fade-text m-inline-end-0">{{ $t('startWorkTime') }}</ion-label>
+        <ion-button
+            slot="end"
+            class="transparent-button-background text-black reset-button-size m-inline-start-0 primary-text-color"
+        >
+          {{ schedule?.start_time ?? '00:00' }}
+        </ion-button>
 
         <ion-popover
             trigger="open-staff-schedule-picker-popover"
@@ -61,7 +66,6 @@
               value="00:00"
               presentation="time"
               hour-cycle="h23"
-              class="reset-datetime-bg"
           ></ion-datetime>
         </ion-popover>
       </ion-item>

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 staff-modal-bg">
+  <div class="py-4 px-2 2xs:px-4 xs:px-10 staff-modal-bg">
     <h2 v-if="product" class="secondary-heading text-center mb-6">
       {{ `${$t('editing')}: ${product.name}` }}
     </h2>
@@ -20,7 +20,7 @@
 
     <ProductCreateEditForm
         :product="product"
-        class="px-6 mt-3.5"
+        class="mt-3.5"
         @dismiss="dismiss"
     />
   </div>

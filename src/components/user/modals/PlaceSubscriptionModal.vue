@@ -1,25 +1,25 @@
 <template>
-  <div class="px-4 pt-4 safe-pb">
-    <ion-item>
+  <div class="px-4 xs:px-6 pt-4 safe-pb">
+    <div class="mt-2">
       <h1 class="submodal-heading">{{ $t('notification', 2) }}</h1>
-    </ion-item>
-    <ion-item>
+    </div>
+    <div class="mt-4">
       <p class="submodal-paragraph">
         {{ $t('notificationModal1') }}
         <span class="submodal-paragraph-meidum">{{ place.name }}</span>
         {{ $t('notificationModal2') }}
       </p>
-    </ion-item>
-    <ion-item class="ion-no-padding mt-4">
+    </div>
+    <div class="mt-6 flex items-center">
       <ion-toggle
           mode="md"
           :disabled="isUserSubscribed"
           class="pl-4"
           @ionChange="indefiniteTimerToggle"
       ></ion-toggle>
-      <ion-label class="margin-left-1 submodal-fade-text">{{ $t('indefinitely') }}</ion-label>
-    </ion-item>
-    <ion-item class="ion-no-padding">
+      <ion-label class="ml-2 submodal-fade-text">{{ $t('indefinitely') }}</ion-label>
+    </div>
+    <div class="mt-4 flex items-center">
       <ion-range
           v-model="notificationTime"
           min="5"
@@ -28,21 +28,24 @@
           color="primary"
           :disabled="indefiniteTimerActive || isUserSubscribed"
       ></ion-range>
-      <ion-label class="ml-1 margin-left-1 submodal-alert-time">
+      <ion-label
+          class="ml-4 submodal-alert-time flex-shrink-0"
+          :style="indefiniteTimerActive ? 'font-size: 1.75rem !important' : ''"
+      >
         {{ !indefiniteTimerActive ? notificationTime + 'min' : '∞' }}
       </ion-label>
-    </ion-item>
-    <div class="mt-2 mb-3 flex justify-around">
+    </div>
+    <div class="mt-2 mb-3 flex justify-around gap-2">
       <ion-button
           :disabled="loading"
-          class="mr-2.5 uppercase button-cancel modal-button-border"
+          class="uppercase button-cancel modal-button-border w-1/2"
           @click="$emit('dismiss')"
       >
         {{ $t('cancel') }}
       </ion-button>
       <ion-button
           :disabled="loading"
-          class="uppercase button-confirm modal-button-border"
+          class="uppercase button-confirm modal-button-border w-1/2"
           @click="toggleSubscription"
       >
         <ion-icon
@@ -60,7 +63,6 @@ import { computed, defineComponent, ref, toRefs } from 'vue';
 import { useStore }                               from 'vuex';
 import { useI18n }                                from 'vue-i18n';
 import {
-  IonItem,
   IonIcon,
   IonButton,
   IonToggle,
@@ -82,7 +84,6 @@ import {
 export default defineComponent({
   name: 'PlaceSubscriptionModal',
   components: {
-    IonItem,
     IonIcon,
     IonButton,
     IonToggle,
@@ -192,8 +193,7 @@ export default defineComponent({
               successMessageParams: {
                 place: place.value.name,
               },
-            }
-
+            },
         );
       }else {
         if(!store.getters['user/notifications']) {
@@ -228,11 +228,12 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-item {
-  --background: var(--secondary-paint);
+ion-toggle {
+  padding: 0 !important;
 }
 
 ion-range {
+  padding: 0 !important;
   --bar-height: 6px;
   --knob-size: 21px;
 }

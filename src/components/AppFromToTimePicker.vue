@@ -1,55 +1,55 @@
 <template>
   <div class="flex items-center">
     <ion-button
-        :id="startTriggerId"
-        class="transparent-button-background text-black"
+        class="transparent-button-background text-black reset-button-size primary-text-color"
+        @click="openPopover(true)"
     >
       {{ start }}
     </ion-button>
-    <span class="px-2"> - </span>
+    <span class="px-1 primary-text-color"> - </span>
     <ion-button
-        :id="endTriggerId"
-        class="transparent-button-background text-black"
+        class="transparent-button-background text-black reset-button-size primary-text-color"
+        @click="openPopover(true, false)"
     >
       {{ end }}
     </ion-button>
   </div>
   <ion-popover
-      :trigger="startTriggerId"
+      :is-open="isOpen.start"
       :arrow="false"
       side="top"
       css-class="from-to-time-picker-popover"
+      @didDismiss="openPopover(false)"
   >
     <ion-datetime
         v-model="start"
         value="00:00"
         presentation="time"
         hour-cycle="h23"
-        class="reset-datetime-bg"
     ></ion-datetime>
   </ion-popover>
   <ion-popover
-      :trigger="endTriggerId"
+      :is-open="isOpen.end"
       :arrow="false"
       side="top"
       css-class="from-to-time-picker-popover"
+      @didDismiss="openPopover(false, false)"
   >
     <ion-datetime
         v-model="end"
         value="00:00"
         presentation="time"
         hour-cycle="h23"
-        class="reset-datetime-bg"
     ></ion-datetime>
   </ion-popover>
 </template>
 <script>
-import { defineComponent, ref, toRefs, watch } from 'vue';
+import { defineComponent, reactive, ref, toRefs, watch } from 'vue';
 import {
   IonButton,
   IonPopover,
   IonDatetime,
-}                                              from '@ionic/vue';
+}                                                        from '@ionic/vue';
 
 export default defineComponent({
   name: 'AppFromToTimePicker',
@@ -80,14 +80,28 @@ export default defineComponent({
     IonPopover,
     IonDatetime,
   },
-  emits: ['startChanged', 'endChanged'],
+  emits: ['startChanged', 'endChanged', 'scrollToBottom'],
   setup(props, { emit }) {
     /* Global properties */
     /* Component properties */
     const start = ref('00:00');
     const end = ref('00:00');
     const { canInitialize, startValue, endValue } = toRefs(props);
+    const isOpen = reactive({
+      start: false,
+      end: false,
+    });
 
+    /* Event handlers */
+    const openPopover = (state, start = true) => {
+      if(state) {
+        emit('scrollToBottom');
+      }
+
+      start ? isOpen.start = state : isOpen.end = state;
+    };
+
+    /* Watchers */
     watch(canInitialize, () => {
       if(canInitialize.value) {
         start.value = startValue.value;
@@ -107,18 +121,17 @@ export default defineComponent({
       }
     });
 
-    /* Composables */
-    /* Event handlers */
-
     return {
       /* Component properties */
       start,
       end,
+      isOpen,
+
       /* Event handlers */
+      openPopover,
     };
   },
 });
 </script>
 <style scoped>
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-8 h-full flex flex-col justify-between">
+  <div class="xs:px-8 h-full flex flex-col justify-between">
     <div>
       <div
           class="flex justify-center mb-6"
@@ -98,8 +98,13 @@
           class="rounded-2xl h-11 mt-3.5"
           :class="{ 'error-border' : errorNames.hasOwnProperty('bday') }"
       >
-        <ion-label slot="start" class="settings-fade-text">{{ $t('birthday') }}</ion-label>
-        <span slot="end" class="text-sm text-black">{{ user.bday }}</span>
+        <ion-label slot="start" class="settings-fade-text m-inline-end-0">{{ $t('birthday') }}</ion-label>
+        <ion-button
+            slot="end"
+            class="transparent-button-background text-black reset-button-size m-inline-start-0 primary-text-color"
+        >
+          {{ user.bday }}
+        </ion-button>
         <ion-modal
             trigger="open-modal"
             css-class="custom-birthday-modal"
@@ -462,5 +467,4 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-
 </style>

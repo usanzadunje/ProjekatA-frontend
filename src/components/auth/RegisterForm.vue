@@ -1,5 +1,5 @@
 <template>
-  <div class="px-8">
+  <div class="px-4 xs:px-8">
     <ion-item
         lines="none"
         class="rounded-2xl h-11 mt-3.5"

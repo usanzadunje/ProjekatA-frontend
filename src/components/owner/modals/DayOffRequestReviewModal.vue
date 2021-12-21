@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 staff-modal-bg">
+  <div class="py-4 px-2 xs:px-4 staff-modal-bg">
     <div class="flex w-full justify-center items-center">
       <span
           class="font-bold text-gray-400"

@@ -6,8 +6,7 @@
           <ion-button
               v-show="!images"
               fill="clear"
-              color="light"
-              class="text-lg uppercase"
+              class="text-lg uppercase light-color"
               @click="selectImages"
           >
             {{ $t('add') }}
@@ -23,8 +22,7 @@
           <ion-button
               v-show="images"
               fill="clear"
-              color="light"
-              class="text-lg uppercase"
+              class="text-lg uppercase light-color"
               @click="uploadImages"
           >
             {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
@@ -32,15 +30,14 @@
           <ion-button
               id="removeButton"
               fill="clear"
-              color="light"
               slot="end"
               :disabled="place.images?.length === 0"
-              class="text-lg uppercase"
+              class="text-lg uppercase light-color"
               @click="removeImage"
           >
             {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
           </ion-button>
-          <ion-button @click="dismiss" fill="clear" color="light" slot="end">
+          <ion-button @click="dismiss" fill="clear" class="light-color" slot="end">
             <ion-icon :icon="close" slot="start"></ion-icon>
           </ion-button>
         </ion-item>
@@ -61,7 +58,7 @@
               :disabled="loading === 0 || place.images?.length === 0"
               fill="white"
               expand="block"
-              class="text-sm font-bold uppercase main-img-button"
+              class="text-xs 2xs:text-sm font-bold uppercase main-img-button"
               @click="setAsMainImage"
           >
             {{ loading === 0 ? `${$t('setting')}...` : $t('setCover') }}
@@ -109,7 +106,7 @@ import {
 } from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'PlaceImageAddModal',
+  name: 'PlaceImagesAddModal',
   components: {
     IonContent,
     IonItem,

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 staff-modal-bg">
+  <div class="py-4 px-2 2xs:px-4 xs:px-10 staff-modal-bg">
     <h2 v-if="category" class="secondary-heading text-center mb-6">
       {{ `${$t('editing')}: ${category.name}` }}
     </h2>
@@ -7,7 +7,6 @@
 
     <CategoryCreateEditForm
         :category="category"
-        class="px-6"
         @dismiss="dismiss"
     />
   </div>

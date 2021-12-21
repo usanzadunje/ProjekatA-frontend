@@ -28,7 +28,10 @@
             class="w-full h-full object-cover"
         >
       </ion-avatar>
-      <ion-label class="break-all">
+      <ion-label
+          class="break-all"
+          :class="this.$store.getters['auth/isStaff'] ? 'text-xs 2xs:text-sm' : ''"
+      >
         {{ authUser?.username || authUser?.fname }}
       </ion-label>
     </ion-chip>

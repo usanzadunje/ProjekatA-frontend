@@ -84,7 +84,7 @@
 
     <AppModal
         :is-open="isModalOpen"
-        css-class="custom-day-off-request-modal"
+        css-class="custom-day-off-request-review-modal"
         :swipeToClose="false"
         width="90%"
         @didDismiss="openModal(false);"

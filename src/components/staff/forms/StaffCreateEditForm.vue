@@ -1,5 +1,5 @@
 <template>
-  <div class="px-8">
+  <div class="2xs:px-4 xs:px-8">
     <h2 v-if="staff" class="secondary-heading text-center mb-6">
       {{ `${$t('editing')}: ${getDisplayNameForUser(staff)}` }}
     </h2>

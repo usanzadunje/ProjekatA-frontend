@@ -28,17 +28,17 @@
       />
     </div>
 
-    <div class="mt-5 mb-3 flex justify-around">
+    <div class="mt-5 mb-3 flex justify-around gap-2">
       <ion-button
           :routerLink="`/places/${place.id}?redirect=${$route.path + '?openModal=true'}`"
-          class="flex-shrink mr-2.5 uppercase button-see-more modal-button-border"
+          class="flex-shrink uppercase button-see-more modal-button-border w-1/2"
           @click="$emit('dismiss')"
       >
         {{ $t('more') }}
       </ion-button>
       <ion-button
           @click="openModal(true);hideModal('.custom-modal')"
-          class="flex-shrink uppercase button-subscribe modal-button-border"
+          class="flex-shrink uppercase button-subscribe modal-button-border w-1/2"
           :disabled="false"
       >
         <ion-icon slot="start"

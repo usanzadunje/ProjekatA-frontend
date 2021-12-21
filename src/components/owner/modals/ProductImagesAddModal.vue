@@ -6,8 +6,7 @@
           <ion-button
               v-show="!images"
               fill="clear"
-              color="light"
-              class="text-lg uppercase"
+              class="text-lg uppercase light-color"
               @click="selectImages"
           >
             {{ $t('add') }}
@@ -23,8 +22,7 @@
           <ion-button
               v-show="images"
               fill="clear"
-              color="light"
-              class="text-lg uppercase"
+              class="text-lg uppercase light-color"
               @click="uploadImages"
           >
             {{ loading === 1 ? `${$t('saving')}...` : $t('uploadSelectedImages') }}
@@ -32,15 +30,14 @@
           <ion-button
               id="removeButton"
               fill="clear"
-              color="light"
               slot="end"
               :disabled="productImages?.length === 0"
-              class="text-lg uppercase"
+              class="text-lg uppercase light-color"
               @click="removeImage"
           >
             {{ loading === -1 ? `${$t('removing')}...` : $t('remove') }}
           </ion-button>
-          <ion-button @click="dismiss" fill="clear" color="light" slot="end">
+          <ion-button @click="dismiss" fill="clear" class="light-color" slot="end">
             <ion-icon :icon="close" slot="start"></ion-icon>
           </ion-button>
         </ion-item>
@@ -51,11 +48,13 @@
           :images="productImages"
           @mounted="setSliderRef"
           @updated="setSliderRef"
+          @add-images="selectImages"
       />
 
       <div class="bg-transparent text-center absolute bottom-7 w-full flex justify-center z-40">
         <ion-button
-            :disabled="loading === 0 || productImages?.length === 0"
+            v-if="productImages?.length !== 0"
+            :disabled="loading === 0"
             fill="white"
             expand="block"
             class="text-sm font-bold uppercase main-img-button"

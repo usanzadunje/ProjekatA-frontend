@@ -26,8 +26,8 @@
     <div class="flex justify-between items-center mt-3.5">
       <div>
         <div v-show="!showSkeleton" class="ion-item-no-padding-x flex flex-col items-center mt-0.5">
-          <span class="modal-cafe-text-regular">{{ `${$t('monday')}-${$t('friday')}` }}</span>
-          <p class="modal-cafe-text-regular lowercase">{{ place.working_hours?.mon_fri }}</p>
+          <span class="primary-text-color text-2xs 2xs:text-xs">{{ `${$t('monday')}-${$t('friday')}` }}</span>
+          <p class="primary-text-color text-2xs 2xs:text-xs">{{ place.working_hours?.mon_fri }}</p>
         </div>
         <ion-skeleton-text
             v-show="showSkeleton"
@@ -37,8 +37,8 @@
       </div>
       <div>
         <div v-show="!showSkeleton" class="ion-item-no-padding-x flex flex-col items-center mt-0.5">
-          <span class="modal-cafe-text-regular">{{ $t('saturday') }}</span>
-          <p class="modal-cafe-text-regular lowercase">{{ place.working_hours?.saturday }}</p>
+          <span class="primary-text-color text-2xs 2xs:text-xs">{{ $t('saturday') }}</span>
+          <p class="primary-text-color text-2xs 2xs:text-xs">{{ place.working_hours?.saturday }}</p>
         </div>
         <ion-skeleton-text
             v-show="showSkeleton"
@@ -48,8 +48,8 @@
       </div>
       <div>
         <div v-show="!showSkeleton" class="ion-item-no-padding-x flex flex-col items-center mt-0.5">
-          <p class="modal-cafe-text-regular">{{ $t('sunday') }}</p>
-          <p class="modal-cafe-text-regular">{{ place.working_hours?.sunday }}</p>
+          <span class="primary-text-color text-2xs 2xs:text-xs">{{ $t('sunday') }}</span>
+          <p class="primary-text-color text-2xs 2xs:text-xs">{{ place.working_hours?.sunday }}</p>
         </div>
         <ion-skeleton-text
             v-show="showSkeleton"

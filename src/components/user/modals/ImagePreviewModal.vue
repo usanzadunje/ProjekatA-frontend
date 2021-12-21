@@ -1,7 +1,7 @@
 <template>
   <ion-content scrollY="false">
     <div class="absolute safe-area-positioning z-40">
-      <ion-button @click="dismiss" fill="clear" color="light">
+      <ion-button @click="dismiss" fill="clear" class="light-color">
         <ion-icon :icon="close" slot="icon-only"></ion-icon>
       </ion-button>
     </div>

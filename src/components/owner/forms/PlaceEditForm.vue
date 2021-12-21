@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full px-8 flex flex-col justify-between">
+  <div class="h-full px-4 xs:px-8 flex flex-col justify-between">
     <div>
       <div>
         <div class="mb-6">
@@ -112,7 +112,7 @@
           ></ion-input>
         </ion-item>
       </div>
-      <ion-item slot="end" class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
+      <ion-item class="ion-no-padding ion-no-margin no-border pl-5 mt-2 bg-transparent">
         <ion-label class="settings-fade-text">{{ $t('workingHours') }}</ion-label>
         <ion-toggle
             :checked="showWorkingHours"
@@ -126,51 +126,75 @@
             class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('mon_fri') }"
         >
-          <ion-label slot="start" class="settings-fade-text">{{ `${$t('monday')}-${$t('friday')}` }}</ion-label>
+          <ion-label
+              slot="start"
+              class="settings-fade-text m-inline-end-0"
+          >
+            {{ `${$t('monday')}-${$t('friday')}` }}
+          </ion-label>
 
-          <AppFromToTimePicker
-              :canInitialize="showWorkingHours"
-              start-trigger-id="open-mon-fri-start-picker"
-              end-trigger-id="open-mon-fri-end-picker"
-              :start-value="place.mon_fri_start"
-              :end-value="place.mon_fri_end"
-              @start-changed="place.mon_fri_start = $event"
-              @end-changed="place.mon_fri_end = $event"
-          />
+          <div slot="end" class="m-inline-start-0">
+            <AppFromToTimePicker
+                :canInitialize="showWorkingHours"
+                start-trigger-id="open-mon-fri-start-picker"
+                end-trigger-id="open-mon-fri-end-picker"
+                :start-value="place.mon_fri_start"
+                :end-value="place.mon_fri_end"
+                @start-changed="place.mon_fri_start = $event"
+                @end-changed="place.mon_fri_end = $event"
+                @scroll-to-bottom="$emit('scrollToBottom')"
+            />
+          </div>
         </ion-item>
         <ion-item
             lines="none"
             class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('saturday') }"
         >
-          <ion-label slot="start" class="settings-fade-text">{{ $t('saturday') }}</ion-label>
+          <ion-label
+              slot="start"
+              class="settings-fade-text m-inline-end-0"
+          >
+            {{ $t('saturday') }}
+          </ion-label>
 
-          <AppFromToTimePicker
-              :canInitialize="showWorkingHours"
-              start-trigger-id="open-saturday-start-picker"
-              end-trigger-id="open-saturday-end-picker"
-              :start-value="place.saturday_start"
-              :end-value="place.saturday_end"
-              @start-changed="place.saturday_start = $event"
-              @end-changed="place.saturday_end = $event"
-          />
+          <div slot="end" class="m-inline-start-0">
+            <AppFromToTimePicker
+                :canInitialize="showWorkingHours"
+                start-trigger-id="open-saturday-start-picker"
+                end-trigger-id="open-saturday-end-picker"
+                :start-value="place.saturday_start"
+                :end-value="place.saturday_end"
+                @start-changed="place.saturday_start = $event"
+                @end-changed="place.saturday_end = $event"
+                @scroll-to-bottom="$emit('scrollToBottom')"
+            />
+          </div>
         </ion-item>
         <ion-item
             lines="none"
             class="rounded-2xl h-11 mt-3.5"
             :class="{ 'error-border' : errorNames.hasOwnProperty('sunday') }"
         >
-          <ion-label slot="start" class="settings-fade-text">{{ $t('sunday') }}</ion-label>
+          <ion-label
+              slot="start"
+              class="settings-fade-text m-inline-end-0"
+          >
+            {{ $t('sunday') }}
+          </ion-label>
 
-          <AppFromToTimePicker
-              :canInitialize="showWorkingHours"
-              start-trigger-id="open-sunday-start-picker"
-              end-trigger-id="open-sunday-end-picker"
-              :start-value="place.sunday_start"
-              :end-value="place.sunday_end"
-              @start-changed="place.sunday_start = $event"
-              @end-changed="place.sunday_end = $event"
-          />
+          <div slot="end" class="m-inline-start-0">
+            <AppFromToTimePicker
+                :canInitialize="showWorkingHours"
+                start-trigger-id="open-sunday-start-picker"
+                end-trigger-id="open-sunday-end-picker"
+                :start-value="place.sunday_start"
+                :end-value="place.sunday_end"
+                @start-changed="place.sunday_start = $event"
+                @end-changed="place.sunday_end = $event"
+                @scroll-to-bottom="$emit('scrollToBottom')"
+            />
+          </div>
         </ion-item>
       </div>
     </div>
@@ -256,7 +280,7 @@ export default defineComponent({
       type: Object,
     },
   },
-  emits: ['scrollToTop'],
+  emits: ['scrollToTop', 'scrollToBottom'],
   setup(props, { emit }) {
     /* Global properties and methods */
     const store = useStore();
@@ -405,5 +429,4 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-
 </style>

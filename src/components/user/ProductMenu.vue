@@ -37,7 +37,7 @@
 
     <AppModal
         :is-open="isModalOpen"
-        css-class="custom-edit-staff-modal"
+        css-class="custom-product-info-modal"
         :swipe-to-close="false"
         width="90%"
         @didDismiss="openModal(false);"

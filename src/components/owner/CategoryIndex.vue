@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-        class="px-6"
+        class="xs:px-6"
         v-if="categories.length > 0"
     >
       <div class="flex justify-end">
@@ -85,7 +85,7 @@
 
     <AppModal
         :is-open="isModalOpen"
-        css-class="custom-edit-staff-modal"
+        css-class="custom-category-modal"
         :swipe-to-close="false"
         width="90%"
         @didDismiss="openModal(false);"

@@ -1,7 +1,7 @@
 <template>
   <div>
     <ion-card
-        class="mb-6 mt-0 mx-auto w-5/6"
+        class="mb-6 mt-0 mx-auto"
         :button="button"
         @click="$emit('editStaff')"
     >
