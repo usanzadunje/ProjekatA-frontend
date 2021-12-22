@@ -65,15 +65,6 @@ export function removeClonedTableElements() {
     });
 }
 
-// Since vuex is getting populated with tables that are stored in DB
-// these cloned ones will still stay and be duplicated with ones returned
-// to avoid this we remove cloned tables and keep only fresh ones from real DB
-export function increaseAccordionMaxHeight(id, additionalHeight) {
-    const accordionPanel = document.getElementById(id);
-    const panelCurrentMaxHeight = parseInt(getComputedStyle(accordionPanel).getPropertyValue('max-height'));
-    accordionPanel.style.setProperty('max-height', `${panelCurrentMaxHeight + additionalHeight}px`);
-}
-
 export function getExpirationDate(intervalType = 'd', intervalLength = 1) {
     if(intervalLength > 0) {
         switch(intervalType) {

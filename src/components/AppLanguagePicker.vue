@@ -74,7 +74,8 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-item {
-  --background: var(--primary-paint);
+  background: transparent;
+  --background: transparent;
   --border-color: rgba(112, 112, 112, 0.1);
   --inner-padding-end: 0;
 }

@@ -67,6 +67,17 @@
           </ion-item-options>
         </ion-item-sliding>
       </ion-list>
+
+      <ion-infinite-scroll
+          threshold="100px"
+          :disabled="isInfiniteScrollDisabled"
+          @ionInfinite="loadMoreProducts($event)"
+      >
+        <ion-infinite-scroll-content
+            loading-spinner="dots"
+        >
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </div>
     <div
         v-else
@@ -104,17 +115,6 @@
       />
     </AppModal>
   </div>
-
-  <ion-infinite-scroll
-      threshold="100px"
-      :disabled="isInfiniteScrollDisabled || panelIsClosed"
-      @ionInfinite="loadMoreProducts($event)"
-  >
-    <ion-infinite-scroll-content
-        loading-spinner="dots"
-    >
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </template>
 
 <script>
@@ -147,8 +147,6 @@ import { shrink, swipe }    from '@/composables/useAnimations';
 
 import { createOutline, trashOutline } from 'ionicons/icons';
 
-import { increaseAccordionMaxHeight } from '@/utils/helpers';
-
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 export default defineComponent({
@@ -173,10 +171,6 @@ export default defineComponent({
     enableInfiniteScroll: {
       type: Boolean,
       default: false,
-    },
-    panelIsClosed: {
-      type: Boolean,
-      default: true,
     },
   },
   setup(props) {
@@ -205,10 +199,6 @@ export default defineComponent({
       await tryCatch(
           async() => {
             await store.dispatch("owner/deleteProduct", id);
-
-            if(products.value.length <= 0) {
-              increaseAccordionMaxHeight('productPanel', '1500');
-            }
           },
           {
             successMessageKey: 'owner.removeProduct',
@@ -284,7 +274,6 @@ export default defineComponent({
     };
     const loadMoreProducts = async(e) => {
       offset += 15;
-      increaseAccordionMaxHeight('productPanel', 1600);
       await getProducts(true);
 
       e?.target.complete();
@@ -362,7 +351,7 @@ ion-searchbar {
   --icon-color: #000000 !important;
 }
 
-ion-infinite-scroll {
-  margin-bottom: -32px !important;
-}
+/*ion-infinite-scroll {*/
+/*  margin-bottom: -32px !important;*/
+/*}*/
 </style>

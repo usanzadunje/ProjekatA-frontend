@@ -31,7 +31,7 @@
               id="removeButton"
               fill="clear"
               slot="end"
-              :disabled="place.images?.length === 0"
+              :disabled="place.images?.length === 0 || loading === -1"
               class="text-lg uppercase light-color"
               @click="removeImage"
           >
@@ -150,6 +150,7 @@ export default defineComponent({
       imagesInput.value.click();
     };
     const imagesSelected = () => {
+      console.log('changed', imagesInput.value.files);
       images.value = imagesInput.value.files;
     };
     const uploadImages = async() => {
@@ -174,18 +175,21 @@ export default defineComponent({
             }
 
             await store.dispatch('owner/uploadPlaceImages', formData);
+
           },
           {
             successMessageKey: 'successImageUpload',
-            catchCallback: () => {
-              images.value = null;
-            },
           },
       );
 
+      images.value = null;
       loading.value = null;
     };
     const removeImage = async() => {
+      if(loading.value === -1) {
+        return;
+      }
+
       loading.value = -1;
 
       await tryCatch(
@@ -195,6 +199,10 @@ export default defineComponent({
             await OwnerService.removePlaceImage(place.value.images[imageIndex].id);
 
             await store.dispatch('owner/getPlaceInfo');
+
+            if(place.value.images <= 0) {
+              imagePreviewSlider.value = document.getElementById('placeImageSlider')?.swiper;
+            }
           },
           {
             successMessageKey: 'successImageRemove',

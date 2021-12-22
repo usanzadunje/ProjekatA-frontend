@@ -44,6 +44,10 @@ ion-searchbar {
     width: calc(100% + 3rem) !important;
 }
 
+ion-icon.ion-accordion-toggle-icon {
+    color: var(--primary-text);
+}
+
 /*ion-searchbar :first-child {*/
 /*}*/
 /*ion-searchbar :first-child input{*/
@@ -377,6 +381,11 @@ ion-badge.notification-badge {
 
 
 /* UTILITY CLASSES */
+.show-bg {
+    --background: var(--show-paint);
+    background: var(--show-paint);
+}
+
 .transparent-button-background {
     --background: transparent;
     background: transparent;
@@ -1092,13 +1101,6 @@ ion-toggle.dark-toggle-checked {
     color: var(--primary-heading) !important;
 }
 
-.accordion-list-box {
-    margin-left: -1rem !important;
-    margin-right: -1rem !important;
-    padding-right: 1rem;
-    padding-left: 1rem;
-}
-
 .accordion-list-border-top {
     border-top: solid 0.5px var(--primary-border);
 }
@@ -1451,4 +1453,3 @@ ion-toggle.dark-toggle-checked {
 /*
     END PLACEHOLDER SCREENS STYLES
 */
-

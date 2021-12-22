@@ -129,8 +129,6 @@ import {
 
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
-import { increaseAccordionMaxHeight } from '@/utils/helpers';
-
 export default defineComponent({
   name: 'CategoryIndex',
   components: {
@@ -167,10 +165,6 @@ export default defineComponent({
       await tryCatch(
           async() => {
             await store.dispatch("owner/deleteCategory", id);
-
-            if(categories.value.length <= 0) {
-              increaseAccordionMaxHeight('categoryPanel', '1500');
-            }
           },
           {
             successMessageKey: 'owner.removeCategory',

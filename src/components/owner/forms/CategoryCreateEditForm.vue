@@ -89,8 +89,6 @@ import {
   pricetagOutline,
 } from 'ionicons/icons';
 
-import { increaseAccordionMaxHeight } from '@/utils/helpers';
-
 export default defineComponent({
   name: "CategoryCreateEditForm",
   components: {
@@ -149,8 +147,6 @@ export default defineComponent({
               });
             }else {
               await store.dispatch("owner/createCategory", internalCategory);
-
-              increaseAccordionMaxHeight('categoryPanel', 150);
             }
 
             emit('dismiss');

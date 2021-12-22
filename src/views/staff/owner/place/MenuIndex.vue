@@ -10,39 +10,47 @@
         </ion-refresher-content>
       </ion-refresher>
 
-      <div class="px-4 pb-4">
+      <div class="pb-4">
         <div v-show="!showSkeleton">
-          <AppAccordion
-              :panel-id="'categoryPanel'"
-              :title="$t('category', 2)"
-              :title-size="'1.125rem'"
-              :icon-size="'1.25rem'"
-              :icon="pricetagOutline"
-              class="accordion-list-border-top"
-              @panel-opened="changeCurrentlyOpenPanel"
-              :is-open="checkIfPanelIsOpen('categoryPanel')"
-          >
-            <CategoryIndex class="mb-4"/>
-          </AppAccordion>
-          <AppAccordion
-              :panel-id="'productPanel'"
-              :title="$t('product', 2)"
-              :title-size="'1.125rem'"
-              :icon-size="'1.25rem'"
-              :icon="fastFoodOutline"
-              class="accordion-list-border-top accordion-list-border-bottom"
-              @panel-opened="changeCurrentlyOpenPanel"
-              :is-open="checkIfPanelIsOpen('productPanel')"
-          >
-            <ProductIndex
-                :enable-infinite-scroll="enableInfiniteScroll"
-                :panel-is-closed="checkIfPanelIsOpen('productPanel', true)"
-            />
-          </AppAccordion>
+          <ion-accordion-group>
+            <ion-accordion value="categories" class="accordion-list-border-top show-bg">
+              <ion-item
+                  slot="header"
+                  class="show-bg"
+                  lines="none"
+              >
+                <ion-icon
+                    :icon="pricetagOutline"
+                    class="primary-icon-color"
+                ></ion-icon>
+                <span class="primary-text-color ml-2">{{ $t('category', 2) }}</span>
+              </ion-item>
+
+              <div slot="content" class="px-4">
+                <CategoryIndex class="mb-4"/>
+              </div>
+            </ion-accordion>
+            <ion-accordion value="products" class="accordion-list-border-top accordion-list-border-bottom show-bg">
+              <ion-item
+                  slot="header"
+                  class="show-bg"
+                  lines="none"
+              >
+                <ion-icon
+                    :icon="fastFoodOutline"
+                    :style="`font-size:1.25rem`"
+                    class="primary-icon-color"
+                ></ion-icon>
+                <span class="primary-text-color ml-2">{{ $t('product', 2) }}</span>
+              </ion-item>
+
+              <div slot="content" class="px-4">
+                <ProductIndex :enable-infinite-scroll="enableInfiniteScroll"/>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
         </div>
-        <div
-            v-show="showSkeleton"
-        >
+        <div v-show="showSkeleton" class="px-4">
           <div
               class="py-2.5 flex justify-between accordion-list-box accordion-list-border-bottom accordion-list-border-top">
             <ion-skeleton-text
@@ -76,19 +84,21 @@ import { useStore }             from 'vuex';
 import {
   IonPage,
   IonContent,
+  IonAccordionGroup,
+  IonAccordion,
+  IonItem,
+  IonIcon,
   IonRefresher,
   IonRefresherContent,
   IonSkeletonText,
 }                               from '@ionic/vue';
 
 import TheSegmentNavigation from '@/components/TheSegmentNavigation';
-import AppAccordion         from '@/components/AppAccordion';
 import CategoryIndex        from '@/components/owner/CategoryIndex';
 import ProductIndex         from '@/components/owner/ProductIndex';
 
 import { useCache }         from '@/composables/useCache';
 import { useErrorHandling } from '@/composables/useErrorHandling';
-import { useAccordion }     from '@/composables/useAccordion';
 
 import {
   pricetagOutline,
@@ -100,11 +110,14 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
+    IonAccordionGroup,
+    IonAccordion,
+    IonItem,
+    IonIcon,
     IonRefresher,
     IonRefresherContent,
     IonSkeletonText,
     TheSegmentNavigation,
-    AppAccordion,
     CategoryIndex,
     ProductIndex,
   },
@@ -119,7 +132,6 @@ export default defineComponent({
     /* Composables */
     const { getCachedOrFetchPlaceCategories } = useCache();
     const { tryCatch } = useErrorHandling();
-    const { changeCurrentlyOpenPanel, checkIfPanelIsOpen } = useAccordion();
 
     /* Methods */
     const getMenuData = async(forceFetch = false) => {
@@ -162,8 +174,6 @@ export default defineComponent({
 
       /* Event handlers */
       refresh,
-      changeCurrentlyOpenPanel,
-      checkIfPanelIsOpen,
 
       /* Icons */
       pricetagOutline,
@@ -177,5 +187,13 @@ export default defineComponent({
 ion-content {
   --background: var(--show-paint);
   background: var(--show-paint);
+}
+
+ion-icon {
+  font-size: 1.25rem;
+}
+
+span {
+  font-size: 1.125rem !important;
 }
 </style>

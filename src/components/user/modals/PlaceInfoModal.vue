@@ -39,7 +39,7 @@
       <ion-button
           @click="openModal(true);hideModal('.custom-modal')"
           class="flex-shrink uppercase button-subscribe modal-button-border w-1/2"
-          :disabled="false"
+          :disabled="isSubButtonDisabled"
       >
         <ion-icon slot="start"
                   :icon="isUserSubscribed ? notifications : notificationsOutline"

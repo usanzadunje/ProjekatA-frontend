@@ -1,39 +1,51 @@
 <template>
   <div class="mb-2">
     <FilterCategoryHeading class="mt-7 mb-2" :title="$t('menu')" :icon="icons['bookOutline']"/>
-    <AppAccordion
-        :panel-id="`productPanel${category.id}`"
-        v-for="category in place.categories"
-        :key="category.id"
-        :title="category.name"
-        :icon="icons[category.icon]"
-        class="accordion-list-border-top"
-        @panel-opened="changeCurrentlyOpenPanel"
-        :is-open="checkIfPanelIsOpen(`productPanel${category.id}`)"
-    >
-      <ProductCard
-          v-for="product in category.products"
-          :key="product.id"
-          :product="product"
-          @click="showProductModal(product, category.name)"
-          class="py-1"
-      />
-      <div class="w-full flex justify-center py-2">
-        <ion-button
-            v-if="category.products.length >= 7"
-            v-show="!loadingProducts"
-            size="default"
-            @click="loadMoreProducts(category.id, $event)"
+    <ion-accordion-group class="-mx-4">
+      <ion-accordion
+          v-for="category in place.categories"
+          :key="category.id"
+          :value="category.name"
+          class="accordion-list-border-top show-bg"
+      >
+        <ion-item
+            slot="header"
+            class="show-bg"
+            lines="none"
         >
-          {{ $t('loadMore') }}
-        </ion-button>
-        <ion-spinner
-            v-show="loadingProducts"
-            name="dots"
-            class="my-2 scale2x"
-        ></ion-spinner>
-      </div>
-    </AppAccordion>
+          <ion-icon
+              :icon="icons[category.icon]"
+              class="primary-icon-color"
+          ></ion-icon>
+          <span class="primary-text-color ml-2">{{ category.name }}</span>
+        </ion-item>
+
+        <div slot="content" class="px-4">
+          <ProductCard
+              v-for="product in category.products"
+              :key="product.id"
+              :product="product"
+              @click="showProductModal(product, category.name)"
+              class="py-1"
+          />
+          <div class="w-full flex justify-center py-2">
+            <ion-button
+                v-if="category.products.length >= 7"
+                v-show="!loadingProducts"
+                size="default"
+                @click="loadMoreProducts(category.id, $event)"
+            >
+              {{ $t('loadMore') }}
+            </ion-button>
+            <ion-spinner
+                v-show="loadingProducts"
+                name="dots"
+                class="my-2 scale2x"
+            ></ion-spinner>
+          </div>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
 
     <AppModal
         :is-open="isModalOpen"
@@ -51,17 +63,21 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs, watch } from 'vue';
-import { IonButton, IonSpinner }                    from '@ionic/vue';
+import {
+  IonButton,
+  IonSpinner,
+  IonAccordionGroup,
+  IonAccordion,
+  IonItem,
+  IonIcon,
+}                                                   from '@ionic/vue';
 
 import FilterCategoryHeading from '@/components/user/FilterCategoryHeading';
-import AppAccordion          from '@/components/AppAccordion';
 import ProductCard           from '@/components/ProductCard';
 import AppModal              from '@/components/AppModal';
 import ProductInfoModal      from '@/components/user/modals/ProductInfoModal';
 
-import { useModal }                   from '@/composables/useModal';
-import { increaseAccordionMaxHeight } from '@/utils/helpers';
-import { useAccordion }               from '@/composables/useAccordion';
+import { useModal } from '@/composables/useModal';
 
 import {
   barbellOutline,
@@ -95,12 +111,15 @@ import {
 } from 'ionicons/icons';
 
 export default defineComponent({
-  name: 'Menu',
+  name: 'ProductMenu',
   components: {
     IonButton,
     IonSpinner,
+    IonAccordionGroup,
+    IonAccordion,
+    IonItem,
+    IonIcon,
     FilterCategoryHeading,
-    AppAccordion,
     ProductCard,
     AppModal,
     ProductInfoModal,
@@ -158,7 +177,6 @@ export default defineComponent({
 
     /* Composables */
     const { isModalOpen, modalData, openModal } = useModal();
-    const { changeCurrentlyOpenPanel, checkIfPanelIsOpen } = useAccordion();
 
     /* Lifecycle hooks */
     /* Methods */
@@ -179,7 +197,6 @@ export default defineComponent({
       openModal(true, product);
     };
     const loadMoreProducts = async(categoryId, event) => {
-      increaseAccordionMaxHeight(`productPanel${categoryId}`, 1100);
       emit('loadMoreProducts', { categoryId, offset: getOffset(categoryId), event });
     };
 
@@ -199,8 +216,6 @@ export default defineComponent({
       openModal,
       showProductModal,
       loadMoreProducts,
-      changeCurrentlyOpenPanel,
-      checkIfPanelIsOpen,
 
       /* Icons */
       icons,
@@ -213,5 +228,13 @@ export default defineComponent({
 ion-button {
   --background: var(--user-selected-color);
   --border-radius: 1rem;
+}
+
+ion-icon {
+  font-size: 1.25rem;
+}
+
+span {
+  font-size: 0.75rem;
 }
 </style>

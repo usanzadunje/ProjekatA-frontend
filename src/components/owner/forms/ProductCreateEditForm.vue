@@ -133,8 +133,6 @@ import {
 
 } from 'ionicons/icons';
 
-import { increaseAccordionMaxHeight } from '@/utils/helpers';
-
 export default defineComponent({
   name: "ProductCreateEditForm",
   components: {
@@ -202,8 +200,6 @@ export default defineComponent({
               });
             }else {
               await store.dispatch("owner/createProduct", newProduct);
-
-              increaseAccordionMaxHeight('productPanel', 220);
             }
 
             emit('dismiss');
