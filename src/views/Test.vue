@@ -36,6 +36,9 @@
       </ion-accordion-group>
 
       <ion-button @click="add">ADD</ion-button>
+      <ion-input
+          type="color"
+      ></ion-input>
     </ion-content>
   </ion-page>
 </template>
@@ -45,6 +48,7 @@ import { ref } from 'vue';
 import {
   IonContent,
   IonPage,
+  IonInput,
   IonAccordionGroup,
   IonAccordion,
 }              from '@ionic/vue';
@@ -54,6 +58,7 @@ export default {
   components: {
     IonContent,
     IonPage,
+    IonInput,
     IonAccordionGroup,
     IonAccordion,
   },

@@ -2,7 +2,6 @@
   <div class="flex items-center">
     <ion-button
         id="colorPickerResetText"
-        slot="end"
         fill="clear"
         :style="{ color: resetTextColor }"
         class="settings-item-text uppercase"
@@ -10,14 +9,14 @@
     >
       {{ $t('reset') }}
     </ion-button>
-    <ion-button @click="selectColor" class="user-selected-paint w-10 radius-11px" slot="end">
-      <input
-          ref="colorPicker"
+    <ion-button class="user-selected-paint w-10 radius-11px reset-button-size">
+      <ion-input
           v-model="color"
           type="color"
-          class="hidden"
-          @change="colorChanged"
+          class="opacity-0"
+          @ionChange="colorChanged"
       >
+      </ion-input>
     </ion-button>
   </div>
 </template>
@@ -27,12 +26,14 @@ import { defineComponent, ref } from 'vue';
 import { useStore }             from 'vuex';
 import {
   IonButton,
+  IonInput,
 }                               from '@ionic/vue';
 
 export default defineComponent({
   name: 'ColorPicker',
   components: {
     IonButton,
+    IonInput,
   },
   props: {
     resetTextColor: {
@@ -45,17 +46,12 @@ export default defineComponent({
     const store = useStore();
 
     /* Component properties */
-    const colorPicker = ref();
     const color = ref(getComputedStyle(document.documentElement)
         .getPropertyValue('--user-selected-color'));
 
     /* Composables */
 
     /* Event handlers */
-    const selectColor = () => {
-      colorPicker.value.click();
-    };
-
     const colorChanged = () => {
       store.dispatch('user/setGlobalColor', color.value);
     };
@@ -67,11 +63,9 @@ export default defineComponent({
 
     return {
       /* Component properties */
-      colorPicker,
       color,
 
       /* Event handlers */
-      selectColor,
       colorChanged,
       resetDefaults,
     };
@@ -79,9 +73,4 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-item {
-  --background: var(--primary-paint);
-  --border-color: rgba(112, 112, 112, 0.1);
-  --inner-padding-end: 0;
-}
 </style>

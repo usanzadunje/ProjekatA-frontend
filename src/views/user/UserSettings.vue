@@ -50,7 +50,7 @@
           <p class="settings-item-text">{{ $t('language') }}</p>
           <AppLanguagePicker class="lang-pl"/>
         </ion-item>
-        <ion-item class="ion-item-padding-right">
+        <ion-item class="ion-item-padding-right ion-no-border">
           <p class="settings-item-text">{{ $t('primaryColor') }}</p>
           <ColorPicker slot="end"/>
         </ion-item>
@@ -215,9 +215,15 @@ export default defineComponent({
 </script>
 <style scoped>
 ion-item {
+  background: var(--primary-paint);
   --background: var(--primary-paint);
   --border-color: rgba(112, 112, 112, 0.1);
   --inner-padding-end: 0;
+}
+
+ion-item.item-has-focus {
+  border: unset !important;
+  --highlight-background: transparent !important;
 }
 
 .ion-item-padding-right {

@@ -146,6 +146,11 @@ ion-item {
   --inner-padding-end: 0;
 }
 
+ion-item.item-has-focus {
+  border: unset !important;
+  --highlight-background: transparent !important;
+}
+
 .ion-item-padding-right {
   --padding-end: 20px;
 }
