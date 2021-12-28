@@ -69,7 +69,7 @@
 
 #### If you do not want to bother with these steps but want to test application on real device you can contact me via e-mail on [dusan.djordjevic.biz@gmail.com](mailto:dusan.djordjevic.biz@gmail.com). I will need e-mail you are using for Google Play Store or App Store to add you as a tester after which you will be able to download application on your device and run it just like in the emulator.
 
-### Download [Android apk file](#) | [iOS ipa file](#)
+### Download [Android apk file](https://www.mediafire.com/file/k9v1hzbtth57ulv/app-debug.apk/file) | [iOS ipa file](#) (not available yet)
 
 # Contact
 
