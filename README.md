@@ -1,4 +1,4 @@
-## Frontend application of ProjekatA
+# Frontend application of ProjekatA
 
 1. Clone repo ```git clone https://github.com/usanzadunje/ProjekatA-frontend.git```
 2. Copy .env.example into .env ```cp .env.example .env``` and populate values
