@@ -2,8 +2,8 @@
 
 1. Clone repo ```git clone https://github.com/usanzadunje/ProjekatA-frontend.git```
 2. Copy .env.example into .env ```cp .env.example .env``` and populate values
-    - VUE_APP_API_URL can be set to https://resize.rs since backend portion of the application is hosted there.
-    - VUE_APP_STORED_IMAGES_URL can be set to https://resize.rs/storage/img (same reason)
+    - VUE_APP_API_URL can be set to http://localhost since backend portion of the application is hosted there.
+    - VUE_APP_STORED_IMAGES_URL can be set to http://localhost/storage/img (same reason)
     - Before you add Google Maps API keys you will need
       to [enable Maps SDK for Android/iOS and Maps Javascript API](https://console.cloud.google.com/apis/library) (only
       ones you will actually use should be enabled)
@@ -69,6 +69,7 @@
 
 #### If you do not want to bother with these steps but want to test application on real device you can contact me via e-mail on [dusan.djordjevic.biz@gmail.com](mailto:dusan.djordjevic.biz@gmail.com). I will need e-mail you are using for Google Play Store or App Store to add you as a tester after which you will be able to download application on your device and run it just like in the emulator.
 
+!Hosted application server has been shut down therefore APK file will not work since it points to that server.!
 ### Download [Android apk file](https://www.mediafire.com/file/k9v1hzbtth57ulv/app-debug.apk/file) | [iOS ipa file](#) (not available yet)
 
 # Contact
