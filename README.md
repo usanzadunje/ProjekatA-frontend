@@ -2,8 +2,8 @@
 
 1. Clone repo ```git clone https://github.com/usanzadunje/ProjekatA-frontend.git```
 2. Copy .env.example into .env ```cp .env.example .env``` and populate values
-    - VUE_APP_API_URL can be set to http://localhost since backend portion of the application is hosted there.
-    - VUE_APP_STORED_IMAGES_URL can be set to http://localhost/storage/img (same reason)
+    - VUE_APP_API_URL can be set to http://localhost or any other address backend is running on your device.
+    - VUE_APP_STORED_IMAGES_URL can be set to http://localhost/storage/img
     - Before you add Google Maps API keys you will need
       to [enable Maps SDK for Android/iOS and Maps Javascript API](https://console.cloud.google.com/apis/library) (only
       ones you will actually use should be enabled)
