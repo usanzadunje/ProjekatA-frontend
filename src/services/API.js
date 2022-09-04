@@ -4,7 +4,7 @@ import store from '@/store';
 // Creating axios instance for routes that are api protected
 export const apiClient = axios.create({
     baseURL: process.env.VUE_APP_API_URL + "/api",
-    // baseURL: "http://192.168.1.203:8200/api",
+    // baseURL: "http://127.0.0.1:8000/api",
 });
 
 
